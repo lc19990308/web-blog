@@ -22,20 +22,20 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="计算属性的getter，setter，watch与computed的区别">
+  <meta name="description" content="使用this.$set更新数据">
 <meta property="og:type" content="article">
-<meta property="og:title" content="vue计算属性与侦听器">
-<meta property="og:url" content="http://example.com/2021/06/22/vue%E4%B8%AD%E7%9A%84%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7%E4%B8%8E%E4%BE%A6%E5%90%AC%E5%99%A8/index.html">
+<meta property="og:title" content="vue数组对象赋值问题">
+<meta property="og:url" content="http://example.com/2021/06/25/vue%E6%95%B0%E7%BB%84%E5%AF%B9%E8%B1%A1%E8%B5%8B%E5%80%BC%EF%BC%8C%E9%A1%B5%E9%9D%A2%E4%B8%8D%E5%88%B7%E6%96%B0/index.html">
 <meta property="og:site_name" content="bug制造者">
-<meta property="og:description" content="计算属性的getter，setter，watch与computed的区别">
+<meta property="og:description" content="使用this.$set更新数据">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-06-22T13:41:40.242Z">
-<meta property="article:modified_time" content="2021-06-23T03:57:07.081Z">
+<meta property="article:published_time" content="2021-06-25T12:48:01.635Z">
+<meta property="article:modified_time" content="2021-06-25T12:56:58.129Z">
 <meta property="article:author" content="lc">
 <meta property="article:tag" content="vue">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://example.com/2021/06/22/vue%E4%B8%AD%E7%9A%84%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7%E4%B8%8E%E4%BE%A6%E5%90%AC%E5%99%A8/">
+<link rel="canonical" href="http://example.com/2021/06/25/vue%E6%95%B0%E7%BB%84%E5%AF%B9%E8%B1%A1%E8%B5%8B%E5%80%BC%EF%BC%8C%E9%A1%B5%E9%9D%A2%E4%B8%8D%E5%88%B7%E6%96%B0/">
 
 
 <script id="page-configurations">
@@ -48,7 +48,7 @@
   };
 </script>
 
-  <title>vue计算属性与侦听器 | bug制造者</title>
+  <title>vue数组对象赋值问题 | bug制造者</title>
   
 
 
@@ -189,7 +189,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/06/22/vue%E4%B8%AD%E7%9A%84%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7%E4%B8%8E%E4%BE%A6%E5%90%AC%E5%99%A8/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/06/25/vue%E6%95%B0%E7%BB%84%E5%AF%B9%E8%B1%A1%E8%B5%8B%E5%80%BC%EF%BC%8C%E9%A1%B5%E9%9D%A2%E4%B8%8D%E5%88%B7%E6%96%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
@@ -203,7 +203,7 @@
       <header class="post-header">
       
         <h1 class="post-title" itemprop="name headline">
-          vue计算属性与侦听器
+          vue数组对象赋值问题
         </h1>
 
         <div class="post-meta">
@@ -212,16 +212,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2021-06-22 21:41:40" itemprop="dateCreated datePublished" datetime="2021-06-22T21:41:40+08:00">2021-06-22</time>
+              <time title="创建时间：2021-06-25 20:48:01 / 修改时间：20:56:58" itemprop="dateCreated datePublished" datetime="2021-06-25T20:48:01+08:00">2021-06-25</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-06-23 11:57:07" itemprop="dateModified" datetime="2021-06-23T11:57:07+08:00">2021-06-23</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -240,7 +234,7 @@
               <span class="post-meta-item-text">阅读次数：</span>
               <span id="busuanzi_value_page_pv"></span>
             </span>
-            <div class="post-description">计算属性的getter，setter，watch与computed的区别</div>
+            <div class="post-description">使用this.$set更新数据</div>
 
         </div>
       </header>
@@ -251,15 +245,57 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h4 id="vue的计算属性与侦听器"><a href="#vue的计算属性与侦听器" class="headerlink" title="vue的计算属性与侦听器"></a>vue的计算属性与侦听器</h4><p>computed的特性</p>
-<ol>
-<li>computed会观察data里面的所有数据的变化。</li>
-<li>computed，观察改变的数据，你有使用才会执行。</li>
-<li>computed数据会有缓存，计算的是默认值，你有你值改变了才会再次计算。</li>
-</ol>
-<h5 id="computed的-getter函数，与setter函数。"><a href="#computed的-getter函数，与setter函数。" class="headerlink" title="computed的 getter函数，与setter函数。"></a>computed的 getter函数，与setter函数。</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">上代码</span><br><span class="line"></span><br><span class="line">&lt;template&gt;</span><br><span class="line">	&lt;view class=&quot;content&quot;&gt;</span><br><span class="line">		&lt;input type=&quot;text&quot; v-model=&quot;value  &quot; /&gt;</span><br><span class="line">		&lt;input type=&quot;text&quot; v-model=&quot;value1&quot; /&gt;</span><br><span class="line">		&#123;&#123;example&#125;&#125;</span><br><span class="line">	&lt;/view&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">	export default &#123;</span><br><span class="line">		data() &#123;</span><br><span class="line">			return &#123;</span><br><span class="line">				value: 1,</span><br><span class="line">				value1: 11,</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;,</span><br><span class="line">		computed: &#123;</span><br><span class="line">			// 计算属性的 getter</span><br><span class="line">			example: &#123;</span><br><span class="line">				get(e) &#123;</span><br><span class="line">					console.log(e)</span><br><span class="line">					return e.value * 2;</span><br><span class="line">				&#125;,</span><br><span class="line">				set(value) &#123;</span><br><span class="line">					this.value = value;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;,</span><br><span class="line">		onLoad() &#123;</span><br><span class="line"></span><br><span class="line">		&#125;,</span><br><span class="line">		onShow() &#123;</span><br><span class="line">		    //调用setter函数赋值。</span><br><span class="line">			this.example = 122;</span><br><span class="line">		&#125;,</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line"></span><br><span class="line">&lt;/style&gt;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h5 id="computed与watch的区别。"><a href="#computed与watch的区别。" class="headerlink" title="computed与watch的区别。"></a>computed与watch的区别。</h5><p>computed更适合，针对一个数据的变化而进行变化。比如商品的价格等于，件数*价格-优惠券-折扣卡。这样的值，更适合computed来去做。<br>因为computed需要依赖其他数据。</p>
-<p>watch的改变。更多程度上，更适用于，一个数据发生变化后做一些事情。</p>
+        <h5 id="数组的更新监测"><a href="#数组的更新监测" class="headerlink" title="数组的更新监测"></a>数组的更新监测</h5><p>vue是一个响应式的框架。data里面的数据的改动，会随时随地的传到view视图里面。</p>
+<p>但是，对于data里面的object类型的数据，并不是这样的。</p>
+<p>数组的更新监测，只有一下这些方法才能触发视图的更新。</p>
+<table>
+<thead>
+<tr>
+<th>触发视图更新的方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>push()</td>
+</tr>
+<tr>
+<td>pop()</td>
+</tr>
+<tr>
+<td>shift()</td>
+</tr>
+<tr>
+<td>unshift()</td>
+</tr>
+<tr>
+<td>splice()</td>
+</tr>
+<tr>
+<td>sort()</td>
+</tr>
+<tr>
+<td>reverse()</td>
+</tr>
+</tbody></table>
+<h5 id="遇到的问题。"><a href="#遇到的问题。" class="headerlink" title="遇到的问题。"></a>遇到的问题。</h5><p>1，我想对一个数组的1号位进行赋值。而且我不想使用数组方法。splie(),什么什么的。但是视图不会更新。</p>
+<p>例子如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;div v-for=&quot;(item,index) in arr&quot; :key=&#x27;index&#x27;&gt;&#123;&#123;item&#125;&#125;&lt;/div&gt;</span><br><span class="line">    //页面渲染出来的是 1 3 3 4</span><br><span class="line">    &lt;button @click=&quot;test&quot;&gt;11&lt;/button&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">  data() &#123;</span><br><span class="line">    return &#123;</span><br><span class="line">      arr:[1,2,3,4],</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;,</span><br><span class="line">  methods: &#123;</span><br><span class="line">    test() &#123;</span><br><span class="line">      this.arr[0] = 11;</span><br><span class="line">      console.log(this.arr);</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">  created()&#123;</span><br><span class="line">    this.arr[1] = 3;</span><br><span class="line">  &#125;,</span><br><span class="line">  mounted() &#123;</span><br><span class="line">    this.arr[2] = 12;</span><br><span class="line">    // console.log(this.arr); [1,3,12,4]</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>为什么会这样，因为 data里面检测不到 对数组的改动。created的赋值，为什么被视图监测到了？</p>
+<p>尤大大的文档： </p>
+<blockquote>
+<p>当你把一个普通的 JavaScript 对象传入 ==Vue 实例==作为 data 选项，Vue 将==遍历==此对象所有的 property，并使用 Object.defineProperty 把这些 property 全部转为 ==getter/setter==。Object.defineProperty 是 ES5 中一个无法 shim 的特性，这也就是 Vue 不支持 IE8 以及更低版本浏览器的原因。</p>
+</blockquote>
+<blockquote>
+<p>这些 getter/setter 对用户来说是不可见的，但是在内部它们让 Vue 能够追踪依赖，在 property 被访问和修改时通知变更。这里需要注意的是不同浏览器在控制台打印数据对象时对 getter/setter 的格式化并不同，所以建议安装 vue-devtools 来获取对检查数据更加友好的用户界面</p>
+</blockquote>
+<p>通俗语言解释下</p>
+<p>vue创建实例的时候，会把我们data里面的所有数据，全部转为getter 与 setter。</p>
+<p>所以created 正是创建vue实例的时候。所以 isok。</p>
+<p>但是 如果我们在 mounted生命周期函数里面操作的话，如果我们写个事件对data里面的数组赋值的话。</p>
+<p>就必须要使用 this.$set方法。来进行。</p>
+<h5 id="使用-this-set-方法。"><a href="#使用-this-set-方法。" class="headerlink" title="使用 $this.set()方法。"></a>使用 $this.set()方法。</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;div v-for=&quot;(item,index) in arr&quot; :key=&#x27;index&#x27;&gt;&#123;&#123;item&#125;&#125;&lt;/div&gt;</span><br><span class="line">    &lt;button @click=&quot;test&quot;&gt;11&lt;/button&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">  data() &#123;</span><br><span class="line">    return &#123;</span><br><span class="line">      arr:[1,2,3,4],</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;,</span><br><span class="line">  methods: &#123;</span><br><span class="line">    test() &#123;</span><br><span class="line">      this.$set(this.arr,1,12);</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">  created()&#123;</span><br><span class="line">    this.$set(this.arr,0,2);</span><br><span class="line">  &#125;,</span><br><span class="line">  mounted() &#123;</span><br><span class="line">    // console.log(this.arr)</span><br><span class="line">    this.arr[1] = 3;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>Vue.set( target, propertyName/index, value )</p>
 
     </div>
 
@@ -275,12 +311,12 @@
   <!-- JS库 sweetalert 可修改路径 -->
   <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-  <p><span>本文标题:</span><a href="/2021/06/22/vue%E4%B8%AD%E7%9A%84%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7%E4%B8%8E%E4%BE%A6%E5%90%AC%E5%99%A8/">vue计算属性与侦听器</a></p>
+  <p><span>本文标题:</span><a href="/2021/06/25/vue%E6%95%B0%E7%BB%84%E5%AF%B9%E8%B1%A1%E8%B5%8B%E5%80%BC%EF%BC%8C%E9%A1%B5%E9%9D%A2%E4%B8%8D%E5%88%B7%E6%96%B0/">vue数组对象赋值问题</a></p>
   <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a></p>
-  <p><span>发布时间:</span>2021年06月22日 - 21:06</p>
-  <p><span>最后更新:</span>2021年06月23日 - 11:06</p>
-  <p><span>原始链接:</span><a href="/2021/06/22/vue%E4%B8%AD%E7%9A%84%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7%E4%B8%8E%E4%BE%A6%E5%90%AC%E5%99%A8/" title="vue计算属性与侦听器">http://example.com/2021/06/22/vue%E4%B8%AD%E7%9A%84%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7%E4%B8%8E%E4%BE%A6%E5%90%AC%E5%99%A8/</a>
-    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://example.com/2021/06/22/vue%E4%B8%AD%E7%9A%84%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7%E4%B8%8E%E4%BE%A6%E5%90%AC%E5%99%A8/"  aria-label="复制成功！"></i></span>
+  <p><span>发布时间:</span>2021年06月25日 - 20:06</p>
+  <p><span>最后更新:</span>2021年06月25日 - 20:06</p>
+  <p><span>原始链接:</span><a href="/2021/06/25/vue%E6%95%B0%E7%BB%84%E5%AF%B9%E8%B1%A1%E8%B5%8B%E5%80%BC%EF%BC%8C%E9%A1%B5%E9%9D%A2%E4%B8%8D%E5%88%B7%E6%96%B0/" title="vue数组对象赋值问题">http://example.com/2021/06/25/vue%E6%95%B0%E7%BB%84%E5%AF%B9%E8%B1%A1%E8%B5%8B%E5%80%BC%EF%BC%8C%E9%A1%B5%E9%9D%A2%E4%B8%8D%E5%88%B7%E6%96%B0/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://example.com/2021/06/25/vue%E6%95%B0%E7%BB%84%E5%AF%B9%E8%B1%A1%E8%B5%8B%E5%80%BC%EF%BC%8C%E9%A1%B5%E9%9D%A2%E4%B8%8D%E5%88%B7%E6%96%B0/"  aria-label="复制成功！"></i></span>
   </p>
   <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> 转载请保留原文链接及作者。</p>  
 </div>
@@ -312,12 +348,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/06/22/vue%E6%A8%A1%E6%9D%BF%E8%AF%AD%E6%B3%95%E7%9A%84%E6%9F%A5%E6%BC%8F%E8%A1%A5%E7%BC%BA/" rel="prev" title="vue模板语法的查漏补缺">
-      <i class="fa fa-chevron-left"></i> vue模板语法的查漏补缺
+    <a href="/2021/06/23/vue%E4%B8%AD%E7%9A%84class%E4%B8%8Estyle%E7%BB%91%E5%AE%9A/" rel="prev" title="vue中class与style绑定">
+      <i class="fa fa-chevron-left"></i> vue中class与style绑定
     </a></div>
       <div class="post-nav-item">
-    <a href="/2021/06/23/vue%E4%B8%AD%E7%9A%84class%E4%B8%8Estyle%E7%BB%91%E5%AE%9A/" rel="next" title="vue中class与style绑定">
-      vue中class与style绑定 <i class="fa fa-chevron-right"></i>
+    <a href="/2021/06/25/vue%E7%BB%84%E4%BB%B6%E5%9F%BA%E7%A1%80/" rel="next" title="vue组件基础">
+      vue组件基础 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -377,7 +413,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#vue%E7%9A%84%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7%E4%B8%8E%E4%BE%A6%E5%90%AC%E5%99%A8"><span class="nav-number">1.</span> <span class="nav-text">vue的计算属性与侦听器</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#computed%E7%9A%84-getter%E5%87%BD%E6%95%B0%EF%BC%8C%E4%B8%8Esetter%E5%87%BD%E6%95%B0%E3%80%82"><span class="nav-number">1.1.</span> <span class="nav-text">computed的 getter函数，与setter函数。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#computed%E4%B8%8Ewatch%E7%9A%84%E5%8C%BA%E5%88%AB%E3%80%82"><span class="nav-number">1.2.</span> <span class="nav-text">computed与watch的区别。</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%E7%9A%84%E6%9B%B4%E6%96%B0%E7%9B%91%E6%B5%8B"><span class="nav-number">1.</span> <span class="nav-text">数组的更新监测</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%E3%80%82"><span class="nav-number">2.</span> <span class="nav-text">遇到的问题。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-this-set-%E6%96%B9%E6%B3%95%E3%80%82"><span class="nav-number">3.</span> <span class="nav-text">使用 $this.set()方法。</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
