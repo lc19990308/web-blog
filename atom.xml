@@ -3,11 +3,11 @@
   <title>bug制造者</title>
   
   
-  <link href="http://example.com/atom.xml" rel="self"/>
+  <link href="https://hexo.io/docs/generating.html/atom.xml" rel="self"/>
   
-  <link href="http://example.com/"/>
+  <link href="https://hexo.io/docs/generating.html/"/>
   <updated>2021-08-14T11:55:49.565Z</updated>
-  <id>http://example.com/</id>
+  <id>https://hexo.io/docs/generating.html/</id>
   
   <author>
     <name>lc</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>2021年8月14日日报</title>
-    <link href="http://example.com/2021/08/14/2021%E5%B9%B48%E6%9C%8814%E6%97%A5%E6%97%A5%E6%8A%A5/"/>
-    <id>http://example.com/2021/08/14/2021%E5%B9%B48%E6%9C%8814%E6%97%A5%E6%97%A5%E6%8A%A5/</id>
+    <link href="https://hexo.io/docs/generating.html/2021/08/14/2021%E5%B9%B48%E6%9C%8814%E6%97%A5%E6%97%A5%E6%8A%A5/"/>
+    <id>https://hexo.io/docs/generating.html/2021/08/14/2021%E5%B9%B48%E6%9C%8814%E6%97%A5%E6%97%A5%E6%8A%A5/</id>
     <published>2021-08-14T11:54:00.771Z</published>
     <updated>2021-08-14T11:55:49.565Z</updated>
     
@@ -30,17 +30,17 @@
     
     
     
-    <category term="开发日记" scheme="http://example.com/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/"/>
+    <category term="开发日记" scheme="https://hexo.io/docs/generating.html/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/"/>
     
     
-    <category term="开发日记" scheme="http://example.com/tags/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/"/>
+    <category term="开发日记" scheme="https://hexo.io/docs/generating.html/tags/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/"/>
     
   </entry>
   
   <entry>
     <title>html查漏补缺</title>
-    <link href="http://example.com/2021/08/14/%E9%87%8D%E6%96%B0%E5%A4%8D%E4%B9%A0html/"/>
-    <id>http://example.com/2021/08/14/%E9%87%8D%E6%96%B0%E5%A4%8D%E4%B9%A0html/</id>
+    <link href="https://hexo.io/docs/generating.html/2021/08/14/%E9%87%8D%E6%96%B0%E5%A4%8D%E4%B9%A0html/"/>
+    <id>https://hexo.io/docs/generating.html/2021/08/14/%E9%87%8D%E6%96%B0%E5%A4%8D%E4%B9%A0html/</id>
     <published>2021-08-14T11:29:12.929Z</published>
     <updated>2021-08-14T11:30:19.614Z</updated>
     
@@ -51,17 +51,17 @@
     
     
     
-    <category term="css" scheme="http://example.com/categories/css/"/>
+    <category term="css" scheme="https://hexo.io/docs/generating.html/categories/css/"/>
     
     
-    <category term="九宫格" scheme="http://example.com/tags/%E4%B9%9D%E5%AE%AB%E6%A0%BC/"/>
+    <category term="九宫格" scheme="https://hexo.io/docs/generating.html/tags/%E4%B9%9D%E5%AE%AB%E6%A0%BC/"/>
     
   </entry>
   
   <entry>
     <title>2021年8月13日日报</title>
-    <link href="http://example.com/2021/08/13/2021%E5%B9%B48%E6%9C%8813%E6%97%A5%E6%97%A5%E6%8A%A5/"/>
-    <id>http://example.com/2021/08/13/2021%E5%B9%B48%E6%9C%8813%E6%97%A5%E6%97%A5%E6%8A%A5/</id>
+    <link href="https://hexo.io/docs/generating.html/2021/08/13/2021%E5%B9%B48%E6%9C%8813%E6%97%A5%E6%97%A5%E6%8A%A5/"/>
+    <id>https://hexo.io/docs/generating.html/2021/08/13/2021%E5%B9%B48%E6%9C%8813%E6%97%A5%E6%97%A5%E6%8A%A5/</id>
     <published>2021-08-13T12:47:29.163Z</published>
     <updated>2021-08-13T12:53:51.068Z</updated>
     
@@ -72,17 +72,17 @@
     
     
     
-    <category term="开发日记" scheme="http://example.com/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/"/>
+    <category term="开发日记" scheme="https://hexo.io/docs/generating.html/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/"/>
     
     
-    <category term="开发日记" scheme="http://example.com/tags/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/"/>
+    <category term="开发日记" scheme="https://hexo.io/docs/generating.html/tags/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/"/>
     
   </entry>
   
   <entry>
     <title>臭德行的热血青年</title>
-    <link href="http://example.com/2021/07/10/%E8%87%AD%E5%BE%B7%E8%A1%8C%E7%9A%84%E7%83%AD%E8%A1%80%E9%9D%92%E5%B9%B4/"/>
-    <id>http://example.com/2021/07/10/%E8%87%AD%E5%BE%B7%E8%A1%8C%E7%9A%84%E7%83%AD%E8%A1%80%E9%9D%92%E5%B9%B4/</id>
+    <link href="https://hexo.io/docs/generating.html/2021/07/10/%E8%87%AD%E5%BE%B7%E8%A1%8C%E7%9A%84%E7%83%AD%E8%A1%80%E9%9D%92%E5%B9%B4/"/>
+    <id>https://hexo.io/docs/generating.html/2021/07/10/%E8%87%AD%E5%BE%B7%E8%A1%8C%E7%9A%84%E7%83%AD%E8%A1%80%E9%9D%92%E5%B9%B4/</id>
     <published>2021-07-10T11:34:45.704Z</published>
     <updated>2021-07-10T11:41:35.838Z</updated>
     
@@ -93,17 +93,17 @@
     
     
     
-    <category term="杂集" scheme="http://example.com/categories/%E6%9D%82%E9%9B%86/"/>
+    <category term="杂集" scheme="https://hexo.io/docs/generating.html/categories/%E6%9D%82%E9%9B%86/"/>
     
     
-    <category term="杂集" scheme="http://example.com/tags/%E6%9D%82%E9%9B%86/"/>
+    <category term="杂集" scheme="https://hexo.io/docs/generating.html/tags/%E6%9D%82%E9%9B%86/"/>
     
   </entry>
   
   <entry>
     <title>vue路由组件传参</title>
-    <link href="http://example.com/2021/07/10/vue%E8%B7%AF%E7%94%B1%E7%BB%84%E4%BB%B6%E4%BC%A0%E5%8F%82/"/>
-    <id>http://example.com/2021/07/10/vue%E8%B7%AF%E7%94%B1%E7%BB%84%E4%BB%B6%E4%BC%A0%E5%8F%82/</id>
+    <link href="https://hexo.io/docs/generating.html/2021/07/10/vue%E8%B7%AF%E7%94%B1%E7%BB%84%E4%BB%B6%E4%BC%A0%E5%8F%82/"/>
+    <id>https://hexo.io/docs/generating.html/2021/07/10/vue%E8%B7%AF%E7%94%B1%E7%BB%84%E4%BB%B6%E4%BC%A0%E5%8F%82/</id>
     <published>2021-07-10T11:22:35.643Z</published>
     <updated>2021-07-10T11:24:49.275Z</updated>
     
@@ -114,17 +114,17 @@
     
     
     
-    <category term="vue" scheme="http://example.com/categories/vue/"/>
+    <category term="vue" scheme="https://hexo.io/docs/generating.html/categories/vue/"/>
     
     
-    <category term="vue" scheme="http://example.com/tags/vue/"/>
+    <category term="vue" scheme="https://hexo.io/docs/generating.html/tags/vue/"/>
     
   </entry>
   
   <entry>
     <title>vue的router</title>
-    <link href="http://example.com/2021/07/10/vue%E7%9A%84router/"/>
-    <id>http://example.com/2021/07/10/vue%E7%9A%84router/</id>
+    <link href="https://hexo.io/docs/generating.html/2021/07/10/vue%E7%9A%84router/"/>
+    <id>https://hexo.io/docs/generating.html/2021/07/10/vue%E7%9A%84router/</id>
     <published>2021-07-10T11:17:07.774Z</published>
     <updated>2021-07-10T11:21:26.034Z</updated>
     
@@ -135,17 +135,17 @@
     
     
     
-    <category term="vue" scheme="http://example.com/categories/vue/"/>
+    <category term="vue" scheme="https://hexo.io/docs/generating.html/categories/vue/"/>
     
     
-    <category term="vue" scheme="http://example.com/tags/vue/"/>
+    <category term="vue" scheme="https://hexo.io/docs/generating.html/tags/vue/"/>
     
   </entry>
   
   <entry>
     <title>vue组件基础</title>
-    <link href="http://example.com/2021/06/25/vue%E7%BB%84%E4%BB%B6%E5%9F%BA%E7%A1%80/"/>
-    <id>http://example.com/2021/06/25/vue%E7%BB%84%E4%BB%B6%E5%9F%BA%E7%A1%80/</id>
+    <link href="https://hexo.io/docs/generating.html/2021/06/25/vue%E7%BB%84%E4%BB%B6%E5%9F%BA%E7%A1%80/"/>
+    <id>https://hexo.io/docs/generating.html/2021/06/25/vue%E7%BB%84%E4%BB%B6%E5%9F%BA%E7%A1%80/</id>
     <published>2021-06-25T12:50:50.570Z</published>
     <updated>2021-06-25T12:56:43.726Z</updated>
     
@@ -156,17 +156,17 @@
     
     
     
-    <category term="vue" scheme="http://example.com/categories/vue/"/>
+    <category term="vue" scheme="https://hexo.io/docs/generating.html/categories/vue/"/>
     
     
-    <category term="vue" scheme="http://example.com/tags/vue/"/>
+    <category term="vue" scheme="https://hexo.io/docs/generating.html/tags/vue/"/>
     
   </entry>
   
   <entry>
     <title>vue数组对象赋值问题</title>
-    <link href="http://example.com/2021/06/25/vue%E6%95%B0%E7%BB%84%E5%AF%B9%E8%B1%A1%E8%B5%8B%E5%80%BC%EF%BC%8C%E9%A1%B5%E9%9D%A2%E4%B8%8D%E5%88%B7%E6%96%B0/"/>
-    <id>http://example.com/2021/06/25/vue%E6%95%B0%E7%BB%84%E5%AF%B9%E8%B1%A1%E8%B5%8B%E5%80%BC%EF%BC%8C%E9%A1%B5%E9%9D%A2%E4%B8%8D%E5%88%B7%E6%96%B0/</id>
+    <link href="https://hexo.io/docs/generating.html/2021/06/25/vue%E6%95%B0%E7%BB%84%E5%AF%B9%E8%B1%A1%E8%B5%8B%E5%80%BC%EF%BC%8C%E9%A1%B5%E9%9D%A2%E4%B8%8D%E5%88%B7%E6%96%B0/"/>
+    <id>https://hexo.io/docs/generating.html/2021/06/25/vue%E6%95%B0%E7%BB%84%E5%AF%B9%E8%B1%A1%E8%B5%8B%E5%80%BC%EF%BC%8C%E9%A1%B5%E9%9D%A2%E4%B8%8D%E5%88%B7%E6%96%B0/</id>
     <published>2021-06-25T12:48:01.635Z</published>
     <updated>2021-06-25T12:56:58.129Z</updated>
     
@@ -177,17 +177,17 @@
     
     
     
-    <category term="vue" scheme="http://example.com/categories/vue/"/>
+    <category term="vue" scheme="https://hexo.io/docs/generating.html/categories/vue/"/>
     
     
-    <category term="vue" scheme="http://example.com/tags/vue/"/>
+    <category term="vue" scheme="https://hexo.io/docs/generating.html/tags/vue/"/>
     
   </entry>
   
   <entry>
     <title>vue中class与style绑定</title>
-    <link href="http://example.com/2021/06/23/vue%E4%B8%AD%E7%9A%84class%E4%B8%8Estyle%E7%BB%91%E5%AE%9A/"/>
-    <id>http://example.com/2021/06/23/vue%E4%B8%AD%E7%9A%84class%E4%B8%8Estyle%E7%BB%91%E5%AE%9A/</id>
+    <link href="https://hexo.io/docs/generating.html/2021/06/23/vue%E4%B8%AD%E7%9A%84class%E4%B8%8Estyle%E7%BB%91%E5%AE%9A/"/>
+    <id>https://hexo.io/docs/generating.html/2021/06/23/vue%E4%B8%AD%E7%9A%84class%E4%B8%8Estyle%E7%BB%91%E5%AE%9A/</id>
     <published>2021-06-23T03:57:32.526Z</published>
     <updated>2021-06-23T03:58:20.097Z</updated>
     
@@ -198,17 +198,17 @@
     
     
     
-    <category term="vue" scheme="http://example.com/categories/vue/"/>
+    <category term="vue" scheme="https://hexo.io/docs/generating.html/categories/vue/"/>
     
     
-    <category term="vue" scheme="http://example.com/tags/vue/"/>
+    <category term="vue" scheme="https://hexo.io/docs/generating.html/tags/vue/"/>
     
   </entry>
   
   <entry>
     <title>vue计算属性与侦听器</title>
-    <link href="http://example.com/2021/06/22/vue%E4%B8%AD%E7%9A%84%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7%E4%B8%8E%E4%BE%A6%E5%90%AC%E5%99%A8/"/>
-    <id>http://example.com/2021/06/22/vue%E4%B8%AD%E7%9A%84%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7%E4%B8%8E%E4%BE%A6%E5%90%AC%E5%99%A8/</id>
+    <link href="https://hexo.io/docs/generating.html/2021/06/22/vue%E4%B8%AD%E7%9A%84%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7%E4%B8%8E%E4%BE%A6%E5%90%AC%E5%99%A8/"/>
+    <id>https://hexo.io/docs/generating.html/2021/06/22/vue%E4%B8%AD%E7%9A%84%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7%E4%B8%8E%E4%BE%A6%E5%90%AC%E5%99%A8/</id>
     <published>2021-06-22T13:41:40.242Z</published>
     <updated>2021-06-23T03:57:07.081Z</updated>
     
@@ -219,17 +219,17 @@
     
     
     
-    <category term="vue" scheme="http://example.com/categories/vue/"/>
+    <category term="vue" scheme="https://hexo.io/docs/generating.html/categories/vue/"/>
     
     
-    <category term="vue" scheme="http://example.com/tags/vue/"/>
+    <category term="vue" scheme="https://hexo.io/docs/generating.html/tags/vue/"/>
     
   </entry>
   
   <entry>
     <title>vue模板语法的查漏补缺</title>
-    <link href="http://example.com/2021/06/22/vue%E6%A8%A1%E6%9D%BF%E8%AF%AD%E6%B3%95%E7%9A%84%E6%9F%A5%E6%BC%8F%E8%A1%A5%E7%BC%BA/"/>
-    <id>http://example.com/2021/06/22/vue%E6%A8%A1%E6%9D%BF%E8%AF%AD%E6%B3%95%E7%9A%84%E6%9F%A5%E6%BC%8F%E8%A1%A5%E7%BC%BA/</id>
+    <link href="https://hexo.io/docs/generating.html/2021/06/22/vue%E6%A8%A1%E6%9D%BF%E8%AF%AD%E6%B3%95%E7%9A%84%E6%9F%A5%E6%BC%8F%E8%A1%A5%E7%BC%BA/"/>
+    <id>https://hexo.io/docs/generating.html/2021/06/22/vue%E6%A8%A1%E6%9D%BF%E8%AF%AD%E6%B3%95%E7%9A%84%E6%9F%A5%E6%BC%8F%E8%A1%A5%E7%BC%BA/</id>
     <published>2021-06-22T13:38:23.892Z</published>
     <updated>2021-06-22T13:40:20.439Z</updated>
     
@@ -240,17 +240,17 @@
     
     
     
-    <category term="vue" scheme="http://example.com/categories/vue/"/>
+    <category term="vue" scheme="https://hexo.io/docs/generating.html/categories/vue/"/>
     
     
-    <category term="vue" scheme="http://example.com/tags/vue/"/>
+    <category term="vue" scheme="https://hexo.io/docs/generating.html/tags/vue/"/>
     
   </entry>
   
   <entry>
     <title>vue组件的双向绑定</title>
-    <link href="http://example.com/2021/06/22/vue%E7%9A%84%E7%BB%84%E4%BB%B6%E7%9A%84%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A/"/>
-    <id>http://example.com/2021/06/22/vue%E7%9A%84%E7%BB%84%E4%BB%B6%E7%9A%84%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A/</id>
+    <link href="https://hexo.io/docs/generating.html/2021/06/22/vue%E7%9A%84%E7%BB%84%E4%BB%B6%E7%9A%84%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A/"/>
+    <id>https://hexo.io/docs/generating.html/2021/06/22/vue%E7%9A%84%E7%BB%84%E4%BB%B6%E7%9A%84%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A/</id>
     <published>2021-06-22T13:32:19.769Z</published>
     <updated>2021-06-22T13:35:57.021Z</updated>
     
@@ -261,17 +261,17 @@
     
     
     
-    <category term="vue" scheme="http://example.com/categories/vue/"/>
+    <category term="vue" scheme="https://hexo.io/docs/generating.html/categories/vue/"/>
     
     
-    <category term="vue" scheme="http://example.com/tags/vue/"/>
+    <category term="vue" scheme="https://hexo.io/docs/generating.html/tags/vue/"/>
     
   </entry>
   
   <entry>
     <title>flex布局复习</title>
-    <link href="http://example.com/2021/06/21/flex%E5%B8%83%E5%B1%80%E7%9A%84%E5%A4%8D%E4%B9%A0/"/>
-    <id>http://example.com/2021/06/21/flex%E5%B8%83%E5%B1%80%E7%9A%84%E5%A4%8D%E4%B9%A0/</id>
+    <link href="https://hexo.io/docs/generating.html/2021/06/21/flex%E5%B8%83%E5%B1%80%E7%9A%84%E5%A4%8D%E4%B9%A0/"/>
+    <id>https://hexo.io/docs/generating.html/2021/06/21/flex%E5%B8%83%E5%B1%80%E7%9A%84%E5%A4%8D%E4%B9%A0/</id>
     <published>2021-06-21T07:37:43.508Z</published>
     <updated>2021-06-21T07:39:22.235Z</updated>
     
@@ -282,17 +282,17 @@
     
     
     
-    <category term="css" scheme="http://example.com/categories/css/"/>
+    <category term="css" scheme="https://hexo.io/docs/generating.html/categories/css/"/>
     
     
-    <category term="flex" scheme="http://example.com/tags/flex/"/>
+    <category term="flex" scheme="https://hexo.io/docs/generating.html/tags/flex/"/>
     
   </entry>
   
   <entry>
     <title>使用css做一个九宫格</title>
-    <link href="http://example.com/2021/06/21/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8css%E5%AE%9E%E7%8E%B0%E4%B9%9D%E5%AE%AB%E6%A0%BC/"/>
-    <id>http://example.com/2021/06/21/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8css%E5%AE%9E%E7%8E%B0%E4%B9%9D%E5%AE%AB%E6%A0%BC/</id>
+    <link href="https://hexo.io/docs/generating.html/2021/06/21/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8css%E5%AE%9E%E7%8E%B0%E4%B9%9D%E5%AE%AB%E6%A0%BC/"/>
+    <id>https://hexo.io/docs/generating.html/2021/06/21/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8css%E5%AE%9E%E7%8E%B0%E4%B9%9D%E5%AE%AB%E6%A0%BC/</id>
     <published>2021-06-21T07:34:54.774Z</published>
     <updated>2021-06-21T07:37:04.067Z</updated>
     
@@ -303,17 +303,17 @@
     
     
     
-    <category term="css" scheme="http://example.com/categories/css/"/>
+    <category term="css" scheme="https://hexo.io/docs/generating.html/categories/css/"/>
     
     
-    <category term="九宫格" scheme="http://example.com/tags/%E4%B9%9D%E5%AE%AB%E6%A0%BC/"/>
+    <category term="九宫格" scheme="https://hexo.io/docs/generating.html/tags/%E4%B9%9D%E5%AE%AB%E6%A0%BC/"/>
     
   </entry>
   
   <entry>
     <title>ES6中，class的使用</title>
-    <link href="http://example.com/2021/06/11/Es6%E4%B8%ADclass%E7%9A%84%E4%BD%BF%E7%94%A8/"/>
-    <id>http://example.com/2021/06/11/Es6%E4%B8%ADclass%E7%9A%84%E4%BD%BF%E7%94%A8/</id>
+    <link href="https://hexo.io/docs/generating.html/2021/06/11/Es6%E4%B8%ADclass%E7%9A%84%E4%BD%BF%E7%94%A8/"/>
+    <id>https://hexo.io/docs/generating.html/2021/06/11/Es6%E4%B8%ADclass%E7%9A%84%E4%BD%BF%E7%94%A8/</id>
     <published>2021-06-11T10:56:31.540Z</published>
     <updated>2021-06-21T07:32:45.242Z</updated>
     
@@ -324,17 +324,17 @@
     
     
     
-    <category term="JavaScript" scheme="http://example.com/categories/JavaScript/"/>
+    <category term="JavaScript" scheme="https://hexo.io/docs/generating.html/categories/JavaScript/"/>
     
     
-    <category term="ES6" scheme="http://example.com/tags/ES6/"/>
+    <category term="ES6" scheme="https://hexo.io/docs/generating.html/tags/ES6/"/>
     
   </entry>
   
   <entry>
     <title>JavaScript中的async与await</title>
-    <link href="http://example.com/2021/06/05/JavaScript%E4%B8%AD%E7%9A%84async/"/>
-    <id>http://example.com/2021/06/05/JavaScript%E4%B8%AD%E7%9A%84async/</id>
+    <link href="https://hexo.io/docs/generating.html/2021/06/05/JavaScript%E4%B8%AD%E7%9A%84async/"/>
+    <id>https://hexo.io/docs/generating.html/2021/06/05/JavaScript%E4%B8%AD%E7%9A%84async/</id>
     <published>2021-06-05T07:16:40.000Z</published>
     <updated>2021-06-11T10:56:42.742Z</updated>
     
@@ -345,17 +345,17 @@
     
     
     
-    <category term="JavaScript" scheme="http://example.com/categories/JavaScript/"/>
+    <category term="JavaScript" scheme="https://hexo.io/docs/generating.html/categories/JavaScript/"/>
     
     
-    <category term="ES6" scheme="http://example.com/tags/ES6/"/>
+    <category term="ES6" scheme="https://hexo.io/docs/generating.html/tags/ES6/"/>
     
   </entry>
   
   <entry>
     <title>我的想法</title>
-    <link href="http://example.com/2021/06/05/hello-world/"/>
-    <id>http://example.com/2021/06/05/hello-world/</id>
+    <link href="https://hexo.io/docs/generating.html/2021/06/05/hello-world/"/>
+    <id>https://hexo.io/docs/generating.html/2021/06/05/hello-world/</id>
     <published>2021-06-05T07:08:29.916Z</published>
     <updated>2021-06-11T10:55:51.039Z</updated>
     
@@ -366,10 +366,10 @@
     
     
     
-    <category term="开发日记" scheme="http://example.com/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/"/>
+    <category term="开发日记" scheme="https://hexo.io/docs/generating.html/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/"/>
     
     
-    <category term="自我表达" scheme="http://example.com/tags/%E8%87%AA%E6%88%91%E8%A1%A8%E8%BE%BE/"/>
+    <category term="自我表达" scheme="https://hexo.io/docs/generating.html/tags/%E8%87%AA%E6%88%91%E8%A1%A8%E8%BE%BE/"/>
     
   </entry>
   
