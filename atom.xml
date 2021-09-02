@@ -6,7 +6,7 @@
   <link href="http://yaru722.gitee.io/atom.xml" rel="self"/>
   
   <link href="http://yaru722.gitee.io/"/>
-  <updated>2021-08-14T11:55:49.565Z</updated>
+  <updated>2021-09-02T13:03:40.111Z</updated>
   <id>http://yaru722.gitee.io/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>git团队协作</title>
+    <link href="http://yaru722.gitee.io/2021/09/02/git%E5%9B%A2%E9%98%9F%E5%8D%8F%E4%BD%9C/"/>
+    <id>http://yaru722.gitee.io/2021/09/02/git%E5%9B%A2%E9%98%9F%E5%8D%8F%E4%BD%9C/</id>
+    <published>2021-09-02T13:02:42.874Z</published>
+    <updated>2021-09-02T13:03:40.111Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>客驾到的时候，我使用了breach，来进行分支管控。<br>dev分支用来开发。master用来合并。</p><p>如果我和A君一起开发的话，我俩一起在一个dev分支下进行开发。然后去master进行合并。<br>春鹏告诉我，我们可以一人一个分支去玩的。一起往master上面合并。我意识到我对breach 的使用略显不足，所以补充一下我的理解。</p><h4 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h4><p>客驾到项目中，我想的更多的是 ，想通过分支来做一个<strong>沙盒</strong>。进行<strong>隔绝</strong>。<br>去进行<strong>区分</strong>。</p><p>但是，分支给我带来的体验并不好，因为2个人使用一个分支，我与A君，我们两个人之间，没有沙盒。</p><p>如果这个时候 B君也参与了进来，我们三个人，使用一个dev分支。超级容易打架。</p><h4 id="多分支开发。"><a href="#多分支开发。" class="headerlink" title="多分支开发。"></a>多分支开发。</h4><p>标准团队协作模式下进行开发。</p><p>应该有这样的分支。</p><p><strong>master</strong>  <strong>hotfix</strong> <strong>develop</strong> <strong>feature</strong> <strong>release</strong></p><table><thead><tr><th>分支名</th><th>用途</th></tr></thead><tbody><tr><td>master</td><td>主分支，随时都得处于发布状态。</td></tr><tr><td>hotfix</td><td>修复线上的bug</td></tr><tr><td>develop</td><td>开发分支</td></tr><tr><td>feature</td><td>开发功能分支。</td></tr><tr><td>release</td><td>预发布分支。</td></tr></tbody></table><p>首先咱们先从 master分支下 创建 develop<br>develop 下创建 feature分支，用来开发功能。<br>功能开发结束，develop合并feature的功能。<br>然后从develop签出一条 release分支。用来准备发布。<br>出现bug，release修复bug，修复结束，同步给develop，与matser分支。</p><p>master分支 出现bug。</p><p>建立hotfix分支。修复bug。修复成功同步给master 与develop。</p><p>主要还是围绕着master 与 develop来展开的。</p><p>这就是标准的 git团队协作。</p>]]></content>
+    
+    
+    <summary type="html">如何进行git团队协作，使用git遇到的坑儿</summary>
+    
+    
+    
+    <category term="git" scheme="http://yaru722.gitee.io/categories/git/"/>
+    
+    
+    <category term="git" scheme="http://yaru722.gitee.io/tags/git/"/>
+    
+  </entry>
   
   <entry>
     <title>2021年8月14日日报</title>
