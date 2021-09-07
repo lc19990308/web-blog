@@ -6,7 +6,7 @@
   <link href="http://yaru722.gitee.io/atom.xml" rel="self"/>
   
   <link href="http://yaru722.gitee.io/"/>
-  <updated>2021-09-02T13:03:40.111Z</updated>
+  <updated>2021-09-07T13:21:20.920Z</updated>
   <id>http://yaru722.gitee.io/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>2021年9月7日日报</title>
+    <link href="http://yaru722.gitee.io/2021/09/07/2021%E5%B9%B49%E6%9C%887%E6%97%A5%E6%97%A5%E6%8A%A5/"/>
+    <id>http://yaru722.gitee.io/2021/09/07/2021%E5%B9%B49%E6%9C%887%E6%97%A5%E6%97%A5%E6%8A%A5/</id>
+    <published>2021-09-07T13:20:38.137Z</published>
+    <updated>2021-09-07T13:21:20.920Z</updated>
+    
+    <content type="html"><![CDATA[<h5 id="已完成的事情"><a href="#已完成的事情" class="headerlink" title="已完成的事情"></a>已完成的事情</h5><p>1.写秒杀专区。<br>2.找春鹏对接。<br>3.帮樊解决上传的问题。  </p><h5 id="未完成的事情"><a href="#未完成的事情" class="headerlink" title="未完成的事情"></a>未完成的事情</h5><p>1.秒杀专区欠支付成功页面。<br>2.小程序导航栏。<br>3.开碰头会。  </p><h5 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h5><p>1.使用vuex，不顺手。<br>2.父组件的子组件的组件库组件的样式不能在子组件修改。<br>3.上传formdata。</p><h5 id="收获"><a href="#收获" class="headerlink" title="收获"></a>收获</h5><p>1.父组件的子组件的组件库组件的样式不能在子组件修改<br>解决方法。在父组件 /deep/.子组件.ui库组件。</p><p>这一块需要在看看。</p><p>2.vuex的使用。和组件的运用。</p><h5 id="反思"><a href="#反思" class="headerlink" title="反思"></a>反思</h5><ol><li>给家人打电话。</li><li>减肥</li><li>焦躁</li></ol>]]></content>
+    
+    
+    <summary type="html">巩固印象</summary>
+    
+    
+    
+    <category term="开发日记" scheme="http://yaru722.gitee.io/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/"/>
+    
+    
+    <category term="开发日记" scheme="http://yaru722.gitee.io/tags/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/"/>
+    
+  </entry>
   
   <entry>
     <title>git团队协作</title>
