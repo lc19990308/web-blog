@@ -1,6 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>前端常用的单位和计算说明</title>
+    <url>/blogs/2021/10/24/%E5%89%8D%E7%AB%AF%E5%B8%B8%E7%94%A8%E7%9A%84%E5%8D%95%E4%BD%8D%E5%92%8C%E8%AE%A1%E7%AE%97%E8%AF%B4%E6%98%8E/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单位</th>
+<th>特性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>px</td>
+<td>相对长度单位</td>
+</tr>
+<tr>
+<td>pt</td>
+<td>绝对单位</td>
+</tr>
+<tr>
+<td>rem</td>
+<td>相对单位</td>
+</tr>
+<tr>
+<td>em</td>
+<td>相对单位</td>
+</tr>
+<tr>
+<td>upx</td>
+<td>uniapp主动放弃了</td>
+</tr>
+<tr>
+<td>rpx</td>
+<td>相对单位-动态宽度单位</td>
+</tr>
+<tr>
+<td>vw</td>
+<td>相对单位</td>
+</tr>
+<tr>
+<td>vh</td>
+<td>相对单位</td>
+</tr>
+<tr>
+<td>vmin</td>
+<td>相对单位，屏幕宽高相对较小的那个。</td>
+</tr>
+<tr>
+<td>vmax</td>
+<td>相对单位，屏幕宽高相对较大的那个。</td>
+</tr>
+</tbody></table>
+<h4 id="关于px"><a href="#关于px" class="headerlink" title="关于px"></a>关于px</h4><p>1.px,是一块屏幕能展示能显示最小的像素点。<br>2.px是一个相对的绝对单位。相对指的是 都是屏幕,但是1px在不同屏幕上可能展示的大小不一样。  A屏幕的1px的长度也许会大于B屏幕的1px。</p>
+<p>3.但是在网页设计中，A屏幕分辨率 300x300px  B屏幕 600x600px，各设一个width 2px，height 2px的盒子。他们大小会是一样的。</p>
+<p>因为浏览器，在A屏幕是 1px 也许只是1个像素点。但是 B屏幕这样的高清屏幕，1px也许就是 2个像素点来表示1px。所以就是屏幕像素密度存在差异，但是会在浏览器会经过逻辑计算。这就是绝对。</p>
+<h4 id="关于pt"><a href="#关于pt" class="headerlink" title="关于pt"></a>关于pt</h4><p>印刷行业表示字体的单位， 1/72英寸。绝对单位。<br>计算公式等于 100px * 4/3</p>
+<h4 id="关于rem单位。"><a href="#关于rem单位。" class="headerlink" title="关于rem单位。"></a>关于rem单位。</h4><p>htlm根元素字体大小。 1rem 等于16px</p>
+<h4 id="关于em-单位"><a href="#关于em-单位" class="headerlink" title="关于em 单位"></a>关于em 单位</h4><p>我对em单位超级超级陌生。培训班大师兄跟我说 国外喜欢用em作为字体大小来使用。<br>但是国内没必要，选择rem或者px就行了。</p>
+<p>今天写这篇博客的时候，看到这篇文章<a href="https://jorux.com/archives/95-websites-of-china-need-to-rewrite-css/">。95%的中国网站需要重写CSS</a></p>
+<p>由于ie浏览器的内核不支持调整网站px字体的大小。所以国外都使用了em作为web网站的字体单位。</p>
+<p>但是国内没有这样去做。以至于今天，ie已经成为会议了。</p>
+<p>那么em单位是什么呢。</p>
+<p>em的值不是固定的，em会继承父级字体的大小。</p>
+<h4 id="rpx单位。"><a href="#rpx单位。" class="headerlink" title="rpx单位。"></a>rpx单位。</h4><p>uniapp 针对屏幕的宽度会动态调整的单位。<br>计算规则如下，2px == 4rpx</p>
+<p>设计稿 * A元素的px / 750 就是rpx。</p>
+<p>设计稿 * 页面测试的元素宽度 / 设计稿基准宽度。</p>
+<p>通常1px 等于2rpx</p>
+<h4 id="vw-和-vh单位。"><a href="#vw-和-vh单位。" class="headerlink" title="vw 和 vh单位。"></a>vw 和 vh单位。</h4><p>vw 是视口的宽度 vh是视口的高度</p>
+<p>vw 等于 视口的1%。<br>也是相对单位</p>
+<p>1920 * 1080 1vw 等于 1920 / 100% 19.2px。</p>
+<h4 id="vmax-与vmin。"><a href="#vmax-与vmin。" class="headerlink" title="vmax 与vmin。"></a>vmax 与vmin。</h4><p>vmax vmin 针对与我们字体 比如，我们手机从竖屏来到横屏。vw 和vh会发生变化。</p>
+<p>vmax vmin 一个是取vw 和vh 最大的值，一个是取最小的值。</p>
+<p>ps：写此篇博客是为了和ui撕逼。</p>
+]]></content>
+      <categories>
+        <category>css</category>
+      </categories>
+      <tags>
+        <tag>css常用单位</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>2021年9月7日日报</title>
     <url>/blogs/2021/09/07/2021%E5%B9%B49%E6%9C%887%E6%97%A5%E6%97%A5%E6%8A%A5/</url>
     <content><![CDATA[<h5 id="已完成的事情"><a href="#已完成的事情" class="headerlink" title="已完成的事情"></a>已完成的事情</h5><p>1.写秒杀专区。<br>2.找春鹏对接。<br>3.帮樊解决上传的问题。  </p>
