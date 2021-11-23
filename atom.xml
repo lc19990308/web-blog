@@ -6,7 +6,7 @@
   <link href="http://yaru722.gitee.io/atom.xml" rel="self"/>
   
   <link href="http://yaru722.gitee.io/"/>
-  <updated>2021-10-24T11:13:00.923Z</updated>
+  <updated>2021-11-23T12:59:29.201Z</updated>
   <id>http://yaru722.gitee.io/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>2021年11月22日日报</title>
+    <link href="http://yaru722.gitee.io/2021/11/23/2021%E5%B9%B411%E6%9C%8822%E6%97%A5%E6%97%A5%E6%8A%A5/"/>
+    <id>http://yaru722.gitee.io/2021/11/23/2021%E5%B9%B411%E6%9C%8822%E6%97%A5%E6%97%A5%E6%8A%A5/</id>
+    <published>2021-11-23T12:58:53.124Z</published>
+    <updated>2021-11-23T12:59:29.201Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="已完成"><a href="#已完成" class="headerlink" title="已完成"></a>已完成</h4><h5 id="看js的红宝书"><a href="#看js的红宝书" class="headerlink" title="看js的红宝书"></a>看js的红宝书</h5><p>标识符<br>js中的标识符指的是，变量，属性，方法。最好使用小驼峰写法（首字母小写），标识符开头必须是字母或者_下划线，或者美元符号$来表示。</p><p>语句<br>{}来表示代码块，那怕就一句，;号表示语句的结束，如果不写分号也许。只不过js引擎会解析都时候带上，对性能不好。<br>最好使用控制语句来控制代码块。</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">if(true)</span><br><span class="line">log(&#x27;坏的写法&#x27;)</span><br><span class="line"></span><br><span class="line">if(ture)&#123;</span><br><span class="line">    log(&#x27;好的写法&#x27;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure><p>es6之后才加了let 与const，任何版本变量都可以使用var 声明。<br>var 自带变量提升。</p><p>关键字是js中定义好的东西，不可以声明为标识符。保留字是不是关键字的关键字。下个版本也许就是关键字了。</p><h5 id="商城项目"><a href="#商城项目" class="headerlink" title="商城项目"></a>商城项目</h5><p>瀑布流的数据push入数组里面，这个时候转成josn字符串再转出来。</p><p>uniapp编译的时候存在问题。（猜测）</p><p>写分页的时候，上拉加载的时候就做判断。</p><h5 id="催宋哥工厂图"><a href="#催宋哥工厂图" class="headerlink" title="催宋哥工厂图"></a>催宋哥工厂图</h5><h4 id="未完成"><a href="#未完成" class="headerlink" title="未完成"></a>未完成</h4><p>尽快结束商城<br>给爸爸打电话<br>找媳妇聊天。<br>恢复状态<br>减肥。</p><h5 id="心得。"><a href="#心得。" class="headerlink" title="心得。"></a>心得。</h5><p>调整状态，多学习。经验。勤为径。</p>]]></content>
+    
+    
+    <summary type="html">巩固印象</summary>
+    
+    
+    
+    <category term="开发日记" scheme="http://yaru722.gitee.io/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/"/>
+    
+    
+    <category term="开发日记" scheme="http://yaru722.gitee.io/tags/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/"/>
+    
+  </entry>
   
   <entry>
     <title>前端常用的单位和计算说明</title>
@@ -412,27 +433,6 @@
     
     
     <category term="ES6" scheme="http://yaru722.gitee.io/tags/ES6/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>我的想法</title>
-    <link href="http://yaru722.gitee.io/2021/06/05/hello-world/"/>
-    <id>http://yaru722.gitee.io/2021/06/05/hello-world/</id>
-    <published>2021-06-05T07:08:29.916Z</published>
-    <updated>2021-06-11T10:55:51.039Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="关于我"><a href="#关于我" class="headerlink" title="关于我"></a>关于我</h1><h2 id="1-自我介绍"><a href="#1-自我介绍" class="headerlink" title="1 自我介绍"></a>1 自我介绍</h2><p>1.我是一个比较热爱技术，沉默寡言的我。学历不高，受教育程度有限，使我在选择这门活计的时候犹豫了很久，最后抱着试试看的心态做的。<br>2.怕什么真理无穷，进一寸有一寸的欢喜</p>]]></content>
-    
-    
-    <summary type="html">碎碎念</summary>
-    
-    
-    
-    <category term="开发日记" scheme="http://yaru722.gitee.io/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/"/>
-    
-    
-    <category term="自我表达" scheme="http://yaru722.gitee.io/tags/%E8%87%AA%E6%88%91%E8%A1%A8%E8%BE%BE/"/>
     
   </entry>
   
