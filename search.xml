@@ -1,6 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>reduce解决商品sku算法问题</title>
+    <url>/blogs/2022/01/10/reduce%E8%A7%A3%E5%86%B3%E5%95%86%E5%93%81sku%E7%AE%97%E6%B3%95%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h4 id="sku问题。"><a href="#sku问题。" class="headerlink" title="sku问题。"></a>sku问题。</h4><p>找到了一个数组方法 特别适合计算sku。</p>
+<p>就是js中的reduce方法。</p>
+<p>关于reduce方法的四个参数。<br>Accumulator (acc) (累计器)<br>Current Value (cur) (当前值)<br>Current Index (idx) (当前索引)<br>Source Array (src) (源数组)<br>initialValue（初始值）</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>accmulator</td>
+<td>累加器（如果设置有初始值的话，第一次是初始值的参数，没有初始值，返回上次回调函数的结果）</td>
+</tr>
+<tr>
+<td>Current Value</td>
+<td>当前的值</td>
+</tr>
+<tr>
+<td>Current Index</td>
+<td>当前下标</td>
+</tr>
+<tr>
+<td>Source Array</td>
+<td>源数组</td>
+</tr>
+<tr>
+<td>initialValue</td>
+<td>默认值</td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">var arr = [[&#x27;s&#x27;, &#x27;m&#x27;, &#x27;x&#x27;, &#x27;l&#x27;, &#x27;xl&#x27;], [&#x27; T恤&#x27;, &#x27;裤子&#x27;, &#x27;裙子&#x27;], [&#x27;蓝色&#x27;, &#x27;白色&#x27;], [&#x27;nike&#x27;, &#x27;安踏&#x27;, &#x27;李宁&#x27;]];</span><br><span class="line">console.log(...arr.reduce((pre, cur) =&gt; &#123;</span><br><span class="line">    let res = [];</span><br><span class="line">    pre.forEach(item =&gt; &#123;</span><br><span class="line">        cur.forEach(items =&gt; &#123;</span><br><span class="line">            res.push(item.concat(items));</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    return res</span><br><span class="line">&#125;, [[]]));</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>这段代码需要理解的地方在于，第一遍的时候因为设置了默认值，[[]],所以第一次遍历到的是一个空数组。第二次再去遍历的时候 <strong>此时</strong>，当前值已经T恤xxx什么的了，所以第二次，我们遍历pre数组，合并cur数组就可以了。</p>
+<p>reduce方法。。</p>
+<p>这样sku问题就解决了</p>
+<h5 id="reduce其他妙用。"><a href="#reduce其他妙用。" class="headerlink" title="reduce其他妙用。"></a>reduce其他妙用。</h5><h6 id="数组求和"><a href="#数组求和" class="headerlink" title="数组求和"></a>数组求和</h6><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">let arr = [12, 3, 31, 21, 21, , 31, 31];</span><br><span class="line"></span><br><span class="line">console.log(arr.reduce((per, cur) =&gt; &#123;</span><br><span class="line">    return per + cur</span><br><span class="line">&#125;));//150</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="reduce-计算数组中每个元素出现的次数"><a href="#reduce-计算数组中每个元素出现的次数" class="headerlink" title="reduce 计算数组中每个元素出现的次数"></a>reduce 计算数组中每个元素出现的次数</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">var names = [&#x27;Alice&#x27;, &#x27;Bob&#x27;, &#x27;Tiff&#x27;, &#x27;Bruce&#x27;, &#x27;Alice&#x27;];</span><br><span class="line"></span><br><span class="line">function test() &#123;</span><br><span class="line">    return names.reduce((allNames, name) =&gt; &#123;</span><br><span class="line">        if (name in allNames) &#123;</span><br><span class="line">            allNames[name]++;</span><br><span class="line">        &#125;</span><br><span class="line">        else &#123;</span><br><span class="line">            allNames[name] = 1;</span><br><span class="line">        &#125;</span><br><span class="line">        return allNames;</span><br><span class="line">    &#125;, &#123;&#125;)</span><br><span class="line">&#125;</span><br><span class="line">console.log(test(names));</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>ES6</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>includes</title>
+    <url>/blogs/2022/01/10/includes/</url>
+    <content><![CDATA[<h4 id="关于ES6-include的使用方法。"><a href="#关于ES6-include的使用方法。" class="headerlink" title="关于ES6-include的使用方法。"></a>关于ES6-include的使用方法。</h4><p>场景，和后端同学调试接口的时候，后端同学很喜欢返回我，status，或者type来给我判断。但是，，，如果状态多的话，那么判断可能是这样的。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">let status = 0;</span><br><span class="line"></span><br><span class="line">if (status == 1 || status == 2 || status == 3) &#123;</span><br><span class="line">    alert(&#x27;yes&#x27;);</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    alert(&#x27;no&#x27;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>说实话这样写一点都不优雅。但是还能接受。毕竟 1 2 3，还好判断。</p>
+<p>场景，后端同学又过来，接口要改，status可能要多判断2个值，4，5。4是进行中，5是已售后，或者叫啥都行。</p>
+<p><a href="https://imgtu.com/i/7VEMdI"><img src="https://s4.ax1x.com/2022/01/10/7VEMdI.jpg" alt="7VEMdI.jpg"></a></p>
+<p>接下来，我们的代码就是这样。。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">let status = 5;</span><br><span class="line"></span><br><span class="line">if (status == 1 || status == 2 || status == 3 || status == 4 || status == 5) &#123;</span><br><span class="line">    alert(&#x27;yes&#x27;);</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    alert(&#x27;no&#x27;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p>即便后端哥们不再过来改接口，添加状态。你也觉得这段代码不妥了把。</p>
+<p>includes方法就可以完美解决这个问题。。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">let status = 5;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">let arr = [1, 2, 3, 4, 5];</span><br><span class="line">if (arr.includes(status)) &#123;</span><br><span class="line">    alert(&#x27;yes&#x27;);</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    alert(&#x27;no&#x27;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>includes</strong>会找数组的成员，找到了就是true，找不到就是false。</p>
+<p>可可可，有indexof，呀。为什么要使用includes。</p>
+<p>的确。indexof能实现这个问题。。</p>
+<p>可是，如果数组里面存在NaN呢。indexof是否还能找得到？</p>
+<p>例子如下。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">let status = NaN;</span><br><span class="line">let arr = [1, 2, 3, 4, 5, NaN, null];</span><br><span class="line">if (arr.indexOf(status) != -1) &#123;</span><br><span class="line">    alert(&#x27;yes&#x27;);</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    alert(&#x27;no&#x27;)</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>alert 出来到是 no。</p>
+<p>而，includes就不会存在这样到问题。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">let status = NaN;</span><br><span class="line">let arr = [1, 2, 3, 4, 5, NaN, null];</span><br><span class="line">if (arr.includes(status)) &#123;</span><br><span class="line">    alert(&#x27;yes&#x27;);</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    alert(&#x27;no&#x27;)</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>indexof 无法在数组内定位到，NaN的位置。</p>
+<p>结论如下，NaN无敌可能会存在数组的情况下，使用includes。</p>
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>ES6</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>阅读红宝书js中的变量</title>
     <url>/blogs/2021/11/25/%E9%98%85%E8%AF%BB%E7%BA%A2%E5%AE%9D%E4%B9%A6%E5%8F%98%E9%87%8F/</url>
     <content><![CDATA[<h5 id="var是什么。"><a href="#var是什么。" class="headerlink" title="var是什么。"></a>var是什么。</h5><p>1.js中的操作符，声明一个函数级的变量。<br>2.会存在变量提升的情况。</p>

@@ -22,20 +22,22 @@
     var CONFIG = {"hostname":"yaru722.gitee.io","root":"/blogs/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="巩固印象">
+  <meta name="description" content="关于ES6，includes">
 <meta property="og:type" content="article">
-<meta property="og:title" content="2021年11月22日日报">
-<meta property="og:url" content="http://yaru722.gitee.io/2021/11/23/2021%E5%B9%B411%E6%9C%8822%E6%97%A5%E6%97%A5%E6%8A%A5/index.html">
+<meta property="og:title" content="includes">
+<meta property="og:url" content="http://yaru722.gitee.io/2022/01/10/includes/index.html">
 <meta property="og:site_name" content="bug制造者">
-<meta property="og:description" content="巩固印象">
+<meta property="og:description" content="关于ES6，includes">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-11-23T12:58:53.124Z">
-<meta property="article:modified_time" content="2021-11-23T12:59:29.201Z">
+<meta property="og:image" content="https://s4.ax1x.com/2022/01/10/7VEMdI.jpg">
+<meta property="article:published_time" content="2022-01-10T11:11:35.014Z">
+<meta property="article:modified_time" content="2022-01-10T11:17:38.160Z">
 <meta property="article:author" content="lc">
-<meta property="article:tag" content="开发日记">
+<meta property="article:tag" content="ES6">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s4.ax1x.com/2022/01/10/7VEMdI.jpg">
 
-<link rel="canonical" href="http://yaru722.gitee.io/2021/11/23/2021%E5%B9%B411%E6%9C%8822%E6%97%A5%E6%97%A5%E6%8A%A5/">
+<link rel="canonical" href="http://yaru722.gitee.io/2022/01/10/includes/">
 
 
 <script id="page-configurations">
@@ -48,7 +50,7 @@
   };
 </script>
 
-  <title>2021年11月22日日报 | bug制造者</title>
+  <title>includes | bug制造者</title>
   
 
 
@@ -189,7 +191,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yaru722.gitee.io/2021/11/23/2021%E5%B9%B411%E6%9C%8822%E6%97%A5%E6%97%A5%E6%8A%A5/">
+    <link itemprop="mainEntityOfPage" href="http://yaru722.gitee.io/2022/01/10/includes/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
@@ -203,7 +205,7 @@
       <header class="post-header">
       
         <h1 class="post-title" itemprop="name headline">
-          2021年11月22日日报
+          includes
         </h1>
 
         <div class="post-meta">
@@ -214,7 +216,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-11-23 20:58:53 / 修改时间：20:59:29" itemprop="dateCreated datePublished" datetime="2021-11-23T20:58:53+08:00">2021-11-23</time>
+              <time title="创建时间：2022-01-10 19:11:35 / 修改时间：19:17:38" itemprop="dateCreated datePublished" datetime="2022-01-10T19:11:35+08:00">2022-01-10</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -222,7 +224,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogs/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">开发日记</span></a>
+                  <a href="/blogs/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a>
                 </span>
             </span>
 
@@ -234,7 +236,7 @@
               <span class="post-meta-item-text">阅读次数：</span>
               <span id="busuanzi_value_page_pv"></span>
             </span>
-            <div class="post-description">巩固印象</div>
+            <div class="post-description">关于ES6，includes</div>
 
         </div>
       </header>
@@ -245,17 +247,33 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h4 id="已完成"><a href="#已完成" class="headerlink" title="已完成"></a>已完成</h4><h5 id="看js的红宝书"><a href="#看js的红宝书" class="headerlink" title="看js的红宝书"></a>看js的红宝书</h5><p>标识符<br>js中的标识符指的是，变量，属性，方法。最好使用小驼峰写法（首字母小写），标识符开头必须是字母或者_下划线，或者美元符号$来表示。</p>
-<p>语句<br>{}来表示代码块，那怕就一句，;号表示语句的结束，如果不写分号也许。只不过js引擎会解析都时候带上，对性能不好。<br>最好使用控制语句来控制代码块。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">if(true)</span><br><span class="line">log(&#x27;坏的写法&#x27;)</span><br><span class="line"></span><br><span class="line">if(ture)&#123;</span><br><span class="line">    log(&#x27;好的写法&#x27;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+        <h4 id="关于ES6-include的使用方法。"><a href="#关于ES6-include的使用方法。" class="headerlink" title="关于ES6-include的使用方法。"></a>关于ES6-include的使用方法。</h4><p>场景，和后端同学调试接口的时候，后端同学很喜欢返回我，status，或者type来给我判断。但是，，，如果状态多的话，那么判断可能是这样的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">let status = 0;</span><br><span class="line"></span><br><span class="line">if (status == 1 || status == 2 || status == 3) &#123;</span><br><span class="line">    alert(&#x27;yes&#x27;);</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    alert(&#x27;no&#x27;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>es6之后才加了let 与const，任何版本变量都可以使用var 声明。<br>var 自带变量提升。</p>
-<p>关键字是js中定义好的东西，不可以声明为标识符。保留字是不是关键字的关键字。下个版本也许就是关键字了。</p>
-<h5 id="商城项目"><a href="#商城项目" class="headerlink" title="商城项目"></a>商城项目</h5><p>瀑布流的数据push入数组里面，这个时候转成josn字符串再转出来。</p>
-<p>uniapp编译的时候存在问题。（猜测）</p>
-<p>写分页的时候，上拉加载的时候就做判断。</p>
-<h5 id="催宋哥工厂图"><a href="#催宋哥工厂图" class="headerlink" title="催宋哥工厂图"></a>催宋哥工厂图</h5><h4 id="未完成"><a href="#未完成" class="headerlink" title="未完成"></a>未完成</h4><p>尽快结束商城<br>给爸爸打电话<br>找媳妇聊天。<br>恢复状态<br>减肥。</p>
-<h5 id="心得。"><a href="#心得。" class="headerlink" title="心得。"></a>心得。</h5><p>调整状态，多学习。经验。勤为径。</p>
+<p>说实话这样写一点都不优雅。但是还能接受。毕竟 1 2 3，还好判断。</p>
+<p>场景，后端同学又过来，接口要改，status可能要多判断2个值，4，5。4是进行中，5是已售后，或者叫啥都行。</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/7VEMdI"><img src="https://s4.ax1x.com/2022/01/10/7VEMdI.jpg" alt="7VEMdI.jpg"></a></p>
+<p>接下来，我们的代码就是这样。。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">let status = 5;</span><br><span class="line"></span><br><span class="line">if (status == 1 || status == 2 || status == 3 || status == 4 || status == 5) &#123;</span><br><span class="line">    alert(&#x27;yes&#x27;);</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    alert(&#x27;no&#x27;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p>即便后端哥们不再过来改接口，添加状态。你也觉得这段代码不妥了把。</p>
+<p>includes方法就可以完美解决这个问题。。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">let status = 5;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">let arr = [1, 2, 3, 4, 5];</span><br><span class="line">if (arr.includes(status)) &#123;</span><br><span class="line">    alert(&#x27;yes&#x27;);</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    alert(&#x27;no&#x27;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>includes</strong>会找数组的成员，找到了就是true，找不到就是false。</p>
+<p>可可可，有indexof，呀。为什么要使用includes。</p>
+<p>的确。indexof能实现这个问题。。</p>
+<p>可是，如果数组里面存在NaN呢。indexof是否还能找得到？</p>
+<p>例子如下。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">let status = NaN;</span><br><span class="line">let arr = [1, 2, 3, 4, 5, NaN, null];</span><br><span class="line">if (arr.indexOf(status) != -1) &#123;</span><br><span class="line">    alert(&#x27;yes&#x27;);</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    alert(&#x27;no&#x27;)</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>alert 出来到是 no。</p>
+<p>而，includes就不会存在这样到问题。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">let status = NaN;</span><br><span class="line">let arr = [1, 2, 3, 4, 5, NaN, null];</span><br><span class="line">if (arr.includes(status)) &#123;</span><br><span class="line">    alert(&#x27;yes&#x27;);</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    alert(&#x27;no&#x27;)</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>indexof 无法在数组内定位到，NaN的位置。</p>
+<p>结论如下，NaN无敌可能会存在数组的情况下，使用includes。</p>
 
     </div>
 
@@ -271,12 +289,12 @@
   <!-- JS库 sweetalert 可修改路径 -->
   <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-  <p><span>本文标题:</span><a href="/blogs/2021/11/23/2021%E5%B9%B411%E6%9C%8822%E6%97%A5%E6%97%A5%E6%8A%A5/">2021年11月22日日报</a></p>
+  <p><span>本文标题:</span><a href="/blogs/2022/01/10/includes/">includes</a></p>
   <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a></p>
-  <p><span>发布时间:</span>2021年11月23日 - 20:11</p>
-  <p><span>最后更新:</span>2021年11月23日 - 20:11</p>
-  <p><span>原始链接:</span><a href="/blogs/2021/11/23/2021%E5%B9%B411%E6%9C%8822%E6%97%A5%E6%97%A5%E6%8A%A5/" title="2021年11月22日日报">http://yaru722.gitee.io/2021/11/23/2021%E5%B9%B411%E6%9C%8822%E6%97%A5%E6%97%A5%E6%8A%A5/</a>
-    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yaru722.gitee.io/2021/11/23/2021%E5%B9%B411%E6%9C%8822%E6%97%A5%E6%97%A5%E6%8A%A5/"  aria-label="复制成功！"></i></span>
+  <p><span>发布时间:</span>2022年01月10日 - 19:01</p>
+  <p><span>最后更新:</span>2022年01月10日 - 19:01</p>
+  <p><span>原始链接:</span><a href="/blogs/2022/01/10/includes/" title="includes">http://yaru722.gitee.io/2022/01/10/includes/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yaru722.gitee.io/2022/01/10/includes/"  aria-label="复制成功！"></i></span>
   </p>
   <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> 转载请保留原文链接及作者。</p>  
 </div>
@@ -299,7 +317,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/blogs/tags/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/" ****># 开发日记</a>
+              <a href="/blogs/tags/ES6/" ****># ES6</a>
           </div>
 
         
@@ -308,12 +326,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/blogs/2021/10/24/%E5%89%8D%E7%AB%AF%E5%B8%B8%E7%94%A8%E7%9A%84%E5%8D%95%E4%BD%8D%E5%92%8C%E8%AE%A1%E7%AE%97%E8%AF%B4%E6%98%8E/" rel="prev" title="前端常用的单位和计算说明">
-      <i class="fa fa-chevron-left"></i> 前端常用的单位和计算说明
+    <a href="/blogs/2021/11/25/%E9%98%85%E8%AF%BB%E7%BA%A2%E5%AE%9D%E4%B9%A6%E5%8F%98%E9%87%8F/" rel="prev" title="阅读红宝书js中的变量">
+      <i class="fa fa-chevron-left"></i> 阅读红宝书js中的变量
     </a></div>
       <div class="post-nav-item">
-    <a href="/blogs/2021/11/25/%E9%98%85%E8%AF%BB%E7%BA%A2%E5%AE%9D%E4%B9%A6%E5%8F%98%E9%87%8F/" rel="next" title="阅读红宝书js中的变量">
-      阅读红宝书js中的变量 <i class="fa fa-chevron-right"></i>
+    <a href="/blogs/2022/01/10/reduce%E8%A7%A3%E5%86%B3%E5%95%86%E5%93%81sku%E7%AE%97%E6%B3%95%E9%97%AE%E9%A2%98/" rel="next" title="reduce解决商品sku算法问题">
+      reduce解决商品sku算法问题 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -373,7 +391,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B7%B2%E5%AE%8C%E6%88%90"><span class="nav-number">1.</span> <span class="nav-text">已完成</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%9C%8Bjs%E7%9A%84%E7%BA%A2%E5%AE%9D%E4%B9%A6"><span class="nav-number">1.1.</span> <span class="nav-text">看js的红宝书</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%95%86%E5%9F%8E%E9%A1%B9%E7%9B%AE"><span class="nav-number">1.2.</span> <span class="nav-text">商城项目</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%82%AC%E5%AE%8B%E5%93%A5%E5%B7%A5%E5%8E%82%E5%9B%BE"><span class="nav-number">1.3.</span> <span class="nav-text">催宋哥工厂图</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%AA%E5%AE%8C%E6%88%90"><span class="nav-number">2.</span> <span class="nav-text">未完成</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%BF%83%E5%BE%97%E3%80%82"><span class="nav-number">2.1.</span> <span class="nav-text">心得。</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B3%E4%BA%8EES6-include%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%E3%80%82"><span class="nav-number">1.</span> <span class="nav-text">关于ES6-include的使用方法。</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
