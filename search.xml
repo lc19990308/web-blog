@@ -1,6 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>关于js中的apply bind call的使用</title>
+    <url>/blogs/2022/01/20/%E5%85%B3%E4%BA%8Ethis%E7%9A%84call%EF%BC%8Capply%EF%BC%8Cbind%E7%9A%84%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<h4 id="this到底指向哪里。"><a href="#this到底指向哪里。" class="headerlink" title="this到底指向哪里。"></a>this到底指向哪里。</h4><p>事实上，this基本上指向最后调用他的对象。谁最后调用了this，this最终就指向哪里。（虽然会存在着，隐式调用的时候，this就变成了默认）</p>
+<h4 id="而apply-call-与-bind-，可以改变this的指向。"><a href="#而apply-call-与-bind-，可以改变this的指向。" class="headerlink" title="而apply call 与 bind ，可以改变this的指向。"></a>而apply call 与 bind ，可以改变this的指向。</h4><p>例子如下，</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var name = &#x27;芳芳&#x27;</span><br><span class="line">function sayHi() &#123;</span><br><span class="line">    console.log(this.name);</span><br><span class="line">&#125;</span><br><span class="line">var parson = &#123;</span><br><span class="line">    name: &#x27;李四&#x27;,</span><br><span class="line">&#125;</span><br><span class="line">sayHi();//芳芳</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>我们需要让sayHi方法的this指向parson</strong></p>
+<p>例子如下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">var name = &#x27;芳芳&#x27;</span><br><span class="line">function sayHi() &#123;</span><br><span class="line">    console.log(this.name);</span><br><span class="line">&#125;</span><br><span class="line">var parson = &#123;</span><br><span class="line">    name: &#x27;李四&#x27;,</span><br><span class="line">&#125;</span><br><span class="line">sayHi.call(parson)//李四</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p>使用apply 也可以改变指向。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">var name = &#x27;芳芳&#x27;</span><br><span class="line">function sayHi() &#123;</span><br><span class="line">    console.log(this.name);</span><br><span class="line">&#125;</span><br><span class="line">var parson = &#123;</span><br><span class="line">    name: &#x27;李四&#x27;,</span><br><span class="line">&#125;</span><br><span class="line">sayHi.apply(parson)//李四</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<h5 id="apply-与-call-的区别。"><a href="#apply-与-call-的区别。" class="headerlink" title="apply 与 call 的区别。"></a>apply 与 call 的区别。</h5><p>apply 和call的第一个参数都是，制定this的指向。第二次参数都是要传递进入的参数。不同的是 apply方法必须要制定一个数组作为参数传入，而，call则不是。</p>
+<p>例子如下，，</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">// var name = &#x27;芳芳&#x27;</span><br><span class="line">function sayHi(a, b) &#123;</span><br><span class="line">    console.log(this.val + a + b);</span><br><span class="line">&#125;</span><br><span class="line">var parson = &#123;</span><br><span class="line">    val: 10,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">sayHi.call(parson, 1, 2);</span><br><span class="line">sayHi.apply(parson, [1, 2,]);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<p>不管是apply 与call 方法都指向了 parson，且，只不过apply参数传递必须是个数组。</p>
+<p>bind 与 apply 和call不同的地方在于。</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>执行</th>
+<th>返回</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>apply</td>
+<td>改变函数的this上下文后马上执行函数</td>
+<td>返回fun的执行结果</td>
+</tr>
+<tr>
+<td>bind</td>
+<td>返回函数改变了上下文的函数不马上执行</td>
+<td>返回fun的拷贝，并指定了this的指向，保存函数的参数。</td>
+</tr>
+</tbody></table>
+<p>关于apply 的一些妙用。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">var arr = [1, 2, 3, 4, 21, 21, 31, 32, 32, 12121, 21];</span><br><span class="line">let max = Math.max.apply(Math, arr);</span><br><span class="line">let min = Math.min.apply(Math, arr)</span><br><span class="line">console.log(max, min);</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>改变this的指向</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>reduce解决商品sku算法问题</title>
     <url>/blogs/2022/01/10/reduce%E8%A7%A3%E5%86%B3%E5%95%86%E5%93%81sku%E7%AE%97%E6%B3%95%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<h4 id="sku问题。"><a href="#sku问题。" class="headerlink" title="sku问题。"></a>sku问题。</h4><p>找到了一个数组方法 特别适合计算sku。</p>
