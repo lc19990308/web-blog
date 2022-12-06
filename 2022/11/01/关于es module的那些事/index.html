@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blogs/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blogs/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blogs/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/blogs/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/blogs/css/main.css">
+
+
+<link rel="stylesheet" href="/blogs/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/blogs/lib/pace/pace-theme-minimal.min.css">
+  <script src="/blogs/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yaru722.gitee.io","root":"/blogs/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="js模块化编程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用es module模块化编程">
+<meta property="og:url" content="http://yaru722.gitee.io/2022/11/01/%E5%85%B3%E4%BA%8Ees%20module%E7%9A%84%E9%82%A3%E4%BA%9B%E4%BA%8B/index.html">
+<meta property="og:site_name" content="bug制造者">
+<meta property="og:description" content="js模块化编程">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1.ax1x.com/2022/11/01/xTjKx0.md.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/11/01/xTj92t.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/11/01/xTjVaQ.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/11/01/xTjZ5j.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/11/01/xTjnGn.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/11/01/xTjZ5j.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/11/01/xTj1qU.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/11/01/xTjlrT.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/11/01/xTjQMV.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/11/01/xTjEVg.jpg">
+<meta property="og:image" content="https://s1.ax1x.com/2022/11/01/xTjiKf.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/11/01/xTjmPs.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/11/01/xTj8ZF.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/11/01/xTjGa4.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/11/01/xTjCxP.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/11/01/xTjNGR.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/11/01/xTjCxP.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/11/01/xTjFr8.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/11/01/xTju2q.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/11/01/xTjkqS.png">
+<meta property="article:published_time" content="2022-11-01T04:12:37.578Z">
+<meta property="article:modified_time" content="2022-11-01T05:12:11.781Z">
+<meta property="article:author" content="lc">
+<meta property="article:tag" content="ES6模块化">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s1.ax1x.com/2022/11/01/xTjKx0.md.png">
+
+<link rel="canonical" href="http://yaru722.gitee.io/2022/11/01/%E5%85%B3%E4%BA%8Ees%20module%E7%9A%84%E9%82%A3%E4%BA%9B%E4%BA%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>使用es module模块化编程 | bug制造者</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/blogs/atom.xml" title="bug制造者" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband">
+    <a target="_blank" rel="noopener" href="https://gitee.com/yaru722" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    </div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/blogs/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bug制造者</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/blogs/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/blogs/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/blogs/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yaru722.gitee.io/2022/11/01/%E5%85%B3%E4%BA%8Ees%20module%E7%9A%84%E9%82%A3%E4%BA%9B%E4%BA%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+      <meta itemprop="name" content="lc">
+      <meta itemprop="description" content="欢迎您的到来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bug制造者">
+    </span>
+      <header class="post-header">
+      
+        <h1 class="post-title" itemprop="name headline">
+          使用es module模块化编程
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-11-01 12:12:37 / 修改时间：13:12:11" itemprop="dateCreated datePublished" datetime="2022-11-01T12:12:37+08:00">2022-11-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogs/categories/ES6/" itemprop="url" rel="index"><span itemprop="name">ES6</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">js模块化编程</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h5 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h5><p>很长的一段时间内，我以为，es modules的关键字import，export,只能在vue里面，使用，是因为webpack，这样的打包工具，才能得已实现的。<br>甚至让我觉得，原生js不行的原因就是因为，不支持es moduls。</p>
+<p>陷入了一定的误区，这篇文章，来修正我的认知错误。</p>
+<h5 id="原生js使用es-module进行模块化。"><a href="#原生js使用es-module进行模块化。" class="headerlink" title="原生js使用es module进行模块化。"></a>原生js使用es module进行模块化。</h5><p>使用script 加载js文件的时候 <strong><u>type = ‘module’</u></strong> 就可以开启模块化。</p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/xTjKx0"><img src="https://s1.ax1x.com/2022/11/01/xTjKx0.md.png" alt="xTjKx0.md.png"></a></p>
+<h5 id="注意，es-module，默认开启的严格模式。我来证明给您看。"><a href="#注意，es-module，默认开启的严格模式。我来证明给您看。" class="headerlink" title="注意，es module，默认开启的严格模式。我来证明给您看。"></a>注意，es module，默认开启的严格模式。我来证明给您看。</h5><p><a target="_blank" rel="noopener" href="https://imgse.com/i/xTj92t"><img src="https://s1.ax1x.com/2022/11/01/xTj92t.png" alt="xTj92t.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/xTjVaQ"><img src="https://s1.ax1x.com/2022/11/01/xTjVaQ.png" alt="xTjVaQ.png"></a></p>
+<p>看吧，控制台上this是 undefined</p>
+<h5 id="原生js，使用import，export"><a href="#原生js，使用import，export" class="headerlink" title="原生js，使用import，export"></a>原生js，使用import，export</h5><p>在上图的index.html文件下的index.js export抛出，<br><a target="_blank" rel="noopener" href="https://imgse.com/i/xTjZ5j"><img src="https://s1.ax1x.com/2022/11/01/xTjZ5j.png" alt="xTjZ5j.png"></a></p>
+<p>在test import，引入。<br><a target="_blank" rel="noopener" href="https://imgse.com/i/xTjnGn"><img src="https://s1.ax1x.com/2022/11/01/xTjnGn.png" alt="xTjnGn.png"></a></p>
+<p>控制台，打印的结果是，{a: 11}</p>
+<h5 id="es-module，加载是通过cors进行的。"><a href="#es-module，加载是通过cors进行的。" class="headerlink" title="es module，加载是通过cors进行的。"></a>es module，加载是通过cors进行的。</h5><p>如果 <strong><script type='module' src=''> </script></strong><br>如果，这里的 <strong>src</strong>加载的是服务器资源的话，如果资源不支持cors的话，会被浏览器拦截。</p>
+<p>例子如下，<br><a target="_blank" rel="noopener" href="https://imgse.com/i/xTjZ5j"><img src="https://s1.ax1x.com/2022/11/01/xTjZ5j.png" alt="xTjZ5j.png"></a></p>
+<p>支持，cors 加载的资源，type = ‘module’ 会被浏览器所加载，不支持cors的，会被浏览器拦截，这点服务端需要注意。</p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/xTj1qU"><img src="https://s1.ax1x.com/2022/11/01/xTj1qU.png" alt="xTj1qU.png"></a></p>
+<p>cors，不支持文件的访问，所以，必须使用，http，serve的方式进行访问。</p>
+<p><strong>使用，文件访问导致的后果</strong></p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/xTjlrT"><img src="https://s1.ax1x.com/2022/11/01/xTjlrT.png" alt="xTjlrT.png"></a></p>
+<h5 id="es-module，自带脚本延迟效果"><a href="#es-module，自带脚本延迟效果" class="headerlink" title="es module，自带脚本延迟效果"></a>es module，自带脚本延迟效果</h5><p>当页面，加载完毕后，才会加载，es module脚本。<br><a target="_blank" rel="noopener" href="https://imgse.com/i/xTjQMV"><img src="https://s1.ax1x.com/2022/11/01/xTjQMV.png" alt="xTjQMV.png"></a></p>
+<p>当所有的，非es module加载完毕后，才能加载es module模块。</p>
+<p>总结，<br>es module的特性是，<br>1，默认就是严格模式<br>2，每个module模块，都拥有私有的作用域。<br>3，只支持cors，加载。本地必须开启 web serve<br>4，自带延迟效果</p>
+<h5 id="关于import-export-一些小知识。"><a href="#关于import-export-一些小知识。" class="headerlink" title="关于import export 一些小知识。"></a>关于import export 一些小知识。</h5><p>我们可以使用，export，到处一些变量方法，也可以，export，设置默认导出的方法。</p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/xTjEVg"><img src="https://s1.ax1x.com/2022/11/01/xTjEVg.jpg" alt="xTjEVg.jpg"></a></p>
+<p>接收默认到处的值</p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/xTjiKf"><img src="https://s1.ax1x.com/2022/11/01/xTjiKf.png" alt="xTjiKf.png"></a></p>
+<p>接收默认导出的值</p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/xTjmPs"><img src="https://s1.ax1x.com/2022/11/01/xTjmPs.png" alt="xTjmPs.png"></a></p>
+<p><strong>as 关键字，修改默认导出的值</strong></p>
+<p>export <strong>as关键字修改 变量名</strong></p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/xTj8ZF"><img src="https://s1.ax1x.com/2022/11/01/xTj8ZF.png" alt="xTj8ZF.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/xTjGa4"><img src="https://s1.ax1x.com/2022/11/01/xTjGa4.png" alt="xTjGa4.png"></a><br>import <strong>as修改接收参数的变量名</strong></p>
+<h5 id="export-导出的并不是一个对象-import-引入的也不是个对象的解构。"><a href="#export-导出的并不是一个对象-import-引入的也不是个对象的解构。" class="headerlink" title="export 导出的并不是一个对象 import 引入的也不是个对象的解构。"></a>export 导出的并不是一个对象 import 引入的也不是个对象的解构。</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">let num = 1;</span><br><span class="line">export &#123;</span><br><span class="line">    num</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>虽然export后面跟着 {} 看起来很像对象， { name },看起来很像es6，字面量的写法。</p>
+<p>import 在这里 **{}**，就像使用对象字面量解构一样，</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">import &#123; num &#125; from &#x27;./test.js&#x27;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>export {}</strong> 和 <strong>import {}</strong> 是 es modulc的固定语法。</p>
+<p>export 导出的只是，内存地址。<br>export 导出的，是常量。只能在 export 内部修改。</p>
+<p><strong>例子如下</strong></p>
+<p>导出num</p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/xTjCxP"><img src="https://s1.ax1x.com/2022/11/01/xTjCxP.png" alt="xTjCxP.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/xTjNGR"><img src="https://s1.ax1x.com/2022/11/01/xTjNGR.png" alt="xTjNGR.png"></a></p>
+<p>控制台报错，index.js:4 Uncaught TypeError: Assignment to constant variable.<br>    at index.js:4:4</p>
+<p>因为，我们import引入的，<strong>num</strong> 是个常量。无法在外部，对 import 引入的 num进行修改。</p>
+<p><strong>那么，怎么样导入，一个字面量对象呢？</strong></p>
+<p>使用 <strong>export default</strong></p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/xTjCxP"><img src="https://s1.ax1x.com/2022/11/01/xTjCxP.png" alt="xTjCxP.png"></a></p>
+<h5 id="import-全部导入和import-动态导入模块和import导出，url，以及import导出，默认成员和命名成员。"><a href="#import-全部导入和import-动态导入模块和import导出，url，以及import导出，默认成员和命名成员。" class="headerlink" title="import 全部导入和import 动态导入模块和import导出，url，以及import导出，默认成员和命名成员。"></a>import 全部导入和import 动态导入模块和import导出，url，以及import导出，默认成员和命名成员。</h5><p>如果export 导入了很多属性。我们可以使用import * 把所有的导出全部接收。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">let num = 1;</span><br><span class="line">let name = &#x27;张三&#x27;;</span><br><span class="line">let age = 12;</span><br><span class="line">let sigin = &#x27;为什么&#x27;</span><br><span class="line">export &#123;</span><br><span class="line">    num,</span><br><span class="line">    name,</span><br><span class="line">    age,</span><br><span class="line">    sigin</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">import * as module from &#x27;./test.js&#x27;</span><br><span class="line">console.log(module);</span><br></pre></td></tr></table></figure>
+
+<p>import * as module 导入全部的要导出的模块。</p>
+<p>试想，我们有一个这样的需求，根据判断条件，来决定要导入，那个模块。</p>
+<p>import 必须要在最外层，最顶层的作用域当中。不能嵌套在if，或者funtion当中。</p>
+<p>es modulc，提供了一个，<strong>import</strong>函数，来帮助我们动态的导入模块。而且，import(),本身是一个promise函数。</p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/xTjFr8"><img src="https://s1.ax1x.com/2022/11/01/xTjFr8.png" alt="xTjFr8.png"></a></p>
+<p>这样通过，then,那么就能读取到模块了。</p>
+<p>import 可以导入一个，url链接模块<br><a target="_blank" rel="noopener" href="https://imgse.com/i/xTju2q"><img src="https://s1.ax1x.com/2022/11/01/xTju2q.png" alt="xTju2q.png"></a></p>
+<p>import 导出默认成员与，命名成员<br><a target="_blank" rel="noopener" href="https://imgse.com/i/xTjkqS"><img src="https://s1.ax1x.com/2022/11/01/xTjkqS.png" alt="xTjkqS.png"></a></p>
+<p>总结，es module，</p>
+<ol>
+<li>在原生js当中使用，script标签，type应该使用，module。module默认就在严格模式环境下，this不可能指向全局。</li>
+<li>每个模块都拥有了独立的，私有的作用域。</li>
+<li>module加载，模块，会存在cors问题，需要服务端专门设置，本地必须开启，web sever</li>
+<li>type = module后，会存在延迟效果，等页面资源加载完毕后，再去加载。</li>
+</ol>
+<p>总结，import的特性</p>
+<ol>
+<li>import {} 并非对象的解构，而是语法就是这样的。</li>
+<li>import，导入的属性，只可以读取。import导入的是常量，无法修改。</li>
+<li>import * model from 可以把，所有导出的属性，全部导入到一个对象里面。</li>
+<li>import，可以导入url模块，</li>
+<li>import必须在顶部，不可以在函数，条件语句下面。</li>
+<li>import()，可以动态导入，<strong>import</strong>默认本身就是一个promise方法。</li>
+<li>import as 可以更换导入的属性别名。</li>
+<li>import num，{age,age1} from ‘../../‘可以导入，默认的成员与命名的成员。</li>
+</ol>
+<p>总结，export的特性</p>
+<ol>
+<li>export {} 这是语法，抛出的不是一个，字面量对象，export default是抛出对象。</li>
+<li>export 抛出去的值是内存地址的引用，值，只能在export模块里面修改。</li>
+<li>as 可以修改默认要导出的值的别名。</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/blogs/2022/11/01/%E5%85%B3%E4%BA%8Ees%20module%E7%9A%84%E9%82%A3%E4%BA%9B%E4%BA%8B/">使用es module模块化编程</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a></p>
+  <p><span>发布时间:</span>2022年11月01日 - 12:11</p>
+  <p><span>最后更新:</span>2022年11月01日 - 13:11</p>
+  <p><span>原始链接:</span><a href="/blogs/2022/11/01/%E5%85%B3%E4%BA%8Ees%20module%E7%9A%84%E9%82%A3%E4%BA%9B%E4%BA%8B/" title="使用es module模块化编程">http://yaru722.gitee.io/2022/11/01/%E5%85%B3%E4%BA%8Ees%20module%E7%9A%84%E9%82%A3%E4%BA%9B%E4%BA%8B/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yaru722.gitee.io/2022/11/01/%E5%85%B3%E4%BA%8Ees%20module%E7%9A%84%E9%82%A3%E4%BA%9B%E4%BA%8B/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+    });
+    });  
+</script>
+
+      
+</div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/blogs/tags/ES6%E6%A8%A1%E5%9D%97%E5%8C%96/" ****># ES6模块化</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blogs/2022/06/08/JavaScript%E5%BD%93%E4%B8%AD%E7%9A%84%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F/" rel="prev" title="关于JavaScript的严格模式那些事">
+      <i class="fa fa-chevron-left"></i> 关于JavaScript的严格模式那些事
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blogs/2022/12/06/DataUrl%E6%98%AF%E4%BB%80%E4%B9%88/" rel="next" title="什么是Data URL">
+      什么是Data URL <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8E%9F%E7%94%9Fjs%E4%BD%BF%E7%94%A8es-module%E8%BF%9B%E8%A1%8C%E6%A8%A1%E5%9D%97%E5%8C%96%E3%80%82"><span class="nav-number">2.</span> <span class="nav-text">原生js使用es module进行模块化。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%EF%BC%8Ces-module%EF%BC%8C%E9%BB%98%E8%AE%A4%E5%BC%80%E5%90%AF%E7%9A%84%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F%E3%80%82%E6%88%91%E6%9D%A5%E8%AF%81%E6%98%8E%E7%BB%99%E6%82%A8%E7%9C%8B%E3%80%82"><span class="nav-number">3.</span> <span class="nav-text">注意，es module，默认开启的严格模式。我来证明给您看。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8E%9F%E7%94%9Fjs%EF%BC%8C%E4%BD%BF%E7%94%A8import%EF%BC%8Cexport"><span class="nav-number">4.</span> <span class="nav-text">原生js，使用import，export</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#es-module%EF%BC%8C%E5%8A%A0%E8%BD%BD%E6%98%AF%E9%80%9A%E8%BF%87cors%E8%BF%9B%E8%A1%8C%E7%9A%84%E3%80%82"><span class="nav-number">5.</span> <span class="nav-text">es module，加载是通过cors进行的。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#es-module%EF%BC%8C%E8%87%AA%E5%B8%A6%E8%84%9A%E6%9C%AC%E5%BB%B6%E8%BF%9F%E6%95%88%E6%9E%9C"><span class="nav-number">6.</span> <span class="nav-text">es module，自带脚本延迟效果</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%85%B3%E4%BA%8Eimport-export-%E4%B8%80%E4%BA%9B%E5%B0%8F%E7%9F%A5%E8%AF%86%E3%80%82"><span class="nav-number">7.</span> <span class="nav-text">关于import export 一些小知识。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#export-%E5%AF%BC%E5%87%BA%E7%9A%84%E5%B9%B6%E4%B8%8D%E6%98%AF%E4%B8%80%E4%B8%AA%E5%AF%B9%E8%B1%A1-import-%E5%BC%95%E5%85%A5%E7%9A%84%E4%B9%9F%E4%B8%8D%E6%98%AF%E4%B8%AA%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%A7%A3%E6%9E%84%E3%80%82"><span class="nav-number">8.</span> <span class="nav-text">export 导出的并不是一个对象 import 引入的也不是个对象的解构。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#import-%E5%85%A8%E9%83%A8%E5%AF%BC%E5%85%A5%E5%92%8Cimport-%E5%8A%A8%E6%80%81%E5%AF%BC%E5%85%A5%E6%A8%A1%E5%9D%97%E5%92%8Cimport%E5%AF%BC%E5%87%BA%EF%BC%8Curl%EF%BC%8C%E4%BB%A5%E5%8F%8Aimport%E5%AF%BC%E5%87%BA%EF%BC%8C%E9%BB%98%E8%AE%A4%E6%88%90%E5%91%98%E5%92%8C%E5%91%BD%E5%90%8D%E6%88%90%E5%91%98%E3%80%82"><span class="nav-number">9.</span> <span class="nav-text">import 全部导入和import 动态导入模块和import导出，url，以及import导出，默认成员和命名成员。</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lc"
+      src="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+  <p class="site-author-name" itemprop="name">lc</p>
+  <div class="site-description" itemprop="description">欢迎您的到来</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/blogs/archives/">
+        
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/blogs/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yourname" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yourname@gmail.com" title="E-Mail → mailto:yourname@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/yourname" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://plus.google.com/yourname" title="Google → https:&#x2F;&#x2F;plus.google.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-google fa-fw"></i>Google</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/yourname" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/yourname" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://stackoverflow.com/yourname" title="StackOverflow → https:&#x2F;&#x2F;stackoverflow.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-stack-overflow fa-fw"></i>StackOverflow</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://youtube.com/yourname" title="YouTube → https:&#x2F;&#x2F;youtube.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-youtube fa-fw"></i>YouTube</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/yourname" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="skype:yourname?call|chat" title="Skype → skype:yourname?call|chat" rel="noopener" target="_blank"><i class="fab fa-skype fa-fw"></i>Skype</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=441491828&auto=1&height=66"></iframe>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lc</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>-->
+<div class="powered-by">
+  <i class="fa fa-user-md"></i>
+  <span id="busuanzi_container_site_pv">
+    本站访问量:<span id="busuanzi_value_site_pv"></span>次
+  </span>
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv">
+    本站总访客量：<span id="busuanzi_value_site_uv"></span>人
+  </span>
+</div>
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共30.3k字</span>
+</div>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/blogs/lib/anime.min.js"></script>
+  <script src="/blogs/lib/velocity/velocity.min.js"></script>
+  <script src="/blogs/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/blogs/js/utils.js"></script>
+
+<script src="/blogs/js/motion.js"></script>
+
+
+<script src="/blogs/js/schemes/pisces.js"></script>
+
+
+<script src="/blogs/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/blogs/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</html>
