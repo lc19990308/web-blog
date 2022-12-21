@@ -22,20 +22,28 @@
     var CONFIG = {"hostname":"yaru722.gitee.io","root":"/blogs/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="input组件的v-model实现，emit。v-on：input，sync修饰符的使用。">
+  <meta name="description" content="css当中的(BFC)块级格式化上下文是什么？">
 <meta property="og:type" content="article">
-<meta property="og:title" content="vue组件的双向绑定">
-<meta property="og:url" content="http://yaru722.gitee.io/2021/06/22/vue%E7%9A%84%E7%BB%84%E4%BB%B6%E7%9A%84%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A/index.html">
+<meta property="og:title" content="css当中的BFC">
+<meta property="og:url" content="http://yaru722.gitee.io/2022/12/21/css%E5%BD%93%E4%B8%AD%E7%9A%84BFC/index.html">
 <meta property="og:site_name" content="bug制造者">
-<meta property="og:description" content="input组件的v-model实现，emit。v-on：input，sync修饰符的使用。">
+<meta property="og:description" content="css当中的(BFC)块级格式化上下文是什么？">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-06-22T13:35:58.000Z">
-<meta property="article:modified_time" content="2021-06-22T13:35:58.000Z">
+<meta property="og:image" content="http://rmeu5gdxe.hd-bkt.clouddn.com/blog_bfc1.jpeg">
+<meta property="og:image" content="http://rmeu5gdxe.hd-bkt.clouddn.com/blog_bfc2.jpeg">
+<meta property="og:image" content="http://rmeu5gdxe.hd-bkt.clouddn.com/WeChatb847b01c1e81db03fd5eb205c3048678.png">
+<meta property="og:image" content="http://rmeu5gdxe.hd-bkt.clouddn.com/WeChatb3ca569dc952680bb8ab7b50e2bd73a8.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/12/14/zIlvoq.md.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/12/14/zI8use.md.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/12/14/zI8TW6.md.png">
+<meta property="article:published_time" content="2022-12-21T07:37:13.914Z">
+<meta property="article:modified_time" content="2022-12-21T07:38:39.216Z">
 <meta property="article:author" content="lc">
-<meta property="article:tag" content="vue">
+<meta property="article:tag" content="css当中的BFC">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://rmeu5gdxe.hd-bkt.clouddn.com/blog_bfc1.jpeg">
 
-<link rel="canonical" href="http://yaru722.gitee.io/2021/06/22/vue%E7%9A%84%E7%BB%84%E4%BB%B6%E7%9A%84%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A/">
+<link rel="canonical" href="http://yaru722.gitee.io/2022/12/21/css%E5%BD%93%E4%B8%AD%E7%9A%84BFC/">
 
 
 <script id="page-configurations">
@@ -48,7 +56,7 @@
   };
 </script>
 
-  <title>vue组件的双向绑定 | bug制造者</title>
+  <title>css当中的BFC | bug制造者</title>
   
 
 
@@ -189,7 +197,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yaru722.gitee.io/2021/06/22/vue%E7%9A%84%E7%BB%84%E4%BB%B6%E7%9A%84%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A/">
+    <link itemprop="mainEntityOfPage" href="http://yaru722.gitee.io/2022/12/21/css%E5%BD%93%E4%B8%AD%E7%9A%84BFC/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
@@ -203,7 +211,7 @@
       <header class="post-header">
       
         <h1 class="post-title" itemprop="name headline">
-          vue组件的双向绑定
+          css当中的BFC
         </h1>
 
         <div class="post-meta">
@@ -212,8 +220,9 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2021-06-22 21:35:58" itemprop="dateCreated datePublished" datetime="2021-06-22T21:35:58+08:00">2021-06-22</time>
+              <time title="创建时间：2022-12-21 15:37:13 / 修改时间：15:38:39" itemprop="dateCreated datePublished" datetime="2022-12-21T15:37:13+08:00">2022-12-21</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -221,7 +230,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogs/categories/vue/" itemprop="url" rel="index"><span itemprop="name">vue</span></a>
+                  <a href="/blogs/categories/css/" itemprop="url" rel="index"><span itemprop="name">css</span></a>
                 </span>
             </span>
 
@@ -233,7 +242,7 @@
               <span class="post-meta-item-text">阅读次数：</span>
               <span id="busuanzi_value_page_pv"></span>
             </span>
-            <div class="post-description">input组件的v-model实现，emit。v-on：input，sync修饰符的使用。</div>
+            <div class="post-description">css当中的(BFC)块级格式化上下文是什么？</div>
 
         </div>
       </header>
@@ -244,14 +253,74 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h4 id="vue组件的双向绑定。"><a href="#vue组件的双向绑定。" class="headerlink" title="vue组件的双向绑定。"></a>vue组件的双向绑定。</h4><p>一直以来vue自定义组件，都有个问题困惑我。prop，好像是一个单向数据流，父组件的数据可以传向子组件，可是子组件。无法修改父组件的值。</p>
-<p>输入框的v-model也只是一个语法糖，实际上。还是把要传进来的值接受到之后再去通过$emit<br>自定义事件和值给抛了出去。</p>
-<p>例子如下，我使用的是 uniapp</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">	&lt;view&gt;</span><br><span class="line">		&lt;input type=&quot;text&quot; :value=&quot;value&quot; @input=&#x27;updata&#x27; /&gt;</span><br><span class="line">	&lt;/view&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">	export default &#123;</span><br><span class="line">		name: &quot;inputfield&quot;,</span><br><span class="line">		props: &#123;</span><br><span class="line">			value: &#123;</span><br><span class="line">				</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;,</span><br><span class="line">		data() &#123;</span><br><span class="line">			return &#123;</span><br><span class="line"></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;,</span><br><span class="line">		methods: &#123;</span><br><span class="line">		    //输入框输入触发，input事件的时候，我们使用emit()，把值给抛出去。value得到了更新。</span><br><span class="line">			updata(e)&#123;</span><br><span class="line">				this.$emit(&#x27;input&#x27;,e.detail.value);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h5 id="sync是vue的修饰符，可以帮助props，实现双向绑定。"><a href="#sync是vue的修饰符，可以帮助props，实现双向绑定。" class="headerlink" title=".sync是vue的修饰符，可以帮助props，实现双向绑定。"></a>.sync是vue的修饰符，可以帮助props，实现双向绑定。</h5><p>例子如下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">//sync绑定了value，</span><br><span class="line">&lt;inputfield :value.sync=&quot;value&quot; /&gt;</span><br><span class="line">&#123;&#123;value&#125;&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">我们看看组件内部是如何实现的</span><br><span class="line">&lt;template&gt;</span><br><span class="line">	&lt;view&gt;</span><br><span class="line">		&lt;view class=&quot;&quot;&gt;</span><br><span class="line">			&#123;&#123;value&#125;&#125;</span><br><span class="line">			&lt;button type=&quot;default&quot; @tap=&#x27;run&#x27;&gt;run&lt;/button&gt;</span><br><span class="line">		&lt;/view&gt;</span><br><span class="line">	&lt;/view&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">	export default &#123;</span><br><span class="line">		name: &quot;inputfield&quot;,</span><br><span class="line">		props: &#123;</span><br><span class="line">			value: &#123;</span><br><span class="line">				type: Boolean,</span><br><span class="line">				default: false,</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;,</span><br><span class="line">		data() &#123;</span><br><span class="line">			return &#123;</span><br><span class="line"></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;,</span><br><span class="line">		methods: &#123;</span><br><span class="line">			run() &#123;</span><br><span class="line">				//使用 emit触发一个update事件，然后:value，是我们子组件要改变的属性。</span><br><span class="line">				if (this.value) &#123;</span><br><span class="line">					this.$emit(&#x27;update:value&#x27;, false);</span><br><span class="line">				&#125; else &#123;</span><br><span class="line">					this.$emit(&#x27;update:value&#x27;, true);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;,</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line"></span><br><span class="line">&lt;/style&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+        <h5 id="到底什么是bfc"><a href="#到底什么是bfc" class="headerlink" title="到底什么是bfc"></a>到底什么是bfc</h5><p>Block formatting contexts 也叫做”块格式化上下文”。简单来说，bfc容器在内部有一块独立的空间。不管内部的元素如何布局，如何排列，它们都不回影响到外部的布局。就像一个规则。</p>
+<p>举个例子，</p>
+<p><img src="http://rmeu5gdxe.hd-bkt.clouddn.com/blog_bfc1.jpeg" alt="什么是bfc"></p>
+<p><strong>孙悟空</strong>画的圈圈，就是<strong>BFC</strong>，而里面的唐僧等人，就是BFC容器内部的子元素。</p>
+<p>外部的容器打扰不到BFC内部的布局，BFC容器，也不会影响到外部的布局。。</p>
+<h5 id="BFC-有什么用？为什么要使用它。"><a href="#BFC-有什么用？为什么要使用它。" class="headerlink" title="BFC,有什么用？为什么要使用它。"></a>BFC,有什么用？为什么要使用它。</h5><p>为什么要使用bfc</p>
+<p>举个例子，</p>
+<p><img src="http://rmeu5gdxe.hd-bkt.clouddn.com/blog_bfc2.jpeg" alt="如果不使用bfc的话"></p>
+<p><strong>子元素</strong>(乘客)，就会<strong>挤出</strong>容器，导致影响到外部的布局。。</p>
+<p>代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">  &lt;div class=&quot;Container&quot;&gt;</span><br><span class="line">        &lt;div class=&quot;box1&quot;&gt;&lt;/div&gt;</span><br><span class="line">        &lt;div class=&quot;box2&quot;&gt;&lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">  &lt;p&gt;林尽水源，便得一山，山有小口，仿佛若有光。便舍船，从口入。初极狭，才通人。复行数十步，豁然开朗。&lt;/p&gt;</span><br><span class="line"></span><br><span class="line">.Container &#123;</span><br><span class="line">    height: 100px;</span><br><span class="line">    width: 100px;</span><br><span class="line">    background-color: black;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.box1 &#123;</span><br><span class="line">    width: 50px;</span><br><span class="line">    height: 50px;</span><br><span class="line">    background-color: red;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.box2 &#123;</span><br><span class="line">    width: 50px;</span><br><span class="line">    height: 150px;</span><br><span class="line">    background-color: orange;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>效果图</p>
+<p><img src="http://rmeu5gdxe.hd-bkt.clouddn.com/WeChatb847b01c1e81db03fd5eb205c3048678.png" alt="容器被子元素挤出"></p>
+<p>因为，Container，大小只有100px，box1+box2，大小已经超出了100px，那么元素就会溢出。这个时候就会影响到，下面的布局。。</p>
+<p>bfc容器，子元素在空间不足的情况下，不会影响到外部布局。。</p>
+<p>代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">   &lt;div class=&quot;BFC_box&quot;&gt;</span><br><span class="line">        &lt;div class=&quot;box1&quot;&gt;&lt;/div&gt;</span><br><span class="line">        &lt;div class=&quot;box2&quot;&gt;&lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;p&gt;林尽水源，便得一山，山有小口，仿佛若有光。便舍船，从口入。初极狭，才通人。复行数十步，豁然开朗。&lt;/p&gt;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    body &#123;</span><br><span class="line">    margin: 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.BFC_box &#123;</span><br><span class="line">    height: 100px;</span><br><span class="line">    width: 100px;</span><br><span class="line">    overflow: hidden;</span><br><span class="line">    background-color: black;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.box1 &#123;</span><br><span class="line">    width: 50px;</span><br><span class="line">    height: 50px;</span><br><span class="line">    background-color: red;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.box2 &#123;</span><br><span class="line">    width: 50px;</span><br><span class="line">    height: 150px;</span><br><span class="line">    background-color: orange;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 
+
+<p>效果图</p>
+<p><img src="http://rmeu5gdxe.hd-bkt.clouddn.com/WeChatb3ca569dc952680bb8ab7b50e2bd73a8.png" alt="bfc容器，子元素不会影响到外部布局"></p>
+<h5 id="如何触发bfc"><a href="#如何触发bfc" class="headerlink" title="如何触发bfc"></a>如何触发bfc</h5><ol>
+<li><p>根元素；</p>
+</li>
+<li><p>浮动元素。元素的 float 不是 none；</p>
+</li>
+<li><p>绝对定位元素。元素的 position 为 absolute 或 fixed；</p>
+</li>
+<li><p>行内块元素。元素的 display 为 inline-block；</p>
+</li>
+<li><p>表格单元格。元素的 display为 table-cell，HTML表格单元格默认为该值；</p>
+</li>
+<li><p>表格标题。元素的 display 为 table-caption，HTML表格标题默认为该值；</p>
+</li>
+<li><p>匿名表格单元格元素。元素的 display为 table、table-row、 table-row-group、table-header-group、table-footer-group（分别是HTML table、row、tbody、thead、tfoot的默认属性）或 inline-table；</p>
+</li>
+<li><p>overflow 值不为 visible 的块元素 ；</p>
+</li>
+<li><p>弹性元素。display为 flex 或 inline-flex元素的直接子元素；</p>
+</li>
+<li><p>网格元素。display为 grid 或 inline-grid 元素的直接子元素。</p>
+</li>
+</ol>
+<h5 id="bfc都有哪些用处。"><a href="#bfc都有哪些用处。" class="headerlink" title="bfc都有哪些用处。"></a>bfc都有哪些用处。</h5><ol>
+<li>出现mrigin重叠。</li>
+<li>可以应用到两栏布局。</li>
+<li>清除内部的元素的浮动。</li>
+</ol>
+<p>marigin 重叠。</p>
+<p>代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div class=&quot;box1&quot;&gt;&lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;box2&quot;&gt;&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line"></span><br><span class="line">.box1 &#123;</span><br><span class="line">    width: 200px;</span><br><span class="line">    height: 200px;</span><br><span class="line">    margin-bottom: 100px;</span><br><span class="line">    background-color: red;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.box2 &#123;</span><br><span class="line">    width: 200px;</span><br><span class="line">    height: 200px;</span><br><span class="line">    margin-top: 40px;</span><br><span class="line">    background-color: red;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<p>效果图</p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/zIlvoq"><img src="https://s1.ax1x.com/2022/12/14/zIlvoq.md.png" alt="zIlvoq.md.png"></a></p>
+<p>按道理来讲  margin-top: 40px;，margin-bottom: 100px;那么，上下边距得有140px的，但是2个盒子之间的上下边距，会被折叠，取最大的那个。所以。上下只有100px的边距。</p>
+<p>bfc可以清除浮动。</p>
+<p>现在产生一个浮动。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div class=&quot;box&quot;&gt;</span><br><span class="line">        &lt;div class=&quot;box1&quot;&gt;&lt;/div&gt;</span><br><span class="line">        &lt;div class=&quot;box2&quot;&gt;&lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;p&gt;111&lt;/p&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line"></span><br><span class="line">body &#123;</span><br><span class="line">    margin: 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.box &#123;</span><br><span class="line">    background-color: aqua;</span><br><span class="line">    border: 1px solid black;</span><br><span class="line">    width: 600px;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.box1 &#123;</span><br><span class="line">    margin: 0 10px;</span><br><span class="line">    float: left;</span><br><span class="line">    width: 200px;</span><br><span class="line">    height: 200px;</span><br><span class="line">    background-color: red;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.box2 &#123;</span><br><span class="line">    margin: 0 10px;</span><br><span class="line">    float: left;</span><br><span class="line">    width: 200px;</span><br><span class="line">    height: 200px;</span><br><span class="line">    background-color: red;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<p>效果图<br><a target="_blank" rel="noopener" href="https://imgse.com/i/zI8use"><img src="https://s1.ax1x.com/2022/12/14/zI8use.md.png" alt="zI8use.md.png"></a></p>
+<p>给.box添加 display：flex，</p>
+<p>效果图。</p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/zI8TW6"><img src="https://s1.ax1x.com/2022/12/14/zI8TW6.md.png" alt="zI8TW6.md.png"></a></p>
+<p>以下就是bfc格式化块级上下文的理解。bfc容器，不影响到外部容器。marigin会折叠。会清清楚浮动。</p>
 
     </div>
 
@@ -267,12 +336,12 @@
   <!-- JS库 sweetalert 可修改路径 -->
   <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-  <p><span>本文标题:</span><a href="/blogs/2021/06/22/vue%E7%9A%84%E7%BB%84%E4%BB%B6%E7%9A%84%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A/">vue组件的双向绑定</a></p>
+  <p><span>本文标题:</span><a href="/blogs/2022/12/21/css%E5%BD%93%E4%B8%AD%E7%9A%84BFC/">css当中的BFC</a></p>
   <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a></p>
-  <p><span>发布时间:</span>2021年06月22日 - 21:06</p>
-  <p><span>最后更新:</span>2021年06月22日 - 21:06</p>
-  <p><span>原始链接:</span><a href="/blogs/2021/06/22/vue%E7%9A%84%E7%BB%84%E4%BB%B6%E7%9A%84%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A/" title="vue组件的双向绑定">http://yaru722.gitee.io/2021/06/22/vue%E7%9A%84%E7%BB%84%E4%BB%B6%E7%9A%84%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A/</a>
-    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yaru722.gitee.io/2021/06/22/vue%E7%9A%84%E7%BB%84%E4%BB%B6%E7%9A%84%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A/"  aria-label="复制成功！"></i></span>
+  <p><span>发布时间:</span>2022年12月21日 - 15:12</p>
+  <p><span>最后更新:</span>2022年12月21日 - 15:12</p>
+  <p><span>原始链接:</span><a href="/blogs/2022/12/21/css%E5%BD%93%E4%B8%AD%E7%9A%84BFC/" title="css当中的BFC">http://yaru722.gitee.io/2022/12/21/css%E5%BD%93%E4%B8%AD%E7%9A%84BFC/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yaru722.gitee.io/2022/12/21/css%E5%BD%93%E4%B8%AD%E7%9A%84BFC/"  aria-label="复制成功！"></i></span>
   </p>
   <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> 转载请保留原文链接及作者。</p>  
 </div>
@@ -295,7 +364,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/blogs/tags/vue/" ****># vue</a>
+              <a href="/blogs/tags/css%E5%BD%93%E4%B8%AD%E7%9A%84BFC/" ****># css当中的BFC</a>
           </div>
 
         
@@ -304,13 +373,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/blogs/2021/06/21/flex%E5%B8%83%E5%B1%80%E7%9A%84%E5%A4%8D%E4%B9%A0/" rel="prev" title="flex布局复习">
-      <i class="fa fa-chevron-left"></i> flex布局复习
+    <a href="/blogs/2022/12/21/%E4%BB%8E0%E5%BC%80%E5%A7%8B%EF%BC%8C%E5%AD%A6%E4%B9%A0vuex/" rel="prev" title="从0开始学习vuex">
+      <i class="fa fa-chevron-left"></i> 从0开始学习vuex
     </a></div>
-      <div class="post-nav-item">
-    <a href="/blogs/2021/06/22/vue%E6%A8%A1%E6%9D%BF%E8%AF%AD%E6%B3%95%E7%9A%84%E6%9F%A5%E6%BC%8F%E8%A1%A5%E7%BC%BA/" rel="next" title="vue模板语法的查漏补缺">
-      vue模板语法的查漏补缺 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -369,7 +435,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#vue%E7%BB%84%E4%BB%B6%E7%9A%84%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A%E3%80%82"><span class="nav-number">1.</span> <span class="nav-text">vue组件的双向绑定。</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#sync%E6%98%AFvue%E7%9A%84%E4%BF%AE%E9%A5%B0%E7%AC%A6%EF%BC%8C%E5%8F%AF%E4%BB%A5%E5%B8%AE%E5%8A%A9props%EF%BC%8C%E5%AE%9E%E7%8E%B0%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A%E3%80%82"><span class="nav-number">1.1.</span> <span class="nav-text">.sync是vue的修饰符，可以帮助props，实现双向绑定。</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%B0%E5%BA%95%E4%BB%80%E4%B9%88%E6%98%AFbfc"><span class="nav-number">1.</span> <span class="nav-text">到底什么是bfc</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#BFC-%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BD%BF%E7%94%A8%E5%AE%83%E3%80%82"><span class="nav-number">2.</span> <span class="nav-text">BFC,有什么用？为什么要使用它。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%A7%A6%E5%8F%91bfc"><span class="nav-number">3.</span> <span class="nav-text">如何触发bfc</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#bfc%E9%83%BD%E6%9C%89%E5%93%AA%E4%BA%9B%E7%94%A8%E5%A4%84%E3%80%82"><span class="nav-number">4.</span> <span class="nav-text">bfc都有哪些用处。</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
