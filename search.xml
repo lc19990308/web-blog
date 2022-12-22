@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>2022年12月22日日报</title>
+    <url>/blogs/2022/12/22/%E8%8E%B7%E5%8F%96%E9%AA%8C%E8%AF%81%E7%A0%81--%E4%BA%BA%E6%9C%BA%E9%AA%8C%E8%AF%81/</url>
+    <content><![CDATA[<p><a href="https://gitee.com/yaru722/vue-monoplasty-slide-verify">人机验证</a></p>
+<p>安装</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install --save vue-monoplasty-slide-verify</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>使用</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import Vue from &#x27;vue&#x27;;</span><br><span class="line">import SlideVerify from &#x27;vue-monoplasty-slide-verify&#x27;;</span><br><span class="line"></span><br><span class="line">Vue.use(SlideVerify);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>例子</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;slide-verify ref=&quot;slideblock&quot; @again=&quot;onAgain&quot; @fulfilled=&quot;onFulfilled&quot; @success=&quot;onSuccess&quot; @fail=&quot;onFail&quot; @refresh=&quot;onRefresh&quot; :slider-text=&quot;text&quot; :accuracy=&quot;accuracy&quot;&gt;&lt;/slide-verify&gt;</span><br><span class="line">  &lt;button @click=&quot;handleClick&quot;&gt;在父组件可以点我刷新哦&lt;/button&gt;</span><br><span class="line">  &lt;div&gt;&#123;&#123;msg&#125;&#125;&lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">    export default &#123;</span><br><span class="line">        name: &#x27;App&#x27;,</span><br><span class="line">        data()&#123;</span><br><span class="line">            return &#123;</span><br><span class="line">                msg: &#x27;&#x27;,</span><br><span class="line">                text: &#x27;向右滑动-&gt;&#x27;,</span><br><span class="line">                // 精确度小，可允许的误差范围小；为1时，则表示滑块要与凹槽完全重叠，才能验证成功。默认值为5</span><br><span class="line">                accuracy: 1,</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        methods: &#123;</span><br><span class="line">            onSuccess(times)&#123;</span><br><span class="line">                console.log(&#x27;验证通过，耗时 +&#x27; times + &#x27;毫秒&#x27;);</span><br><span class="line">                this.msg = &#x27;login success, 耗时$&#123;(times / 1000).toFixed(1)&#125;s&#x27;</span><br><span class="line">            &#125;,</span><br><span class="line">            onFail()&#123;</span><br><span class="line">                console.log(&#x27;验证不通过&#x27;);</span><br><span class="line">                this.msg = &#x27;&#x27;</span><br><span class="line">            &#125;,</span><br><span class="line">            onRefresh()&#123;</span><br><span class="line">                console.log(&#x27;点击了刷新小图标&#x27;);</span><br><span class="line">                this.msg = &#x27;&#x27;</span><br><span class="line">            &#125;,</span><br><span class="line">            onFulfilled() &#123;</span><br><span class="line">                console.log(&#x27;刷新成功啦！&#x27;);</span><br><span class="line">            &#125;,</span><br><span class="line">            onAgain() &#123;</span><br><span class="line">                console.log(&#x27;检测到非人为操作的哦！&#x27;);</span><br><span class="line">                this.msg = &#x27;try again&#x27;;</span><br><span class="line">                // 刷新</span><br><span class="line">                this.$refs.slideblock.reset();</span><br><span class="line">            &#125;,</span><br><span class="line">            handleClick() &#123;</span><br><span class="line">                this.$refs.slideblock.reset();</span><br><span class="line">            &#125;,</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>开发日记</category>
+      </categories>
+      <tags>
+        <tag>vue插件</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>css当中的BFC</title>
     <url>/blogs/2022/12/21/css%E5%BD%93%E4%B8%AD%E7%9A%84BFC/</url>
     <content><![CDATA[<h5 id="到底什么是bfc"><a href="#到底什么是bfc" class="headerlink" title="到底什么是bfc"></a>到底什么是bfc</h5><p>Block formatting contexts 也叫做”块格式化上下文”。简单来说，bfc容器在内部有一块独立的空间。不管内部的元素如何布局，如何排列，它们都不回影响到外部的布局。就像一个规则。</p>

@@ -6,7 +6,7 @@
   <link href="http://yaru722.gitee.io/atom.xml" rel="self"/>
   
   <link href="http://yaru722.gitee.io/"/>
-  <updated>2022-12-21T07:38:39.216Z</updated>
+  <updated>2022-12-22T10:47:30.255Z</updated>
   <id>http://yaru722.gitee.io/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>2022年12月22日日报</title>
+    <link href="http://yaru722.gitee.io/2022/12/22/%E8%8E%B7%E5%8F%96%E9%AA%8C%E8%AF%81%E7%A0%81--%E4%BA%BA%E6%9C%BA%E9%AA%8C%E8%AF%81/"/>
+    <id>http://yaru722.gitee.io/2022/12/22/%E8%8E%B7%E5%8F%96%E9%AA%8C%E8%AF%81%E7%A0%81--%E4%BA%BA%E6%9C%BA%E9%AA%8C%E8%AF%81/</id>
+    <published>2022-12-22T10:46:06.347Z</published>
+    <updated>2022-12-22T10:47:30.255Z</updated>
+    
+    <content type="html"><![CDATA[<p><a href="https://gitee.com/yaru722/vue-monoplasty-slide-verify">人机验证</a></p><p>安装</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm install --save vue-monoplasty-slide-verify</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure><p>使用</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import Vue from &#x27;vue&#x27;;</span><br><span class="line">import SlideVerify from &#x27;vue-monoplasty-slide-verify&#x27;;</span><br><span class="line"></span><br><span class="line">Vue.use(SlideVerify);</span><br><span class="line"></span><br></pre></td></tr></table></figure><p>例子</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;slide-verify ref=&quot;slideblock&quot; @again=&quot;onAgain&quot; @fulfilled=&quot;onFulfilled&quot; @success=&quot;onSuccess&quot; @fail=&quot;onFail&quot; @refresh=&quot;onRefresh&quot; :slider-text=&quot;text&quot; :accuracy=&quot;accuracy&quot;&gt;&lt;/slide-verify&gt;</span><br><span class="line">  &lt;button @click=&quot;handleClick&quot;&gt;在父组件可以点我刷新哦&lt;/button&gt;</span><br><span class="line">  &lt;div&gt;&#123;&#123;msg&#125;&#125;&lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">    export default &#123;</span><br><span class="line">        name: &#x27;App&#x27;,</span><br><span class="line">        data()&#123;</span><br><span class="line">            return &#123;</span><br><span class="line">                msg: &#x27;&#x27;,</span><br><span class="line">                text: &#x27;向右滑动-&gt;&#x27;,</span><br><span class="line">                // 精确度小，可允许的误差范围小；为1时，则表示滑块要与凹槽完全重叠，才能验证成功。默认值为5</span><br><span class="line">                accuracy: 1,</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        methods: &#123;</span><br><span class="line">            onSuccess(times)&#123;</span><br><span class="line">                console.log(&#x27;验证通过，耗时 +&#x27; times + &#x27;毫秒&#x27;);</span><br><span class="line">                this.msg = &#x27;login success, 耗时$&#123;(times / 1000).toFixed(1)&#125;s&#x27;</span><br><span class="line">            &#125;,</span><br><span class="line">            onFail()&#123;</span><br><span class="line">                console.log(&#x27;验证不通过&#x27;);</span><br><span class="line">                this.msg = &#x27;&#x27;</span><br><span class="line">            &#125;,</span><br><span class="line">            onRefresh()&#123;</span><br><span class="line">                console.log(&#x27;点击了刷新小图标&#x27;);</span><br><span class="line">                this.msg = &#x27;&#x27;</span><br><span class="line">            &#125;,</span><br><span class="line">            onFulfilled() &#123;</span><br><span class="line">                console.log(&#x27;刷新成功啦！&#x27;);</span><br><span class="line">            &#125;,</span><br><span class="line">            onAgain() &#123;</span><br><span class="line">                console.log(&#x27;检测到非人为操作的哦！&#x27;);</span><br><span class="line">                this.msg = &#x27;try again&#x27;;</span><br><span class="line">                // 刷新</span><br><span class="line">                this.$refs.slideblock.reset();</span><br><span class="line">            &#125;,</span><br><span class="line">            handleClick() &#123;</span><br><span class="line">                this.$refs.slideblock.reset();</span><br><span class="line">            &#125;,</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+    <summary type="html">vue-monoplasty-slide-verify插件，开发登录人机验证。</summary>
+    
+    
+    
+    <category term="开发日记" scheme="http://yaru722.gitee.io/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/"/>
+    
+    
+    <category term="vue插件" scheme="http://yaru722.gitee.io/tags/vue%E6%8F%92%E4%BB%B6/"/>
+    
+  </entry>
   
   <entry>
     <title>css当中的BFC</title>
@@ -412,27 +433,6 @@
     
     
     <category term="开发日记" scheme="http://yaru722.gitee.io/tags/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>前端常用的单位和计算说明</title>
-    <link href="http://yaru722.gitee.io/2021/10/24/%E5%89%8D%E7%AB%AF%E5%B8%B8%E7%94%A8%E7%9A%84%E5%8D%95%E4%BD%8D%E5%92%8C%E8%AE%A1%E7%AE%97%E8%AF%B4%E6%98%8E/"/>
-    <id>http://yaru722.gitee.io/2021/10/24/%E5%89%8D%E7%AB%AF%E5%B8%B8%E7%94%A8%E7%9A%84%E5%8D%95%E4%BD%8D%E5%92%8C%E8%AE%A1%E7%AE%97%E8%AF%B4%E6%98%8E/</id>
-    <published>2021-10-24T11:13:02.000Z</published>
-    <updated>2021-10-24T11:13:02.000Z</updated>
-    
-    <content type="html"><![CDATA[<table><thead><tr><th>单位</th><th>特性</th></tr></thead><tbody><tr><td>px</td><td>相对长度单位</td></tr><tr><td>pt</td><td>绝对单位</td></tr><tr><td>rem</td><td>相对单位</td></tr><tr><td>em</td><td>相对单位</td></tr><tr><td>upx</td><td>uniapp主动放弃了</td></tr><tr><td>rpx</td><td>相对单位-动态宽度单位</td></tr><tr><td>vw</td><td>相对单位</td></tr><tr><td>vh</td><td>相对单位</td></tr><tr><td>vmin</td><td>相对单位，屏幕宽高相对较小的那个。</td></tr><tr><td>vmax</td><td>相对单位，屏幕宽高相对较大的那个。</td></tr></tbody></table><h4 id="关于px"><a href="#关于px" class="headerlink" title="关于px"></a>关于px</h4><p>1.px,是一块屏幕能展示能显示最小的像素点。<br>2.px是一个相对的绝对单位。相对指的是 都是屏幕,但是1px在不同屏幕上可能展示的大小不一样。  A屏幕的1px的长度也许会大于B屏幕的1px。</p><p>3.但是在网页设计中，A屏幕分辨率 300x300px  B屏幕 600x600px，各设一个width 2px，height 2px的盒子。他们大小会是一样的。</p><p>因为浏览器，在A屏幕是 1px 也许只是1个像素点。但是 B屏幕这样的高清屏幕，1px也许就是 2个像素点来表示1px。所以就是屏幕像素密度存在差异，但是会在浏览器会经过逻辑计算。这就是绝对。</p><h4 id="关于pt"><a href="#关于pt" class="headerlink" title="关于pt"></a>关于pt</h4><p>印刷行业表示字体的单位， 1/72英寸。绝对单位。<br>计算公式等于 100px * 4/3</p><h4 id="关于rem单位。"><a href="#关于rem单位。" class="headerlink" title="关于rem单位。"></a>关于rem单位。</h4><p>htlm根元素字体大小。 1rem 等于16px</p><h4 id="关于em-单位"><a href="#关于em-单位" class="headerlink" title="关于em 单位"></a>关于em 单位</h4><p>我对em单位超级超级陌生。培训班大师兄跟我说 国外喜欢用em作为字体大小来使用。<br>但是国内没必要，选择rem或者px就行了。</p><p>今天写这篇博客的时候，看到这篇文章<a href="https://jorux.com/archives/95-websites-of-china-need-to-rewrite-css/">。95%的中国网站需要重写CSS</a></p><p>由于ie浏览器的内核不支持调整网站px字体的大小。所以国外都使用了em作为web网站的字体单位。</p><p>但是国内没有这样去做。以至于今天，ie已经成为会议了。</p><p>那么em单位是什么呢。</p><p>em的值不是固定的，em会继承父级字体的大小。</p><h4 id="rpx单位。"><a href="#rpx单位。" class="headerlink" title="rpx单位。"></a>rpx单位。</h4><p>uniapp 针对屏幕的宽度会动态调整的单位。<br>计算规则如下，2px == 4rpx</p><p>设计稿 * A元素的px / 750 就是rpx。</p><p>设计稿 * 页面测试的元素宽度 / 设计稿基准宽度。</p><p>通常1px 等于2rpx</p><h4 id="vw-和-vh单位。"><a href="#vw-和-vh单位。" class="headerlink" title="vw 和 vh单位。"></a>vw 和 vh单位。</h4><p>vw 是视口的宽度 vh是视口的高度</p><p>vw 等于 视口的1%。<br>也是相对单位</p><p>1920 * 1080 1vw 等于 1920 / 100% 19.2px。</p><h4 id="vmax-与vmin。"><a href="#vmax-与vmin。" class="headerlink" title="vmax 与vmin。"></a>vmax 与vmin。</h4><p>vmax vmin 针对与我们字体 比如，我们手机从竖屏来到横屏。vw 和vh会发生变化。</p><p>vmax vmin 一个是取vw 和vh 最大的值，一个是取最小的值。</p><p>ps：写此篇博客是为了和ui撕逼。</p>]]></content>
-    
-    
-    <summary type="html">ui图,750pt,我直呼好家伙,ui我跟你拼了。对前端常用的单位扫盲</summary>
-    
-    
-    
-    <category term="css" scheme="http://yaru722.gitee.io/categories/css/"/>
-    
-    
-    <category term="css常用单位" scheme="http://yaru722.gitee.io/tags/css%E5%B8%B8%E7%94%A8%E5%8D%95%E4%BD%8D/"/>
     
   </entry>
   
