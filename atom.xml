@@ -38,27 +38,6 @@
   </entry>
   
   <entry>
-    <title>2022年12月22日日报</title>
-    <link href="http://yaru722.gitee.io/2022/12/22/%E8%8E%B7%E5%8F%96%E9%AA%8C%E8%AF%81%E7%A0%81--%E4%BA%BA%E6%9C%BA%E9%AA%8C%E8%AF%81/"/>
-    <id>http://yaru722.gitee.io/2022/12/22/%E8%8E%B7%E5%8F%96%E9%AA%8C%E8%AF%81%E7%A0%81--%E4%BA%BA%E6%9C%BA%E9%AA%8C%E8%AF%81/</id>
-    <published>2022-12-22T10:46:06.347Z</published>
-    <updated>2022-12-22T10:47:30.255Z</updated>
-    
-    <content type="html"><![CDATA[<p><a href="https://gitee.com/yaru722/vue-monoplasty-slide-verify">人机验证</a></p><p>安装</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm install --save vue-monoplasty-slide-verify</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure><p>使用</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import Vue from &#x27;vue&#x27;;</span><br><span class="line">import SlideVerify from &#x27;vue-monoplasty-slide-verify&#x27;;</span><br><span class="line"></span><br><span class="line">Vue.use(SlideVerify);</span><br><span class="line"></span><br></pre></td></tr></table></figure><p>例子</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;slide-verify ref=&quot;slideblock&quot; @again=&quot;onAgain&quot; @fulfilled=&quot;onFulfilled&quot; @success=&quot;onSuccess&quot; @fail=&quot;onFail&quot; @refresh=&quot;onRefresh&quot; :slider-text=&quot;text&quot; :accuracy=&quot;accuracy&quot;&gt;&lt;/slide-verify&gt;</span><br><span class="line">  &lt;button @click=&quot;handleClick&quot;&gt;在父组件可以点我刷新哦&lt;/button&gt;</span><br><span class="line">  &lt;div&gt;&#123;&#123;msg&#125;&#125;&lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">    export default &#123;</span><br><span class="line">        name: &#x27;App&#x27;,</span><br><span class="line">        data()&#123;</span><br><span class="line">            return &#123;</span><br><span class="line">                msg: &#x27;&#x27;,</span><br><span class="line">                text: &#x27;向右滑动-&gt;&#x27;,</span><br><span class="line">                // 精确度小，可允许的误差范围小；为1时，则表示滑块要与凹槽完全重叠，才能验证成功。默认值为5</span><br><span class="line">                accuracy: 1,</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        methods: &#123;</span><br><span class="line">            onSuccess(times)&#123;</span><br><span class="line">                console.log(&#x27;验证通过，耗时 +&#x27; times + &#x27;毫秒&#x27;);</span><br><span class="line">                this.msg = &#x27;login success, 耗时$&#123;(times / 1000).toFixed(1)&#125;s&#x27;</span><br><span class="line">            &#125;,</span><br><span class="line">            onFail()&#123;</span><br><span class="line">                console.log(&#x27;验证不通过&#x27;);</span><br><span class="line">                this.msg = &#x27;&#x27;</span><br><span class="line">            &#125;,</span><br><span class="line">            onRefresh()&#123;</span><br><span class="line">                console.log(&#x27;点击了刷新小图标&#x27;);</span><br><span class="line">                this.msg = &#x27;&#x27;</span><br><span class="line">            &#125;,</span><br><span class="line">            onFulfilled() &#123;</span><br><span class="line">                console.log(&#x27;刷新成功啦！&#x27;);</span><br><span class="line">            &#125;,</span><br><span class="line">            onAgain() &#123;</span><br><span class="line">                console.log(&#x27;检测到非人为操作的哦！&#x27;);</span><br><span class="line">                this.msg = &#x27;try again&#x27;;</span><br><span class="line">                // 刷新</span><br><span class="line">                this.$refs.slideblock.reset();</span><br><span class="line">            &#125;,</span><br><span class="line">            handleClick() &#123;</span><br><span class="line">                this.$refs.slideblock.reset();</span><br><span class="line">            &#125;,</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
-    
-    
-    <summary type="html">vue-monoplasty-slide-verify插件，开发登录人机验证。</summary>
-    
-    
-    
-    <category term="开发日记" scheme="http://yaru722.gitee.io/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/"/>
-    
-    
-    <category term="vue插件" scheme="http://yaru722.gitee.io/tags/vue%E6%8F%92%E4%BB%B6/"/>
-    
-  </entry>
-  
-  <entry>
     <title>css当中的BFC</title>
     <link href="http://yaru722.gitee.io/2022/12/21/css%E5%BD%93%E4%B8%AD%E7%9A%84BFC/"/>
     <id>http://yaru722.gitee.io/2022/12/21/css%E5%BD%93%E4%B8%AD%E7%9A%84BFC/</id>
@@ -433,6 +412,27 @@
     
     
     <category term="九宫格" scheme="http://yaru722.gitee.io/tags/%E4%B9%9D%E5%AE%AB%E6%A0%BC/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>2021年11月22日日报</title>
+    <link href="http://yaru722.gitee.io/2021/11/23/2021%E5%B9%B411%E6%9C%8822%E6%97%A5%E6%97%A5%E6%8A%A5/"/>
+    <id>http://yaru722.gitee.io/2021/11/23/2021%E5%B9%B411%E6%9C%8822%E6%97%A5%E6%97%A5%E6%8A%A5/</id>
+    <published>2021-11-23T12:58:53.124Z</published>
+    <updated>2021-11-23T12:59:29.201Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="已完成"><a href="#已完成" class="headerlink" title="已完成"></a>已完成</h4><h5 id="看js的红宝书"><a href="#看js的红宝书" class="headerlink" title="看js的红宝书"></a>看js的红宝书</h5><p>标识符<br>js中的标识符指的是，变量，属性，方法。最好使用小驼峰写法（首字母小写），标识符开头必须是字母或者_下划线，或者美元符号$来表示。</p><p>语句<br>{}来表示代码块，那怕就一句，;号表示语句的结束，如果不写分号也许。只不过js引擎会解析都时候带上，对性能不好。<br>最好使用控制语句来控制代码块。</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">if(true)</span><br><span class="line">log(&#x27;坏的写法&#x27;)</span><br><span class="line"></span><br><span class="line">if(ture)&#123;</span><br><span class="line">    log(&#x27;好的写法&#x27;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure><p>es6之后才加了let 与const，任何版本变量都可以使用var 声明。<br>var 自带变量提升。</p><p>关键字是js中定义好的东西，不可以声明为标识符。保留字是不是关键字的关键字。下个版本也许就是关键字了。</p><h5 id="商城项目"><a href="#商城项目" class="headerlink" title="商城项目"></a>商城项目</h5><p>瀑布流的数据push入数组里面，这个时候转成josn字符串再转出来。</p><p>uniapp编译的时候存在问题。（猜测）</p><p>写分页的时候，上拉加载的时候就做判断。</p><h5 id="催宋哥工厂图"><a href="#催宋哥工厂图" class="headerlink" title="催宋哥工厂图"></a>催宋哥工厂图</h5><h4 id="未完成"><a href="#未完成" class="headerlink" title="未完成"></a>未完成</h4><p>尽快结束商城<br>给爸爸打电话<br>找媳妇聊天。<br>恢复状态<br>减肥。</p><h5 id="心得。"><a href="#心得。" class="headerlink" title="心得。"></a>心得。</h5><p>调整状态，多学习。经验。勤为径。</p>]]></content>
+    
+    
+    <summary type="html">巩固印象</summary>
+    
+    
+    
+    <category term="开发日记" scheme="http://yaru722.gitee.io/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/"/>
+    
+    
+    <category term="开发日记" scheme="http://yaru722.gitee.io/tags/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/"/>
     
   </entry>
   
