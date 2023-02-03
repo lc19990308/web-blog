@@ -1,6 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>阅读vue的风格指南</title>
+    <url>/blogs/2023/02/03/%E9%98%85%E8%AF%BBvue%E7%9A%84%E9%A3%8E%E6%A0%BC%E6%8C%87%E5%8D%97/</url>
+    <content><![CDATA[<h4 id="规则-A"><a href="#规则-A" class="headerlink" title="规则 A"></a>规则 A</h4><p><strong>vue 当中的组件名当为多个单词。</strong><br>例子</p>
+<p>good</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">order-list.vue</span><br><span class="line">order-list-item.vue</span><br><span class="line">OrderList.vue</span><br><span class="line">OrderListItem.vue</span><br></pre></td></tr></table></figure>
+
+<p>bad</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">order.vue</span><br><span class="line">ORDER.vue</span><br></pre></td></tr></table></figure>
+
+<p><strong>data 必须是一个函数</strong></p>
+<p>bad</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">data:&#123;</span><br><span class="line">    name:11,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>good</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">data()&#123;</span><br><span class="line">    return&#123;</span><br><span class="line">        name:11</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>prop 定义尽量详细</strong></p>
+<p>bad</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">prop:[&#x27;name&#x27;,&#x27;value&#x27;],</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>good</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">prop:&#123;</span><br><span class="line">    name:&#123;</span><br><span class="line">        type:string,</span><br><span class="line">        default：&#x27;2&#x27;,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>更好的做法</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">prop:&#123;</span><br><span class="line">    name:&#123;</span><br><span class="line">        type:string,</span><br><span class="line">        default:&#x27;2&#x27;,</span><br><span class="line">        required: true,</span><br><span class="line">        validator: function (value) &#123;</span><br><span class="line">        return [</span><br><span class="line">            &#x27;syncing&#x27;,</span><br><span class="line">            &#x27;synced&#x27;,</span><br><span class="line">            &#x27;version-conflict&#x27;,</span><br><span class="line">            &#x27;error&#x27;</span><br><span class="line">        ].indexOf(value) !== -1</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>避免 v-for 与 v-if 用在一起</strong></p>
+<p>v-for 的优先级要高于 v-for。<br>最好使用计算属性，返回过滤后的列表</p>
+<p><strong>为组件样式设置私有的作用域</strong><br>good</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;style scoped&gt;</span><br><span class="line">.box&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
+
+<p>bad</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;style&gt;</span><br><span class="line">.box&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="规则-B"><a href="#规则-B" class="headerlink" title="规则 B"></a>规则 B</h4><p><strong>只要有拼接组件的构建系统，就把每个组件单独分成文件。</strong></p>
+<p>bad</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vue.component(&#x27;TodoList&#x27;);</span><br><span class="line">vue.component(&#x27;TodoListItem&#x27;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>good</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">components/</span><br><span class="line">|- TodoList.js</span><br><span class="line">|- TodoItem.js</span><br><span class="line">|- TodoList.vue</span><br><span class="line">|- TodoListItem.vue</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>单文件组件文件名大小写</strong><br>要么，单文件组件的文件名，始终首字母大写，要么全部小写，下划线分割。</p>
+<p>bad</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">components/</span><br><span class="line">|- todolistitem.vue</span><br><span class="line">|- todolistItem.vue</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>good</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">components/</span><br><span class="line">|- todo-list-item.vue</span><br><span class="line">|- TodoListItem.vue</span><br></pre></td></tr></table></figure>
+
+<p><strong>基础组件名</strong></p>
+<p>应用特定样式和约定的基础组件 (也就是展示类的、无逻辑的或无状态的组件) 应该全部以一个特定的前缀开头，比如 Base、App 或 V</p>
+<p>bad</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">components/</span><br><span class="line">|- list.vue</span><br></pre></td></tr></table></figure>
+
+<p>good</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">components/</span><br><span class="line">|- v-list.vue</span><br><span class="line">|- VList.vue</span><br><span class="line">|- BaseList.vue</span><br><span class="line">|- base-list.vue</span><br></pre></td></tr></table></figure>
+
+<p><strong>紧耦合的组件名</strong><br>和父组件紧密耦合的组件，需要以父组件的前缀来命名。。</p>
+<p>bad</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">components/</span><br><span class="line">|- TodoList.vue</span><br><span class="line">|- ItemTodoList.vue</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>good</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">components/</span><br><span class="line">|- TodoList.vue</span><br><span class="line">|- TodoListItem.vue</span><br><span class="line">|- todo-list.vue</span><br><span class="line">|- todo-list-item.vue</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>组件名中的单词顺序</strong></p>
+<p>组件名应该以高级别的 (通常是一般化描述的) 单词开头，以描述性的修饰词结尾。</p>
+<p>bod</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">components/</span><br><span class="line">|- ClearSearchInput.vue</span><br><span class="line">|- WarpSearchBOX.vue</span><br><span class="line">|- RunSearchButton.vue</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>good</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">components/</span><br><span class="line">|- SearchInput.vue</span><br><span class="line">|- SearchInputButton.vue</span><br><span class="line">|- SearchButtonClaer.vue</span><br></pre></td></tr></table></figure>
+
+<p><strong>自闭合组件</strong></p>
+<p>在单文件组件、字符串模板和 JSX 中没有内容的组件应该是自闭合的——但在 DOM 模板里永远不要这样做。</p>
+<p>bod</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//dom模版</span><br><span class="line"></span><br><span class="line">&lt;my-components /&gt;</span><br><span class="line"></span><br><span class="line">//单页面，字符串模版，jsx中</span><br><span class="line"></span><br><span class="line">&lt;my-components&gt;&lt;/my-components&gt;</span><br></pre></td></tr></table></figure>
+
+<p>good</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//dom模版</span><br><span class="line">&lt;my-components&gt;&lt;my-components/&gt;</span><br><span class="line"></span><br><span class="line">//单页面，字符串模版，jsx中</span><br><span class="line">&lt;my-components/&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>模板中的组件名大小写</strong></p>
+<p>对于绝大多数项目来说，在单文件组件和字符串模板中组件名应该总是 PascalCase 的——但是在 DOM 模板中总是 kebab-case 的。</p>
+<p>bad</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//在dom模版里</span><br><span class="line"></span><br><span class="line">&lt;mycomponetns&gt;&lt;/mycomponetns&gt;</span><br><span class="line"></span><br><span class="line">在单文件，jsx，字符串模版里面</span><br><span class="line"></span><br><span class="line">&lt;myComponent/&gt;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>good</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;my-component /&gt;</span><br><span class="line">&lt;MyComponent /&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>完整单词的组件名</strong><br>组件名应该倾向于完整单词而不是缩写。<br>bad</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">components/</span><br><span class="line">|- UCheckbox.vue</span><br><span class="line">|- UCheckboxItem.vue</span><br></pre></td></tr></table></figure>
+
+<p>good</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">components/</span><br><span class="line">|- UserCheckbox.vue</span><br><span class="line">|- UserCheckboxItem.vue</span><br></pre></td></tr></table></figure>
+
+<p><strong>Prop 名大小写</strong><br>组件 prop 命名，小驼峰，在模版，jsx 里面，kebab-case 命名。<br>bod</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">prop:&#123;</span><br><span class="line">    &#x27;greeting-text&#x27;:String</span><br><span class="line">&#125;</span><br><span class="line">&lt;WelcomeMessage greetingText=&quot;hi&quot;/&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>good</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">prop:&#123;</span><br><span class="line">    greetingText:</span><br><span class="line">&#125;</span><br><span class="line">&lt;WelcomeMessage greetingText=&quot;hi&quot;/&gt;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>多个 attribute 的元素</strong></p>
+<p>多个 attribute 的元素应该分多行撰写，每个 attribute 一行。</p>
+<p>bad</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;img src=&#x27;../../xxx/xxx&#x27; alit=&#x27;xxxx&#x27;&gt;</span><br><span class="line">&lt;MyComponent foo=&quot;a&quot; bar=&quot;b&quot; baz=&quot;c&quot; /&gt;</span><br></pre></td></tr></table></figure>
+
+<p>good</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;img src=&#x27;../../xxx/xxx&#x27;</span><br><span class="line">    alit=&#x27;xxxx&#x27;</span><br><span class="line">&gt;</span><br><span class="line">&lt;MyComponent</span><br><span class="line">  foo=&quot;a&quot;</span><br><span class="line">  bar=&quot;b&quot;</span><br><span class="line">  baz=&quot;c&quot;</span><br><span class="line">/&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>模板中简单的表达式</strong></p>
+<p>bad</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;&#123;</span><br><span class="line">  fullName.split(&#x27; &#x27;).map(function (word) &#123;</span><br><span class="line">    return word[0].toUpperCase() + word.slice(1)</span><br><span class="line">  &#125;).join(&#x27; &#x27;)</span><br><span class="line">&#125;&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>good</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;&#123; normalizedFullName &#125;&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>复杂的表达式移到计算属性上面</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">computed: &#123;</span><br><span class="line">  normalizedFullName: function () &#123;</span><br><span class="line">    return this.fullName.split(&#x27; &#x27;).map(function (word) &#123;</span><br><span class="line">      return word[0].toUpperCase() + word.slice(1)</span><br><span class="line">    &#125;).join(&#x27; &#x27;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>简单的计算属性</strong></p>
+<p>bad</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">computed: &#123;</span><br><span class="line">  price: function () &#123;</span><br><span class="line">    var basePrice = this.manufactureCost / (1 - this.profitMargin)</span><br><span class="line">    return (</span><br><span class="line">      basePrice -</span><br><span class="line">      basePrice * (this.discountPercent || 0)</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>good</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">computed: &#123;</span><br><span class="line">  basePrice: function () &#123;</span><br><span class="line">    return this.manufactureCost / (1 - this.profitMargin)</span><br><span class="line">  &#125;,</span><br><span class="line">  discount: function () &#123;</span><br><span class="line">    return this.basePrice * (this.discountPercent || 0)</span><br><span class="line">  &#125;,</span><br><span class="line">  finalPrice: function () &#123;</span><br><span class="line">    return this.basePrice - this.discount</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>带引号的 attribute 值</strong></p>
+<p>bad</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;input type=text&gt;</span><br><span class="line">&lt;input :style=&#123;width:inputWidth+&#x27;px&#x27;&#125;&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>good</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;input type=&#x27;text&#x27;&gt;</span><br><span class="line">&lt;input :style=&#x27;&#123;width:inputWidth+&#x27;px&#x27;&#125;&#x27;&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>指令缩写</strong></p>
+<p><strong>:</strong> 来表示:v-bind<br><strong>@</strong> 来表示:v-on<br><strong>#</strong> 来表示:v-slot</p>
+<p>good</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;button @click=&#x27;sumbit&#x27;</span><br><span class="line">       :width=&#x27;100px&#x27;&gt;</span><br><span class="line">提交&lt;/button&gt;</span><br></pre></td></tr></table></figure>
+
+<p>总结下来大概是。</p>
+<p>prop 必须写全。<br>prop 的属性，必须要 buttonText。组件使用的时候 :button-text</p>
+<p>组件必须是多个单词。<br>组件文件命名，要么遵守大驼峰，要么遵守短横线。<br>组件名在 dom 里面，要写闭合标签，在 jsx，模版里面，自闭合就行了。</p>
+<p>组件在模版里面，要么短横线使用，要么大驼峰。<br>紧密耦合性组件，前缀必须带父组件。<br>模版里面不要放复杂表达式。<br>scoped 样式，不要对标签使用。要用 class，速度快。<br>组件 attribute，必须分行。</p>
+]]></content>
+      <categories>
+        <category>vue</category>
+      </categories>
+      <tags>
+        <tag>vue风格指南</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>玩转sass</title>
     <url>/blogs/2023/02/01/%E7%8E%A9%E8%BD%ACsass/</url>
     <content><![CDATA[<h4 id="作为一个前端工程师，对sass的使用。只停留在嵌套是不够的。这次好好阅读一下sass的使用。"><a href="#作为一个前端工程师，对sass的使用。只停留在嵌套是不够的。这次好好阅读一下sass的使用。" class="headerlink" title="作为一个前端工程师，对sass的使用。只停留在嵌套是不够的。这次好好阅读一下sass的使用。"></a>作为一个前端工程师，对sass的使用。只停留在嵌套是不够的。这次好好阅读一下sass的使用。</h4><h4 id="嵌套规则"><a href="#嵌套规则" class="headerlink" title="嵌套规则"></a>嵌套规则</h4><p>当我们使用css写的时候，要表明上下级关系，就需要用 <strong>.</strong> 父级选择,然后后面跟上子级选择器。。</p>
