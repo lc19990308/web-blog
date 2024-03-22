@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blogs/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blogs/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blogs/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/blogs/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/blogs/css/main.css">
+
+
+<link rel="stylesheet" href="/blogs/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/blogs/lib/pace/pace-theme-minimal.min.css">
+  <script src="/blogs/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yaru722.gitee.io","root":"/blogs/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="学习了vue3，模版语法，事件绑定，修饰符，计算属性，组件基础">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从零开始学习vue3">
+<meta property="og:url" content="http://yaru722.gitee.io/2024/03/22/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0vue3/index.html">
+<meta property="og:site_name" content="bug制造者">
+<meta property="og:description" content="学习了vue3，模版语法，事件绑定，修饰符，计算属性，组件基础">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-03-22T09:39:03.350Z">
+<meta property="article:modified_time" content="2024-03-22T09:47:43.805Z">
+<meta property="article:author" content="lc">
+<meta property="article:tag" content="vue3">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yaru722.gitee.io/2024/03/22/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0vue3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>从零开始学习vue3 | bug制造者</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/blogs/atom.xml" title="bug制造者" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband">
+    <a target="_blank" rel="noopener" href="https://gitee.com/yaru722" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    </div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/blogs/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bug制造者</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/blogs/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/blogs/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/blogs/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yaru722.gitee.io/2024/03/22/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0vue3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+      <meta itemprop="name" content="lc">
+      <meta itemprop="description" content="欢迎您的到来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bug制造者">
+    </span>
+      <header class="post-header">
+      
+        <h1 class="post-title" itemprop="name headline">
+          从零开始学习vue3
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-03-22 17:39:03 / 修改时间：17:47:43" itemprop="dateCreated datePublished" datetime="2024-03-22T17:39:03+08:00">2024-03-22</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogs/categories/vue3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">vue3学习笔记</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">学习了vue3，模版语法，事件绑定，修饰符，计算属性，组件基础</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h5 id="模版语法"><a href="#模版语法" class="headerlink" title="模版语法"></a>模版语法</h5><h5 id="v-bind"><a href="#v-bind" class="headerlink" title="v-bind"></a>v-bind</h5><p><strong>1. v-bind 可以动态绑定元素，</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;a :=&quot;attribute&quot;&gt;demo&lt;/a&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref &#125; from &quot;vue&quot;;</span><br><span class="line">const attribute = ref(&#123;</span><br><span class="line">  class: &quot;box&quot;,</span><br><span class="line">  id: &quot;demo&quot;,</span><br><span class="line">  style: &quot;color:red&quot;,</span><br><span class="line">  href: &quot;www.baidu.com&quot;,</span><br><span class="line">  msg: &quot;元神怎么你了&quot;,</span><br><span class="line">&#125;);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">打开调试模式</span><br><span class="line"></span><br><span class="line">&lt;a class=&quot;box&quot; id=&quot;demo&quot; href=&quot;www.baidu.com&quot; msg=&quot;元神怎么你了&quot; style=&quot;color: red;&quot;&gt;demo&lt;/a&gt;</span><br></pre></td></tr></table></figure>
+
+<p>id，class 等属性都被绑定到上面了。</p>
+<p><strong>2. 包括组件自定义的 props，也可以绑定</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;HelloWorld :=&quot;attribute&quot; /&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import HelloWorld from &quot;../../components/HelloWorld.vue&quot;;</span><br><span class="line">import &#123; ref &#125; from &quot;vue&quot;;</span><br><span class="line">const attribute = ref(&#123;</span><br><span class="line">  class: &quot;box&quot;,</span><br><span class="line">  id: &quot;demo&quot;,</span><br><span class="line">  style: &quot;color:red&quot;,</span><br><span class="line">  href: &quot;www.baidu.com&quot;,</span><br><span class="line">  msg: &quot;元神怎么你了&quot;,</span><br><span class="line">&#125;);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;style&gt;&lt;/style&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>helloword.vue</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref &#125; from &#x27;vue&#x27;</span><br><span class="line"></span><br><span class="line">defineProps(&#123;</span><br><span class="line">  msg: String,</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">const count = ref(0)</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;h1&gt;&#123;&#123; msg &#125;&#125;&lt;/h1&gt;</span><br><span class="line"></span><br><span class="line">  &lt;div class=&quot;card&quot;&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; @click=&quot;count++&quot;&gt;count is &#123;&#123; count &#125;&#125;&lt;/button&gt;</span><br><span class="line">    &lt;p&gt;</span><br><span class="line">      Edit</span><br><span class="line">      &lt;code&gt;components/HelloWorld.vue&lt;/code&gt; to test HMR</span><br><span class="line">    &lt;/p&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line"></span><br><span class="line">  &lt;p&gt;</span><br><span class="line">    Check out</span><br><span class="line">    &lt;a href=&quot;https://vuejs.org/guide/quick-start.html#local&quot; target=&quot;_blank&quot;</span><br><span class="line">      &gt;create-vue&lt;/a</span><br><span class="line">    &gt;, the official Vue + Vite starter</span><br><span class="line">  &lt;/p&gt;</span><br><span class="line">  &lt;p&gt;</span><br><span class="line">    Install</span><br><span class="line">    &lt;a href=&quot;https://github.com/vuejs/language-tools&quot; target=&quot;_blank&quot;&gt;Volar&lt;/a&gt;</span><br><span class="line">    in your IDE for a better DX</span><br><span class="line">  &lt;/p&gt;</span><br><span class="line">  &lt;p class=&quot;read-the-docs&quot;&gt;Click on the Vite and Vue logos to learn more&lt;/p&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;style scoped&gt;</span><br><span class="line">.read-the-docs &#123;</span><br><span class="line">  color: #888;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="v-bind-和-v-on-进行动态绑定属性和事件"><a href="#v-bind-和-v-on-进行动态绑定属性和事件" class="headerlink" title="v-bind 和 v-on 进行动态绑定属性和事件"></a>v-bind 和 v-on 进行动态绑定属性和事件</h5><p>v-on === @<br>v-bind === :</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div v-on:[argument]=&quot;url&quot;&gt;demo&lt;/div&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;button class=&quot;btn&quot; @click=&quot;argument = &#x27;src&#x27;&quot;&gt;设置argument是src&lt;/button&gt;</span><br><span class="line">    &lt;button class=&quot;btn&quot; @click=&quot;argument = &#x27;href&#x27;&quot;&gt;设置argument是href&lt;/button&gt;</span><br><span class="line">    &lt;button class=&quot;btn&quot; @click=&quot;setClick&quot;&gt;设置argument是click&lt;/button&gt;</span><br><span class="line">    &lt;button class=&quot;btn&quot; @click=&quot;setDblclick&quot;&gt;设置argument是dblclick&lt;/button&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref &#125; from &quot;vue&quot;;</span><br><span class="line">const url = ref(&quot;www.baidu.com&quot;);</span><br><span class="line">const argument = ref(&quot;src&quot;);</span><br><span class="line">function run() &#123;</span><br><span class="line">  console.log(&quot;run方法！&quot;);</span><br><span class="line">&#125;</span><br><span class="line">function setClick() &#123;</span><br><span class="line">  url.value = run;</span><br><span class="line">  argument.value = &quot;click&quot;;</span><br><span class="line">&#125;</span><br><span class="line">function setDblclick() &#123;</span><br><span class="line">  url.value = run;</span><br><span class="line">  argument.value = &quot;dblclick&quot;;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">.btn &#123;</span><br><span class="line">  background-color: red;</span><br><span class="line">  color: #fff;</span><br><span class="line">  padding: 10px;</span><br><span class="line">  margin: 0 10px;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="vue-当中的修饰符"><a href="#vue-当中的修饰符" class="headerlink" title="vue 当中的修饰符"></a>vue 当中的修饰符</h5><p>使用 once 修饰符，事件只能触发一次</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div v-on:[argument].once=&quot;url&quot;&gt;demo&lt;/div&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;button class=&quot;btn&quot; @click=&quot;setDblclick&quot;&gt;设置argument是dblclick&lt;/button&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref &#125; from &quot;vue&quot;;</span><br><span class="line">const url = ref(&quot;www.baidu.com&quot;);</span><br><span class="line">const argument = ref(&quot;src&quot;);</span><br><span class="line">function run() &#123;</span><br><span class="line">  console.log(&quot;run方法！&quot;);</span><br><span class="line">&#125;</span><br><span class="line">function setDblclick() &#123;</span><br><span class="line">  url.value = run;</span><br><span class="line">  argument.value = &quot;dblclick&quot;;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="vue-当中的计算属性"><a href="#vue-当中的计算属性" class="headerlink" title="vue 当中的计算属性"></a>vue 当中的计算属性</h4><p>比起用函数计算，计算属性会缓存计算的结果，只要数据变动才会再去计算。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;input type=&quot;text&quot; v-model=&quot;priceValue&quot; placeholder=&quot;请输入价格&quot; /&gt;</span><br><span class="line">  &lt;input type=&quot;text&quot; v-model=&quot;pieceValue&quot; placeholder=&quot;请输入件数&quot; /&gt;</span><br><span class="line">  &lt;div&gt;总价：¥&#123;&#123; totalPirce &#125;&#125;&lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref, computed &#125; from &quot;vue&quot;;</span><br><span class="line">const priceValue = ref(10);</span><br><span class="line">const pieceValue = ref(1);</span><br><span class="line">const totalPirce = computed(() =&gt; &#123;</span><br><span class="line">  return priceValue.value * pieceValue.value;</span><br><span class="line">&#125;);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="可写计算属性"><a href="#可写计算属性" class="headerlink" title="可写计算属性"></a>可写计算属性</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;input type=&quot;text&quot; v-model=&quot;priceValue&quot; placeholder=&quot;请输入价格&quot; /&gt;</span><br><span class="line">  &lt;input type=&quot;text&quot; v-model=&quot;pieceValue&quot; placeholder=&quot;请输入件数&quot; /&gt;</span><br><span class="line">  &lt;div&gt;总价：¥&#123;&#123; totalPirce &#125;&#125;&lt;/div&gt;</span><br><span class="line">  &lt;div&gt;可读写的计算属性:&#123;&#123; fullName &#125;&#125;&lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref, computed &#125; from &quot;vue&quot;;</span><br><span class="line">const priceValue = ref(10);</span><br><span class="line">const pieceValue = ref(1);</span><br><span class="line">const totalPirce = computed(() =&gt; &#123;</span><br><span class="line">  return priceValue.value * pieceValue.value;</span><br><span class="line">&#125;);</span><br><span class="line">const firstName = ref(&quot;John&quot;);</span><br><span class="line">const lastName = ref(&quot;Doe&quot;);</span><br><span class="line"></span><br><span class="line">const fullName = computed(&#123;</span><br><span class="line">  // getter</span><br><span class="line">  get() &#123;</span><br><span class="line">    return firstName.value + &quot; &quot; + lastName.value;</span><br><span class="line">  &#125;,</span><br><span class="line">  // setter</span><br><span class="line">  set(newValue) &#123;</span><br><span class="line">    // 注意：我们这里使用的是解构赋值语法</span><br><span class="line">    [firstName.value, lastName.value] = newValue.split(&quot; &quot;);</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br><span class="line">fullName.value = &quot;cool faker&quot;;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>fullName.value = “cool faker”; 会改变计算属性的结果。。</p>
+<h5 id="使用-computed-的注意事项"><a href="#使用-computed-的注意事项" class="headerlink" title="使用 computed 的注意事项"></a>使用 computed 的注意事项</h5><ol>
+<li>在 getter 当中不要做<strong>异步</strong>请求，不要去<strong>操作 dom</strong>！</li>
+<li>避免直接修改计算属性的值。</li>
+</ol>
+<h4 id="class-与-style-的绑定"><a href="#class-与-style-的绑定" class="headerlink" title="class 与 style 的绑定"></a>class 与 style 的绑定</h4><p>claas 可以绑定一个对象，active 是存在需要根据 isActive 的真假值，class 和使用 v-bind 绑定 class 可以共存</p>
+<h5 id="class-的绑定"><a href="#class-的绑定" class="headerlink" title="class 的绑定"></a>class 的绑定</h5><p><strong>通过变量绑定 class</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div :class=&quot;&#123; active: isActive &#125;&quot; class=&quot;box&quot;&gt;faker&lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref &#125; from &quot;vue&quot;;</span><br><span class="line">const isActive = ref(1);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">.active &#123;</span><br><span class="line">  background-color: red;</span><br><span class="line">  color: #fff;</span><br><span class="line">  padding: 10px;</span><br><span class="line">  margin: 10px;</span><br><span class="line">&#125;</span><br><span class="line">.box &#123;</span><br><span class="line">  width: 100px;</span><br><span class="line">  height: 100px;</span><br><span class="line">  border: 3px solid blue;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>class 绑定数组</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div :class=&quot;demoClass&quot; class=&quot;box&quot;&gt;faker&lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref &#125; from &quot;vue&quot;;</span><br><span class="line">let demoClass = ref([&quot;box&quot;, &quot;active&quot;]);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">.active &#123;</span><br><span class="line">  background-color: red;</span><br><span class="line">  color: #fff;</span><br><span class="line">  padding: 10px;</span><br><span class="line">  margin: 10px;</span><br><span class="line">&#125;</span><br><span class="line">.box &#123;</span><br><span class="line">  width: 100px;</span><br><span class="line">  height: 100px;</span><br><span class="line">  border: 3px solid blue;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>class 绑定计算属性</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div :class=&quot;demoClass&quot; class=&quot;box&quot;&gt;faker&lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref, computed &#125; from &quot;vue&quot;;</span><br><span class="line">const isActive = ref(0);</span><br><span class="line">setTimeout(() =&gt; &#123;</span><br><span class="line">  isActive.value = 1;</span><br><span class="line">&#125;, 4000);</span><br><span class="line">const demoClass = computed(() =&gt; (&#123;</span><br><span class="line">  active: isActive.value,</span><br><span class="line">  box: isActive.value,</span><br><span class="line">&#125;));</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">.active &#123;</span><br><span class="line">  background-color: red;</span><br><span class="line">  color: #fff;</span><br><span class="line">  padding: 10px;</span><br><span class="line">  margin: 10px;</span><br><span class="line">&#125;</span><br><span class="line">.box &#123;</span><br><span class="line">  width: 100px;</span><br><span class="line">  height: 100px;</span><br><span class="line">  border: 3px solid blue;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>使用 class 绑定的类名和 vue 组件的类名会合并到一起。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;HelloWorld :class=&quot;demoClass&quot; msg=&quot;hello,word&quot;&gt;faker&lt;/HelloWorld&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref, computed &#125; from &quot;vue&quot;;</span><br><span class="line">import HelloWorld from &quot;../../components/HelloWorld.vue&quot;;</span><br><span class="line">const isActive = ref(0);</span><br><span class="line">setTimeout(() =&gt; &#123;</span><br><span class="line">  isActive.value = 1;</span><br><span class="line">&#125;, 4000);</span><br><span class="line">const demoClass = computed(() =&gt; (&#123;</span><br><span class="line">  active: isActive.value,</span><br><span class="line">&#125;));</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">.active &#123;</span><br><span class="line">  background-color: red;</span><br><span class="line">  color: #fff;</span><br><span class="line">  padding: 10px;</span><br><span class="line">  margin: 10px;</span><br><span class="line">&#125;</span><br><span class="line">.box &#123;</span><br><span class="line">  width: 100px;</span><br><span class="line">  height: 100px;</span><br><span class="line">  border: 3px solid blue;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
+
+<p>子组件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref &#125; from &quot;vue&quot;;</span><br><span class="line"></span><br><span class="line">defineProps(&#123;</span><br><span class="line">  msg: String,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">const count = ref(0);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div class=&quot;box&quot;&gt;</span><br><span class="line">    &lt;h1&gt;&#123;&#123; msg &#125;&#125;&lt;/h1&gt;</span><br><span class="line"></span><br><span class="line">    &lt;div class=&quot;card&quot;&gt;</span><br><span class="line">      &lt;button type=&quot;button&quot; @click=&quot;count++&quot;&gt;count is &#123;&#123; count &#125;&#125;&lt;/button&gt;</span><br><span class="line">      &lt;p&gt;</span><br><span class="line">        Edit</span><br><span class="line">        &lt;code&gt;components/HelloWorld.vue&lt;/code&gt; to test HMR</span><br><span class="line">      &lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line"></span><br><span class="line">    &lt;p&gt;</span><br><span class="line">      Check out</span><br><span class="line">      &lt;a href=&quot;https://vuejs.org/guide/quick-start.html#local&quot; target=&quot;_blank&quot;</span><br><span class="line">        &gt;create-vue&lt;/a</span><br><span class="line">      &gt;, the official Vue + Vite starter</span><br><span class="line">    &lt;/p&gt;</span><br><span class="line">    &lt;p&gt;</span><br><span class="line">      Install</span><br><span class="line">      &lt;a href=&quot;https://github.com/vuejs/language-tools&quot; target=&quot;_blank&quot;</span><br><span class="line">        &gt;Volar&lt;/a</span><br><span class="line">      &gt;</span><br><span class="line">      in your IDE for a better DX</span><br><span class="line">    &lt;/p&gt;</span><br><span class="line">    &lt;p class=&quot;read-the-docs&quot;&gt;Click on the Vite and Vue logos to learn more&lt;/p&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;style scoped&gt;</span><br><span class="line">.read-the-docs &#123;</span><br><span class="line">  color: #888;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>动态添加 active 类名和组件的 box 类名合并到了一起，<br>parents 父组件</p>
+<h5 id="style-的绑定"><a href="#style-的绑定" class="headerlink" title="style 的绑定"></a>style 的绑定</h5><p><strong>style 绑定对象</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div :style=&quot;boxClass&quot;&gt;&lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref, computed &#125; from &quot;vue&quot;;</span><br><span class="line">const boxClass = ref(&#123;</span><br><span class="line">  width: &quot;100px&quot;,</span><br><span class="line">  height: &quot;100px&quot;,</span><br><span class="line">  &quot;background-color&quot;: &quot;red&quot;,</span><br><span class="line">&#125;);</span><br><span class="line">setTimeout(() =&gt; &#123;</span><br><span class="line">  boxClass.value.width = &quot;200px&quot;;</span><br><span class="line">&#125;, 4000);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>style 绑定数组</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div :style=&quot;boxClass&quot;&gt;&lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref, computed &#125; from &quot;vue&quot;;</span><br><span class="line">const boxClass = ref(&#123;</span><br><span class="line">  width: &quot;100px&quot;,</span><br><span class="line">  height: &quot;100px&quot;,</span><br><span class="line">  &quot;background-color&quot;: &quot;red&quot;,</span><br><span class="line">&#125;);</span><br><span class="line">setTimeout(() =&gt; &#123;</span><br><span class="line">  boxClass.value.width = &quot;200px&quot;;</span><br><span class="line">&#125;, 4000);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;style&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>style 数组绑定</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div :style=&quot;[boxClass, boxClass1]&quot;&gt;&lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref, computed &#125; from &quot;vue&quot;;</span><br><span class="line">const boxClass = ref(&#123;</span><br><span class="line">  width: &quot;100px&quot;,</span><br><span class="line">  height: &quot;100px&quot;,</span><br><span class="line">  &quot;background-color&quot;: &quot;red&quot;,</span><br><span class="line">&#125;);</span><br><span class="line">const boxClass1 = ref(&#123;</span><br><span class="line">  border: &quot;1px solid blue&quot;,</span><br><span class="line">&#125;);</span><br><span class="line">setTimeout(() =&gt; &#123;</span><br><span class="line">  boxClass.value.width = &quot;200px&quot;;</span><br><span class="line">&#125;, 4000);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="模版的引用"><a href="#模版的引用" class="headerlink" title="模版的引用"></a>模版的引用</h4><h5 id="ref-可以访问到底层的-dom-元素"><a href="#ref-可以访问到底层的-dom-元素" class="headerlink" title="ref 可以访问到底层的 dom 元素"></a>ref 可以访问到底层的 dom 元素</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;input type=&quot;text&quot; ref=&quot;input&quot; /&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref, onMounted &#125; from &quot;vue&quot;;</span><br><span class="line">const input = ref(null);</span><br><span class="line"></span><br><span class="line">onMounted(() =&gt; &#123;</span><br><span class="line">  input.value.focus();</span><br><span class="line">&#125;);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="ref，父组件调用子组件"><a href="#ref，父组件调用子组件" class="headerlink" title="ref，父组件调用子组件"></a>ref，父组件调用子组件</h5><p><strong>如果是选项式 api 的话，父可以对每个子组件都有完全都访问权限，如果使用了 <script setup> 的话，就是私有的，除非子组件去通过 defineExpose 宏显式暴露。</strong></p>
+<p><strong>父组件</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;HelloWorld msg=&quot;123456789&quot; ref=&quot;childRef&quot; /&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import HelloWorld from &quot;../../components/HelloWorld.vue&quot;;</span><br><span class="line">import &#123; ref, onMounted &#125; from &quot;vue&quot;;</span><br><span class="line">const childRef = ref(null);</span><br><span class="line"></span><br><span class="line">onMounted(() =&gt; &#123;</span><br><span class="line">  childRef.value.childMethod();</span><br><span class="line">&#125;);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>子组件通过 defineExpose 暴露</strong></p>
+<figure class="highlight plaintext"><figcaption><span>setup></span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">import &#123; ref &#125; from &quot;vue&quot;;</span><br><span class="line">defineProps(&#123;</span><br><span class="line">  msg: String,</span><br><span class="line">&#125;);</span><br><span class="line">const childMethod = () =&gt; &#123;</span><br><span class="line">  console.log(&quot;Child method called&quot;);</span><br><span class="line">&#125;;</span><br><span class="line">const count = ref(0);</span><br><span class="line">defineExpose(&#123;</span><br><span class="line">  childMethod,</span><br><span class="line">&#125;);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="组件基础"><a href="#组件基础" class="headerlink" title="组件基础"></a>组件基础</h4><h5 id="组件的-props-传递和-emit-事件注册"><a href="#组件的-props-传递和-emit-事件注册" class="headerlink" title="组件的 props 传递和 emit 事件注册"></a>组件的 props 传递和 emit 事件注册</h5><p>子组件自定义事件，在标签里面，可以通过$emit,<br>在组合式 api 里面，只能通过，<strong>defineEmits</strong>定义事件。<br>在组合式 api 当中，<strong>defineProps</strong>定义子组件的属性参数。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref &#125; from &quot;vue&quot;;</span><br><span class="line">defineProps(&#123;</span><br><span class="line">  msg: &#123;</span><br><span class="line">    type: String,</span><br><span class="line">    default: &quot;hello&quot;,</span><br><span class="line">  &#125;,</span><br><span class="line">  title: String,</span><br><span class="line">  h3: String,</span><br><span class="line">&#125;);</span><br><span class="line">const emit = defineEmits([&quot;enlarge-text&quot;]);</span><br><span class="line"></span><br><span class="line">function run() &#123;</span><br><span class="line">  emit(&quot;enlarge-text&quot;, &#123; data: &quot;这是自定义数据&quot; &#125;);</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;h1&gt;&#123;&#123; msg &#125;&#125;&lt;/h1&gt;</span><br><span class="line">    &lt;h2&gt;&#123;&#123; title &#125;&#125;&lt;/h2&gt;</span><br><span class="line">    &lt;h3&gt;&#123;&#123; h3 &#125;&#125;&lt;/h3&gt;</span><br><span class="line">    &lt;button @click=&quot;run&quot;&gt;enlarge-text&lt;/button&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/blogs/2024/03/22/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0vue3/">从零开始学习vue3</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a></p>
+  <p><span>发布时间:</span>2024年03月22日 - 17:03</p>
+  <p><span>最后更新:</span>2024年03月22日 - 17:03</p>
+  <p><span>原始链接:</span><a href="/blogs/2024/03/22/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0vue3/" title="从零开始学习vue3">http://yaru722.gitee.io/2024/03/22/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0vue3/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yaru722.gitee.io/2024/03/22/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0vue3/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+    });
+    });  
+</script>
+
+      
+</div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/blogs/tags/vue3/" ****># vue3</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blogs/2024/03/21/%E7%A8%8B%E5%BA%8F%E5%91%98%E5%8D%95%E8%AF%8D%E8%A1%A8/" rel="prev" title="程序员必会的单词表">
+      <i class="fa fa-chevron-left"></i> 程序员必会的单词表
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%A8%A1%E7%89%88%E8%AF%AD%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">模版语法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#v-bind"><span class="nav-number">2.</span> <span class="nav-text">v-bind</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#v-bind-%E5%92%8C-v-on-%E8%BF%9B%E8%A1%8C%E5%8A%A8%E6%80%81%E7%BB%91%E5%AE%9A%E5%B1%9E%E6%80%A7%E5%92%8C%E4%BA%8B%E4%BB%B6"><span class="nav-number">3.</span> <span class="nav-text">v-bind 和 v-on 进行动态绑定属性和事件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#vue-%E5%BD%93%E4%B8%AD%E7%9A%84%E4%BF%AE%E9%A5%B0%E7%AC%A6"><span class="nav-number">4.</span> <span class="nav-text">vue 当中的修饰符</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vue-%E5%BD%93%E4%B8%AD%E7%9A%84%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7"><span class="nav-number"></span> <span class="nav-text">vue 当中的计算属性</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%AF%E5%86%99%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7"><span class="nav-number">1.</span> <span class="nav-text">可写计算属性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-computed-%E7%9A%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">2.</span> <span class="nav-text">使用 computed 的注意事项</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#class-%E4%B8%8E-style-%E7%9A%84%E7%BB%91%E5%AE%9A"><span class="nav-number"></span> <span class="nav-text">class 与 style 的绑定</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#class-%E7%9A%84%E7%BB%91%E5%AE%9A"><span class="nav-number">1.</span> <span class="nav-text">class 的绑定</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#style-%E7%9A%84%E7%BB%91%E5%AE%9A"><span class="nav-number">2.</span> <span class="nav-text">style 的绑定</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A8%A1%E7%89%88%E7%9A%84%E5%BC%95%E7%94%A8"><span class="nav-number"></span> <span class="nav-text">模版的引用</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#ref-%E5%8F%AF%E4%BB%A5%E8%AE%BF%E9%97%AE%E5%88%B0%E5%BA%95%E5%B1%82%E7%9A%84-dom-%E5%85%83%E7%B4%A0"><span class="nav-number">1.</span> <span class="nav-text">ref 可以访问到底层的 dom 元素</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ref%EF%BC%8C%E7%88%B6%E7%BB%84%E4%BB%B6%E8%B0%83%E7%94%A8%E5%AD%90%E7%BB%84%E4%BB%B6"><span class="nav-number">2.</span> <span class="nav-text">ref，父组件调用子组件</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lc"
+      src="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+  <p class="site-author-name" itemprop="name">lc</p>
+  <div class="site-description" itemprop="description">欢迎您的到来</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/blogs/archives/">
+        
+          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/blogs/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yourname" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yourname@gmail.com" title="E-Mail → mailto:yourname@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/yourname" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://plus.google.com/yourname" title="Google → https:&#x2F;&#x2F;plus.google.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-google fa-fw"></i>Google</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/yourname" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/yourname" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://stackoverflow.com/yourname" title="StackOverflow → https:&#x2F;&#x2F;stackoverflow.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-stack-overflow fa-fw"></i>StackOverflow</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://youtube.com/yourname" title="YouTube → https:&#x2F;&#x2F;youtube.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-youtube fa-fw"></i>YouTube</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/yourname" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="skype:yourname?call|chat" title="Skype → skype:yourname?call|chat" rel="noopener" target="_blank"><i class="fab fa-skype fa-fw"></i>Skype</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=441491828&auto=1&height=66"></iframe>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lc</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>-->
+<div class="powered-by">
+  <i class="fa fa-user-md"></i>
+  <span id="busuanzi_container_site_pv">
+    本站访问量:<span id="busuanzi_value_site_pv"></span>次
+  </span>
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv">
+    本站总访客量：<span id="busuanzi_value_site_uv"></span>人
+  </span>
+</div>
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共56.6k字</span>
+</div>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/blogs/lib/anime.min.js"></script>
+  <script src="/blogs/lib/velocity/velocity.min.js"></script>
+  <script src="/blogs/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/blogs/js/utils.js"></script>
+
+<script src="/blogs/js/motion.js"></script>
+
+
+<script src="/blogs/js/schemes/pisces.js"></script>
+
+
+<script src="/blogs/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/blogs/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</html>
