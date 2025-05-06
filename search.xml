@@ -2,7 +2,7 @@
 <search>
   <entry>
     <title>从零开始学习vue3-4</title>
-    <url>/blogs/2024/03/26/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0vue3-4/</url>
+    <url>/web-blog/2024/03/26/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0vue3-4/</url>
     <content><![CDATA[<h4 id="插槽"><a href="#插槽" class="headerlink" title="插槽"></a>插槽</h4><h5 id="组件使用插槽"><a href="#组件使用插槽" class="headerlink" title="组件使用插槽"></a>组件使用插槽</h5><p>组件外部</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;div class=&quot;&quot;&gt;</span><br><span class="line">  &lt;Child&gt;</span><br><span class="line">    &lt;div&gt;123456789&lt;/div&gt;</span><br><span class="line">    &lt;p&gt;先帝创业未半&lt;/p&gt;</span><br><span class="line">  &lt;/Child&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
@@ -59,7 +59,7 @@
   </entry>
   <entry>
     <title>从零开始学习vue3-3</title>
-    <url>/blogs/2024/03/26/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0vue3-3/</url>
+    <url>/web-blog/2024/03/26/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0vue3-3/</url>
     <content><![CDATA[<h4 id="Attributes-继承"><a href="#Attributes-继承" class="headerlink" title="Attributes 继承"></a>Attributes 继承</h4><h5 id="组件根元素继承"><a href="#组件根元素继承" class="headerlink" title="组件根元素继承"></a>组件根元素继承</h5><p>Attributes 继承指的是，当我们的一个<strong>组件</strong>，以根元素为渲染的时候，穿透的 Attributes 会自动被添加到根元素上。。</p>
 <p>组件外部</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;Child</span><br><span class="line">  class=&quot;box&quot;</span><br><span class="line">  ss</span><br><span class="line">  v-model:name=&quot;name&quot;</span><br><span class="line">  v-model:password=&quot;password&quot;</span><br><span class="line">  v-model:model.capitalize=&quot;model&quot;</span><br><span class="line">/&gt;</span><br></pre></td></tr></table></figure>
@@ -115,7 +115,7 @@
   </entry>
   <entry>
     <title>从零开始学习vue3-2</title>
-    <url>/blogs/2024/03/25/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0vue3-2/</url>
+    <url>/web-blog/2024/03/25/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0vue3-2/</url>
     <content><![CDATA[<h4 id="props-的绑定"><a href="#props-的绑定" class="headerlink" title="props 的绑定"></a>props 的绑定</h4><p>**v-bing 的不指定名字，会把 object 对象当中符合 object 的参数，给作为 props，传递过去。<br>**</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;HelloWorld @enlarge-text=&quot;enlarge&quot; :=&quot;object&quot; /&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref, onMounted &#125; from &quot;vue&quot;;</span><br><span class="line">const object = ref(&#123;</span><br><span class="line">  title: &quot;泰酷辣&quot;,</span><br><span class="line">  h3: &quot;泰酷辣&quot;,</span><br><span class="line">  msg: &quot;泰酷辣&quot;,</span><br><span class="line">  class: &quot;box&quot;,</span><br><span class="line">  id: &quot;box1&quot;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 
@@ -161,7 +161,7 @@
   </entry>
   <entry>
     <title>从零开始学习vue3-1</title>
-    <url>/blogs/2024/03/22/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0vue3-1/</url>
+    <url>/web-blog/2024/03/22/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0vue3-1/</url>
     <content><![CDATA[<h5 id="模版语法"><a href="#模版语法" class="headerlink" title="模版语法"></a>模版语法</h5><h5 id="v-bind"><a href="#v-bind" class="headerlink" title="v-bind"></a>v-bind</h5><p><strong>1. v-bind 可以动态绑定元素，</strong></p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;a :=&quot;attribute&quot;&gt;demo&lt;/a&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref &#125; from &quot;vue&quot;;</span><br><span class="line">const attribute = ref(&#123;</span><br><span class="line">  class: &quot;box&quot;,</span><br><span class="line">  id: &quot;demo&quot;,</span><br><span class="line">  style: &quot;color:red&quot;,</span><br><span class="line">  href: &quot;www.baidu.com&quot;,</span><br><span class="line">  msg: &quot;元神怎么你了&quot;,</span><br><span class="line">&#125;);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">打开调试模式</span><br><span class="line"></span><br><span class="line">&lt;a class=&quot;box&quot; id=&quot;demo&quot; href=&quot;www.baidu.com&quot; msg=&quot;元神怎么你了&quot; style=&quot;color: red;&quot;&gt;demo&lt;/a&gt;</span><br></pre></td></tr></table></figure>
 
@@ -235,7 +235,7 @@
   </entry>
   <entry>
     <title>程序员必会的单词表</title>
-    <url>/blogs/2024/03/21/%E7%A8%8B%E5%BA%8F%E5%91%98%E5%8D%95%E8%AF%8D%E8%A1%A8/</url>
+    <url>/web-blog/2024/03/21/%E7%A8%8B%E5%BA%8F%E5%91%98%E5%8D%95%E8%AF%8D%E8%A1%A8/</url>
     <content><![CDATA[<h4 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h4><ul>
 <li>plugins(插件)</li>
 <li>vite(极速)</li>
@@ -1041,7 +1041,7 @@
   </entry>
   <entry>
     <title>前端播放rtsp视频流遇到的坑</title>
-    <url>/blogs/2023/11/07/%E5%89%8D%E7%AB%AF%E6%92%AD%E6%94%BErtsp%E8%A7%86%E9%A2%91%E6%B5%81%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/</url>
+    <url>/web-blog/2023/11/07/%E5%89%8D%E7%AB%AF%E6%92%AD%E6%94%BErtsp%E8%A7%86%E9%A2%91%E6%B5%81%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/</url>
     <content><![CDATA[<h4 id="需求阶段"><a href="#需求阶段" class="headerlink" title="需求阶段"></a>需求阶段</h4><p>由于我们公司，在内网开发，后端也不愿意去替我处理 rtsp 文档流。前端也对 rtsp 文档流，没有办法使用，所以有了这篇博客。</p>
 <h4 id="能播放-rtsp-流的播放器，"><a href="#能播放-rtsp-流的播放器，" class="headerlink" title="能播放 rtsp 流的播放器，"></a>能播放 rtsp 流的播放器，</h4><p>VLC media playe，和海康自家的 vsplayer。都可以播放。</p>
 <h4 id="开发经历"><a href="#开发经历" class="headerlink" title="开发经历"></a>开发经历</h4><p>因为我们内网开发很麻烦，我想在我的电脑下，就把处理 rtsp 流的方案去解决了，但是，完全找不到公共我可以使用的 rtsp 公共流。所以，我只能在我们内网环境下，对播放进行验证。。</p>
@@ -1072,7 +1072,7 @@
   </entry>
   <entry>
     <title>vue当中的nextTick</title>
-    <url>/blogs/2023/11/07/%E5%AD%A6%E4%B9%A0vue%E5%BD%93%E4%B8%AD%E7%9A%84nextTick/</url>
+    <url>/web-blog/2023/11/07/%E5%AD%A6%E4%B9%A0vue%E5%BD%93%E4%B8%AD%E7%9A%84nextTick/</url>
     <content><![CDATA[<pre><code>vue的dom是异步更新的，当监测到数据变动的时候，vue会开启一个队列，并且缓冲同一事件下循环当中的所有数据变更，哪怕一个数据我们在这个事件里面做了n次更新，只会被vue推入队列中一次。
 
 
@@ -1094,7 +1094,7 @@
   </entry>
   <entry>
     <title>作用域是什么？</title>
-    <url>/blogs/2023/11/07/%E4%BD%9C%E7%94%A8%E5%9F%9F%E6%98%AF%E4%BB%80%E4%B9%88/</url>
+    <url>/web-blog/2023/11/07/%E4%BD%9C%E7%94%A8%E5%9F%9F%E6%98%AF%E4%BB%80%E4%B9%88/</url>
     <content><![CDATA[<pre><code>#### 理解作用域
 
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">let a = 11;</span><br></pre></td></tr></table></figure>
@@ -1160,7 +1160,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>学习vue3 计算属性</title>
-    <url>/blogs/2023/08/08/%E5%AD%A6%E4%B9%A0vue3%E5%BD%93%E4%B8%AD%E7%9A%84computed/</url>
+    <url>/web-blog/2023/08/08/%E5%AD%A6%E4%B9%A0vue3%E5%BD%93%E4%B8%AD%E7%9A%84computed/</url>
     <content><![CDATA[<h5 id="vue3-当中的计算属性"><a href="#vue3-当中的计算属性" class="headerlink" title="vue3 当中的计算属性"></a>vue3 当中的计算属性</h5><p>例子 1.我们有一些价格，条件等着计算。</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;价格:&#123;&#123; price &#125;&#125;&lt;/div&gt;</span><br><span class="line">  &lt;div&gt;总价格：&#123;&#123; totalPirce &#125;&#125;&lt;/div&gt;</span><br><span class="line">  &lt;div&gt;优惠价格:&#123;&#123; discountPrice &#125;&#125;&lt;/div&gt;</span><br><span class="line">  &lt;input type=&quot;number&quot; min=&quot;1&quot; step=&quot;5&quot; v-model=&quot;num&quot; name=&quot;&quot; id=&quot;&quot; /&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; reactive, ref, nextTick, computed &#125; from &quot;vue&quot;;</span><br><span class="line">const price = ref(10);</span><br><span class="line">const num = ref(1);</span><br><span class="line">const discount = ref(0.8);</span><br><span class="line">const totalPirce = computed(() =&gt; &#123;</span><br><span class="line">  return num.value * price.value;</span><br><span class="line">&#125;);</span><br><span class="line">const discountPrice = computed(() =&gt; &#123;</span><br><span class="line">  return num.value * price.value * discount.value;</span><br><span class="line">&#125;);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;style scoped&gt;&lt;/style&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
@@ -1183,7 +1183,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>学习vue3 响应式基础</title>
-    <url>/blogs/2023/08/08/%E5%AD%A6%E4%B9%A0vue3%E5%93%8D%E5%BA%94%E5%BC%8F%E5%9F%BA%E7%A1%80/</url>
+    <url>/web-blog/2023/08/08/%E5%AD%A6%E4%B9%A0vue3%E5%93%8D%E5%BA%94%E5%BC%8F%E5%9F%BA%E7%A1%80/</url>
     <content><![CDATA[<h4 id="vue-响应式基础"><a href="#vue-响应式基础" class="headerlink" title="vue 响应式基础"></a>vue 响应式基础</h4><h5 id="我们可以使用-reactive，创建出一个响应式的对象。"><a href="#我们可以使用-reactive，创建出一个响应式的对象。" class="headerlink" title="我们可以使用 reactive，创建出一个响应式的对象。"></a>我们可以使用 reactive，创建出一个响应式的对象。</h5><p>这里的响应指的是，如同 vue2 一样，我们在 data 函数里面创建的数据，都能被实时的更新到，模板里面。</p>
 <p>例子如下，</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; v-model=&quot;state.count&quot; /&gt;</span><br><span class="line">    &lt;button id=&quot;Dim&quot; class=&quot;num&quot; @click=&quot;increment&quot;&gt;&#123;&#123; state.count &#125;&#125;++&lt;/button&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; reactive, ref, nextTick &#125; from &quot;vue&quot;;</span><br><span class="line">const state = reactive(&#123; count: 0 &#125;);</span><br><span class="line">function increment() &#123;</span><br><span class="line">  state.count++;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
@@ -1241,7 +1241,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>学习vue router</title>
-    <url>/blogs/2023/08/08/%E5%AD%A6%E4%B9%A0vue2%E7%BB%84%E4%BB%B6%E9%80%9A%E8%AE%AF/</url>
+    <url>/web-blog/2023/08/08/%E5%AD%A6%E4%B9%A0vue2%E7%BB%84%E4%BB%B6%E9%80%9A%E8%AE%AF/</url>
     <content><![CDATA[<h4 id="vue-的组件通讯都有那些方式？"><a href="#vue-的组件通讯都有那些方式？" class="headerlink" title="vue 的组件通讯都有那些方式？"></a>vue 的组件通讯都有那些方式？</h4><ol>
 <li>props 父组件的数据，自动流向子组件。但是，子组件无法修改父组件的传参。</li>
 <li>使用 vuex，组件之间进行通讯。</li>
@@ -1281,7 +1281,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>学些canvas的使用</title>
-    <url>/blogs/2023/02/23/%E5%AD%A6%E4%BA%9Bcanvas%E7%9A%84%E4%BD%BF%E7%94%A8/</url>
+    <url>/web-blog/2023/02/23/%E5%AD%A6%E4%BA%9Bcanvas%E7%9A%84%E4%BD%BF%E7%94%A8/</url>
     <content><![CDATA[<h4 id="学习如何使用-canvas。"><a href="#学习如何使用-canvas。" class="headerlink" title="学习如何使用 canvas。"></a>学习如何使用 canvas。</h4><h5 id="绘制一条直线。"><a href="#绘制一条直线。" class="headerlink" title="绘制一条直线。"></a>绘制一条直线。</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">创建canvas</span><br><span class="line">&lt;canvas id=&quot;canvas&quot; width=&quot;300&quot; height=&quot;200px&quot;&gt;&lt;/canvas&gt;</span><br><span class="line"></span><br><span class="line">获取canvas对象</span><br><span class="line">const canvas = document.getElementById(&quot;canvas&quot;);</span><br><span class="line"></span><br><span class="line">获取 canvas 上下文环境对象</span><br><span class="line">const cxt = canvas.getContext(&quot;2d&quot;);</span><br><span class="line"></span><br><span class="line">绘制图形</span><br><span class="line">cxt.moveTo(100, 120); // 起点坐标 (x, y)</span><br><span class="line">cxt.lineTo(200, 120); // 终点坐标 (x, y)</span><br><span class="line">cxt.stroke(); // 将起点和终点连接起来</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <p>canvas 有着自己的默认宽高，宽 300，高 150.可以在 canvas 标签上进行设置。如果在 css 里面进行设置的话，会导致 canvas 默认本身的宽高出现拉伸的情况。</p>
@@ -1403,7 +1403,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>vue配置内网环境</title>
-    <url>/blogs/2023/02/21/vue%E9%85%8D%E7%BD%AE%E5%86%85%E7%BD%91%E7%8E%AF%E5%A2%83/</url>
+    <url>/web-blog/2023/02/21/vue%E9%85%8D%E7%BD%AE%E5%86%85%E7%BD%91%E7%8E%AF%E5%A2%83/</url>
     <content><![CDATA[<h4 id="前景提要"><a href="#前景提要" class="headerlink" title="前景提要"></a>前景提要</h4><p>我需要在内网配置 node npm yarn 顺便把 vue cli 安装上去。</p>
 <p>遇到的问题，csdn 能够参考的文章不多。而且，极为拉胯，所以我就先写一篇。如何配置环境。</p>
 <h5 id="前期准备"><a href="#前期准备" class="headerlink" title="前期准备"></a>前期准备</h5><ol>
@@ -1444,7 +1444,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>阅读vue的风格指南</title>
-    <url>/blogs/2023/02/03/%E9%98%85%E8%AF%BBvue%E7%9A%84%E9%A3%8E%E6%A0%BC%E6%8C%87%E5%8D%97/</url>
+    <url>/web-blog/2023/02/03/%E9%98%85%E8%AF%BBvue%E7%9A%84%E9%A3%8E%E6%A0%BC%E6%8C%87%E5%8D%97/</url>
     <content><![CDATA[<h4 id="规则-A"><a href="#规则-A" class="headerlink" title="规则 A"></a>规则 A</h4><p><strong>vue 当中的组件名当为多个单词。</strong><br>例子</p>
 <p>good</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">order-list.vue</span><br><span class="line">order-list-item.vue</span><br><span class="line">OrderList.vue</span><br><span class="line">OrderListItem.vue</span><br></pre></td></tr></table></figure>
@@ -1593,7 +1593,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>玩转sass</title>
-    <url>/blogs/2023/02/01/%E7%8E%A9%E8%BD%ACsass/</url>
+    <url>/web-blog/2023/02/01/%E7%8E%A9%E8%BD%ACsass/</url>
     <content><![CDATA[<h4 id="作为一个前端工程师，对sass的使用。只停留在嵌套是不够的。这次好好阅读一下sass的使用。"><a href="#作为一个前端工程师，对sass的使用。只停留在嵌套是不够的。这次好好阅读一下sass的使用。" class="headerlink" title="作为一个前端工程师，对sass的使用。只停留在嵌套是不够的。这次好好阅读一下sass的使用。"></a>作为一个前端工程师，对sass的使用。只停留在嵌套是不够的。这次好好阅读一下sass的使用。</h4><h4 id="嵌套规则"><a href="#嵌套规则" class="headerlink" title="嵌套规则"></a>嵌套规则</h4><p>当我们使用css写的时候，要表明上下级关系，就需要用 <strong>.</strong> 父级选择,然后后面跟上子级选择器。。</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.app-container &#123;</span><br><span class="line">  text-align: center;</span><br><span class="line">&#125;</span><br><span class="line">.app-container .box &#123;</span><br><span class="line">  color: #000;</span><br><span class="line">&#125;</span><br><span class="line">.app-container .box span &#123;</span><br><span class="line">  color: red;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
@@ -1654,7 +1654,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>css的公共样式与reset.css</title>
-    <url>/blogs/2023/02/01/css%E7%9A%84%E5%85%AC%E5%85%B1%E6%A0%B7%E5%BC%8F%E4%B8%8Ereset.css/</url>
+    <url>/web-blog/2023/02/01/css%E7%9A%84%E5%85%AC%E5%85%B1%E6%A0%B7%E5%BC%8F%E4%B8%8Ereset.css/</url>
     <content><![CDATA[<h4 id="浏览器内核不同，导致标签在浏览器当中，渲染的不一样。"><a href="#浏览器内核不同，导致标签在浏览器当中，渲染的不一样。" class="headerlink" title="浏览器内核不同，导致标签在浏览器当中，渲染的不一样。"></a>浏览器内核不同，导致标签在浏览器当中，渲染的不一样。</h4><p>reset.css能够把 css默认的标签样式给分离出去。</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">body,</span><br><span class="line">h1,</span><br><span class="line">h2,</span><br><span class="line">h3,</span><br><span class="line">h4,</span><br><span class="line">h5,</span><br><span class="line">h6,</span><br><span class="line">hr,</span><br><span class="line">p,</span><br><span class="line">blockquote,</span><br><span class="line">dl,</span><br><span class="line">dt,</span><br><span class="line">dd,</span><br><span class="line">ul,</span><br><span class="line">ol,</span><br><span class="line">li,</span><br><span class="line">button,</span><br><span class="line">input,</span><br><span class="line">textarea,</span><br><span class="line">th,</span><br><span class="line">td &#123;</span><br><span class="line">  margin: 0;</span><br><span class="line">  padding: 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">body &#123;</span><br><span class="line">  font-style: normal;</span><br><span class="line">  font-family: &quot;\5FAE\8F6F\96C5\9ED1&quot;, Helvetica, sans-serif;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ul,</span><br><span class="line">ol &#123;</span><br><span class="line">  list-style: none;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">a &#123;</span><br><span class="line">  text-decoration: none;</span><br><span class="line">  background-color: transparent;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">a:hover,</span><br><span class="line">a:active &#123;</span><br><span class="line">  outline-width: 0;</span><br><span class="line">  text-decoration: none;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">table &#123;</span><br><span class="line">  border-collapse: collapse;</span><br><span class="line">  border-spacing: 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">hr &#123;</span><br><span class="line">  border: 0;</span><br><span class="line">  height: 1px;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">img &#123;</span><br><span class="line">  border-style: none;</span><br><span class="line">  vertical-align: top;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">img:not([src]) &#123;</span><br><span class="line">  display: none;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">svg:not(:root) &#123;</span><br><span class="line">  overflow: hidden;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">html &#123;</span><br><span class="line">  -webkit-touch-callout: none;</span><br><span class="line">  -webkit-text-size-adjust: 100%;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">input,</span><br><span class="line">textarea,</span><br><span class="line">button,</span><br><span class="line">a &#123;</span><br><span class="line">  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">article,</span><br><span class="line">aside,</span><br><span class="line">details,</span><br><span class="line">figcaption,</span><br><span class="line">figure,</span><br><span class="line">footer,</span><br><span class="line">header,</span><br><span class="line">main,</span><br><span class="line">menu,</span><br><span class="line">nav,</span><br><span class="line">section,</span><br><span class="line">summary &#123;</span><br><span class="line">  display: block;</span><br><span class="line">  margin: 0;</span><br><span class="line">  padding: 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">audio,</span><br><span class="line">canvas,</span><br><span class="line">progress,</span><br><span class="line">video &#123;</span><br><span class="line">  display: inline-block;</span><br><span class="line">  margin: 0;</span><br><span class="line">  padding: 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">audio:not([controls]),</span><br><span class="line">video:not([controls]) &#123;</span><br><span class="line">  display: none;</span><br><span class="line">  height: 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">progress &#123;</span><br><span class="line">  vertical-align: baseline;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">mark &#123;</span><br><span class="line">  background-color: #ff0;</span><br><span class="line">  color: #000;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">sub,</span><br><span class="line">sup &#123;</span><br><span class="line">  position: relative;</span><br><span class="line">  font-size: 75%;</span><br><span class="line">  line-height: 0;</span><br><span class="line">  vertical-align: baseline;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">sub &#123;</span><br><span class="line">  bottom: -0.25em;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">sup &#123;</span><br><span class="line">  top: -0.5em;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">button,</span><br><span class="line">input,</span><br><span class="line">select,</span><br><span class="line">textarea &#123;</span><br><span class="line">  font-size: 100%;</span><br><span class="line">  outline: 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">button,</span><br><span class="line">input &#123;</span><br><span class="line">  overflow: visible;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">button,</span><br><span class="line">select &#123;</span><br><span class="line">  text-transform: none;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">textarea &#123;</span><br><span class="line">  overflow: auto;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">button,</span><br><span class="line">html [type=&quot;button&quot;],</span><br><span class="line">[type=&quot;reset&quot;],</span><br><span class="line">[type=&quot;submit&quot;] &#123;</span><br><span class="line">  -webkit-appearance: button;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">button::-moz-focus-inner,</span><br><span class="line">[type=&quot;button&quot;]::-moz-focus-inner,</span><br><span class="line">[type=&quot;reset&quot;]::-moz-focus-inner,</span><br><span class="line">[type=&quot;submit&quot;]::-moz-focus-inner &#123;</span><br><span class="line">  border-style: none;</span><br><span class="line">  padding: 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">button:-moz-focusring,</span><br><span class="line">[type=&quot;button&quot;]:-moz-focusring,</span><br><span class="line">[type=&quot;reset&quot;]:-moz-focusring,</span><br><span class="line">[type=&quot;submit&quot;]:-moz-focusring &#123;</span><br><span class="line">  outline: 1px dotted ButtonText;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[type=&quot;checkbox&quot;],</span><br><span class="line">[type=&quot;radio&quot;] &#123;</span><br><span class="line">  box-sizing: border-box;</span><br><span class="line">  padding: 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[type=&quot;number&quot;]::-webkit-inner-spin-button,</span><br><span class="line">[type=&quot;number&quot;]::-webkit-outer-spin-button &#123;</span><br><span class="line">  height: auto;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[type=&quot;search&quot;] &#123;</span><br><span class="line">  -webkit-appearance: textfield;</span><br><span class="line">  outline-offset: -2px;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[type=&quot;search&quot;]::-webkit-search-cancel-button,</span><br><span class="line">[type=&quot;search&quot;]::-webkit-search-decoration &#123;</span><br><span class="line">  -webkit-appearance: none;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">::-webkit-input-placeholder &#123;</span><br><span class="line">  color: inherit;</span><br><span class="line">  opacity: 0.54;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">::-webkit-file-upload-button &#123;</span><br><span class="line">  -webkit-appearance: button;</span><br><span class="line">  font: inherit;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.clearFix:after &#123;</span><br><span class="line">  display: block;</span><br><span class="line">  /*height: 0;*/</span><br><span class="line">  /*overflow: hidden;*/</span><br><span class="line">  content: &quot;&quot;;</span><br><span class="line">  clear: both;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.clearFix &#123;</span><br><span class="line">  *zoom: 1; /*兼容低版本浏览器*/</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
@@ -1674,7 +1674,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>css BEM命名规范</title>
-    <url>/blogs/2023/02/01/css%20BEM%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83/</url>
+    <url>/web-blog/2023/02/01/css%20BEM%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83/</url>
     <content><![CDATA[<h4 id="为什么要使用BEM命名规范"><a href="#为什么要使用BEM命名规范" class="headerlink" title="为什么要使用BEM命名规范"></a>为什么要使用BEM命名规范</h4><p>当我们写css，参与到大项目的时候，需要一种统一的方式来书写css。BEM（block element modifier）是一种命名规范，使用这种方式让css代码更容易进行维护。</p>
 <p>标准的BEM写法是，.block-name__element-name–modifier-name。</p>
 <h4 id="和–，-，都代表什么意思。。"><a href="#和–，-，都代表什么意思。。" class="headerlink" title="__和–，-，都代表什么意思。。"></a>__和–，-，都代表什么意思。。</h4><p><strong>–</strong> 符号，需要连接的是，modifier。</p>
@@ -1697,7 +1697,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>学习vue router</title>
-    <url>/blogs/2022/12/26/%E5%AD%A6%E4%B9%A0vue-router/</url>
+    <url>/web-blog/2022/12/26/%E5%AD%A6%E4%B9%A0vue-router/</url>
     <content><![CDATA[<p>一直都没老老实实的看过 vue router 的文档。</p>
 <p>今天详细的过一遍 vue router 文档。</p>
 <h4 id="router-当中的动态路由匹配"><a href="#router-当中的动态路由匹配" class="headerlink" title="router 当中的动态路由匹配"></a>router 当中的动态路由匹配</h4><p>假设我们有一个页面，需要传递参数。我们看一下动态路由如何进行匹配。</p>
@@ -1843,7 +1843,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>开发登录人机验证</title>
-    <url>/blogs/2022/12/22/%E8%8E%B7%E5%8F%96%E9%AA%8C%E8%AF%81%E7%A0%81--%E4%BA%BA%E6%9C%BA%E9%AA%8C%E8%AF%81/</url>
+    <url>/web-blog/2022/12/22/%E8%8E%B7%E5%8F%96%E9%AA%8C%E8%AF%81%E7%A0%81--%E4%BA%BA%E6%9C%BA%E9%AA%8C%E8%AF%81/</url>
     <content><![CDATA[<p><a href="https://gitee.com/yaru722/vue-monoplasty-slide-verify">人机验证</a></p>
 <p>安装</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install --save vue-monoplasty-slide-verify</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
@@ -1863,7 +1863,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>css当中的BFC</title>
-    <url>/blogs/2022/12/21/css%E5%BD%93%E4%B8%AD%E7%9A%84BFC/</url>
+    <url>/web-blog/2022/12/21/css%E5%BD%93%E4%B8%AD%E7%9A%84BFC/</url>
     <content><![CDATA[<h5 id="到底什么是bfc"><a href="#到底什么是bfc" class="headerlink" title="到底什么是bfc"></a>到底什么是bfc</h5><p>Block formatting contexts 也叫做”块格式化上下文”。简单来说，bfc容器在内部有一块独立的空间。不管内部的元素如何布局，如何排列，它们都不回影响到外部的布局。就像一个规则。</p>
 <p>举个例子，</p>
 <p><img src="http://rmeu5gdxe.hd-bkt.clouddn.com/blog_bfc1.jpeg" alt="什么是bfc"></p>
@@ -1942,7 +1942,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>从0开始学习vuex</title>
-    <url>/blogs/2022/12/21/%E4%BB%8E0%E5%BC%80%E5%A7%8B%EF%BC%8C%E5%AD%A6%E4%B9%A0vuex/</url>
+    <url>/web-blog/2022/12/21/%E4%BB%8E0%E5%BC%80%E5%A7%8B%EF%BC%8C%E5%AD%A6%E4%B9%A0vuex/</url>
     <content><![CDATA[<h4 id="什么是vuex"><a href="#什么是vuex" class="headerlink" title="什么是vuex"></a>什么是vuex</h4><blockquote>
 <p>Vuex 是一个专为 Vue.js 应用程序开发的状态管理模式 + 库。它采用集中式存储管理应用的所有组件的状态，并以相应的规则保证状态以一种可预测的方式发生变化。</p>
 </blockquote>
@@ -2093,7 +2093,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>ES Modules的特性</title>
-    <url>/blogs/2022/12/06/es_modules%E7%9A%84%E7%89%B9%E6%80%A7/</url>
+    <url>/web-blog/2022/12/06/es_modules%E7%9A%84%E7%89%B9%E6%80%A7/</url>
     <content><![CDATA[<h5 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h5><p>很长的一段时间内，我以为，es modules的关键字import，export,只能在vue里面，使用，是因为webpack，这样的打包工具，才能得已实现的。<br>甚至让我觉得，原生js不行的原因就是因为，不支持es moduls。</p>
 <p>陷入了一定的误区，这篇文章，来修正我的认知错误。</p>
 <h5 id="原生js使用es-module进行模块化。"><a href="#原生js使用es-module进行模块化。" class="headerlink" title="原生js使用es module进行模块化。"></a>原生js使用es module进行模块化。</h5><p>使用script 加载js文件的时候 <strong><u>type = ‘module’</u></strong> 就可以开启模块化。</p>
@@ -2185,7 +2185,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>初学webpack</title>
-    <url>/blogs/2022/12/06/%E5%88%9D%E5%AD%A6webpack/</url>
+    <url>/web-blog/2022/12/06/%E5%88%9D%E5%AD%A6webpack/</url>
     <content><![CDATA[<h5 id="什么是webpack？"><a href="#什么是webpack？" class="headerlink" title="什么是webpack？"></a>什么是webpack？</h5><blockquote>
 <p>WebPack可以看做是模块打包机：它做的事情是，分析你的项目结构，找到JavaScript模块以及其它的一些预设，打包为合适的格式以供浏览器使用。</p>
 </blockquote>
@@ -2319,7 +2319,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>如何实现网站的哀悼模式</title>
-    <url>/blogs/2022/12/06/%E4%B8%80%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E5%89%8D%E7%AB%AF%E9%A1%B5%E9%9D%A2%E4%B8%AD%E7%9A%84%E5%93%80%E6%82%BC%E6%A8%A1%E5%BC%8F/</url>
+    <url>/web-blog/2022/12/06/%E4%B8%80%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E5%89%8D%E7%AB%AF%E9%A1%B5%E9%9D%A2%E4%B8%AD%E7%9A%84%E5%93%80%E6%82%BC%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">body&#123;</span><br><span class="line"> filter: grayscale(100%);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 
@@ -2336,7 +2336,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>什么是Data URL</title>
-    <url>/blogs/2022/12/06/DataUrl%E6%98%AF%E4%BB%80%E4%B9%88/</url>
+    <url>/web-blog/2022/12/06/DataUrl%E6%98%AF%E4%BB%80%E4%B9%88/</url>
     <content><![CDATA[<h4 id="什么是Data-URL"><a href="#什么是Data-URL" class="headerlink" title="什么是Data URL"></a>什么是Data URL</h4><p>Data URL指的是，前缀为data:协议url。<br>现代浏览器将 <strong>Data URL</strong> 视作唯一的不透明来源，而不是可以用于导航的 URL，<br>不透明质指的是，在浏览器url上，输入上，一段比如<a href="https://baidu.com,我们可以看到这段url最终是要访问那里,而/">https://baidu.com,我们可以看到这段url最终是要访问那里，而</a> <strong>Data Url</strong>，则不是不透明，又长又臭，我们看不出这段url是什么。</p>
 <h5 id="Data-URL语法"><a href="#Data-URL语法" class="headerlink" title="Data URL语法"></a>Data URL语法</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">data:[&lt;mediatype&gt;][;base64],&lt;data&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &lt;img src=&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAA2CAYAAAB3Ep8CAAAAAXNSR0IArs4c6QAABTtJREFUaEPVW1Fy4kYU7CflI1W4Kr5B2BME2wcInCDrE8ScIMbs/9oHAPkGi08Q7wnMBWDxDZwb2FUmlY/VvK0RiGAxM280SID5RTNMt1pv+vUIQvCndYwo+gyiFoB28DShA5mfQTQD4x4qvQNmzyFTUcggoNVGFH0BUTNsfMWjGDOotAvMZmVnDiCg1UYcP5T9odqv14pQqlOWhJIEtFqIogcQHdcOKOQHAkgoQcCBg88JY36CUie+NcGTgFYTUfTtYO98US2LmqAfB7EwehCgq338AIKu9uZPmmrGSxegEJWvxsSnFwB9sc7hSYJAgAd4cBfpdLQVmNDBEgnAGOmk45reQcCBg89RRafXIPpsVwKPoKZd2/d2AqJTvc9f2Nnb450vLio6G4HwZwgJZgIk8Iw7qImDnFBNbzFOJuEGanpd/IVNAt4j+BxVfHYP4I8yqn1LgFRUDvHOv0Gb9SdjEP3mS8L/BIjg+RFqat8Kt1BvtUM9SEhxDky0WrAkQPD3rMGrto+xqBZM6GwCCWuWmYDsYu3yzJ3duwOfk6atezwG4RcjjZlRmpwQotNLECWWi16g0ub7ufNFFAIJadrRBNyC6K8NAhgavJb9bi1uqOqt4xwkMN8Q7FvHPdLJeeXr2ceE8ZnOLzZTq4wAl5VkNpoHJ4YkOW4AzXmvV6lyjpKk/drrjUvz5/Q13NVFsIU4/ua7b7oWcDQYrHw5AzMQdbclopEkLWLWd1CHMM/M3Jv3+37Nl9QnpOmHxTZoqwM52rV900ZAYzC4INpoT5+/E5381+s9lb5zAArgV1Mopc7//fQp28etH9nX9KCmt7kPcDsoj6jpaDjU8vy9uCCthDlRB72eGE6sj/05SZo/MWtlmuK3r69XVx/t6M8+IsbfDnq+Ip1k49escOYHtGx/NW+JWeiogw/j3bQRoOcqTYKuI8wP+vk0rYWBu/nVlaUZE6K7gq8pNEM+5sEcNekihcWzauGPR/N+39qXrwYJ4PV134k+mB8rIbpj/gdKtdZ9jaEdDifBUgdW2JhlEhrD4Yhg7+2ZuWsugkKAY/E15jxALiDWlMUDgK7ityaZeIytFHyhBhSWVC8JG0Aag8El2Sz5oo7Yn3spw3Dklu5QVEpZHBM3BoMZufpyok5ubMRHpybwbgXkggglQRczpcYOEp6ZqEN6m3MXz8d5v2/OIUSVytGdx7lAZpT09mhPWWznAklyfKTUE4jMLSmQewPjURszP86jqG30EBWA91NApgT/gKFY3DI3p5SOqWwk2PbNl9coapoNlGDfs73eL73yU8CChCaieGYPGOxncktL6+g3Chwwv3AUtc19RDmj43LLJRSQT1OfR1hfKBOdWMAL6VWWYWij4917lFDAigTp/QDrcZRU7TPbXLHRqVgBy+nEAmQ/jnKZHTt4ALZQI0eYZha9dF4QoIDlL0q9tiNMMZFQl9GpRwHbegTd6w+HuhdfZJHMN6/9/saxVfbdFkRL4AOKoGFK6TjKI0yxLlR81GSjI5EQ/gisZg73CO7F+YcaEkjX9xUQsDJKwWHK5gKr3et3QEBGgsdJjM97O+VDjQNQwPZGaTFDWKhxQATo/Vp6ecnmEXYPvppdwER/CAlbhBqHpYAQj7An8PUpoAwJ2bXO9/1qfR+pom3QIUIpTHHpdwev5NRPgBSm2AgoEWocZg14syohTCki2OFbKTtQgKdHyC9bHGCUCjXegQJWJLjDlD28lbJDBSxJsHmEPYCvfxu0ajNLda/B+rWV5Z+f0vSyTJa3jezXx/4AhsQjITcm0vsAAAAASUVORK5CYII=</span><br><span class="line">    &quot; alt=&quot;&quot;&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
@@ -2361,7 +2361,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>使用es module模块化编程</title>
-    <url>/blogs/2022/11/01/%E5%85%B3%E4%BA%8Ees%20module%E7%9A%84%E9%82%A3%E4%BA%9B%E4%BA%8B/</url>
+    <url>/web-blog/2022/11/01/%E5%85%B3%E4%BA%8Ees%20module%E7%9A%84%E9%82%A3%E4%BA%9B%E4%BA%8B/</url>
     <content><![CDATA[<h5 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h5><p>很长的一段时间内，我以为，es modules的关键字import，export,只能在vue里面，使用，是因为webpack，这样的打包工具，才能得已实现的。<br>甚至让我觉得，原生js不行的原因就是因为，不支持es moduls。</p>
 <p>陷入了一定的误区，这篇文章，来修正我的认知错误。</p>
 <h5 id="原生js使用es-module进行模块化。"><a href="#原生js使用es-module进行模块化。" class="headerlink" title="原生js使用es module进行模块化。"></a>原生js使用es module进行模块化。</h5><p>使用script 加载js文件的时候 <strong><u>type = ‘module’</u></strong> 就可以开启模块化。</p>
@@ -2453,7 +2453,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>关于JavaScript的严格模式那些事</title>
-    <url>/blogs/2022/06/08/JavaScript%E5%BD%93%E4%B8%AD%E7%9A%84%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F/</url>
+    <url>/web-blog/2022/06/08/JavaScript%E5%BD%93%E4%B8%AD%E7%9A%84%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<blockquote>
 <p>JavaScript通常情况下隐式运行在正常模式-“Sloppy Mode”，ES5及其版本之后，javaScript可以显示运行在严格模式-“Strict Mode”！在严格模式下。可以减少我们编写不安全的JavaScript代码，获得更加清大的错误检查机制。为了向后兼容，严格模式需要我们手动开启！</p>
 </blockquote>
@@ -2507,7 +2507,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>如何优雅的去console</title>
-    <url>/blogs/2022/06/08/%E4%BC%98%E9%9B%85%E7%9A%84%E8%BF%9B%E8%A1%8Cconsole/</url>
+    <url>/web-blog/2022/06/08/%E4%BC%98%E9%9B%85%E7%9A%84%E8%BF%9B%E8%A1%8Cconsole/</url>
     <content><![CDATA[<h4 id="不要再去console一把梭了。"><a href="#不要再去console一把梭了。" class="headerlink" title="不要再去console一把梭了。"></a>不要再去console一把梭了。</h4><h5 id="使用console-time-console-timeEnd"><a href="#使用console-time-console-timeEnd" class="headerlink" title="使用console.time,console.timeEnd"></a>使用console.time,console.timeEnd</h5><p>可以获取到代码的执行时间</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">console.time(1);</span><br><span class="line">console.timeEnd(1);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
@@ -2531,7 +2531,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>JavaScript标签页通讯问题</title>
-    <url>/blogs/2022/06/08/js%E6%A0%87%E7%AD%BE%E9%A1%B5%E9%80%9A%E8%AE%AF/</url>
+    <url>/web-blog/2022/06/08/js%E6%A0%87%E7%AD%BE%E9%A1%B5%E9%80%9A%E8%AE%AF/</url>
     <content><![CDATA[<h4 id="浏览器中的标签页如何通讯"><a href="#浏览器中的标签页如何通讯" class="headerlink" title="浏览器中的标签页如何通讯"></a>浏览器中的标签页如何通讯</h4><ol>
 <li>标签页必须是同源的页面，必须是同源的页面。</li>
 <li>使用BroadcastChannel。</li>
@@ -2550,7 +2550,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>ES6中的Promise</title>
-    <url>/blogs/2022/05/30/%E5%85%B3%E4%BA%8Epromise%E7%9A%84%E4%B8%80%E4%BA%9B%E4%BA%8B/</url>
+    <url>/web-blog/2022/05/30/%E5%85%B3%E4%BA%8Epromise%E7%9A%84%E4%B8%80%E4%BA%9B%E4%BA%8B/</url>
     <content><![CDATA[<h5 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h5><p>关于ES6中<strong>promise</strong>的使用，我已经熟练掌握了不少。至少能顺顺利利的写上一个异步方法。<br>但是对promise的理解使用 并没有得到提高。</p>
 <p>比如，有这么一个场景，我需要发送5个接口。拿到5个接口里面的数据，且必须五个接口全部请求完毕，有结果了，我才能拿到。因为接口的响应时间不一样的，而且这个业务里面不想，a接口好了，去请求b接口。而是abcde5个接口一起请求。</p>
 <p>这就是我，重新细读promsie的原因。</p>
@@ -2737,7 +2737,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>js中的包管理器</title>
-    <url>/blogs/2022/04/14/%E5%85%B3%E4%BA%8Enpm%E4%B8%8Eyran%E5%92%8Ccnpm%E5%8C%85%E6%8B%ACpnpm%E3%80%82/</url>
+    <url>/web-blog/2022/04/14/%E5%85%B3%E4%BA%8Enpm%E4%B8%8Eyran%E5%92%8Ccnpm%E5%8C%85%E6%8B%ACpnpm%E3%80%82/</url>
     <content><![CDATA[<ol>
 <li>npm早起pages.json来确定node_modules依赖树关系，而且众所周知的原因，慢。v5版本之后多了，package-lock.json文件，锁定了依赖的版本，保证我们每次都能下到正确版本的依赖。</li>
 <li>yran性能好，体积会小一些。早起的时候npm没有package-look.json。</li>
@@ -2754,7 +2754,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>学习Javascript闭包（Closure）</title>
-    <url>/blogs/2022/04/14/%E5%AD%A6%E4%B9%A0Javascript%E9%97%AD%E5%8C%85%EF%BC%88Closure%EF%BC%89/</url>
+    <url>/web-blog/2022/04/14/%E5%AD%A6%E4%B9%A0Javascript%E9%97%AD%E5%8C%85%EF%BC%88Closure%EF%BC%89/</url>
     <content><![CDATA[<h5 id="在弄清楚闭包之前，我们首先要明白的点是，js的作用域与作用域链。"><a href="#在弄清楚闭包之前，我们首先要明白的点是，js的作用域与作用域链。" class="headerlink" title="在弄清楚闭包之前，我们首先要明白的点是，js的作用域与作用域链。"></a>在弄清楚闭包之前，我们首先要明白的点是，js的作用域与作用域链。</h5><p>不bb上代码！！！</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">a = 0;</span><br><span class="line">function parent() &#123;</span><br><span class="line">    var b = 1;</span><br><span class="line">    console.log(a, b);</span><br><span class="line">    function son() &#123;</span><br><span class="line">        var c = 2;</span><br><span class="line">        console.log(a, b, c);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">parent();</span><br><span class="line">console.log(a);</span><br></pre></td></tr></table></figure>
 
@@ -2821,7 +2821,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>js中的new操作符</title>
-    <url>/blogs/2022/01/23/javascript%E4%B8%AD%E7%9A%84new%E6%93%8D%E4%BD%9C%E7%AC%A6/</url>
+    <url>/web-blog/2022/01/23/javascript%E4%B8%AD%E7%9A%84new%E6%93%8D%E4%BD%9C%E7%AC%A6/</url>
     <content><![CDATA[<h4 id="new操作符有什么用？"><a href="#new操作符有什么用？" class="headerlink" title="new操作符有什么用？"></a>new操作符有什么用？</h4><h5 id="试想一个有这样一个场景，一场游戏，需要100个士兵。（我们需要一百个object），要怎么做。"><a href="#试想一个有这样一个场景，一场游戏，需要100个士兵。（我们需要一百个object），要怎么做。" class="headerlink" title="试想一个有这样一个场景，一场游戏，需要100个士兵。（我们需要一百个object），要怎么做。"></a>试想一个有这样一个场景，一场游戏，需要100个士兵。（我们需要一百个object），要怎么做。</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//士兵数组</span><br><span class="line">var arr = [];</span><br><span class="line">for (let index = 0; index &lt; 100; index++) &#123;</span><br><span class="line">    arr.push(&#123;</span><br><span class="line">        id: index,</span><br><span class="line">        hp: Math.floor(Math.random() * (100 - 0)) + 0,</span><br><span class="line">        run: function () &#123;</span><br><span class="line">            console.log(`$&#123;this.id&#125;号士兵`);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">arr[0].run();</span><br><span class="line">console.log(arr);</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <p>100个士兵，我们生成了，但是，这样这样，既不优雅，对性能也是一种极大的浪费。</p>
@@ -2852,7 +2852,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>关于js中的apply bind call的使用</title>
-    <url>/blogs/2022/01/20/%E5%85%B3%E4%BA%8Ethis%E7%9A%84call%EF%BC%8Capply%EF%BC%8Cbind%E7%9A%84%E4%BD%BF%E7%94%A8/</url>
+    <url>/web-blog/2022/01/20/%E5%85%B3%E4%BA%8Ethis%E7%9A%84call%EF%BC%8Capply%EF%BC%8Cbind%E7%9A%84%E4%BD%BF%E7%94%A8/</url>
     <content><![CDATA[<h4 id="this到底指向哪里。"><a href="#this到底指向哪里。" class="headerlink" title="this到底指向哪里。"></a>this到底指向哪里。</h4><p>事实上，this基本上指向最后调用他的对象。谁最后调用了this，this最终就指向哪里。（虽然会存在着，隐式调用的时候，this就变成了默认）</p>
 <h4 id="而apply-call-与-bind-，可以改变this的指向。"><a href="#而apply-call-与-bind-，可以改变this的指向。" class="headerlink" title="而apply call 与 bind ，可以改变this的指向。"></a>而apply call 与 bind ，可以改变this的指向。</h4><p>例子如下，</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var name = &#x27;芳芳&#x27;</span><br><span class="line">function sayHi() &#123;</span><br><span class="line">    console.log(this.name);</span><br><span class="line">&#125;</span><br><span class="line">var parson = &#123;</span><br><span class="line">    name: &#x27;李四&#x27;,</span><br><span class="line">&#125;</span><br><span class="line">sayHi();//芳芳</span><br><span class="line"></span><br></pre></td></tr></table></figure>
@@ -2904,7 +2904,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>reduce解决商品sku算法问题</title>
-    <url>/blogs/2022/01/10/reduce%E8%A7%A3%E5%86%B3%E5%95%86%E5%93%81sku%E7%AE%97%E6%B3%95%E9%97%AE%E9%A2%98/</url>
+    <url>/web-blog/2022/01/10/reduce%E8%A7%A3%E5%86%B3%E5%95%86%E5%93%81sku%E7%AE%97%E6%B3%95%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<h4 id="sku问题。"><a href="#sku问题。" class="headerlink" title="sku问题。"></a>sku问题。</h4><p>找到了一个数组方法 特别适合计算sku。</p>
 <p>就是js中的reduce方法。</p>
 <p>关于reduce方法的四个参数。<br>Accumulator (acc) (累计器)<br>Current Value (cur) (当前值)<br>Current Index (idx) (当前索引)<br>Source Array (src) (源数组)<br>initialValue（初始值）</p>
@@ -2952,7 +2952,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>includes</title>
-    <url>/blogs/2022/01/10/includes/</url>
+    <url>/web-blog/2022/01/10/includes/</url>
     <content><![CDATA[<h4 id="关于ES6-include的使用方法。"><a href="#关于ES6-include的使用方法。" class="headerlink" title="关于ES6-include的使用方法。"></a>关于ES6-include的使用方法。</h4><p>场景，和后端同学调试接口的时候，后端同学很喜欢返回我，status，或者type来给我判断。但是，，，如果状态多的话，那么判断可能是这样的。</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">let status = 0;</span><br><span class="line"></span><br><span class="line">if (status == 1 || status == 2 || status == 3) &#123;</span><br><span class="line">    alert(&#x27;yes&#x27;);</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    alert(&#x27;no&#x27;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
@@ -2990,7 +2990,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>阅读红宝书js中的变量</title>
-    <url>/blogs/2021/11/25/%E9%98%85%E8%AF%BB%E7%BA%A2%E5%AE%9D%E4%B9%A6%E5%8F%98%E9%87%8F/</url>
+    <url>/web-blog/2021/11/25/%E9%98%85%E8%AF%BB%E7%BA%A2%E5%AE%9D%E4%B9%A6%E5%8F%98%E9%87%8F/</url>
     <content><![CDATA[<h5 id="var是什么。"><a href="#var是什么。" class="headerlink" title="var是什么。"></a>var是什么。</h5><p>1.js中的操作符，声明一个函数级的变量。<br>2.会存在变量提升的情况。</p>
 <h6 id="举个例子"><a href="#举个例子" class="headerlink" title="举个例子"></a>举个例子</h6><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">console.log(a);</span><br><span class="line">var a = 11;//undefined</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>因为，变量提升到了最上面，所以虽然没有声明变量a，但是a变量被提到了最前面。</p>
@@ -3053,7 +3053,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>2021年11月22日日报</title>
-    <url>/blogs/2021/11/23/2021%E5%B9%B411%E6%9C%8822%E6%97%A5%E6%97%A5%E6%8A%A5/</url>
+    <url>/web-blog/2021/11/23/2021%E5%B9%B411%E6%9C%8822%E6%97%A5%E6%97%A5%E6%8A%A5/</url>
     <content><![CDATA[<h4 id="已完成"><a href="#已完成" class="headerlink" title="已完成"></a>已完成</h4><h5 id="看js的红宝书"><a href="#看js的红宝书" class="headerlink" title="看js的红宝书"></a>看js的红宝书</h5><p>标识符<br>js中的标识符指的是，变量，属性，方法。最好使用小驼峰写法（首字母小写），标识符开头必须是字母或者_下划线，或者美元符号$来表示。</p>
 <p>语句<br>{}来表示代码块，那怕就一句，;号表示语句的结束，如果不写分号也许。只不过js引擎会解析都时候带上，对性能不好。<br>最好使用控制语句来控制代码块。</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">if(true)</span><br><span class="line">log(&#x27;坏的写法&#x27;)</span><br><span class="line"></span><br><span class="line">if(ture)&#123;</span><br><span class="line">    log(&#x27;好的写法&#x27;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
@@ -3075,7 +3075,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>前端常用的单位和计算说明</title>
-    <url>/blogs/2021/10/24/%E5%89%8D%E7%AB%AF%E5%B8%B8%E7%94%A8%E7%9A%84%E5%8D%95%E4%BD%8D%E5%92%8C%E8%AE%A1%E7%AE%97%E8%AF%B4%E6%98%8E/</url>
+    <url>/web-blog/2021/10/24/%E5%89%8D%E7%AB%AF%E5%B8%B8%E7%94%A8%E7%9A%84%E5%8D%95%E4%BD%8D%E5%92%8C%E8%AE%A1%E7%AE%97%E8%AF%B4%E6%98%8E/</url>
     <content><![CDATA[<table>
 <thead>
 <tr>
@@ -3155,7 +3155,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>2021年9月7日日报</title>
-    <url>/blogs/2021/09/07/2021%E5%B9%B49%E6%9C%887%E6%97%A5%E6%97%A5%E6%8A%A5/</url>
+    <url>/web-blog/2021/09/07/2021%E5%B9%B49%E6%9C%887%E6%97%A5%E6%97%A5%E6%8A%A5/</url>
     <content><![CDATA[<h5 id="已完成的事情"><a href="#已完成的事情" class="headerlink" title="已完成的事情"></a>已完成的事情</h5><p>1.写秒杀专区。<br>2.找春鹏对接。<br>3.帮樊解决上传的问题。  </p>
 <h5 id="未完成的事情"><a href="#未完成的事情" class="headerlink" title="未完成的事情"></a>未完成的事情</h5><p>1.秒杀专区欠支付成功页面。<br>2.小程序导航栏。<br>3.开碰头会。  </p>
 <h5 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h5><p>1.使用vuex，不顺手。<br>2.父组件的子组件的组件库组件的样式不能在子组件修改。<br>3.上传formdata。</p>
@@ -3177,7 +3177,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>git团队协作</title>
-    <url>/blogs/2021/09/02/git%E5%9B%A2%E9%98%9F%E5%8D%8F%E4%BD%9C/</url>
+    <url>/web-blog/2021/09/02/git%E5%9B%A2%E9%98%9F%E5%8D%8F%E4%BD%9C/</url>
     <content><![CDATA[<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>客驾到的时候，我使用了breach，来进行分支管控。<br>dev分支用来开发。master用来合并。</p>
 <p>如果我和A君一起开发的话，我俩一起在一个dev分支下进行开发。然后去master进行合并。<br>春鹏告诉我，我们可以一人一个分支去玩的。一起往master上面合并。我意识到我对breach 的使用略显不足，所以补充一下我的理解。</p>
 <h4 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h4><p>客驾到项目中，我想的更多的是 ，想通过分支来做一个<strong>沙盒</strong>。进行<strong>隔绝</strong>。<br>去进行<strong>区分</strong>。</p>
@@ -3229,7 +3229,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>2021年8月14日日报</title>
-    <url>/blogs/2021/08/14/2021%E5%B9%B48%E6%9C%8814%E6%97%A5%E6%97%A5%E6%8A%A5/</url>
+    <url>/web-blog/2021/08/14/2021%E5%B9%B48%E6%9C%8814%E6%97%A5%E6%97%A5%E6%8A%A5/</url>
     <content><![CDATA[<h5 id="已完成的事情"><a href="#已完成的事情" class="headerlink" title="已完成的事情"></a>已完成的事情</h5><ol>
 <li>看webview与iframe</li>
 <li>对着html进行查漏补缺</li>
@@ -3283,7 +3283,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>html查漏补缺</title>
-    <url>/blogs/2021/08/14/%E9%87%8D%E6%96%B0%E5%A4%8D%E4%B9%A0html/</url>
+    <url>/web-blog/2021/08/14/%E9%87%8D%E6%96%B0%E5%A4%8D%E4%B9%A0html/</url>
     <content><![CDATA[<h5 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h5><p>一个优秀的前端开发者，一定不是靠着一手所谓的<div><p>标签一把梭的。</p>
 <p>即使html是一个超文本标记语言。JavaScript一直以来才是web开发者中的重中之重。</p>
 <h5 id="学习内容"><a href="#学习内容" class="headerlink" title="学习内容"></a>学习内容</h5><ol>
@@ -3424,7 +3424,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>2021年8月13日日报</title>
-    <url>/blogs/2021/08/13/2021%E5%B9%B48%E6%9C%8813%E6%97%A5%E6%97%A5%E6%8A%A5/</url>
+    <url>/web-blog/2021/08/13/2021%E5%B9%B48%E6%9C%8813%E6%97%A5%E6%97%A5%E6%8A%A5/</url>
     <content><![CDATA[<h5 id="已完成的事情"><a href="#已完成的事情" class="headerlink" title="已完成的事情"></a>已完成的事情</h5><ol>
 <li>智喔喔调试bug。</li>
 <li>部署nuxt打包。</li>
@@ -3472,7 +3472,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>vue路由组件传参</title>
-    <url>/blogs/2021/07/10/vue%E8%B7%AF%E7%94%B1%E7%BB%84%E4%BB%B6%E4%BC%A0%E5%8F%82/</url>
+    <url>/web-blog/2021/07/10/vue%E8%B7%AF%E7%94%B1%E7%BB%84%E4%BB%B6%E4%BC%A0%E5%8F%82/</url>
     <content><![CDATA[<h3 id="关于vue-router组件的传参"><a href="#关于vue-router组件的传参" class="headerlink" title="关于vue router组件的传参"></a>关于vue router组件的传参</h3><h5 id="提到，使用router进行传参，你会想到什么。从A页面，到B页面。只使用router，都有那些方式？"><a href="#提到，使用router进行传参，你会想到什么。从A页面，到B页面。只使用router，都有那些方式？" class="headerlink" title="提到，使用router进行传参，你会想到什么。从A页面，到B页面。只使用router，都有那些方式？"></a>提到，使用router进行传参，你会想到什么。从A页面，到B页面。只使用router，都有那些方式？</h5><ol>
 <li> 比如vue 动态路由参数匹配？</li>
 <li> 还是使用vue params，传参，比如通过router上的name，才能跳转，刷新一下参数就掉。</li>
@@ -3533,7 +3533,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>vue的router</title>
-    <url>/blogs/2021/07/10/vue%E7%9A%84router/</url>
+    <url>/web-blog/2021/07/10/vue%E7%9A%84router/</url>
     <content><![CDATA[<h5 id="vue-动态路由"><a href="#vue-动态路由" class="headerlink" title="vue 动态路由"></a>vue 动态路由</h5><p>很多时候,向url上传参都是使用的，query传参，因为params很多时候，视图你需要靠name来找。</p>
 <p>但是 动态路由，可以让我们在路由的url上面去定义一个参数。跳转的时候把参数传入过去就能匹配到该页面。</p>
 <p>比如我们有个查询接口，id来查找非常好用。</p>
@@ -3642,7 +3642,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>vue数组对象赋值问题</title>
-    <url>/blogs/2021/06/25/vue%E6%95%B0%E7%BB%84%E5%AF%B9%E8%B1%A1%E8%B5%8B%E5%80%BC%EF%BC%8C%E9%A1%B5%E9%9D%A2%E4%B8%8D%E5%88%B7%E6%96%B0/</url>
+    <url>/web-blog/2021/06/25/vue%E6%95%B0%E7%BB%84%E5%AF%B9%E8%B1%A1%E8%B5%8B%E5%80%BC%EF%BC%8C%E9%A1%B5%E9%9D%A2%E4%B8%8D%E5%88%B7%E6%96%B0/</url>
     <content><![CDATA[<h5 id="数组的更新监测"><a href="#数组的更新监测" class="headerlink" title="数组的更新监测"></a>数组的更新监测</h5><p>vue是一个响应式的框架。data里面的数据的改动，会随时随地的传到view视图里面。</p>
 <p>但是，对于data里面的object类型的数据，并不是这样的。</p>
 <p>数组的更新监测，只有一下这些方法才能触发视图的更新。</p>
@@ -3704,7 +3704,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>vue组件基础</title>
-    <url>/blogs/2021/06/25/vue%E7%BB%84%E4%BB%B6%E5%9F%BA%E7%A1%80/</url>
+    <url>/web-blog/2021/06/25/vue%E7%BB%84%E4%BB%B6%E5%9F%BA%E7%A1%80/</url>
     <content><![CDATA[<h4 id="vue的组件基础"><a href="#vue的组件基础" class="headerlink" title="vue的组件基础"></a>vue的组件基础</h4><p>创建一个组件</p>
 <p>1，我们在src文件夹下面的components文件下，创建了一个组件。代码如下。</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;div&gt;&#123;&#123;count&#125;&#125;&lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">    name:&#x27;cell&#x27;,</span><br><span class="line">    data()&#123;</span><br><span class="line">        return&#123;</span><br><span class="line">            count:0,</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    methods:&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style lang=&quot;less&quot; scoped&gt;</span><br><span class="line"></span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
@@ -3785,7 +3785,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>vue中class与style绑定</title>
-    <url>/blogs/2021/06/23/vue%E4%B8%AD%E7%9A%84class%E4%B8%8Estyle%E7%BB%91%E5%AE%9A/</url>
+    <url>/web-blog/2021/06/23/vue%E4%B8%AD%E7%9A%84class%E4%B8%8Estyle%E7%BB%91%E5%AE%9A/</url>
     <content><![CDATA[<h5 id="class的绑定"><a href="#class的绑定" class="headerlink" title="class的绑定"></a>class的绑定</h5><p>1.通过v-bind：对象语法绑定class</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;input type=&quot;text&quot; class=&quot;b-b-w-1&quot; :class=&quot;&#123;active:isactive,error:isactive&#125;&quot; value=&quot;&quot; /&gt;</span><br></pre></td></tr></table></figure>
 <p>class中的 active 的绑定完全依赖于 isactive的布尔值。<br>class 绑定的静态类型与v-bind绑定动态类型，class最终还是会汇聚到一起。也就是这个样子。</p>
@@ -3827,7 +3827,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>vue计算属性与侦听器</title>
-    <url>/blogs/2021/06/23/vue%E4%B8%AD%E7%9A%84%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7%E4%B8%8E%E4%BE%A6%E5%90%AC%E5%99%A8/</url>
+    <url>/web-blog/2021/06/23/vue%E4%B8%AD%E7%9A%84%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7%E4%B8%8E%E4%BE%A6%E5%90%AC%E5%99%A8/</url>
     <content><![CDATA[<h4 id="vue的计算属性与侦听器"><a href="#vue的计算属性与侦听器" class="headerlink" title="vue的计算属性与侦听器"></a>vue的计算属性与侦听器</h4><p>computed的特性</p>
 <ol>
 <li>computed会观察data里面的所有数据的变化。</li>
@@ -3847,7 +3847,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>vue模板语法的查漏补缺</title>
-    <url>/blogs/2021/06/22/vue%E6%A8%A1%E6%9D%BF%E8%AF%AD%E6%B3%95%E7%9A%84%E6%9F%A5%E6%BC%8F%E8%A1%A5%E7%BC%BA/</url>
+    <url>/web-blog/2021/06/22/vue%E6%A8%A1%E6%9D%BF%E8%AF%AD%E6%B3%95%E7%9A%84%E6%9F%A5%E6%BC%8F%E8%A1%A5%E7%BC%BA/</url>
     <content><![CDATA[<h4 id="一直以来，都没有认真的看过vue的文档。所以把一些细节性的东西给过一遍。查漏补缺。"><a href="#一直以来，都没有认真的看过vue的文档。所以把一些细节性的东西给过一遍。查漏补缺。" class="headerlink" title="一直以来，都没有认真的看过vue的文档。所以把一些细节性的东西给过一遍。查漏补缺。"></a>一直以来，都没有认真的看过vue的文档。所以把一些细节性的东西给过一遍。查漏补缺。</h4><h5 id="1-关于vue的模板语法，表达式。我使用的很少很少。"><a href="#1-关于vue的模板语法，表达式。我使用的很少很少。" class="headerlink" title="1.关于vue的模板语法，表达式。我使用的很少很少。"></a>1.关于vue的模板语法，表达式。我使用的很少很少。</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">status是0</span><br><span class="line">&lt;view class=&quot;&quot;&gt;</span><br><span class="line">    &#123;&#123;status ? &#x27;是&#x27;:&#x27;否&#x27;&#125;&#125;//否</span><br><span class="line">&lt;/view&gt;</span><br><span class="line">&lt;view class=&quot;&quot;&gt;</span><br><span class="line">    &#123;&#123;status ? &#x27;已激活&#x27;:&#x27;已冻结&#x27;&#125;&#125;//已冻结</span><br><span class="line">&lt;/view&gt;</span><br><span class="line"></span><br><span class="line">在模板里面使用 三元表达式，我们可以省下一个过滤器。</span><br></pre></td></tr></table></figure>
 
 <h5 id="1-1-关于使用，我们都知道-vue的v-bind可以绑定参数。如果他是一个动态参数呢？"><a href="#1-1-关于使用，我们都知道-vue的v-bind可以绑定参数。如果他是一个动态参数呢？" class="headerlink" title="1.1 关于使用，我们都知道 vue的v-bind可以绑定参数。如果他是一个动态参数呢？"></a>1.1 关于使用，我们都知道 vue的v-bind可以绑定参数。如果他是一个动态参数呢？</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">&lt;a :[type]=&quot;url&quot;&gt;百度&lt;/a&gt;</span><br><span class="line"></span><br><span class="line">data() &#123;</span><br><span class="line">	return &#123;</span><br><span class="line">		url:&#x27;https://www.baidu.com/&#x27;,</span><br><span class="line">		type:&#x27;href&#x27;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;,</span><br><span class="line"></span><br></pre></td></tr></table></figure>
@@ -3913,7 +3913,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>vue组件的双向绑定</title>
-    <url>/blogs/2021/06/22/vue%E7%9A%84%E7%BB%84%E4%BB%B6%E7%9A%84%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A/</url>
+    <url>/web-blog/2021/06/22/vue%E7%9A%84%E7%BB%84%E4%BB%B6%E7%9A%84%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A/</url>
     <content><![CDATA[<h4 id="vue组件的双向绑定。"><a href="#vue组件的双向绑定。" class="headerlink" title="vue组件的双向绑定。"></a>vue组件的双向绑定。</h4><p>一直以来vue自定义组件，都有个问题困惑我。prop，好像是一个单向数据流，父组件的数据可以传向子组件，可是子组件。无法修改父组件的值。</p>
 <p>输入框的v-model也只是一个语法糖，实际上。还是把要传进来的值接受到之后再去通过$emit<br>自定义事件和值给抛了出去。</p>
 <p>例子如下，我使用的是 uniapp</p>
@@ -3932,7 +3932,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>flex布局复习</title>
-    <url>/blogs/2021/06/21/flex%E5%B8%83%E5%B1%80%E7%9A%84%E5%A4%8D%E4%B9%A0/</url>
+    <url>/web-blog/2021/06/21/flex%E5%B8%83%E5%B1%80%E7%9A%84%E5%A4%8D%E4%B9%A0/</url>
     <content><![CDATA[<h3 id="flex给项目排序"><a href="#flex给项目排序" class="headerlink" title="flex给项目排序"></a>flex给项目排序</h3><h5 id="例子如下"><a href="#例子如下" class="headerlink" title="例子如下"></a>例子如下</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;div class=&quot;box&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;box1&quot;&gt;1&lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;box2&quot;&gt;2&lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;box3&quot;&gt;3&lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;box4&quot;&gt;4&lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;box5&quot;&gt;5&lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;box6&quot;&gt;6&lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;box7&quot;&gt;7&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">.box&#123;</span><br><span class="line">    display: flex;</span><br><span class="line">&#125;</span><br><span class="line">.box div&#123;</span><br><span class="line">    width: 100px;</span><br><span class="line">    height: 100px;</span><br><span class="line">    color: #fff;</span><br><span class="line">    background-color: blueviolet;</span><br><span class="line">    border: 1px solid #fff;</span><br><span class="line">    text-align: center;</span><br><span class="line">&#125;</span><br><span class="line">.box1&#123;</span><br><span class="line">    order: 1;</span><br><span class="line">&#125;</span><br><span class="line">.box2&#123;</span><br><span class="line">    order: 2;</span><br><span class="line">&#125;</span><br><span class="line">.box3&#123;</span><br><span class="line">    order: 3;</span><br><span class="line">&#125;</span><br><span class="line">.box4&#123;</span><br><span class="line">    order: 4;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>flex布局下面的item，根据order的大小来进行排序，数值越小越靠前。</p>
 <h4 id="flex-grow"><a href="#flex-grow" class="headerlink" title="flex-grow"></a>flex-grow</h4><p>分配flex下面的item成员的空间。</p>
@@ -3951,7 +3951,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>使用css做一个九宫格</title>
-    <url>/blogs/2021/06/21/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8css%E5%AE%9E%E7%8E%B0%E4%B9%9D%E5%AE%AB%E6%A0%BC/</url>
+    <url>/web-blog/2021/06/21/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8css%E5%AE%9E%E7%8E%B0%E4%B9%9D%E5%AE%AB%E6%A0%BC/</url>
     <content><![CDATA[<h4 id="css中的，九宫格的实现。"><a href="#css中的，九宫格的实现。" class="headerlink" title="css中的，九宫格的实现。"></a>css中的，九宫格的实现。</h4><h5 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h5><p>1，2个商品排列在一起，我很难处理其中的间距。因为如果左右各设10px,他俩之间有20px的间距。<br>2，那么我们如果只给一边间距的话，那么最左边以及最右边，总会多出来。还需要我们去清理。</p>
 <p>解决方案如下。</p>
 <p>1，flex布局。我们需要计算长度。非常非常准确的长度。css的calc()函数准确的满足了我的需要。比如，一个盒子是100%，我们一行三列。margin-right 是10px。实际上我们需要的只是，20px的marin值就够了。</p>
@@ -3974,7 +3974,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>ES6中，class的使用</title>
-    <url>/blogs/2021/06/21/Es6%E4%B8%ADclass%E7%9A%84%E4%BD%BF%E7%94%A8/</url>
+    <url>/web-blog/2021/06/21/Es6%E4%B8%ADclass%E7%9A%84%E4%BD%BF%E7%94%A8/</url>
     <content><![CDATA[<h3 id="ES6中的Class"><a href="#ES6中的Class" class="headerlink" title="ES6中的Class"></a>ES6中的Class</h3><h4 id="1-首先我们可以回归一下ES5之前的类是如何实现的。"><a href="#1-首先我们可以回归一下ES5之前的类是如何实现的。" class="headerlink" title="1.首先我们可以回归一下ES5之前的类是如何实现的。"></a>1.首先我们可以回归一下ES5之前的类是如何实现的。</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//一个类</span><br><span class="line">function Tool(name)&#123;</span><br><span class="line">    this.name=&#x27;张三&#x27;;</span><br><span class="line">    this.run = function()&#123;</span><br><span class="line">        alert(`$&#123;this.name&#125;,在奔跑`);</span><br><span class="line">    &#125;;</span><br><span class="line">    </span><br><span class="line">&#125;;</span><br><span class="line">//实例化</span><br><span class="line">var tool = new Tool(&#x27;李四&#x27;);</span><br><span class="line">tool.run();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//使用create创建类</span><br><span class="line">var Dog = &#123;</span><br><span class="line">    name:&#x27;大黄&#x27;,</span><br><span class="line">    run()&#123;</span><br><span class="line">        console.log(&#x27;我是大黄&#x27;);</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;;</span><br><span class="line">Dog.prototype.name = &#x27;王五&#x27;;</span><br><span class="line">var dog = Object.create(Dog);</span><br><span class="line"></span><br><span class="line">//使用  Object.create 创建的类 没有 静态类型 ，prototype</span><br><span class="line">dog.run();</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <h4 id="2-ES6的class"><a href="#2-ES6的class" class="headerlink" title="2.ES6的class"></a>2.ES6的class</h4><p>1.es6的class更想是一个语法糖。</p>
@@ -4013,7 +4013,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>我的想法</title>
-    <url>/blogs/2021/06/11/hello-world/</url>
+    <url>/web-blog/2021/06/11/hello-world/</url>
     <content><![CDATA[<h1 id="关于我"><a href="#关于我" class="headerlink" title="关于我"></a>关于我</h1><h2 id="1-自我介绍"><a href="#1-自我介绍" class="headerlink" title="1 自我介绍"></a>1 自我介绍</h2><p>1.我是一个比较热爱技术，沉默寡言的我。学历不高，受教育程度有限，使我在选择这门活计的时候犹豫了很久，最后抱着试试看的心态做的。<br>2.怕什么真理无穷，进一寸有一寸的欢喜</p>
 ]]></content>
       <categories>
@@ -4025,7 +4025,7 @@ RHS查询，当前变量一定存在且被声明，RHS查询是为了获取到�
   </entry>
   <entry>
     <title>JavaScript中的async与await</title>
-    <url>/blogs/2021/06/05/JavaScript%E4%B8%AD%E7%9A%84async/</url>
+    <url>/web-blog/2021/06/05/JavaScript%E4%B8%AD%E7%9A%84async/</url>
     <content><![CDATA[<h4 id="在JavaScript中，async与await的使用"><a href="#在JavaScript中，async与await的使用" class="headerlink" title="在JavaScript中，async与await的使用"></a>在JavaScript中，async与await的使用</h4><h5 id="1-async函数中的，async代表一个关键字。和await是一块用的。await只能在async函数里面使用。"><a href="#1-async函数中的，async代表一个关键字。和await是一块用的。await只能在async函数里面使用。" class="headerlink" title="1.async函数中的，async代表一个关键字。和await是一块用的。await只能在async函数里面使用。"></a>1.async函数中的，async代表一个关键字。和await是一块用的。await只能在async函数里面使用。</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">定义一个异步函数。</span><br><span class="line">function one()&#123;  </span><br><span class="line">    return new Promise((resolve,reject)=&gt;&#123;</span><br><span class="line">        console.log(&#x27;11&#x27;)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;;</span><br><span class="line">定义一个async函数</span><br><span class="line">async function test()&#123;</span><br><span class="line">    await one();</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">console.log(test());--Promise &#123;&lt;pending&gt;&#125;</span><br><span class="line">打印出来的async函数是一个promise对象</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">既然async函数内置了 promise对象，那么就可以使用then来调用。</span><br><span class="line">test().then(res=&gt;&#123;</span><br><span class="line">    console.log(&#x27;success&#x27;);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
