@@ -14,28 +14,29 @@
 
 
 <link rel="stylesheet" href="/web-blog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
   <link rel="stylesheet" href="/web-blog/lib/pace/pace-theme-minimal.min.css">
   <script src="/web-blog/lib/pace/pace.min.js"></script>
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"github.com","root":"/web-blog/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"lc19990308.github.io","root":"/web-blog/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="学习vue当中的nexTick的使用">
+  <meta name="description" content="理解 Vue 的 nextTick 机制——为什么数据变了但 DOM 没变？何时需要 nextTick？原理是什么？附实战场景">
 <meta property="og:type" content="article">
-<meta property="og:title" content="vue当中的nextTick">
-<meta property="og:url" content="https://github.com/lc19990308/web-blog.git/2023/11/07/%E5%AD%A6%E4%B9%A0vue%E5%BD%93%E4%B8%AD%E7%9A%84nextTick/index.html">
-<meta property="og:site_name" content="bug制造者">
-<meta property="og:description" content="学习vue当中的nexTick的使用">
+<meta property="og:title" content="Vue nextTick 原理与应用：DOM 更新后执行">
+<meta property="og:url" content="https://lc19990308.github.io/web-blog/2023/11/07/%E5%AD%A6%E4%B9%A0vue%E5%BD%93%E4%B8%AD%E7%9A%84nextTick/index.html">
+<meta property="og:site_name" content="前端技术笔记">
+<meta property="og:description" content="理解 Vue 的 nextTick 机制——为什么数据变了但 DOM 没变？何时需要 nextTick？原理是什么？附实战场景">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-11-07T07:36:07.269Z">
-<meta property="article:modified_time" content="2023-11-07T07:37:46.155Z">
-<meta property="article:author" content="lc">
-<meta property="article:tag" content="vue当中的nextTick">
+<meta property="article:published_time" content="2023-11-07T07:31:00.000Z">
+<meta property="article:modified_time" content="2026-06-22T16:00:00.000Z">
+<meta property="article:author" content="LC">
+<meta property="article:tag" content="Vue">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://github.com/lc19990308/web-blog.git/2023/11/07/%E5%AD%A6%E4%B9%A0vue%E5%BD%93%E4%B8%AD%E7%9A%84nextTick/">
+<link rel="canonical" href="https://lc19990308.github.io/web-blog/2023/11/07/%E5%AD%A6%E4%B9%A0vue%E5%BD%93%E4%B8%AD%E7%9A%84nextTick/">
 
 
 <script id="page-configurations">
@@ -48,7 +49,7 @@
   };
 </script>
 
-  <title>vue当中的nextTick | bug制造者</title>
+  <title>Vue nextTick 原理与应用：DOM 更新后执行 | 前端技术笔记</title>
   
 
 
@@ -79,7 +80,7 @@
   </style>
 </noscript>
 
-<link rel="alternate" href="/web-blog/atom.xml" title="bug制造者" type="application/atom+xml">
+<link rel="alternate" href="/web-blog/atom.xml" title="前端技术笔记" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
@@ -102,9 +103,10 @@
 
     <a href="/web-blog/" class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <h1 class="site-title">bug制造者</h1>
+      <h1 class="site-title">前端技术笔记</h1>
       <span class="logo-line-after"><i></i></span>
     </a>
+      <p class="site-subtitle" itemprop="description">记录前端路上的思考与实践</p>
   </div>
 
   <div class="site-nav-right">
@@ -122,6 +124,16 @@
         <li class="menu-item menu-item-home">
 
     <a href="/web-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/web-blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/web-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -171,10 +183,10 @@
     </header>
 
     
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/lc19990308" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
 
 
     <main class="main">
@@ -189,21 +201,21 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://github.com/lc19990308/web-blog.git/2023/11/07/%E5%AD%A6%E4%B9%A0vue%E5%BD%93%E4%B8%AD%E7%9A%84nextTick/">
+    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2023/11/07/%E5%AD%A6%E4%B9%A0vue%E5%BD%93%E4%B8%AD%E7%9A%84nextTick/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
-      <meta itemprop="name" content="lc">
-      <meta itemprop="description" content="欢迎您的到来">
+      <meta itemprop="name" content="LC">
+      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bug制造者">
+      <meta itemprop="name" content="前端技术笔记">
     </span>
       <header class="post-header">
       
         <h1 class="post-title" itemprop="name headline">
-          vue当中的nextTick
+          Vue nextTick 原理与应用：DOM 更新后执行
         </h1>
 
         <div class="post-meta">
@@ -212,9 +224,8 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2023-11-07 15:36:07 / 修改时间：15:37:46" itemprop="dateCreated datePublished" datetime="2023-11-07T15:36:07+08:00">2023-11-07</time>
+              <time title="创建时间：2023-11-07 15:31:00" itemprop="dateCreated datePublished" datetime="2023-11-07T15:31:00+08:00">2023-11-07</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -222,7 +233,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/web-blog/categories/vue/" itemprop="url" rel="index"><span itemprop="name">vue</span></a>
+                  <a href="/web-blog/categories/Vue/" itemprop="url" rel="index"><span itemprop="name">Vue</span></a>
                 </span>
             </span>
 
@@ -234,7 +245,7 @@
               <span class="post-meta-item-text">阅读次数：</span>
               <span id="busuanzi_value_page_pv"></span>
             </span>
-            <div class="post-description">学习vue当中的nexTick的使用</div>
+            <div class="post-description">理解 Vue 的 nextTick 机制——为什么数据变了但 DOM 没变？何时需要 nextTick？原理是什么？附实战场景</div>
 
         </div>
       </header>
@@ -245,17 +256,51 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <pre><code>vue的dom是异步更新的，当监测到数据变动的时候，vue会开启一个队列，并且缓冲同一事件下循环当中的所有数据变更，哪怕一个数据我们在这个事件里面做了n次更新，只会被vue推入队列中一次。
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>很多 Vue 初学者会遇到这样的问题：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> count = ref(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">handleClick</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  count.value++</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="built_in">document</span>.getElementById(<span class="string">&#x27;count&#x27;</span>).textContent) <span class="comment">// ❌ 还是旧值</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<p>这是因为 Vue 的 DOM 更新是<strong>异步</strong>的。而 <code>nextTick</code> 就是在 DOM 更新完成后执行回调的工具。</p>
+<hr>
+<h2 id="一、为什么需要-nextTick"><a href="#一、为什么需要-nextTick" class="headerlink" title="一、为什么需要 nextTick"></a>一、为什么需要 nextTick</h2><h3 id="1-1-Vue-的异步更新策略"><a href="#1-1-Vue-的异步更新策略" class="headerlink" title="1.1 Vue 的异步更新策略"></a>1.1 Vue 的异步更新策略</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref, nextTick &#125; from &#x27;vue&#x27;</span><br><span class="line"></span><br><span class="line">const list = ref([])</span><br><span class="line"></span><br><span class="line">function addItem() &#123;</span><br><span class="line">  list.value.push(&#x27;新项目&#x27;)</span><br><span class="line"></span><br><span class="line">  // ❌ DOM 还没更新</span><br><span class="line">  console.log(list.value.length)            // 1（数据已变）</span><br><span class="line">  console.log(document.querySelectorAll(&#x27;li&#x27;).length) // 0（DOM 未更新）</span><br><span class="line"></span><br><span class="line">  // ✅ 等 DOM 更新后再操作</span><br><span class="line">  nextTick(() =&gt; &#123;</span><br><span class="line">    console.log(document.querySelectorAll(&#x27;li&#x27;).length) // 1</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;ul&gt;</span><br><span class="line">    &lt;li v-for=&quot;item in list&quot; :key=&quot;item&quot;&gt;&#123;&#123; item &#125;&#125;&lt;/li&gt;</span><br><span class="line">  &lt;/ul&gt;</span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure>
 
+<h3 id="1-2-性能优化"><a href="#1-2-性能优化" class="headerlink" title="1.2 性能优化"></a>1.2 性能优化</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">addMultiple</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 同步修改数据多次</span></span><br><span class="line">  list.value.push(<span class="string">&#x27;A&#x27;</span>)</span><br><span class="line">  list.value.push(<span class="string">&#x27;B&#x27;</span>)</span><br><span class="line">  list.value.push(<span class="string">&#x27;C&#x27;</span>)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// ✅ DOM 只会更新一次——Vue 会批量处理</span></span><br><span class="line">  <span class="comment">// 而不是修改一次就重新渲染一次</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div class=&quot;hello&quot;&gt;</span><br><span class="line">    &lt;h1&gt;&#123;&#123; msg &#125;&#125;&lt;/h1&gt;</span><br><span class="line">    &lt;div ref=&quot;list&quot;&gt;</span><br><span class="line">      &lt;div v-for=&quot;(item, index) in list&quot; :key=&quot;index&quot;&gt;&#123;&#123; item.name &#125;&#125;&lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;div&gt;say &#123;&#123; title &#125;&#125;&lt;/div&gt;</span><br><span class="line">    &lt;button @click=&quot;add&quot;&gt;添加&lt;/button&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">  name: &quot;HelloWorld&quot;,</span><br><span class="line">  props: &#123;</span><br><span class="line">    msg: String,</span><br><span class="line">  &#125;,</span><br><span class="line">  data() &#123;</span><br><span class="line">    return &#123;</span><br><span class="line">      list: [</span><br><span class="line">        &#123;</span><br><span class="line">          name: &quot;项目1&quot;,</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          name: &quot;项目2&quot;,</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          name: &quot;项目3&quot;,</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          name: &quot;项目4&quot;,</span><br><span class="line">        &#125;,</span><br><span class="line">      ],</span><br><span class="line">      title: &quot;hello&quot;,</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;,</span><br><span class="line">  methods: &#123;</span><br><span class="line">    add() &#123;</span><br><span class="line">      this.list.push(&#123;</span><br><span class="line">        name: Math.random(),</span><br><span class="line">      &#125;);</span><br><span class="line">      this.list.push(&#123;</span><br><span class="line">        name: Math.random(),</span><br><span class="line">      &#125;);</span><br><span class="line">      this.list.push(&#123;</span><br><span class="line">        name: Math.random(),</span><br><span class="line">      &#125;);</span><br><span class="line">      this.title = &quot;Hello Word&quot;;</span><br><span class="line">      this.$nextTick(() =&gt; &#123;</span><br><span class="line">        console.log(this.$refs.list.childNodes.length);</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;,</span><br><span class="line">    setList(time) &#123;</span><br><span class="line">      setTimeout(() =&gt; &#123;</span><br><span class="line">        this.list.push(&#123;</span><br><span class="line">          name: Math.random(),</span><br><span class="line">        &#125;);</span><br><span class="line">      &#125;, time);</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- Add &quot;scoped&quot; attribute to limit CSS to this component only --&gt;</span><br><span class="line">&lt;style scoped lang=&quot;scss&quot;&gt;&lt;/style&gt;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>Vue 将同一事件循环中的数据变更缓冲起来，在下一次事件循环中批量更新 DOM——这就是<strong>异步更新队列</strong>。</p>
+<hr>
+<h2 id="二、nextTick-的用法"><a href="#二、nextTick-的用法" class="headerlink" title="二、nextTick 的用法"></a>二、nextTick 的用法</h2><h3 id="2-1-组合式-API（Vue-3）"><a href="#2-1-组合式-API（Vue-3）" class="headerlink" title="2.1 组合式 API（Vue 3）"></a>2.1 组合式 API（Vue 3）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref, nextTick &#125; from &#x27;vue&#x27;</span><br><span class="line"></span><br><span class="line">const inputRef = ref(null)</span><br><span class="line">const showInput = ref(false)</span><br><span class="line"></span><br><span class="line">async function showAndFocus() &#123;</span><br><span class="line">  showInput.value = true</span><br><span class="line"></span><br><span class="line">  // 方式一：回调函数</span><br><span class="line">  nextTick(() =&gt; &#123;</span><br><span class="line">    inputRef.value.focus()</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  // 方式二：async/await（推荐）</span><br><span class="line">  await nextTick()</span><br><span class="line">  inputRef.value.focus()</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;input v-if=&quot;showInput&quot; ref=&quot;inputRef&quot; type=&quot;text&quot; /&gt;</span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure>
 
-在nexttick当中我们能够获取到最新的dom。。
+<h3 id="2-2-选项式-API（Vue-2-3）"><a href="#2-2-选项式-API（Vue-2-3）" class="headerlink" title="2.2 选项式 API（Vue 2/3）"></a>2.2 选项式 API（Vue 2/3）</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  <span class="function"><span class="title">data</span>(<span class="params"></span>)</span> &#123; <span class="keyword">return</span> &#123; <span class="attr">showInput</span>: <span class="literal">false</span> &#125; &#125;,</span><br><span class="line">  <span class="attr">methods</span>: &#123;</span><br><span class="line">    <span class="function"><span class="title">showAndFocus</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">      <span class="built_in">this</span>.showInput = <span class="literal">true</span></span><br><span class="line">      <span class="built_in">this</span>.$nextTick(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.$refs.input.focus()</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<hr>
+<h2 id="三、实战场景"><a href="#三、实战场景" class="headerlink" title="三、实战场景"></a>三、实战场景</h2><h3 id="3-1-获取更新后的-DOM-尺寸"><a href="#3-1-获取更新后的-DOM-尺寸" class="headerlink" title="3.1 获取更新后的 DOM 尺寸"></a>3.1 获取更新后的 DOM 尺寸</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref, nextTick &#125; from &#x27;vue&#x27;</span><br><span class="line"></span><br><span class="line">const content = ref(&#x27;&#x27;)</span><br><span class="line">const boxRef = ref(null)</span><br><span class="line"></span><br><span class="line">async function updateContent(text) &#123;</span><br><span class="line">  content.value = text</span><br><span class="line"></span><br><span class="line">  // 等待 DOM 更新，获取实际渲染高度</span><br><span class="line">  await nextTick()</span><br><span class="line">  const height = boxRef.value.offsetHeight</span><br><span class="line">  console.log(&#x27;内容高度:&#x27;, height)</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
 
-应用场景，比如，数据更新后，计算这个列表的高度。比如我们使用的组件，遇到了获取数据的问题。这个时候，nexttick 能获取到dom更新后的状态。
-</code></pre>
+<h3 id="3-2-列表滚动到底部"><a href="#3-2-列表滚动到底部" class="headerlink" title="3.2 列表滚动到底部"></a>3.2 列表滚动到底部</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref, nextTick &#125; from &#x27;vue&#x27;</span><br><span class="line"></span><br><span class="line">const messages = ref([])</span><br><span class="line">const listRef = ref(null)</span><br><span class="line"></span><br><span class="line">async function addMessage(msg) &#123;</span><br><span class="line">  messages.value.push(msg)</span><br><span class="line"></span><br><span class="line">  // 等新消息渲染完后滚动到底部</span><br><span class="line">  await nextTick()</span><br><span class="line">  listRef.value.scrollTop = listRef.value.scrollHeight</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div ref=&quot;listRef&quot; class=&quot;message-list&quot;&gt;</span><br><span class="line">    &lt;div v-for=&quot;msg in messages&quot; :key=&quot;msg.id&quot;&gt;&#123;&#123; msg.text &#125;&#125;&lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-与第三方库配合"><a href="#3-3-与第三方库配合" class="headerlink" title="3.3 与第三方库配合"></a>3.3 与第三方库配合</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref, nextTick, onMounted &#125; from &#x27;vue&#x27;</span><br><span class="line">import Chart from &#x27;chart.js&#x27;</span><br><span class="line"></span><br><span class="line">const chartRef = ref(null)</span><br><span class="line"></span><br><span class="line">onMounted(async () =&gt; &#123;</span><br><span class="line">  // 确保 DOM 渲染完成</span><br><span class="line">  await nextTick()</span><br><span class="line"></span><br><span class="line">  // 初始化图表</span><br><span class="line">  new Chart(chartRef.value, &#123;</span><br><span class="line">    type: &#x27;bar&#x27;,</span><br><span class="line">    data: &#123; /* ... */ &#125;,</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="四、nextTick-原理"><a href="#四、nextTick-原理" class="headerlink" title="四、nextTick 原理"></a>四、nextTick 原理</h2><h3 id="4-1-实现原理"><a href="#4-1-实现原理" class="headerlink" title="4.1 实现原理"></a>4.1 实现原理</h3><p>Vue 的 nextTick 本质上使用了 JavaScript 的<strong>微任务</strong>机制：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 简化版实现</span></span><br><span class="line"><span class="keyword">const</span> callbacks = []</span><br><span class="line"><span class="keyword">let</span> pending = <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">nextTick</span>(<span class="params">cb</span>) </span>&#123;</span><br><span class="line">  callbacks.push(cb)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (!pending) &#123;</span><br><span class="line">    pending = <span class="literal">true</span></span><br><span class="line">    <span class="comment">// 使用 Promise 创建微任务</span></span><br><span class="line">    <span class="built_in">Promise</span>.resolve().then(flushCallbacks)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">flushCallbacks</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  pending = <span class="literal">false</span></span><br><span class="line">  <span class="keyword">const</span> copies = callbacks.slice(<span class="number">0</span>)</span><br><span class="line">  callbacks.length = <span class="number">0</span></span><br><span class="line">  copies.forEach(<span class="function"><span class="params">cb</span> =&gt;</span> cb())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2-执行顺序"><a href="#4-2-执行顺序" class="headerlink" title="4.2 执行顺序"></a>4.2 执行顺序</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">同步代码执行</span><br><span class="line">  │</span><br><span class="line">  ├── Vue 数据变更（data changed）</span><br><span class="line">  │     ↓</span><br><span class="line">  ├── 放入异步更新队列（watcher queue）</span><br><span class="line">  │     ↓</span><br><span class="line">  ├── nextTick(callback) → 回调放入微任务队列</span><br><span class="line">  │     ↓</span><br><span class="line">  ├── 同步代码执行完毕</span><br><span class="line">  │     ↓</span><br><span class="line">  ├── 微任务队列执行</span><br><span class="line">  │     ├── Vue 批量更新 DOM</span><br><span class="line">  │     └── nextTick 回调执行（此时 DOM 已更新）</span><br><span class="line">  │     ↓</span><br><span class="line">  └── 宏任务（setTimeout 等）</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="五、注意事项"><a href="#五、注意事项" class="headerlink" title="五、注意事项"></a>五、注意事项</h2><h3 id="5-1-nextTick-不是-setTimeout"><a href="#5-1-nextTick-不是-setTimeout" class="headerlink" title="5.1 nextTick 不是 setTimeout"></a>5.1 nextTick 不是 setTimeout</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// nextTick：微任务，DOM 更新后立即执行</span></span><br><span class="line">nextTick(<span class="function">() =&gt;</span> &#123; <span class="comment">/* DOM 已更新 */</span> &#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// setTimeout：宏任务，要等下一轮事件循环</span></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123; <span class="comment">/* DOM 已更新 */</span> &#125;)</span><br></pre></td></tr></table></figure>
+
+<p>两者都能等到 DOM 更新，但 <code>nextTick</code> 更早执行，性能更好。</p>
+<h3 id="5-2-不必要的-nextTick"><a href="#5-2-不必要的-nextTick" class="headerlink" title="5.2 不必要的 nextTick"></a>5.2 不必要的 nextTick</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ❌ 不需要 nextTick 的场景</span></span><br><span class="line"><span class="comment">// 如果你只是获取响应式数据，不需要等 DOM</span></span><br><span class="line"><span class="keyword">const</span> data = ref(&#123; <span class="attr">name</span>: <span class="string">&#x27;test&#x27;</span> &#125;)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">update</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  data.value.name = <span class="string">&#x27;new&#x27;</span></span><br><span class="line">  <span class="built_in">console</span>.log(data.value.name) <span class="comment">// 直接访问数据，不需要 nextTick</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="六、调试技巧"><a href="#六、调试技巧" class="headerlink" title="六、调试技巧"></a>六、调试技巧</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; nextTick &#125; from &#x27;vue&#x27;</span><br><span class="line"></span><br><span class="line">// 追踪 DOM 更新时间</span><br><span class="line">const start = performance.now()</span><br><span class="line"></span><br><span class="line">someData.value = &#x27;new value&#x27;</span><br><span class="line"></span><br><span class="line">nextTick(() =&gt; &#123;</span><br><span class="line">  const elapsed = performance.now() - start</span><br><span class="line">  console.log(`DOM 更新耗时: $&#123;elapsed.toFixed(2)&#125;ms`)</span><br><span class="line">&#125;)</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// nextTick 核心：</span></span><br><span class="line"><span class="comment">// 1. 解决&quot;数据变了，但 DOM 没变&quot;的问题</span></span><br><span class="line"><span class="comment">// 2. Vue 异步更新 DOM → nextTick 在 DOM 更新后回调</span></span><br><span class="line"><span class="comment">// 3. 基于 Promise（微任务）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 适用场景：</span></span><br><span class="line"><span class="comment">// - 获取更新后的 DOM 尺寸/位置</span></span><br><span class="line"><span class="comment">// - 操作 v-if/v-for 渲染后的元素</span></span><br><span class="line"><span class="comment">// - 与第三方 DOM 库配合</span></span><br><span class="line"><span class="comment">// - 列表滚动到底部</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 不建议：</span></span><br><span class="line"><span class="comment">// - 仅访问响应式数据（不需要等 DOM）</span></span><br><span class="line"><span class="comment">// - 替代 watch（watch 更语义化）</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>推荐阅读：</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://vuejs.org/api/general.html#nexttick">Vue 3 nextTick 文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://vuejs.org/guide/essentials/reactivity-fundamentals.html#async-update-queue">Vue 异步更新队列</a></li>
+</ul>
 
     </div>
 
@@ -271,12 +316,12 @@
   <!-- JS库 sweetalert 可修改路径 -->
   <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-  <p><span>本文标题:</span><a href="/web-blog/2023/11/07/%E5%AD%A6%E4%B9%A0vue%E5%BD%93%E4%B8%AD%E7%9A%84nextTick/">vue当中的nextTick</a></p>
+  <p><span>本文标题:</span><a href="/web-blog/2023/11/07/%E5%AD%A6%E4%B9%A0vue%E5%BD%93%E4%B8%AD%E7%9A%84nextTick/">Vue nextTick 原理与应用：DOM 更新后执行</a></p>
   <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a></p>
   <p><span>发布时间:</span>2023年11月07日 - 15:11</p>
-  <p><span>最后更新:</span>2023年11月07日 - 15:11</p>
-  <p><span>原始链接:</span><a href="/web-blog/2023/11/07/%E5%AD%A6%E4%B9%A0vue%E5%BD%93%E4%B8%AD%E7%9A%84nextTick/" title="vue当中的nextTick">https://github.com/lc19990308/web-blog.git/2023/11/07/%E5%AD%A6%E4%B9%A0vue%E5%BD%93%E4%B8%AD%E7%9A%84nextTick/</a>
-    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://github.com/lc19990308/web-blog.git/2023/11/07/%E5%AD%A6%E4%B9%A0vue%E5%BD%93%E4%B8%AD%E7%9A%84nextTick/"  aria-label="复制成功！"></i></span>
+  <p><span>最后更新:</span>2026年06月23日 - 00:06</p>
+  <p><span>原始链接:</span><a href="/web-blog/2023/11/07/%E5%AD%A6%E4%B9%A0vue%E5%BD%93%E4%B8%AD%E7%9A%84nextTick/" title="Vue nextTick 原理与应用：DOM 更新后执行">https://lc19990308.github.io/web-blog/2023/11/07/%E5%AD%A6%E4%B9%A0vue%E5%BD%93%E4%B8%AD%E7%9A%84nextTick/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://lc19990308.github.io/web-blog/2023/11/07/%E5%AD%A6%E4%B9%A0vue%E5%BD%93%E4%B8%AD%E7%9A%84nextTick/"  aria-label="复制成功！"></i></span>
   </p>
   <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> 转载请保留原文链接及作者。</p>  
 </div>
@@ -296,10 +341,28 @@
 
       
 </div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>LC
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://lc19990308.github.io/web-blog/2023/11/07/%E5%AD%A6%E4%B9%A0vue%E5%BD%93%E4%B8%AD%E7%9A%84nextTick/" title="Vue nextTick 原理与应用：DOM 更新后执行">https://lc19990308.github.io/web-blog/2023/11/07/学习vue当中的nextTick/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
 
       <footer class="post-footer">
+          
           <div class="post-tags">
-              <a href="/web-blog/tags/vue%E5%BD%93%E4%B8%AD%E7%9A%84nextTick/" ****># vue当中的nextTick</a>
+              <a href="/web-blog/tags/Vue/" ****><i class="fa fa-tag"></i> Vue</a>
           </div>
 
         
@@ -308,12 +371,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/web-blog/2023/11/07/%E4%BD%9C%E7%94%A8%E5%9F%9F%E6%98%AF%E4%BB%80%E4%B9%88/" rel="prev" title="作用域是什么？">
-      <i class="fa fa-chevron-left"></i> 作用域是什么？
+    <a href="/web-blog/2023/08/08/%E5%AD%A6%E4%B9%A0vue2%E7%BB%84%E4%BB%B6%E9%80%9A%E8%AE%AF/" rel="prev" title="Vue 组件通讯方案全景对比：从 Props 到 Pinia">
+      <i class="fa fa-chevron-left"></i> Vue 组件通讯方案全景对比：从 Props 到 Pinia
     </a></div>
       <div class="post-nav-item">
-    <a href="/web-blog/2023/11/07/%E5%89%8D%E7%AB%AF%E6%92%AD%E6%94%BErtsp%E8%A7%86%E9%A2%91%E6%B5%81%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/" rel="next" title="前端播放rtsp视频流遇到的坑">
-      前端播放rtsp视频流遇到的坑 <i class="fa fa-chevron-right"></i>
+    <a href="/web-blog/2023/11/07/%E4%BD%9C%E7%94%A8%E5%9F%9F%E6%98%AF%E4%BB%80%E4%B9%88/" rel="next" title="JavaScript 作用域（Scope）与作用域链完全解析">
+      JavaScript 作用域（Scope）与作用域链完全解析 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -373,73 +436,63 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81-nextTick"><span class="nav-number">2.</span> <span class="nav-text">一、为什么需要 nextTick</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-Vue-%E7%9A%84%E5%BC%82%E6%AD%A5%E6%9B%B4%E6%96%B0%E7%AD%96%E7%95%A5"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 Vue 的异步更新策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="nav-number">2.2.</span> <span class="nav-text">1.2 性能优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81nextTick-%E7%9A%84%E7%94%A8%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">二、nextTick 的用法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E7%BB%84%E5%90%88%E5%BC%8F-API%EF%BC%88Vue-3%EF%BC%89"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 组合式 API（Vue 3）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E9%80%89%E9%A1%B9%E5%BC%8F-API%EF%BC%88Vue-2-3%EF%BC%89"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 选项式 API（Vue 2&#x2F;3）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%AE%9E%E6%88%98%E5%9C%BA%E6%99%AF"><span class="nav-number">4.</span> <span class="nav-text">三、实战场景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E8%8E%B7%E5%8F%96%E6%9B%B4%E6%96%B0%E5%90%8E%E7%9A%84-DOM-%E5%B0%BA%E5%AF%B8"><span class="nav-number">4.1.</span> <span class="nav-text">3.1 获取更新后的 DOM 尺寸</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E5%88%97%E8%A1%A8%E6%BB%9A%E5%8A%A8%E5%88%B0%E5%BA%95%E9%83%A8"><span class="nav-number">4.2.</span> <span class="nav-text">3.2 列表滚动到底部</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93%E9%85%8D%E5%90%88"><span class="nav-number">4.3.</span> <span class="nav-text">3.3 与第三方库配合</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81nextTick-%E5%8E%9F%E7%90%86"><span class="nav-number">5.</span> <span class="nav-text">四、nextTick 原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="nav-number">5.1.</span> <span class="nav-text">4.1 实现原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F"><span class="nav-number">5.2.</span> <span class="nav-text">4.2 执行顺序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">6.</span> <span class="nav-text">五、注意事项</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-nextTick-%E4%B8%8D%E6%98%AF-setTimeout"><span class="nav-number">6.1.</span> <span class="nav-text">5.1 nextTick 不是 setTimeout</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-%E4%B8%8D%E5%BF%85%E8%A6%81%E7%9A%84-nextTick"><span class="nav-number">6.2.</span> <span class="nav-text">5.2 不必要的 nextTick</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E8%B0%83%E8%AF%95%E6%8A%80%E5%B7%A7"><span class="nav-number">7.</span> <span class="nav-text">六、调试技巧</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">8.</span> <span class="nav-text">总结</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="lc"
+    <img class="site-author-image" itemprop="image" alt="LC"
       src="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
-  <p class="site-author-name" itemprop="name">lc</p>
-  <div class="site-description" itemprop="description">欢迎您的到来</div>
+  <p class="site-author-name" itemprop="name">LC</p>
+  <div class="site-description" itemprop="description">专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践</div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/web-blog/archives/">
         
-          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-count">80</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/web-blog/categories/">
           
-        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-count">23</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">31</span>
-        <span class="site-state-item-name">标签</span>
+            <a href="/web-blog/tags/">
+          
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
+  <div class="sidebar-button motion-element"><i class="fa fa-comment"></i>
+    Chat
+  </a>
+  </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/lc19990308/web-blog" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lc19990308&#x2F;web-blog"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/lc19990308/web-blog" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lc19990308&#x2F;web-blog" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/web-blog/jarridaddison4@gmail.com" title="E-Mail → jarridaddison4@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+        <a href="mailto:jarridaddison4@gmail.com" title="E-Mail → mailto:jarridaddison4@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
       </span>
-      <span class="links-of-author-item">
-        <a href="https://weibo.com/yourname" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="https://plus.google.com/yourname" title="Google → https:&#x2F;&#x2F;plus.google.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-google fa-fw"></i>Google</a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="https://twitter.com/yourname" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="https://www.facebook.com/yourname" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="https://stackoverflow.com/yourname" title="StackOverflow → https:&#x2F;&#x2F;stackoverflow.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-stack-overflow fa-fw"></i>StackOverflow</a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="https://youtube.com/yourname" title="YouTube → https:&#x2F;&#x2F;youtube.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-youtube fa-fw"></i>YouTube</a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="https://instagram.com/yourname" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="skype:yourname?call|chat" title="Skype → skype:yourname?call|chat" rel="noopener" target="_blank"><i class="fab fa-skype fa-fw"></i>Skype</a>
-      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/web-blog/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
   </div>
 
 
 
       </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
 
     </div>
       <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=441491828&auto=1&height=66"></iframe>
@@ -458,12 +511,12 @@
 
 <div class="copyright">
   
-  &copy; 
-  <span itemprop="copyrightYear">2025</span>
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2026</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">lc</span>
+  <span class="author" itemprop="copyrightHolder">LC</span>
 </div>
 
 <!--
@@ -481,7 +534,7 @@
 </div>
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共62.2k字</span>
+  <span class="post-count">博客全站共94.7k字</span>
 </div>
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
@@ -521,6 +574,10 @@
 
   
   <script src="/web-blog/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
   <script src="/web-blog/lib/velocity/velocity.min.js"></script>
   <script src="/web-blog/lib/velocity/velocity.ui.min.js"></script>
 
@@ -533,6 +590,8 @@
 
 
 <script src="/web-blog/js/next-boot.js"></script>
+
+<script src="/web-blog/js/bookmark.js"></script>
 
 
 
@@ -555,6 +614,19 @@
 
 
 
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
 
 
   

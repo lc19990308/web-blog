@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/web-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/web-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/web-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/web-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/web-blog/css/main.css">
+
+
+<link rel="stylesheet" href="/web-blog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/web-blog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/web-blog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lc19990308.github.io","root":"/web-blog/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="MCP（Model Context Protocol）是 AI 与工具之间的「USB 接口」。本文从原理到实战，彻底讲清楚 MCP 是什么、能做什么、怎么用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MCP 到底是什么？一文搞懂 Model Context Protocol">
+<meta property="og:url" content="https://lc19990308.github.io/web-blog/2026/08/18/MCP-Model-Context-Protocol%E5%AE%8C%E5%85%A8%E8%A7%A3%E8%AF%BB/index.html">
+<meta property="og:site_name" content="前端技术笔记">
+<meta property="og:description" content="MCP（Model Context Protocol）是 AI 与工具之间的「USB 接口」。本文从原理到实战，彻底讲清楚 MCP 是什么、能做什么、怎么用">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-08-17T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-23T04:31:58.225Z">
+<meta property="article:author" content="LC">
+<meta property="article:tag" content="AI">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://lc19990308.github.io/web-blog/2026/08/18/MCP-Model-Context-Protocol%E5%AE%8C%E5%85%A8%E8%A7%A3%E8%AF%BB/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>MCP 到底是什么？一文搞懂 Model Context Protocol | 前端技术笔记</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/web-blog/atom.xml" title="前端技术笔记" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband">
+    <a target="_blank" rel="noopener" href="https://gitee.com/yaru722" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    </div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/web-blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">前端技术笔记</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录前端路上的思考与实践</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/web-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/web-blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/web-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/web-blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/web-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/lc19990308" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/08/18/MCP-Model-Context-Protocol%E5%AE%8C%E5%85%A8%E8%A7%A3%E8%AF%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+      <meta itemprop="name" content="LC">
+      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端技术笔记">
+    </span>
+      <header class="post-header">
+      
+        <h1 class="post-title" itemprop="name headline">
+          MCP 到底是什么？一文搞懂 Model Context Protocol
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-08-18 00:00:00" itemprop="dateCreated datePublished" datetime="2026-08-18T00:00:00+08:00">2026-08-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/web-blog/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">MCP（Model Context Protocol）是 AI 与工具之间的「USB 接口」。本文从原理到实战，彻底讲清楚 MCP 是什么、能做什么、怎么用</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>如果你用过 AI 编程助手（如 Claude Code、Cursor），你可能已经发现：<strong>AI 的能力不仅限于聊天，它还能读取文件、执行命令、调用 API、查询数据库</strong>。</p>
+<p>这种能力背后的关键技术就是 <strong>MCP</strong>——Model Context Protocol（模型上下文协议）。</p>
+<p>简单说：<strong>MCP 是 AI 模型与外部工具之间的「USB 接口」</strong>。</p>
+<p>就像 USB 让电脑可以连接各种设备一样，MCP 让 AI 模型可以连接各种工具和数据源。</p>
+<hr>
+<h2 id="一、MCP-是什么？"><a href="#一、MCP-是什么？" class="headerlink" title="一、MCP 是什么？"></a>一、MCP 是什么？</h2><h3 id="1-1-官方定义"><a href="#1-1-官方定义" class="headerlink" title="1.1 官方定义"></a>1.1 官方定义</h3><blockquote>
+<p>MCP（Model Context Protocol）是 Anthropic 提出的<strong>开放协议</strong>，定义了 AI 模型与外部工具/数据源之间的标准化通信方式。</p>
+</blockquote>
+<h3 id="1-2-一个类比"><a href="#1-2-一个类比" class="headerlink" title="1.2 一个类比"></a>1.2 一个类比</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">传统方式：每个 AI 工具各自实现自己的工具调用</span><br><span class="line"></span><br><span class="line">  AI 助手 A ──── 自定义 ────► 文件系统</span><br><span class="line">  AI 助手 B ──── 自定义 ────► 文件系统（不兼容）</span><br><span class="line">  AI 助手 C ──── 自定义 ────► 文件系统（又一套）</span><br><span class="line"></span><br><span class="line">MCP 方式：统一协议，一次实现到处用</span><br><span class="line"></span><br><span class="line">  AI 助手 A ────┐</span><br><span class="line">  AI 助手 B ────┼─── MCP 协议 ────► MCP 服务器 ────► 文件系统</span><br><span class="line">  AI 助手 C ────┘                    (统一接口)</span><br></pre></td></tr></table></figure>
+
+<p><strong>MCP 的核心理念：</strong> 工具开发者只需实现一次 MCP 服务器，所有支持 MCP 的 AI 客户端都能使用这个工具。</p>
+<hr>
+<h2 id="二、MCP-架构"><a href="#二、MCP-架构" class="headerlink" title="二、MCP 架构"></a>二、MCP 架构</h2><p>MCP 采用<strong>客户端-服务器</strong>架构：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">┌──────────────────────────────────────────────┐</span><br><span class="line">│                AI 客户端                      │</span><br><span class="line">│  (Claude Code / Cursor / 其他 AI 工具)        │</span><br><span class="line">│                    │                          │</span><br><span class="line">│              MCP Protocol                     │</span><br><span class="line">│                    │                          │</span><br><span class="line">├────────────────────┼──────────────────────────┤</span><br><span class="line">│                    ▼                          │</span><br><span class="line">│          ┌─────────────────┐                  │</span><br><span class="line">│          │   MCP 服务器     │                  │</span><br><span class="line">│          │  (统一协议适配器) │                  │</span><br><span class="line">│          └────────┬────────┘                  │</span><br><span class="line">│                   │                           │</span><br><span class="line">│     ┌─────────────┼─────────────┐             │</span><br><span class="line">│     ▼             ▼             ▼             │</span><br><span class="line">│  文件系统        API         数据库            │</span><br><span class="line">│     │             │             │             │</span><br><span class="line">│  读/写文件     HTTP请求     SQL查询            │</span><br><span class="line">└──────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-1-核心概念"><a href="#2-1-核心概念" class="headerlink" title="2.1 核心概念"></a>2.1 核心概念</h3><table>
+<thead>
+<tr>
+<th>概念</th>
+<th>说明</th>
+<th>类比</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>MCP 客户端</strong></td>
+<td>发起请求的 AI 工具（Claude Code、Cursor）</td>
+<td>电脑上的 USB 接口</td>
+</tr>
+<tr>
+<td><strong>MCP 服务器</strong></td>
+<td>提供特定能力的服务（文件系统、数据库、API）</td>
+<td>USB 设备</td>
+</tr>
+<tr>
+<td><strong>资源（Resources）</strong></td>
+<td>可读取的数据（文件、文档、配置）</td>
+<td>文件</td>
+</tr>
+<tr>
+<td><strong>工具（Tools）</strong></td>
+<td>可执行的操作（发送邮件、查询天气、运行脚本）</td>
+<td>功能按钮</td>
+</tr>
+<tr>
+<td><strong>提示（Prompts）</strong></td>
+<td>预定义的交互模板</td>
+<td>快捷指令</td>
+</tr>
+</tbody></table>
+<h3 id="2-2-通信流程"><a href="#2-2-通信流程" class="headerlink" title="2.2 通信流程"></a>2.2 通信流程</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">1. AI 客户端连接 MCP 服务器</span><br><span class="line">         │</span><br><span class="line">2. 服务器告知客户端：我能做什么？</span><br><span class="line">   「我有 read_file、write_file、search_code 三个工具」</span><br><span class="line">         │</span><br><span class="line">3. AI 根据用户需求决定调用哪个工具</span><br><span class="line">   「用户想修改文件 → 调用 read_file + write_file」</span><br><span class="line">         │</span><br><span class="line">4. 客户端向服务器发送工具调用请求</span><br><span class="line">         │</span><br><span class="line">5. 服务器执行操作，返回结果</span><br><span class="line">   「文件内容如下：...」</span><br><span class="line">         │</span><br><span class="line">6. AI 基于返回结果继续推理</span><br><span class="line">   「好的，我已经读取了文件，接下来帮你修改...」</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="三、MCP-能做什么？"><a href="#三、MCP-能做什么？" class="headerlink" title="三、MCP 能做什么？"></a>三、MCP 能做什么？</h2><h3 id="3-1-文件系统操作"><a href="#3-1-文件系统操作" class="headerlink" title="3.1 文件系统操作"></a>3.1 文件系统操作</h3><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// MCP 服务器暴露的工具</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;tools&quot;</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;read_file&quot;</span>,</span><br><span class="line">      <span class="attr">&quot;description&quot;</span>: <span class="string">&quot;读取文件内容&quot;</span>,</span><br><span class="line">      <span class="attr">&quot;parameters&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;path&quot;</span>: <span class="string">&quot;文件路径&quot;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;write_file&quot;</span>,</span><br><span class="line">      <span class="attr">&quot;description&quot;</span>: <span class="string">&quot;写入文件&quot;</span>,</span><br><span class="line">      <span class="attr">&quot;parameters&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;path&quot;</span>: <span class="string">&quot;文件路径&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;content&quot;</span>: <span class="string">&quot;文件内容&quot;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;search_files&quot;</span>,</span><br><span class="line">      <span class="attr">&quot;description&quot;</span>: <span class="string">&quot;搜索文件&quot;</span>,</span><br><span class="line">      <span class="attr">&quot;parameters&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;pattern&quot;</span>: <span class="string">&quot;搜索模式&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;path&quot;</span>: <span class="string">&quot;搜索目录&quot;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-数据库查询"><a href="#3-2-数据库查询" class="headerlink" title="3.2 数据库查询"></a>3.2 数据库查询</h3><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;tools&quot;</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;query_database&quot;</span>,</span><br><span class="line">      <span class="attr">&quot;description&quot;</span>: <span class="string">&quot;执行 SQL 查询&quot;</span>,</span><br><span class="line">      <span class="attr">&quot;parameters&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;sql&quot;</span>: <span class="string">&quot;SQL 语句&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;params&quot;</span>: <span class="string">&quot;参数&quot;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;get_schema&quot;</span>,</span><br><span class="line">      <span class="attr">&quot;description&quot;</span>: <span class="string">&quot;获取数据库表结构&quot;</span>,</span><br><span class="line">      <span class="attr">&quot;parameters&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;table&quot;</span>: <span class="string">&quot;表名&quot;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-API-调用"><a href="#3-3-API-调用" class="headerlink" title="3.3 API 调用"></a>3.3 API 调用</h3><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;tools&quot;</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;fetch_url&quot;</span>,</span><br><span class="line">      <span class="attr">&quot;description&quot;</span>: <span class="string">&quot;发送 HTTP 请求&quot;</span>,</span><br><span class="line">      <span class="attr">&quot;parameters&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;url&quot;</span>: <span class="string">&quot;请求地址&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;method&quot;</span>: <span class="string">&quot;GET/POST&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;headers&quot;</span>: <span class="string">&quot;请求头&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;body&quot;</span>: <span class="string">&quot;请求体&quot;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="四、为什么需要-MCP？"><a href="#四、为什么需要-MCP？" class="headerlink" title="四、为什么需要 MCP？"></a>四、为什么需要 MCP？</h2><h3 id="4-1-MCP-出现之前"><a href="#4-1-MCP-出现之前" class="headerlink" title="4.1 MCP 出现之前"></a>4.1 MCP 出现之前</h3><p>每个 AI 工具各自实现自己的工具集成：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Claude Code：</span><br><span class="line">  └─ 自己的文件系统实现</span><br><span class="line">  └─ 自己的命令执行实现</span><br><span class="line">  └─ 自己的代码搜索实现</span><br><span class="line"></span><br><span class="line">Cursor：</span><br><span class="line">  └─ 自己的文件系统实现（不兼容 Claude Code 的）</span><br><span class="line">  └─ 自己的命令执行实现（又写一遍）</span><br><span class="line"></span><br><span class="line">GitHub Copilot：</span><br><span class="line">  └─ 自己的……（再写一遍）</span><br></pre></td></tr></table></figure>
+
+<p>问题：<strong>每个 AI 工具都要重复实现同样的能力，而且互不兼容。</strong></p>
+<h3 id="4-2-MCP-出现之后"><a href="#4-2-MCP-出现之后" class="headerlink" title="4.2 MCP 出现之后"></a>4.2 MCP 出现之后</h3><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@anthropic/mcp-server-filesystem（一次性实现）</span><br><span class="line">  ├─ Claude Code 能用</span><br><span class="line">  ├─ Cursor 能用</span><br><span class="line">  └─ 任何支持 MCP 的 AI 客户端都能用</span><br><span class="line"></span><br><span class="line">@anthropic/mcp-server-github（一次性实现）</span><br><span class="line">  ├─ Claude Code 能用</span><br><span class="line">  ├─ Cursor 能用</span><br><span class="line">  └─ ...</span><br><span class="line"></span><br><span class="line">MCP 的核心价值：一次开发，到处使用。</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3-MCP-vs-传统-API"><a href="#4-3-MCP-vs-传统-API" class="headerlink" title="4.3 MCP vs 传统 API"></a>4.3 MCP vs 传统 API</h3><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>传统 API</th>
+<th>MCP</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>设计目的</strong></td>
+<td>人与人对接</td>
+<td><strong>AI 与工具对接</strong></td>
+</tr>
+<tr>
+<td><strong>接口定义</strong></td>
+<td>REST / GraphQL</td>
+<td><strong>标准化工具描述</strong></td>
+</tr>
+<tr>
+<td><strong>发现机制</strong></td>
+<td>文档（人读）</td>
+<td><strong>自动发现</strong>（AI 读）</td>
+</tr>
+<tr>
+<td><strong>参数描述</strong></td>
+<td>文档</td>
+<td><strong>JSON Schema</strong></td>
+</tr>
+<tr>
+<td><strong>调用格式</strong></td>
+<td>HTTP 请求</td>
+<td><strong>统一协议</strong></td>
+</tr>
+<tr>
+<td><strong>AI 友好度</strong></td>
+<td>❌ 需要人写代码调用</td>
+<td>✅ AI 自动理解</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="五、MCP-服务器示例"><a href="#五、MCP-服务器示例" class="headerlink" title="五、MCP 服务器示例"></a>五、MCP 服务器示例</h2><h3 id="5-1-创建一个简单的-MCP-服务器"><a href="#5-1-创建一个简单的-MCP-服务器" class="headerlink" title="5.1 创建一个简单的 MCP 服务器"></a>5.1 创建一个简单的 MCP 服务器</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// mcp-server-weather.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; Server &#125; <span class="keyword">from</span> <span class="string">&#x27;@anthropic-ai/sdk/mcp&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = <span class="keyword">new</span> Server(&#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;weather-server&#x27;</span>,</span><br><span class="line">  <span class="attr">version</span>: <span class="string">&#x27;1.0.0&#x27;</span>,</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 注册工具</span></span><br><span class="line">server.tool(</span><br><span class="line">  <span class="string">&#x27;get_weather&#x27;</span>,</span><br><span class="line">  <span class="string">&#x27;获取指定城市的天气信息&#x27;</span>,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">city</span>: &#123; <span class="attr">type</span>: <span class="string">&#x27;string&#x27;</span>, <span class="attr">description</span>: <span class="string">&#x27;城市名称，如 北京&#x27;</span> &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="keyword">async</span> (&#123; city &#125;) =&gt; &#123;</span><br><span class="line">    <span class="comment">// 调用天气 API</span></span><br><span class="line">    <span class="keyword">const</span> response = <span class="keyword">await</span> fetch(<span class="string">`https://api.weather.com/<span class="subst">$&#123;city&#125;</span>`</span>)</span><br><span class="line">    <span class="keyword">const</span> data = <span class="keyword">await</span> response.json()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="attr">content</span>: [&#123;</span><br><span class="line">        <span class="attr">type</span>: <span class="string">&#x27;text&#x27;</span>,</span><br><span class="line">        <span class="attr">text</span>: <span class="string">`<span class="subst">$&#123;city&#125;</span> 当前天气：<span class="subst">$&#123;data.temperature&#125;</span>°C，<span class="subst">$&#123;data.condition&#125;</span>`</span>,</span><br><span class="line">      &#125;],</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 启动服务器</span></span><br><span class="line">server.listen(<span class="number">3100</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2-MCP-服务器开发指南"><a href="#5-2-MCP-服务器开发指南" class="headerlink" title="5.2 MCP 服务器开发指南"></a>5.2 MCP 服务器开发指南</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 一个更完整的 MCP 服务器示例</span></span><br><span class="line"><span class="keyword">import</span> &#123; Server &#125; <span class="keyword">from</span> <span class="string">&#x27;@anthropic-ai/sdk/mcp&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = <span class="keyword">new</span> Server(&#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;project-helper&#x27;</span>,</span><br><span class="line">  <span class="attr">version</span>: <span class="string">&#x27;1.0.0&#x27;</span>,</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 工具：读取项目配置</span></span><br><span class="line">server.tool(</span><br><span class="line">  <span class="string">&#x27;get_project_config&#x27;</span>,</span><br><span class="line">  <span class="string">&#x27;读取项目的配置文件&#x27;</span>,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">path</span>: &#123; <span class="attr">type</span>: <span class="string">&#x27;string&#x27;</span>, <span class="attr">description</span>: <span class="string">&#x27;配置文件的相对路径&#x27;</span> &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="keyword">async</span> (&#123; path &#125;) =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> content = <span class="keyword">await</span> fs.readFile(<span class="string">`./<span class="subst">$&#123;path&#125;</span>`</span>, <span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> &#123; <span class="attr">content</span>: [&#123; <span class="attr">type</span>: <span class="string">&#x27;text&#x27;</span>, <span class="attr">text</span>: content &#125;] &#125;</span><br><span class="line">  &#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 工具：运行测试</span></span><br><span class="line">server.tool(</span><br><span class="line">  <span class="string">&#x27;run_tests&#x27;</span>,</span><br><span class="line">  <span class="string">&#x27;运行项目的测试用例&#x27;</span>,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">filter</span>: &#123; <span class="attr">type</span>: <span class="string">&#x27;string&#x27;</span>, <span class="attr">description</span>: <span class="string">&#x27;测试过滤条件（可选）&#x27;</span> &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="keyword">async</span> (&#123; filter &#125;) =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> cmd = filter ? <span class="string">`npm test -- --grep &quot;<span class="subst">$&#123;filter&#125;</span>&quot;`</span> : <span class="string">&#x27;npm test&#x27;</span></span><br><span class="line">    <span class="keyword">const</span> result = <span class="keyword">await</span> exec(cmd)</span><br><span class="line">    <span class="keyword">return</span> &#123; <span class="attr">content</span>: [&#123; <span class="attr">type</span>: <span class="string">&#x27;text&#x27;</span>, <span class="attr">text</span>: result.stdout &#125;] &#125;</span><br><span class="line">  &#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 资源：提供项目文档</span></span><br><span class="line">server.resource(</span><br><span class="line">  <span class="string">&#x27;project-docs&#x27;</span>,</span><br><span class="line">  <span class="string">&#x27;docs://README.md&#x27;</span>,</span><br><span class="line">  <span class="keyword">async</span> (uri) =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> content = <span class="keyword">await</span> fs.readFile(<span class="string">&#x27;./README.md&#x27;</span>, <span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> &#123; <span class="attr">contents</span>: [&#123; <span class="attr">uri</span>: uri.href, <span class="attr">text</span>: content &#125;] &#125;</span><br><span class="line">  &#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">3100</span>)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="六、MCP-生态"><a href="#六、MCP-生态" class="headerlink" title="六、MCP 生态"></a>六、MCP 生态</h2><h3 id="6-1-官方-MCP-服务器"><a href="#6-1-官方-MCP-服务器" class="headerlink" title="6.1 官方 MCP 服务器"></a>6.1 官方 MCP 服务器</h3><table>
+<thead>
+<tr>
+<th>服务器</th>
+<th>功能</th>
+<th>安装</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>@anthropic/mcp-server-filesystem</code></td>
+<td>文件系统操作</td>
+<td><code>npx @anthropic/mcp-server-filesystem</code></td>
+</tr>
+<tr>
+<td><code>@anthropic/mcp-server-github</code></td>
+<td>GitHub API 操作</td>
+<td><code>npx @anthropic/mcp-server-github</code></td>
+</tr>
+<tr>
+<td><code>@anthropic/mcp-server-puppeteer</code></td>
+<td>浏览器自动化</td>
+<td><code>npx @anthropic/mcp-server-puppeteer</code></td>
+</tr>
+<tr>
+<td><code>@anthropic/mcp-server-sqlite</code></td>
+<td>SQLite 数据库</td>
+<td><code>npx @anthropic/mcp-server-sqlite</code></td>
+</tr>
+</tbody></table>
+<h3 id="6-2-社区-MCP-服务器"><a href="#6-2-社区-MCP-服务器" class="headerlink" title="6.2 社区 MCP 服务器"></a>6.2 社区 MCP 服务器</h3><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> mcp-server-postgres    → PostgreSQL 数据库</span><br><span class="line"><span class="bullet">-</span> mcp-server-redis       → Redis 缓存操作</span><br><span class="line"><span class="bullet">-</span> mcp-server-aws         → AWS 服务管理</span><br><span class="line"><span class="bullet">-</span> mcp-server-slack       → Slack 消息发送</span><br><span class="line"><span class="bullet">-</span> mcp-server-jira        → Jira 任务管理</span><br><span class="line"><span class="bullet">-</span> mcp-server-figma       → Figma 设计文件读取</span><br><span class="line"><span class="bullet">-</span> mcp-server-sentry      → Sentry 错误查询</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-3-配置-MCP-服务器"><a href="#6-3-配置-MCP-服务器" class="headerlink" title="6.3 配置 MCP 服务器"></a>6.3 配置 MCP 服务器</h3><p>以 Claude Code 为例：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ~/.claude/mcp-servers.json</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;mcpServers&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;filesystem&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;command&quot;</span>: <span class="string">&quot;npx&quot;</span>,</span><br><span class="line">      <span class="attr">&quot;args&quot;</span>: [<span class="string">&quot;@anthropic/mcp-server-filesystem&quot;</span>, <span class="string">&quot;/allowed/path&quot;</span>]</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">&quot;github&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;command&quot;</span>: <span class="string">&quot;npx&quot;</span>,</span><br><span class="line">      <span class="attr">&quot;args&quot;</span>: [<span class="string">&quot;@anthropic/mcp-server-github&quot;</span>],</span><br><span class="line">      <span class="attr">&quot;env&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;GITHUB_TOKEN&quot;</span>: <span class="string">&quot;ghp_xxx&quot;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">&quot;database&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;command&quot;</span>: <span class="string">&quot;node&quot;</span>,</span><br><span class="line">      <span class="attr">&quot;args&quot;</span>: [<span class="string">&quot;./mcp-servers/db-server.js&quot;</span>]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="七、MCP-的意义与展望"><a href="#七、MCP-的意义与展望" class="headerlink" title="七、MCP 的意义与展望"></a>七、MCP 的意义与展望</h2><h3 id="7-1-对开发者的意义"><a href="#7-1-对开发者的意义" class="headerlink" title="7.1 对开发者的意义"></a>7.1 对开发者的意义</h3><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">1.</span> 工具开发一次，所有 AI 都能用</span><br><span class="line"><span class="bullet">   -</span> 不再为每个 AI 工具重复实现集成</span><br><span class="line"></span><br><span class="line"><span class="bullet">2.</span> AI 的能力边界被无限扩展</span><br><span class="line"><span class="bullet">   -</span> 不再局限于&quot;聊天&quot;，可以操作真实世界</span><br><span class="line"></span><br><span class="line"><span class="bullet">3.</span> 标准化带来生态繁荣</span><br><span class="line"><span class="bullet">   -</span> 就像 npm 让前端生态爆发一样</span><br><span class="line"><span class="bullet">   -</span> MCP 让 AI 工具生态爆发</span><br><span class="line"></span><br><span class="line"><span class="bullet">4.</span> 从&quot;对话&quot;到&quot;行动&quot;</span><br><span class="line"><span class="bullet">   -</span> 以前 AI 只能&quot;说&quot;，有了 MCP 后 AI 能&quot;做&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-2-MCP-可能的未来"><a href="#7-2-MCP-可能的未来" class="headerlink" title="7.2 MCP 可能的未来"></a>7.2 MCP 可能的未来</h3><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">2024         2025           2026+</span><br><span class="line">  │            │               │</span><br><span class="line">  ▼            ▼               ▼</span><br><span class="line">协议提出    社区爆发       标准化基础设施</span><br><span class="line">(Anthropic) (各种 MCP 服务器) (就像如今的 HTTP/WebSocket)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">MCP 一句话总结：</span><br><span class="line"></span><br><span class="line">MCP = AI 界的「USB 协议」</span><br><span class="line"></span><br><span class="line">以前：</span><br><span class="line">  AI 工具各自实现自己的工具调用（重复造轮子）</span><br><span class="line"></span><br><span class="line">现在：</span><br><span class="line">  统一协议，工具一次实现，所有 AI 都能用</span><br><span class="line"></span><br><span class="line">核心价值：</span><br><span class="line"><span class="bullet">  1.</span> 标准化——工具描述、参数、调用的统一规范</span><br><span class="line"><span class="bullet">  2.</span> 可发现——AI 自动理解工具能做什么</span><br><span class="line"><span class="bullet">  3.</span> 可扩展——任何人都可以开发 MCP 服务器</span><br><span class="line"><span class="bullet">  4.</span> 解耦——工具开发者只需关注实现，不用关心 AI 客户端</span><br><span class="line"></span><br><span class="line">如果你做工具/API，考虑提供 MCP 接口。</span><br><span class="line">如果你用 AI 编程，了解 MCP 能帮你发挥 AI 的最大潜力。</span><br></pre></td></tr></table></figure>
+
+<p><strong>推荐阅读：</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://modelcontextprotocol.io/">MCP 官方文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/modelcontextprotocol">MCP GitHub 仓库</a></li>
+<li><a target="_blank" rel="noopener" href="https://anthropic.com/news/model-context-protocol">Anthropic MCP 介绍</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/web-blog/2026/08/18/MCP-Model-Context-Protocol%E5%AE%8C%E5%85%A8%E8%A7%A3%E8%AF%BB/">MCP 到底是什么？一文搞懂 Model Context Protocol</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a></p>
+  <p><span>发布时间:</span>2026年08月18日 - 00:08</p>
+  <p><span>最后更新:</span>2026年06月23日 - 12:06</p>
+  <p><span>原始链接:</span><a href="/web-blog/2026/08/18/MCP-Model-Context-Protocol%E5%AE%8C%E5%85%A8%E8%A7%A3%E8%AF%BB/" title="MCP 到底是什么？一文搞懂 Model Context Protocol">https://lc19990308.github.io/web-blog/2026/08/18/MCP-Model-Context-Protocol%E5%AE%8C%E5%85%A8%E8%A7%A3%E8%AF%BB/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://lc19990308.github.io/web-blog/2026/08/18/MCP-Model-Context-Protocol%E5%AE%8C%E5%85%A8%E8%A7%A3%E8%AF%BB/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+    });
+    });  
+</script>
+
+      
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>LC
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://lc19990308.github.io/web-blog/2026/08/18/MCP-Model-Context-Protocol%E5%AE%8C%E5%85%A8%E8%A7%A3%E8%AF%BB/" title="MCP 到底是什么？一文搞懂 Model Context Protocol">https://lc19990308.github.io/web-blog/2026/08/18/MCP-Model-Context-Protocol完全解读/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/web-blog/tags/AI/" ****><i class="fa fa-tag"></i> AI</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/08/05/%E6%90%AD%E5%BB%BA%E9%87%91%E8%9E%8D%E6%99%BA%E8%83%BD%E4%BD%93-Hermes-Agent%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97/" rel="prev" title="搭建金融智能体：Hermes Agent 实战指南">
+      <i class="fa fa-chevron-left"></i> 搭建金融智能体：Hermes Agent 实战指南
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81MCP-%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">一、MCP 是什么？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E5%AE%98%E6%96%B9%E5%AE%9A%E4%B9%89"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 官方定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E4%B8%80%E4%B8%AA%E7%B1%BB%E6%AF%94"><span class="nav-number">2.2.</span> <span class="nav-text">1.2 一个类比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81MCP-%E6%9E%B6%E6%9E%84"><span class="nav-number">3.</span> <span class="nav-text">二、MCP 架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 核心概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E9%80%9A%E4%BF%A1%E6%B5%81%E7%A8%8B"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 通信流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81MCP-%E8%83%BD%E5%81%9A%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">4.</span> <span class="nav-text">三、MCP 能做什么？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E6%93%8D%E4%BD%9C"><span class="nav-number">4.1.</span> <span class="nav-text">3.1 文件系统操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9F%A5%E8%AF%A2"><span class="nav-number">4.2.</span> <span class="nav-text">3.2 数据库查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-API-%E8%B0%83%E7%94%A8"><span class="nav-number">4.3.</span> <span class="nav-text">3.3 API 调用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81-MCP%EF%BC%9F"><span class="nav-number">5.</span> <span class="nav-text">四、为什么需要 MCP？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-MCP-%E5%87%BA%E7%8E%B0%E4%B9%8B%E5%89%8D"><span class="nav-number">5.1.</span> <span class="nav-text">4.1 MCP 出现之前</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-MCP-%E5%87%BA%E7%8E%B0%E4%B9%8B%E5%90%8E"><span class="nav-number">5.2.</span> <span class="nav-text">4.2 MCP 出现之后</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-MCP-vs-%E4%BC%A0%E7%BB%9F-API"><span class="nav-number">5.3.</span> <span class="nav-text">4.3 MCP vs 传统 API</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81MCP-%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%A4%BA%E4%BE%8B"><span class="nav-number">6.</span> <span class="nav-text">五、MCP 服务器示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84-MCP-%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">6.1.</span> <span class="nav-text">5.1 创建一个简单的 MCP 服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-MCP-%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97"><span class="nav-number">6.2.</span> <span class="nav-text">5.2 MCP 服务器开发指南</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81MCP-%E7%94%9F%E6%80%81"><span class="nav-number">7.</span> <span class="nav-text">六、MCP 生态</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-%E5%AE%98%E6%96%B9-MCP-%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">7.1.</span> <span class="nav-text">6.1 官方 MCP 服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-%E7%A4%BE%E5%8C%BA-MCP-%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">7.2.</span> <span class="nav-text">6.2 社区 MCP 服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-%E9%85%8D%E7%BD%AE-MCP-%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">7.3.</span> <span class="nav-text">6.3 配置 MCP 服务器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81MCP-%E7%9A%84%E6%84%8F%E4%B9%89%E4%B8%8E%E5%B1%95%E6%9C%9B"><span class="nav-number">8.</span> <span class="nav-text">七、MCP 的意义与展望</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-%E5%AF%B9%E5%BC%80%E5%8F%91%E8%80%85%E7%9A%84%E6%84%8F%E4%B9%89"><span class="nav-number">8.1.</span> <span class="nav-text">7.1 对开发者的意义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-MCP-%E5%8F%AF%E8%83%BD%E7%9A%84%E6%9C%AA%E6%9D%A5"><span class="nav-number">8.2.</span> <span class="nav-text">7.2 MCP 可能的未来</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">9.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="LC"
+      src="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+  <p class="site-author-name" itemprop="name">LC</p>
+  <div class="site-description" itemprop="description">专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/web-blog/archives/">
+        
+          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/web-blog/categories/">
+          
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/web-blog/tags/">
+          
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button motion-element"><i class="fa fa-comment"></i>
+    Chat
+  </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lc19990308/web-blog" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lc19990308&#x2F;web-blog" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:jarridaddison4@gmail.com" title="E-Mail → mailto:jarridaddison4@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/web-blog/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=441491828&auto=1&height=66"></iframe>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LC</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>-->
+<div class="powered-by">
+  <i class="fa fa-user-md"></i>
+  <span id="busuanzi_container_site_pv">
+    本站访问量:<span id="busuanzi_value_site_pv"></span>次
+  </span>
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv">
+    本站总访客量：<span id="busuanzi_value_site_uv"></span>人
+  </span>
+</div>
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共94.7k字</span>
+</div>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/web-blog/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/web-blog/js/utils.js"></script>
+
+<script src="/web-blog/js/motion.js"></script>
+
+
+<script src="/web-blog/js/schemes/pisces.js"></script>
+
+
+<script src="/web-blog/js/next-boot.js"></script>
+
+<script src="/web-blog/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/web-blog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+</body>
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</html>

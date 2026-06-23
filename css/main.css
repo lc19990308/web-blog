@@ -18,6 +18,34 @@
   --btn-default-hover-color: #fff;
   --btn-default-hover-border-color: #222;
 }
+@media (prefers-color-scheme: dark) {
+  :root {
+    --body-bg-color: #282828;
+    --content-bg-color: #333;
+    --card-bg-color: #555;
+    --text-color: #ccc;
+    --blockquote-color: #bbb;
+    --link-color: #ccc;
+    --link-hover-color: #eee;
+    --brand-color: #ddd;
+    --brand-hover-color: #ddd;
+    --table-row-odd-bg-color: #282828;
+    --table-row-hover-bg-color: #363636;
+    --menu-item-bg-color: #555;
+    --btn-default-bg: #222;
+    --btn-default-color: #ccc;
+    --btn-default-border-color: #555;
+    --btn-default-hover-bg: #666;
+    --btn-default-hover-color: #ccc;
+    --btn-default-hover-border-color: #666;
+  }
+  img {
+    opacity: 0.75;
+  }
+  img:hover {
+    opacity: 0.9;
+  }
+}
 html {
   line-height: 1.15; /* 1 */
   -webkit-text-size-adjust: 100%; /* 2 */
@@ -381,6 +409,29 @@ td {
 .toggle.toggle-close .toggle-line-last {
   transform: rotate(45deg);
   top: -5px;
+}
+.highlight-container {
+  position: relative;
+}
+.highlight-container:hover .copy-btn,
+.highlight-container .copy-btn:focus {
+  opacity: 1;
+}
+.copy-btn {
+  color: #333;
+  cursor: pointer;
+  line-height: 1.6;
+  opacity: 0;
+  padding: 2px 6px;
+  position: absolute;
+  transition-delay: 0s;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-in-out;
+  background: #fff;
+  border: 0;
+  font-size: 0.8125em;
+  right: 0;
+  top: 0;
 }
 .highlight,
 pre {
@@ -1104,10 +1155,105 @@ pre .javascript .function {
 .use-motion .menu-item {
   opacity: 0;
 }
+.book-mark-link {
+  border-bottom: none;
+  display: inline-block;
+  position: fixed;
+  right: 30px;
+  top: -10px;
+  transition: 0.3s;
+}
+@media (max-width: 991px) {
+  .book-mark-link {
+    display: none;
+  }
+}
+.book-mark-link::before {
+  color: #222;
+  content: '\f02e';
+  font-size: 32px;
+  line-height: 1;
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+}
+.book-mark-link:hover,
+.book-mark-link-fixed {
+  top: -2px;
+}
+.github-corner :hover .octo-arm {
+  animation: octocat-wave 560ms ease-in-out;
+}
+.github-corner svg {
+  border: 0;
+  color: #fff;
+  fill: #222;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 1000;
+}
+@media (max-width: 991px) {
+  .github-corner {
+    display: none;
+  }
+  .github-corner svg {
+    color: #222;
+    fill: #fff;
+  }
+  .github-corner .github-corner:hover .octo-arm {
+    animation: none;
+  }
+  .github-corner .github-corner .octo-arm {
+    animation: octocat-wave 560ms ease-in-out;
+  }
+}
+@-moz-keyframes octocat-wave {
+  0%, 100% {
+    transform: rotate(0);
+  }
+  20%, 60% {
+    transform: rotate(-25deg);
+  }
+  40%, 80% {
+    transform: rotate(10deg);
+  }
+}
+@-webkit-keyframes octocat-wave {
+  0%, 100% {
+    transform: rotate(0);
+  }
+  20%, 60% {
+    transform: rotate(-25deg);
+  }
+  40%, 80% {
+    transform: rotate(10deg);
+  }
+}
+@-o-keyframes octocat-wave {
+  0%, 100% {
+    transform: rotate(0);
+  }
+  20%, 60% {
+    transform: rotate(-25deg);
+  }
+  40%, 80% {
+    transform: rotate(10deg);
+  }
+}
+@keyframes octocat-wave {
+  0%, 100% {
+    transform: rotate(0);
+  }
+  20%, 60% {
+    transform: rotate(-25deg);
+  }
+  40%, 80% {
+    transform: rotate(10deg);
+  }
+}
 .sidebar {
   background: #222;
   bottom: 0;
-  box-shadow: inset 0 2px 6px #000;
   position: fixed;
   top: 0;
 }
@@ -1141,6 +1287,7 @@ pre .javascript .function {
   margin: 0 auto;
   max-width: 120px;
   padding: 2px;
+  border-radius: 50%;
 }
 .site-author-name {
   color: var(--text-color);
@@ -1244,7 +1391,7 @@ img:hover {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #c36079;
+  background: #cfa1ff;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -1394,7 +1541,7 @@ img:hover {
   white-space: nowrap;
 }
 .post-toc .nav .nav-child {
-  display: none;
+  display: block;
 }
 .post-toc .nav .active > .nav-child {
   display: block;
@@ -1487,9 +1634,10 @@ img:hover {
   width: 100%;
 }
 .with-love {
-  color: #ff0000;
+  color: #1890ff;
   display: inline-block;
   margin: 0 5px;
+  animation: iconAnimate 1.33s ease-in-out infinite;
 }
 .powered-by,
 .theme-info {
@@ -1559,33 +1707,26 @@ img:hover {
   transition-timing-function: ease-in-out;
 }
 .back-to-top {
-  background: #222;
-  bottom: -100px;
-  box-sizing: border-box;
-  color: #fff;
-  cursor: pointer;
-  left: 30px;
-  opacity: 0.6;
-  padding: 0 6px;
-  position: fixed;
-  transition-property: bottom;
-  z-index: 1300;
-  width: 24px;
-}
-.back-to-top span {
-  display: none;
-}
-.back-to-top:hover {
-  color: #fc6423;
+  background: transparent;
+  margin: 8px -10px -20px;
+  opacity: 0;
 }
 .back-to-top.back-to-top-on {
-  bottom: 30px;
+  cursor: pointer;
+  opacity: 0.6;
 }
-@media (max-width: 991px) {
-  .back-to-top {
-    left: 20px;
-    opacity: 0.8;
-  }
+.back-to-top.back-to-top-on:hover {
+  opacity: 0.8;
+}
+.reading-progress-bar {
+  background: #37c6c0;
+  display: block;
+  height: 3px;
+  left: 0;
+  position: fixed;
+  width: 0;
+  z-index: 1500;
+  top: 0;
 }
 .post-body {
   font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
@@ -2037,6 +2178,13 @@ img:hover {
 }
 #qr p {
   text-align: center;
+}
+.post-copyright {
+  background: var(--card-bg-color);
+  border-left: 3px solid #ff2a2a;
+  list-style: none;
+  margin: 2em 0 0;
+  padding: 0.5em 1em;
 }
 .my_post_copyright {
   width: 85%;
@@ -2676,6 +2824,13 @@ ul.breadcrumb li + li:last-child {
 .links-of-blogroll-item {
   padding: 0;
 }
+.back-to-top {
+  background: var(--body-bg-color);
+  margin: -4px -10px -18px;
+}
+.back-to-top.back-to-top-on {
+  margin-top: 16px;
+}
 .content-wrap {
   background: initial;
   box-shadow: initial;
@@ -2798,5 +2953,170 @@ ul.breadcrumb li + li:last-child {
   }
   .pagination {
     margin: 8px 0 0;
+  }
+}
+/* 文章排版优化 */
+.post-body {
+  font-size: 15px;
+  line-height: 1.8;
+}
+.post-body p {
+  margin: 1.2em 0;
+}
+/* 标题样式 */
+.post-body h2 {
+  font-size: 1.5em;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 8px;
+  margin-top: 2em;
+  margin-bottom: 0.8em;
+}
+.post-body h3 {
+  font-size: 1.25em;
+  margin-top: 1.5em;
+  margin-bottom: 0.6em;
+  color: #555;
+}
+/* 代码块美化 */
+.highlight {
+  border-radius: 8px !important;
+  margin: 1.5em 0 !important;
+}
+.highlight pre {
+  padding: 16px 20px !important;
+  font-size: 13.5px !important;
+  line-height: 1.6 !important;
+}
+/* 行内代码 */
+code:not(.highlight code) {
+  color: #d63384;
+  background: #f8f9fa;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+/* 引用块美化 */
+blockquote {
+  border-left: 4px solid #1890ff !important;
+  background: #f8f9ff;
+  padding: 12px 20px !important;
+  border-radius: 0 8px 8px 0;
+}
+/* 表格美化 */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.5em 0;
+  font-size: 14px;
+}
+table th,
+table td {
+  border: 1px solid #e8e8e8;
+  padding: 10px 14px;
+  text-align: left;
+}
+table th {
+  background: #f5f7fa;
+  font-weight: 600;
+}
+/* 链接样式 */
+.post-body a {
+  color: #1890ff;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+.post-body a:hover {
+  border-bottom-color: #1890ff;
+}
+/* 列表优化 */
+.post-body ul,
+.post-body ol {
+  padding-left: 1.8em;
+  line-height: 1.8;
+}
+.post-body li {
+  margin: 0.4em 0;
+}
+/* 阅读更多按钮 */
+.read-more-btn {
+  border-radius: 20px !important;
+  font-size: 13px !important;
+  padding: 6px 20px !important;
+  transition: all 0.3s !important;
+}
+.read-more-btn:hover {
+  background: #1890ff !important;
+  border-color: #1890ff !important;
+  color: #fff !important;
+}
+/* 文章底部标签样式 */
+.post-tags a {
+  border-radius: 12px;
+  padding: 2px 10px;
+  font-size: 12px;
+  background: #f0f2f5;
+  color: #666;
+  transition: all 0.2s;
+}
+.post-tags a:hover {
+  background: #1890ff;
+  color: #fff;
+  text-decoration: none;
+}
+/* 头像旋转动画 */
+.site-avatar:hover img {
+  animation: spin 2s linear infinite;
+}
+/* 代码块复制按钮位置 */
+.copy-btn {
+  top: 8px !important;
+  right: 8px !important;
+  border-radius: 4px !important;
+  padding: 2px 8px !important;
+  font-size: 12px !important;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+.highlight:hover .copy-btn {
+  opacity: 1;
+}
+/* 首页文章间距 */
+.posts-expand .post-body {
+  margin-top: 12px;
+}
+.post-meta {
+  color: #999;
+  font-size: 13px;
+}
+@-moz-keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-o-keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }

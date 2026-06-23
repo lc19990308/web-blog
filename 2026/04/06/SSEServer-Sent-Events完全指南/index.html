@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/web-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/web-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/web-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/web-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/web-blog/css/main.css">
+
+
+<link rel="stylesheet" href="/web-blog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/web-blog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/web-blog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lc19990308.github.io","root":"/web-blog/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="SSE 是比 WebSocket 更轻量的服务端推送方案。本文从基础用法到生产实践，覆盖 EventSource API、数据格式、断线重连、与 WebSocket 的选型对比">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SSE（Server-Sent Events）完全指南：服务端推送的轻量方案">
+<meta property="og:url" content="https://lc19990308.github.io/web-blog/2026/04/06/SSEServer-Sent-Events%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/index.html">
+<meta property="og:site_name" content="前端技术笔记">
+<meta property="og:description" content="SSE 是比 WebSocket 更轻量的服务端推送方案。本文从基础用法到生产实践，覆盖 EventSource API、数据格式、断线重连、与 WebSocket 的选型对比">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-04-05T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-23T04:31:58.236Z">
+<meta property="article:author" content="LC">
+<meta property="article:tag" content="网络协议">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://lc19990308.github.io/web-blog/2026/04/06/SSEServer-Sent-Events%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>SSE（Server-Sent Events）完全指南：服务端推送的轻量方案 | 前端技术笔记</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/web-blog/atom.xml" title="前端技术笔记" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband">
+    <a target="_blank" rel="noopener" href="https://gitee.com/yaru722" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    </div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/web-blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">前端技术笔记</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录前端路上的思考与实践</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/web-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/web-blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/web-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/web-blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/web-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/lc19990308" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/04/06/SSEServer-Sent-Events%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+      <meta itemprop="name" content="LC">
+      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端技术笔记">
+    </span>
+      <header class="post-header">
+      
+        <h1 class="post-title" itemprop="name headline">
+          SSE（Server-Sent Events）完全指南：服务端推送的轻量方案
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-04-06 00:00:00" itemprop="dateCreated datePublished" datetime="2026-04-06T00:00:00+08:00">2026-04-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/web-blog/categories/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" itemprop="url" rel="index"><span itemprop="name">网络协议</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">SSE 是比 WebSocket 更轻量的服务端推送方案。本文从基础用法到生产实践，覆盖 EventSource API、数据格式、断线重连、与 WebSocket 的选型对比</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>SSE（Server-Sent Events）是一种<strong>服务端主动向客户端推送数据</strong>的技术。与 WebSocket 不同，SSE 是<strong>单向的</strong>（服务端→客户端），基于<strong>原生 HTTP 协议</strong>，使用起来非常简单。</p>
+<p><strong>最典型场景：</strong> ChatGPT 的流式输出、实时通知、股票行情、日志推送。</p>
+<hr>
+<h2 id="一、SSE-的核心特点"><a href="#一、SSE-的核心特点" class="headerlink" title="一、SSE 的核心特点"></a>一、SSE 的核心特点</h2><h3 id="1-1-与-WebSocket-的对比"><a href="#1-1-与-WebSocket-的对比" class="headerlink" title="1.1 与 WebSocket 的对比"></a>1.1 与 WebSocket 的对比</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">SSE（单向推送）：</span><br><span class="line">客户端 ──请求──────► 服务端</span><br><span class="line">客户端 ◄──持续推送── 服务端（单向）</span><br><span class="line"></span><br><span class="line">WebSocket（全双工）：</span><br><span class="line">客户端 ═══ 握手 ═══► 服务端</span><br><span class="line">客户端 ◄──推送────── 服务端</span><br><span class="line">客户端 ──发送──────► 服务端</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>SSE</th>
+<th>WebSocket</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>方向</strong></td>
+<td>服务端→客户端（单向）</td>
+<td><strong>双向</strong></td>
+</tr>
+<tr>
+<td><strong>协议</strong></td>
+<td><strong>原生 HTTP</strong></td>
+<td>需要协议升级（ws://）</td>
+</tr>
+<tr>
+<td><strong>使用复杂度</strong></td>
+<td><strong>极低</strong>（原生 EventSource）</td>
+<td>较高</td>
+</tr>
+<tr>
+<td><strong>自动重连</strong></td>
+<td>✅ <strong>内置</strong>（浏览器自动处理）</td>
+<td>❌ 需要手动实现</td>
+</tr>
+<tr>
+<td><strong>二进制数据</strong></td>
+<td>❌ 仅文本</td>
+<td>✅ 支持</td>
+</tr>
+<tr>
+<td><strong>浏览器支持</strong></td>
+<td>现代浏览器均支持</td>
+<td>均支持</td>
+</tr>
+<tr>
+<td><strong>最大连接数</strong></td>
+<td>浏览器限制（通常 6 个）</td>
+<td>无限制</td>
+</tr>
+<tr>
+<td><strong>适用场景</strong></td>
+<td>通知、推送、流式响应</td>
+<td>聊天、游戏、实时协作</td>
+</tr>
+</tbody></table>
+<h3 id="1-2-一句话选型"><a href="#1-2-一句话选型" class="headerlink" title="1.2 一句话选型"></a>1.2 一句话选型</h3><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">只需要「服务端推送，客户端接收」→ SSE（更简单）</span><br><span class="line">需要「双向实时通信」→ WebSocket</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="二、客户端：EventSource-API"><a href="#二、客户端：EventSource-API" class="headerlink" title="二、客户端：EventSource API"></a>二、客户端：EventSource API</h2><h3 id="2-1-基础用法"><a href="#2-1-基础用法" class="headerlink" title="2.1 基础用法"></a>2.1 基础用法</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建 SSE 连接</span></span><br><span class="line"><span class="keyword">const</span> eventSource = <span class="keyword">new</span> EventSource(<span class="string">&#x27;/api/events&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 监听消息</span></span><br><span class="line">eventSource.onmessage = <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;收到数据:&#x27;</span>, event.data)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 监听连接打开</span></span><br><span class="line">eventSource.onopen = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;SSE 连接已建立&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 监听错误</span></span><br><span class="line">eventSource.onerror = <span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.error(<span class="string">&#x27;连接出错:&#x27;</span>, err)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 关闭连接</span></span><br><span class="line"><span class="comment">// eventSource.close()</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-监听命名事件"><a href="#2-2-监听命名事件" class="headerlink" title="2.2 监听命名事件"></a>2.2 监听命名事件</h3><p>服务端可以发送不同类型的事件，客户端分别监听：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> eventSource = <span class="keyword">new</span> EventSource(<span class="string">&#x27;/api/events&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 监听特定事件</span></span><br><span class="line">eventSource.addEventListener(<span class="string">&#x27;notification&#x27;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;通知:&#x27;</span>, <span class="built_in">JSON</span>.parse(event.data))</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">eventSource.addEventListener(<span class="string">&#x27;chat&#x27;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;聊天消息:&#x27;</span>, <span class="built_in">JSON</span>.parse(event.data))</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">eventSource.addEventListener(<span class="string">&#x27;status&#x27;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;状态更新:&#x27;</span>, event.data)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 通用消息（没有指定事件名）</span></span><br><span class="line">eventSource.onmessage = <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;通用消息:&#x27;</span>, event.data)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-自动重连"><a href="#2-3-自动重连" class="headerlink" title="2.3 自动重连"></a>2.3 自动重连</h3><p>SSE 最大的优势之一：<strong>浏览器内置自动重连</strong>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> eventSource = <span class="keyword">new</span> EventSource(<span class="string">&#x27;/api/events&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 服务端可以控制重连延迟（通过 retry 字段）</span></span><br><span class="line"><span class="comment">// 浏览器在连接断开后会自动重新连接</span></span><br><span class="line"><span class="comment">// 无需手动实现心跳和重连逻辑！</span></span><br><span class="line"></span><br><span class="line">eventSource.onerror = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;连接断开，浏览器会自动重连...&#x27;</span>)</span><br><span class="line">  <span class="comment">// eventSource.readyState 可以查看当前状态</span></span><br><span class="line">  <span class="comment">// 0 = CONNECTING（正在重连）</span></span><br><span class="line">  <span class="comment">// 1 = OPEN</span></span><br><span class="line">  <span class="comment">// 2 = CLOSED</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="三、服务端：数据格式"><a href="#三、服务端：数据格式" class="headerlink" title="三、服务端：数据格式"></a>三、服务端：数据格式</h2><p>SSE 的数据格式非常简单——纯文本，以 <code>data:</code> 开头，以 <code>\n\n</code> 结尾。</p>
+<h3 id="3-1-Node-js-实现"><a href="#3-1-Node-js-实现" class="headerlink" title="3.1 Node.js 实现"></a>3.1 Node.js 实现</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Node.js 原生 SSE 服务</span></span><br><span class="line"><span class="keyword">import</span> http <span class="keyword">from</span> <span class="string">&#x27;http&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = http.createServer(<span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 设置 SSE 响应头</span></span><br><span class="line">  res.writeHead(<span class="number">200</span>, &#123;</span><br><span class="line">    <span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;text/event-stream&#x27;</span>,   <span class="comment">// SSE 必须</span></span><br><span class="line">    <span class="string">&#x27;Cache-Control&#x27;</span>: <span class="string">&#x27;no-cache&#x27;</span>,           <span class="comment">// 不缓存</span></span><br><span class="line">    <span class="string">&#x27;Connection&#x27;</span>: <span class="string">&#x27;keep-alive&#x27;</span>,            <span class="comment">// 保持连接</span></span><br><span class="line">    <span class="string">&#x27;Access-Control-Allow-Origin&#x27;</span>: <span class="string">&#x27;*&#x27;</span>,    <span class="comment">// CORS（需要时）</span></span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 发送消息</span></span><br><span class="line">  <span class="keyword">let</span> count = <span class="number">0</span></span><br><span class="line">  <span class="keyword">const</span> timer = <span class="built_in">setInterval</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    count++</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 基础消息格式</span></span><br><span class="line">    res.write(<span class="string">`data: <span class="subst">$&#123;<span class="built_in">JSON</span>.stringify(&#123; id: count, message: <span class="string">&#x27;Hello&#x27;</span> &#125;)&#125;</span>\n\n`</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 5 秒后关闭</span></span><br><span class="line">    <span class="keyword">if</span> (count &gt;= <span class="number">5</span>) &#123;</span><br><span class="line">      <span class="built_in">clearInterval</span>(timer)</span><br><span class="line">      res.end()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, <span class="number">1000</span>)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 客户端断开时清理</span></span><br><span class="line">  req.on(<span class="string">&#x27;close&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">clearInterval</span>(timer)</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;客户端断开连接&#x27;</span>)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">3001</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-Express-实现"><a href="#3-2-Express-实现" class="headerlink" title="3.2 Express 实现"></a>3.2 Express 实现</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> express <span class="keyword">from</span> <span class="string">&#x27;express&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> app = express()</span><br><span class="line"></span><br><span class="line">app.get(<span class="string">&#x27;/api/events&#x27;</span>, <span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  res.writeHead(<span class="number">200</span>, &#123;</span><br><span class="line">    <span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;text/event-stream&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Cache-Control&#x27;</span>: <span class="string">&#x27;no-cache&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Connection&#x27;</span>: <span class="string">&#x27;keep-alive&#x27;</span>,</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 发送命名事件</span></span><br><span class="line">  res.write(<span class="string">&#x27;event: notification\n&#x27;</span>)</span><br><span class="line">  res.write(<span class="string">`data: <span class="subst">$&#123;<span class="built_in">JSON</span>.stringify(&#123; title: <span class="string">&#x27;新消息&#x27;</span>, body: <span class="string">&#x27;你有 3 条未读&#x27;</span> &#125;)&#125;</span>\n\n`</span>)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 发送普通消息</span></span><br><span class="line">  res.write(<span class="string">`data: <span class="subst">$&#123;<span class="built_in">JSON</span>.stringify(&#123; type: <span class="string">&#x27;ping&#x27;</span> &#125;)&#125;</span>\n\n`</span>)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 设置重连延迟（毫秒）</span></span><br><span class="line">  res.write(<span class="string">&#x27;retry: 3000\n\n&#x27;</span>)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 定时推送</span></span><br><span class="line">  <span class="keyword">const</span> timer = <span class="built_in">setInterval</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    res.write(<span class="string">`data: <span class="subst">$&#123;<span class="keyword">new</span> <span class="built_in">Date</span>().toISOString()&#125;</span>\n\n`</span>)</span><br><span class="line">  &#125;, <span class="number">5000</span>)</span><br><span class="line"></span><br><span class="line">  req.on(<span class="string">&#x27;close&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">clearInterval</span>(timer)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">app.listen(<span class="number">3000</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-SSE-数据格式速查"><a href="#3-3-SSE-数据格式速查" class="headerlink" title="3.3 SSE 数据格式速查"></a>3.3 SSE 数据格式速查</h3><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="section"># SSE 数据格式（每行以 \n 结尾，消息以 \n\n 结尾）</span></span><br><span class="line"></span><br><span class="line">data: 数据内容                        # 消息数据（可多行）</span><br><span class="line">data: 第二行数据                      # 多行 data 拼接为一条消息</span><br><span class="line"></span><br><span class="line">event: eventName                      # 事件名称（客户端用 addEventListener 监听）</span><br><span class="line">id: msg-123                           # 消息 ID（断线重连时自动发送 Last-Event-ID）</span><br><span class="line">retry: 3000                           # 重连延迟（毫秒）</span><br><span class="line"></span><br><span class="line">: 这是一个注释                        # 以 : 开头的是注释</span><br><span class="line"></span><br><span class="line"><span class="section"># 一条完整消息示例：</span></span><br><span class="line">event: notification</span><br><span class="line">id: notif-001</span><br><span class="line">data: &#123;&quot;title&quot;:&quot;新消息&quot;,&quot;body&quot;:&quot;你好&quot;&#125;</span><br><span class="line"><span class="code">                                   ← 空行表示消息结束</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="四、实战场景"><a href="#四、实战场景" class="headerlink" title="四、实战场景"></a>四、实战场景</h2><h3 id="4-1-ChatGPT-流式输出"><a href="#4-1-ChatGPT-流式输出" class="headerlink" title="4.1 ChatGPT 流式输出"></a>4.1 ChatGPT 流式输出</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 前端：逐字显示 AI 回复</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">fetchAIResponse</span>(<span class="params">prompt</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> eventSource = <span class="keyword">new</span> EventSource(<span class="string">`/api/chat?prompt=<span class="subst">$&#123;<span class="built_in">encodeURIComponent</span>(prompt)&#125;</span>`</span>)</span><br><span class="line"></span><br><span class="line">  eventSource.onmessage = <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> data = <span class="built_in">JSON</span>.parse(event.data)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (data.type === <span class="string">&#x27;token&#x27;</span>) &#123;</span><br><span class="line">      <span class="comment">// 逐 token 追加显示</span></span><br><span class="line">      outputElement.textContent += data.text</span><br><span class="line">      scrollToBottom()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (data.type === <span class="string">&#x27;done&#x27;</span>) &#123;</span><br><span class="line">      <span class="comment">// 流结束</span></span><br><span class="line">      eventSource.close()</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">&#x27;生成完成&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  eventSource.onerror = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 出错时也关闭</span></span><br><span class="line">    eventSource.close()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2-日志实时推送"><a href="#4-2-日志实时推送" class="headerlink" title="4.2 日志实时推送"></a>4.2 日志实时推送</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 服务端实时推送日志</span></span><br><span class="line">app.get(<span class="string">&#x27;/api/logs&#x27;</span>, <span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  res.writeHead(<span class="number">200</span>, &#123;</span><br><span class="line">    <span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;text/event-stream&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Cache-Control&#x27;</span>: <span class="string">&#x27;no-cache&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Connection&#x27;</span>: <span class="string">&#x27;keep-alive&#x27;</span>,</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 监听日志文件变化</span></span><br><span class="line">  <span class="keyword">const</span> watcher = fs.watch(<span class="string">&#x27;app.log&#x27;</span>, <span class="function">(<span class="params">eventType</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (eventType === <span class="string">&#x27;change&#x27;</span>) &#123;</span><br><span class="line">      <span class="keyword">const</span> data = fs.readFileSync(<span class="string">&#x27;app.log&#x27;</span>, <span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">      <span class="keyword">const</span> lines = data.split(<span class="string">&#x27;\n&#x27;</span>).filter(<span class="built_in">Boolean</span>).slice(-<span class="number">10</span>)</span><br><span class="line">      res.write(<span class="string">`data: <span class="subst">$&#123;<span class="built_in">JSON</span>.stringify(&#123; lines &#125;)&#125;</span>\n\n`</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  req.on(<span class="string">&#x27;close&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    watcher.close()</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3-实时通知"><a href="#4-3-实时通知" class="headerlink" title="4.3 实时通知"></a>4.3 实时通知</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 前端统一通知处理</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">NotificationClient</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">url</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.eventSource = <span class="keyword">new</span> EventSource(url)</span><br><span class="line">    <span class="built_in">this</span>.setupListeners()</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="title">setupListeners</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.eventSource.addEventListener(<span class="string">&#x27;notification&#x27;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> data = <span class="built_in">JSON</span>.parse(event.data)</span><br><span class="line">      <span class="built_in">this</span>.showNotification(data)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">this</span>.eventSource.onerror = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">&#x27;通知服务重连中...&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="title">showNotification</span>(<span class="params">data</span>)</span> &#123;</span><br><span class="line">    <span class="comment">// 更新 UI 上的未读数</span></span><br><span class="line">    <span class="keyword">if</span> (data.unreadCount !== <span class="literal">undefined</span>) &#123;</span><br><span class="line">      badgeElement.textContent = data.unreadCount</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 浏览器原生通知</span></span><br><span class="line">    <span class="keyword">if</span> (Notification.permission === <span class="string">&#x27;granted&#x27;</span>) &#123;</span><br><span class="line">      <span class="keyword">new</span> Notification(data.title, &#123; <span class="attr">body</span>: data.body &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="title">close</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.eventSource.close()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> notifier = <span class="keyword">new</span> NotificationClient(<span class="string">&#x27;/api/notifications&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="五、生产注意事项"><a href="#五、生产注意事项" class="headerlink" title="五、生产注意事项"></a>五、生产注意事项</h2><h3 id="5-1-连接数限制"><a href="#5-1-连接数限制" class="headerlink" title="5.1 连接数限制"></a>5.1 连接数限制</h3><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">浏览器对同一域名的 SSE 连接数有限制：</span><br><span class="line"><span class="bullet">-</span> HTTP/1.1：通常 6 个</span><br><span class="line"><span class="bullet">-</span> HTTP/2：最多 100 个</span><br><span class="line"></span><br><span class="line">解决方案：</span><br><span class="line"><span class="bullet">-</span> 一个页面只建一个 SSE 连接，通过事件名区分不同类型</span><br><span class="line"><span class="bullet">-</span> 使用 HTTP/2</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2-代理与负载均衡"><a href="#5-2-代理与负载均衡" class="headerlink" title="5.2 代理与负载均衡"></a>5.2 代理与负载均衡</h3><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Nginx 配置 SSE</span></span><br><span class="line"><span class="attribute">location</span> /api/events &#123;</span><br><span class="line">  <span class="attribute">proxy_pass</span> http://backend;</span><br><span class="line">  <span class="attribute">proxy_http_version</span> <span class="number">1</span>.<span class="number">1</span>;</span><br><span class="line">  <span class="attribute">proxy_set_header</span> Connection <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">  <span class="attribute">proxy_buffering</span> <span class="literal">off</span>;           <span class="comment"># 关闭缓冲（SSE 必须）</span></span><br><span class="line">  <span class="attribute">proxy_cache</span> <span class="literal">off</span>;               <span class="comment"># 关闭缓存</span></span><br><span class="line">  <span class="attribute">chunked_transfer_encoding</span> <span class="literal">on</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-3-断线重连的-ID"><a href="#5-3-断线重连的-ID" class="headerlink" title="5.3 断线重连的 ID"></a>5.3 断线重连的 ID</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 服务端发送 id，客户端重连时自动发送 Last-Event-ID</span></span><br><span class="line"><span class="comment">// 服务端据此恢复断点后的数据</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> eventId = <span class="number">0</span></span><br><span class="line"><span class="keyword">const</span> timer = <span class="built_in">setInterval</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  eventId++</span><br><span class="line">  res.write(<span class="string">`id: <span class="subst">$&#123;eventId&#125;</span>\n`</span>)</span><br><span class="line">  res.write(<span class="string">`data: <span class="subst">$&#123;<span class="built_in">JSON</span>.stringify(&#123; eventId, data: <span class="string">&#x27;...&#x27;</span> &#125;)&#125;</span>\n\n`</span>)</span><br><span class="line">&#125;, <span class="number">1000</span>)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="六、完整示例：Vue-3-SSE"><a href="#六、完整示例：Vue-3-SSE" class="headerlink" title="六、完整示例：Vue 3 + SSE"></a>六、完整示例：Vue 3 + SSE</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref, onMounted, onUnmounted &#125; from &#x27;vue&#x27;</span><br><span class="line"></span><br><span class="line">const messages = ref([])</span><br><span class="line">const connected = ref(false)</span><br><span class="line">let eventSource = null</span><br><span class="line"></span><br><span class="line">onMounted(() =&gt; &#123;</span><br><span class="line">  eventSource = new EventSource(&#x27;/api/events&#x27;)</span><br><span class="line"></span><br><span class="line">  eventSource.onopen = () =&gt; &#123;</span><br><span class="line">    connected.value = true</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  eventSource.onmessage = (event) =&gt; &#123;</span><br><span class="line">    messages.value.push(&#123;</span><br><span class="line">      id: Date.now(),</span><br><span class="line">      content: event.data,</span><br><span class="line">      time: new Date().toLocaleTimeString(),</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    // 只保留最近 50 条</span><br><span class="line">    if (messages.value.length &gt; 50) &#123;</span><br><span class="line">      messages.value.shift()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  eventSource.onerror = () =&gt; &#123;</span><br><span class="line">    connected.value = false</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">onUnmounted(() =&gt; &#123;</span><br><span class="line">  eventSource?.close()</span><br><span class="line">&#125;)</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div class=&quot;sse-demo&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;status&quot; :class=&quot;&#123; connected &#125;&quot;&gt;</span><br><span class="line">      &#123;&#123; connected ? &#x27;已连接&#x27; : &#x27;连接中...&#x27; &#125;&#125;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line"></span><br><span class="line">    &lt;div class=&quot;messages&quot;&gt;</span><br><span class="line">      &lt;div v-for=&quot;msg in messages&quot; :key=&quot;msg.id&quot; class=&quot;message&quot;&gt;</span><br><span class="line">        &lt;span class=&quot;time&quot;&gt;&#123;&#123; msg.time &#125;&#125;&lt;/span&gt;</span><br><span class="line">        &lt;span class=&quot;content&quot;&gt;&#123;&#123; msg.content &#125;&#125;&lt;/span&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">SSE 的三大优势：</span><br><span class="line"></span><br><span class="line"><span class="bullet">1.</span> 简单——原生 EventSource API，几行代码搞定</span><br><span class="line"><span class="bullet">2.</span> 自动重连——浏览器内置，不需要手动实现</span><br><span class="line"><span class="bullet">3.</span> 基于 HTTP——不需要额外的协议和服务器配置</span><br><span class="line"></span><br><span class="line">什么时候用 SSE？</span><br><span class="line"><span class="bullet">-</span> ChatGPT 流式输出</span><br><span class="line"><span class="bullet">-</span> 实时通知/提醒</span><br><span class="line"><span class="bullet">-</span> 状态/进度推送</span><br><span class="line"><span class="bullet">-</span> 日志实时展示</span><br><span class="line"></span><br><span class="line">什么时候用 WebSocket？</span><br><span class="line"><span class="bullet">-</span> 需要双向通信（聊天、游戏）</span><br><span class="line"><span class="bullet">-</span> 需要发送二进制数据</span><br><span class="line"><span class="bullet">-</span> 需要大量并发连接</span><br><span class="line"></span><br><span class="line">一句话：SSE 是「够用且简单」的服务端推送方案。</span><br></pre></td></tr></table></figure>
+
+<p><strong>推荐阅读：</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Server-sent_events">MDN: Server-Sent Events</a></li>
+<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/EventSource">EventSource API</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.developer.com/web-services/server-sent-events-vs-websockets/">SSE vs WebSocket</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/web-blog/2026/04/06/SSEServer-Sent-Events%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/">SSE（Server-Sent Events）完全指南：服务端推送的轻量方案</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a></p>
+  <p><span>发布时间:</span>2026年04月06日 - 00:04</p>
+  <p><span>最后更新:</span>2026年06月23日 - 12:06</p>
+  <p><span>原始链接:</span><a href="/web-blog/2026/04/06/SSEServer-Sent-Events%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/" title="SSE（Server-Sent Events）完全指南：服务端推送的轻量方案">https://lc19990308.github.io/web-blog/2026/04/06/SSEServer-Sent-Events%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://lc19990308.github.io/web-blog/2026/04/06/SSEServer-Sent-Events%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+    });
+    });  
+</script>
+
+      
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>LC
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://lc19990308.github.io/web-blog/2026/04/06/SSEServer-Sent-Events%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/" title="SSE（Server-Sent Events）完全指南：服务端推送的轻量方案">https://lc19990308.github.io/web-blog/2026/04/06/SSEServer-Sent-Events完全指南/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/web-blog/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" ****><i class="fa fa-tag"></i> 网络协议</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/03/22/WebSocket%E5%AE%9E%E6%97%B6%E9%80%9A%E8%AE%AF%E6%8C%87%E5%8D%97/" rel="prev" title="WebSocket 实时通讯：从原理到实战">
+      <i class="fa fa-chevron-left"></i> WebSocket 实时通讯：从原理到实战
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/04/12/%E5%89%8D%E7%AB%AF%E6%B5%8B%E8%AF%95%E6%8C%87%E5%8D%97-Vitest%E4%B8%8EPlaywright/" rel="next" title="前端测试指南：Vitest + Playwright 从零到实战">
+      前端测试指南：Vitest + Playwright 从零到实战 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81SSE-%E7%9A%84%E6%A0%B8%E5%BF%83%E7%89%B9%E7%82%B9"><span class="nav-number">2.</span> <span class="nav-text">一、SSE 的核心特点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E4%B8%8E-WebSocket-%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 与 WebSocket 的对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E4%B8%80%E5%8F%A5%E8%AF%9D%E9%80%89%E5%9E%8B"><span class="nav-number">2.2.</span> <span class="nav-text">1.2 一句话选型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%AE%A2%E6%88%B7%E7%AB%AF%EF%BC%9AEventSource-API"><span class="nav-number">3.</span> <span class="nav-text">二、客户端：EventSource API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%9F%BA%E7%A1%80%E7%94%A8%E6%B3%95"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 基础用法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E7%9B%91%E5%90%AC%E5%91%BD%E5%90%8D%E4%BA%8B%E4%BB%B6"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 监听命名事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E8%87%AA%E5%8A%A8%E9%87%8D%E8%BF%9E"><span class="nav-number">3.3.</span> <span class="nav-text">2.3 自动重连</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E6%9C%8D%E5%8A%A1%E7%AB%AF%EF%BC%9A%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F"><span class="nav-number">4.</span> <span class="nav-text">三、服务端：数据格式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-Node-js-%E5%AE%9E%E7%8E%B0"><span class="nav-number">4.1.</span> <span class="nav-text">3.1 Node.js 实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-Express-%E5%AE%9E%E7%8E%B0"><span class="nav-number">4.2.</span> <span class="nav-text">3.2 Express 实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-SSE-%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F%E9%80%9F%E6%9F%A5"><span class="nav-number">4.3.</span> <span class="nav-text">3.3 SSE 数据格式速查</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E5%AE%9E%E6%88%98%E5%9C%BA%E6%99%AF"><span class="nav-number">5.</span> <span class="nav-text">四、实战场景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-ChatGPT-%E6%B5%81%E5%BC%8F%E8%BE%93%E5%87%BA"><span class="nav-number">5.1.</span> <span class="nav-text">4.1 ChatGPT 流式输出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E6%97%A5%E5%BF%97%E5%AE%9E%E6%97%B6%E6%8E%A8%E9%80%81"><span class="nav-number">5.2.</span> <span class="nav-text">4.2 日志实时推送</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-%E5%AE%9E%E6%97%B6%E9%80%9A%E7%9F%A5"><span class="nav-number">5.3.</span> <span class="nav-text">4.3 实时通知</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E7%94%9F%E4%BA%A7%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">6.</span> <span class="nav-text">五、生产注意事项</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%E8%BF%9E%E6%8E%A5%E6%95%B0%E9%99%90%E5%88%B6"><span class="nav-number">6.1.</span> <span class="nav-text">5.1 连接数限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-%E4%BB%A3%E7%90%86%E4%B8%8E%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-number">6.2.</span> <span class="nav-text">5.2 代理与负载均衡</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-%E6%96%AD%E7%BA%BF%E9%87%8D%E8%BF%9E%E7%9A%84-ID"><span class="nav-number">6.3.</span> <span class="nav-text">5.3 断线重连的 ID</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E5%AE%8C%E6%95%B4%E7%A4%BA%E4%BE%8B%EF%BC%9AVue-3-SSE"><span class="nav-number">7.</span> <span class="nav-text">六、完整示例：Vue 3 + SSE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">8.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="LC"
+      src="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+  <p class="site-author-name" itemprop="name">LC</p>
+  <div class="site-description" itemprop="description">专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/web-blog/archives/">
+        
+          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/web-blog/categories/">
+          
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/web-blog/tags/">
+          
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button motion-element"><i class="fa fa-comment"></i>
+    Chat
+  </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lc19990308/web-blog" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lc19990308&#x2F;web-blog" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:jarridaddison4@gmail.com" title="E-Mail → mailto:jarridaddison4@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/web-blog/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=441491828&auto=1&height=66"></iframe>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LC</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>-->
+<div class="powered-by">
+  <i class="fa fa-user-md"></i>
+  <span id="busuanzi_container_site_pv">
+    本站访问量:<span id="busuanzi_value_site_pv"></span>次
+  </span>
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv">
+    本站总访客量：<span id="busuanzi_value_site_uv"></span>人
+  </span>
+</div>
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共94.7k字</span>
+</div>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/web-blog/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/web-blog/js/utils.js"></script>
+
+<script src="/web-blog/js/motion.js"></script>
+
+
+<script src="/web-blog/js/schemes/pisces.js"></script>
+
+
+<script src="/web-blog/js/next-boot.js"></script>
+
+<script src="/web-blog/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/web-blog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+</body>
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</html>
