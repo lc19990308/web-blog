@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/web-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/web-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/web-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/web-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/web-blog/css/main.css">
+
+
+<link rel="stylesheet" href="/web-blog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/web-blog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/web-blog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lc19990308.github.io","root":"/web-blog/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="系统讲解 Git 团队协作的最佳实践，涵盖分支策略、Commit 规范、Git Hooks 自动化、Code Review 流程和 Changesets 版本发布">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git 工作流实战：从团队规范到自动化流水线">
+<meta property="og:url" content="https://lc19990308.github.io/web-blog/2026/06/25/git-workflow-practice/index.html">
+<meta property="og:site_name" content="前端技术笔记">
+<meta property="og:description" content="系统讲解 Git 团队协作的最佳实践，涵盖分支策略、Commit 规范、Git Hooks 自动化、Code Review 流程和 Changesets 版本发布">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-25T07:34:21.142Z">
+<meta property="article:author" content="LC">
+<meta property="article:tag" content="工程化">
+<meta property="article:tag" content="git">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://lc19990308.github.io/web-blog/2026/06/25/git-workflow-practice/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Git 工作流实战：从团队规范到自动化流水线 | 前端技术笔记</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/web-blog/atom.xml" title="前端技术笔记" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband">
+    <a target="_blank" rel="noopener" href="https://gitee.com/yaru722" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    </div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/web-blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">前端技术笔记</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录前端路上的思考与实践</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/web-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/web-blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/web-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/web-blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/web-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/lc19990308" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/25/git-workflow-practice/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+      <meta itemprop="name" content="LC">
+      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端技术笔记">
+    </span>
+      <header class="post-header">
+      
+        <h1 class="post-title" itemprop="name headline">
+          Git 工作流实战：从团队规范到自动化流水线
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-06-25 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-25T00:00:00+08:00">2026-06-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/web-blog/categories/git/" itemprop="url" rel="index"><span itemprop="name">git</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">系统讲解 Git 团队协作的最佳实践，涵盖分支策略、Commit 规范、Git Hooks 自动化、Code Review 流程和 Changesets 版本发布</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Git 不只是 <code>add</code>、<code>commit</code>、<code>push</code> 三板斧。在团队协作中，一套规范的 Git 工作流能解决很多痛点：</p>
+<ul>
+<li>分支管理混乱，不知道哪个分支是稳定的</li>
+<li>Commit 信息随意，无法生成有用的 Changelog</li>
+<li>代码合并冲突不断，Review 流程缺失</li>
+<li>版本发布靠手动，容易出纰漏</li>
+</ul>
+<p>本文从<strong>分支策略 → Commit 规范 → 自动化 → 发布管理</strong>四个层次，搭建完整的 Git 工作流。</p>
+<hr>
+<h2 id="一、分支策略"><a href="#一、分支策略" class="headerlink" title="一、分支策略"></a>一、分支策略</h2><h3 id="1-1-Git-Flow-与-GitHub-Flow-对比"><a href="#1-1-Git-Flow-与-GitHub-Flow-对比" class="headerlink" title="1.1 Git Flow 与 GitHub Flow 对比"></a>1.1 Git Flow 与 GitHub Flow 对比</h3><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Git Flow</th>
+<th>GitHub Flow（推荐）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>适用团队</strong></td>
+<td>大型团队、版本周期长</td>
+<td>中小团队、持续交付</td>
+</tr>
+<tr>
+<td><strong>常驻分支</strong></td>
+<td>master + develop + release + hotfix</td>
+<td>main + feature</td>
+</tr>
+<tr>
+<td><strong>复杂度</strong></td>
+<td>高（5+ 种分支）</td>
+<td>低（2-3 种分支）</td>
+</tr>
+<tr>
+<td><strong>发布频率</strong></td>
+<td>周期性发布</td>
+<td>持续部署</td>
+</tr>
+</tbody></table>
+<p><strong>推荐：简化的 GitHub Flow</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">main（稳定版，受保护，不可直接推送）</span><br><span class="line">  └── feature/xxx（从 main 拉出，开发完成后 PR → main）</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-分支命名规范"><a href="#1-2-分支命名规范" class="headerlink" title="1.2 分支命名规范"></a>1.2 分支命名规范</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">feature/xxx    <span class="comment"># 新功能：  feature/user-login</span></span><br><span class="line">fix/xxx        <span class="comment"># 修复 bug： fix/header-styling</span></span><br><span class="line">chore/xxx      <span class="comment"># 杂项：    chore/update-deps</span></span><br><span class="line">refactor/xxx   <span class="comment"># 重构：    refactor/api-layer</span></span><br><span class="line">docs/xxx       <span class="comment"># 文档：    docs/api-readme</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="1-3-分支保护规则"><a href="#1-3-分支保护规则" class="headerlink" title="1.3 分支保护规则"></a>1.3 分支保护规则</h3><p>在 GitHub/GitLab 中设置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- 禁止直接推送到 main</span><br><span class="line">- PR 必须至少 1 人 Review 通过</span><br><span class="line">- 通过 CI 检查后才能合并</span><br><span class="line">- 合并方式选择 Squash merge（保持历史整洁）</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="二、Commit-规范"><a href="#二、Commit-规范" class="headerlink" title="二、Commit 规范"></a>二、Commit 规范</h2><h3 id="2-1-Conventional-Commits"><a href="#2-1-Conventional-Commits" class="headerlink" title="2.1 Conventional Commits"></a>2.1 Conventional Commits</h3><p>推荐的提交信息格式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;type&gt;(&lt;scope&gt;): &lt;description&gt;</span><br><span class="line"></span><br><span class="line">[optional body]</span><br><span class="line"></span><br><span class="line">[optional footer]</span><br></pre></td></tr></table></figure>
+
+<p><strong>type 类型</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>type</th>
+<th>说明</th>
+<th>是否出现在 Changelog</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>feat</code></td>
+<td>新功能</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code>fix</code></td>
+<td>Bug 修复</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code>perf</code></td>
+<td>性能优化</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code>refactor</code></td>
+<td>代码重构</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><code>style</code></td>
+<td>样式/格式修改</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><code>docs</code></td>
+<td>文档更新</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><code>test</code></td>
+<td>测试相关</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><code>chore</code></td>
+<td>构建/依赖</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><code>types</code></td>
+<td>类型定义修改</td>
+<td>❌</td>
+</tr>
+</tbody></table>
+<h3 id="2-2-良好的示例"><a href="#2-2-良好的示例" class="headerlink" title="2.2 良好的示例"></a>2.2 良好的示例</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ✅ 好的 commit</span></span><br><span class="line">feat(user): 添加用户登录功能</span><br><span class="line">fix(header): 修复导航栏在移动端不显示的问题</span><br><span class="line">perf(list): 优化虚拟滚动渲染性能，减少 50% 重排</span><br><span class="line">docs(readme): 更新安装步骤</span><br><span class="line"></span><br><span class="line"><span class="comment"># ❌ 差的 commit</span></span><br><span class="line">fix bug</span><br><span class="line">update</span><br><span class="line">wip</span><br><span class="line">asdf</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-Commitizen-交互式提交"><a href="#2-3-Commitizen-交互式提交" class="headerlink" title="2.3 Commitizen 交互式提交"></a>2.3 Commitizen 交互式提交</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装</span></span><br><span class="line">npm install -g commitizen cz-conventional-changelog</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置 package.json</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;config&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;commitizen&quot;</span>: &#123;</span><br><span class="line">      <span class="string">&quot;path&quot;</span>: <span class="string">&quot;cz-conventional-changelog&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用交互式提交</span></span><br><span class="line">git cz</span><br><span class="line"><span class="comment"># 会提示选择 type、写 description、body、footer</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="三、Commit-规范自动化"><a href="#三、Commit-规范自动化" class="headerlink" title="三、Commit 规范自动化"></a>三、Commit 规范自动化</h2><h3 id="3-1-Husky-commitlint"><a href="#3-1-Husky-commitlint" class="headerlink" title="3.1 Husky + commitlint"></a>3.1 Husky + commitlint</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -D husky @commitlint/cli @commitlint/config-conventional</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// commitlint.config.js</span></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="attr">extends</span>: [<span class="string">&#x27;@commitlint/config-conventional&#x27;</span>],</span><br><span class="line">  <span class="attr">rules</span>: &#123;</span><br><span class="line">    <span class="string">&#x27;type-enum&#x27;</span>: [<span class="number">2</span>, <span class="string">&#x27;always&#x27;</span>, [</span><br><span class="line">      <span class="string">&#x27;feat&#x27;</span>, <span class="string">&#x27;fix&#x27;</span>, <span class="string">&#x27;docs&#x27;</span>, <span class="string">&#x27;style&#x27;</span>, <span class="string">&#x27;refactor&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;perf&#x27;</span>, <span class="string">&#x27;test&#x27;</span>, <span class="string">&#x27;chore&#x27;</span>, <span class="string">&#x27;types&#x27;</span>,</span><br><span class="line">    ]],</span><br><span class="line">    <span class="string">&#x27;subject-case&#x27;</span>: [<span class="number">0</span>], <span class="comment">// 不限制大小写</span></span><br><span class="line">    <span class="string">&#x27;subject-max-length&#x27;</span>: [<span class="number">2</span>, <span class="string">&#x27;always&#x27;</span>, <span class="number">72</span>],</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 配置 Husky 钩子</span></span><br><span class="line">npx husky init</span><br><span class="line">npx husky add .husky/commit-msg <span class="string">&#x27;npx --no -- commitlint --edit $1&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-lint-staged-—-提交前自动检查和格式化"><a href="#3-2-lint-staged-—-提交前自动检查和格式化" class="headerlink" title="3.2 lint-staged — 提交前自动检查和格式化"></a>3.2 lint-staged — 提交前自动检查和格式化</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -D lint-staged</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// package.json</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;lint-staged&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;*.&#123;js,ts,vue&#125;&quot;</span>: [<span class="string">&quot;eslint --fix&quot;</span>, <span class="string">&quot;prettier --write&quot;</span>],</span><br><span class="line">    <span class="attr">&quot;*.&#123;css,scss&#125;&quot;</span>: [<span class="string">&quot;stylelint --fix&quot;</span>, <span class="string">&quot;prettier --write&quot;</span>],</span><br><span class="line">    <span class="attr">&quot;*.md&quot;</span>: [<span class="string">&quot;prettier --write&quot;</span>]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># .husky/pre-commit</span></span><br><span class="line">npx lint-staged</span><br></pre></td></tr></table></figure>
+
+<p><strong>工作流程</strong>：<code>git commit</code> 前自动检查并修复代码，检查不通过则提交失败。</p>
+<hr>
+<h2 id="四、Commit-信息与-Changelog"><a href="#四、Commit-信息与-Changelog" class="headerlink" title="四、Commit 信息与 Changelog"></a>四、Commit 信息与 Changelog</h2><h3 id="4-1-从-Commit-生成-Changelog"><a href="#4-1-从-Commit-生成-Changelog" class="headerlink" title="4.1 从 Commit 生成 Changelog"></a>4.1 从 Commit 生成 Changelog</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -D conventional-changelog-cli</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// package.json</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;scripts&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;changelog&quot;</span>: <span class="string">&quot;conventional-changelog -p angular -i CHANGELOG.md -s -r 0&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行 <code>npm run changelog</code> 自动生成或更新 <code>CHANGELOG.md</code>：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="section"># Changelog</span></span><br><span class="line"></span><br><span class="line"><span class="section">## [1.2.0] - 2026-06-25</span></span><br><span class="line"></span><br><span class="line"><span class="section">### Features</span></span><br><span class="line"><span class="bullet">-</span> 添加用户登录功能 (abc1234)</span><br><span class="line"><span class="bullet">-</span> 新增文章搜索功能 (def5678)</span><br><span class="line"></span><br><span class="line"><span class="section">### Bug Fixes</span></span><br><span class="line"><span class="bullet">-</span> 修复导航栏在移动端不显示 (ghi9012)</span><br><span class="line"></span><br><span class="line"><span class="section">### Performance Improvements</span></span><br><span class="line"><span class="bullet">-</span> 优化虚拟滚动渲染性能 (jkl3456)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="五、Code-Review-流程"><a href="#五、Code-Review-流程" class="headerlink" title="五、Code Review 流程"></a>五、Code Review 流程</h2><h3 id="5-1-PR-模板"><a href="#5-1-PR-模板" class="headerlink" title="5.1 PR 模板"></a>5.1 PR 模板</h3><p>在仓库创建 <code>.github/PULL_REQUEST_TEMPLATE.md</code>：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">## 描述</span></span><br><span class="line"></span><br><span class="line">请简要描述本次 PR 所做的改动。</span><br><span class="line"></span><br><span class="line"><span class="section">## 关联 Issue</span></span><br><span class="line"></span><br><span class="line">Fixes #123</span><br><span class="line"></span><br><span class="line"><span class="section">## 改动类型</span></span><br><span class="line"></span><br><span class="line"><span class="bullet">-</span> [ ] 新功能 (feat)</span><br><span class="line"><span class="bullet">-</span> [ ] Bug 修复 (fix)</span><br><span class="line"><span class="bullet">-</span> [ ] 性能优化 (perf)</span><br><span class="line"><span class="bullet">-</span> [ ] 重构 (refactor)</span><br><span class="line"><span class="bullet">-</span> [ ] 文档更新 (docs)</span><br><span class="line"></span><br><span class="line"><span class="section">## 检查清单</span></span><br><span class="line"></span><br><span class="line"><span class="bullet">-</span> [ ] 代码通过 ESLint 检查</span><br><span class="line"><span class="bullet">-</span> [ ] 新增/修改的组件有单元测试</span><br><span class="line"><span class="bullet">-</span> [ ] 本地运行通过</span><br><span class="line"><span class="bullet">-</span> [ ] 更新了相关文档</span><br><span class="line"></span><br><span class="line"><span class="section">## 截图（如有）</span></span><br><span class="line"></span><br><span class="line"><span class="section">## 备注</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2-Review-检查要点"><a href="#5-2-Review-检查要点" class="headerlink" title="5.2 Review 检查要点"></a>5.2 Review 检查要点</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">功能逻辑</span><br><span class="line">   ├── 边界情况是否处理（空值、超长、特殊字符）</span><br><span class="line">   ├── 错误处理是否完善</span><br><span class="line">   └── 状态变更是否符合预期</span><br><span class="line"></span><br><span class="line">代码质量</span><br><span class="line">   ├── 是否有重复代码</span><br><span class="line">   ├── 命名是否清晰</span><br><span class="line">   ├── 函数/组件是否过长（建议 &lt; 100 行）</span><br><span class="line">   └── 类型定义是否完整</span><br><span class="line"></span><br><span class="line">性能</span><br><span class="line">   ├── 是否有不必要的渲染/计算</span><br><span class="line">   ├── 循环内是否有耗时操作</span><br><span class="line">   └── 大型 list 是否使用虚拟滚动</span><br><span class="line"></span><br><span class="line">安全</span><br><span class="line">   ├── 用户输入是否有校验/过滤</span><br><span class="line">   ├── 敏感信息是否写死在代码中</span><br><span class="line">   └── API 权限检查是否到位</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="六、版本发布管理"><a href="#六、版本发布管理" class="headerlink" title="六、版本发布管理"></a>六、版本发布管理</h2><h3 id="6-1-语义化版本"><a href="#6-1-语义化版本" class="headerlink" title="6.1 语义化版本"></a>6.1 语义化版本</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">主版本号.次版本号.修订号</span><br><span class="line">  ↑       ↑       ↑</span><br><span class="line"> 不兼容API 新功能   Bug 修复</span><br><span class="line"></span><br><span class="line">示例：1.2.3 → 主版本 1，次版本 2，修订号 3</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-2-Changesets-自动化版本"><a href="#6-2-Changesets-自动化版本" class="headerlink" title="6.2 Changesets 自动化版本"></a>6.2 Changesets 自动化版本</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install -D @changesets/cli</span><br><span class="line">npx changeset init</span><br></pre></td></tr></table></figure>
+
+<p><strong>工作流</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 开发完成，选择变更类型</span></span><br><span class="line">npx changeset</span><br><span class="line"><span class="comment"># 交互式选择 major / minor / patch</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 更新版本号</span></span><br><span class="line">npx changeset version</span><br><span class="line"><span class="comment"># 自动根据 commit 和 changeset 更新版本</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 生成 Changelog</span></span><br><span class="line">npx changeset changelog</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 发布</span></span><br><span class="line">npx changeset publish</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-3-自动发布-CI"><a href="#6-3-自动发布-CI" class="headerlink" title="6.3 自动发布 CI"></a>6.3 自动发布 CI</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># .github/workflows/release.yml</span></span><br><span class="line"><span class="attr">name:</span> <span class="string">Release</span></span><br><span class="line"></span><br><span class="line"><span class="attr">on:</span></span><br><span class="line">  <span class="attr">push:</span></span><br><span class="line">    <span class="attr">branches:</span> [<span class="string">main</span>]</span><br><span class="line"></span><br><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">release:</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">ubuntu-latest</span></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">actions/checkout@v4</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">pnpm/action-setup@v4</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">actions/setup-node@v4</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">node-version:</span> <span class="number">20</span></span><br><span class="line"></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">run:</span> <span class="string">pnpm</span> <span class="string">install</span></span><br><span class="line"></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Create</span> <span class="string">Release</span> <span class="string">Pull</span> <span class="string">Request</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">changesets/action@v1</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">publish:</span> <span class="string">pnpm</span> <span class="string">publish</span></span><br><span class="line">        <span class="attr">env:</span></span><br><span class="line">          <span class="attr">GITHUB_TOKEN:</span> <span class="string">$&#123;&#123;</span> <span class="string">secrets.GITHUB_TOKEN</span> <span class="string">&#125;&#125;</span></span><br><span class="line">          <span class="attr">NPM_TOKEN:</span> <span class="string">$&#123;&#123;</span> <span class="string">secrets.NPM_TOKEN</span> <span class="string">&#125;&#125;</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="七、常用-Git-技巧"><a href="#七、常用-Git-技巧" class="headerlink" title="七、常用 Git 技巧"></a>七、常用 Git 技巧</h2><h3 id="7-1-修改历史"><a href="#7-1-修改历史" class="headerlink" title="7.1 修改历史"></a>7.1 修改历史</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 修改上一次 commit 信息</span></span><br><span class="line">git commit --amend -m <span class="string">&quot;新信息&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改最近 3 个 commit（交互式）</span></span><br><span class="line">git rebase -i HEAD~3</span><br><span class="line"></span><br><span class="line"><span class="comment"># 合并多个 commit</span></span><br><span class="line"><span class="comment"># 在 rebase 交互界面中将 pick 改为 squash</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="7-2-暂存工作"><a href="#7-2-暂存工作" class="headerlink" title="7.2 暂存工作"></a>7.2 暂存工作</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 临时保存当前修改</span></span><br><span class="line">git stash save <span class="string">&quot;wip: 登录功能开发中&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看 stash 列表</span></span><br><span class="line">git stash list</span><br><span class="line"></span><br><span class="line"><span class="comment"># 恢复最近一次 stash</span></span><br><span class="line">git stash pop</span><br><span class="line"></span><br><span class="line"><span class="comment"># 恢复指定 stash</span></span><br><span class="line">git stash apply stash@&#123;2&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-3-撤销操作"><a href="#7-3-撤销操作" class="headerlink" title="7.3 撤销操作"></a>7.3 撤销操作</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 撤销工作区的修改</span></span><br><span class="line">git checkout -- file.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 撤销暂存区的修改</span></span><br><span class="line">git restore --staged file.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 回退到某个 commit（保留修改）</span></span><br><span class="line">git reset --soft HEAD~1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 强制回退（丢弃修改，慎用）</span></span><br><span class="line">git reset --hard HEAD~1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 撤销某个历史 commit 的影响</span></span><br><span class="line">git revert &lt;commit-hash&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-4-查找-bug-的二分查找"><a href="#7-4-查找-bug-的二分查找" class="headerlink" title="7.4 查找 bug 的二分查找"></a>7.4 查找 bug 的二分查找</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 从当前到 2 周前之间二分查找</span></span><br><span class="line">git bisect start</span><br><span class="line">git bisect bad HEAD</span><br><span class="line">git bisect good HEAD~14</span><br><span class="line"></span><br><span class="line"><span class="comment"># Git 会 checkout 中间的 commit</span></span><br><span class="line"><span class="comment"># 如果这个 commit 有 bug → git bisect bad</span></span><br><span class="line"><span class="comment"># 如果这个 commit 正常 → git bisect good</span></span><br><span class="line"><span class="comment"># 重复几次后就能精确定位到引入 bug 的 commit</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 结束二分查找</span></span><br><span class="line">git bisect reset</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="八、Git-配置最佳实践"><a href="#八、Git-配置最佳实践" class="headerlink" title="八、Git 配置最佳实践"></a>八、Git 配置最佳实践</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 全局配置</span></span><br><span class="line">git config --global user.name <span class="string">&quot;LC&quot;</span></span><br><span class="line">git config --global user.email <span class="string">&quot;lc@example.com&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 推荐配置</span></span><br><span class="line">git config --global init.defaultBranch main</span><br><span class="line">git config --global pull.rebase <span class="literal">true</span>        <span class="comment"># pull 使用 rebase 而非 merge</span></span><br><span class="line">git config --global fetch.prune <span class="literal">true</span>        <span class="comment"># 自动删除远程不存在的分支</span></span><br><span class="line">git config --global rebase.autostash <span class="literal">true</span>   <span class="comment"># rebase 前自动暂存</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 别名</span></span><br><span class="line">git config --global alias.co checkout</span><br><span class="line">git config --global alias.br branch</span><br><span class="line">git config --global alias.ci commit</span><br><span class="line">git config --global alias.st status</span><br><span class="line">git config --global alias.lg <span class="string">&quot;log --graph --oneline --all --decorate&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="gitignore-通用模板"><a href="#gitignore-通用模板" class="headerlink" title=".gitignore 通用模板"></a>.gitignore 通用模板</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">node_modules/</span><br><span class="line">dist/</span><br><span class="line">.env</span><br><span class="line">.env.local</span><br><span class="line">*.log</span><br><span class="line">.DS_Store</span><br><span class="line">coverage/</span><br><span class="line">.temp/</span><br><span class="line">.cache/</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><table>
+<thead>
+<tr>
+<th>环节</th>
+<th>工具/规范</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>分支策略</strong></td>
+<td>GitHub Flow</td>
+<td>简化分支管理，main + feature 为主</td>
+</tr>
+<tr>
+<td><strong>Commit</strong></td>
+<td>Conventional Commits</td>
+<td>统一格式，支持自动化</td>
+</tr>
+<tr>
+<td><strong>提交检查</strong></td>
+<td>Husky + lint-staged</td>
+<td>提交前自动检查，守住质量</td>
+</tr>
+<tr>
+<td><strong>Code Review</strong></td>
+<td>PR 模板 + Checklist</td>
+<td>结构化的 Review 流程</td>
+</tr>
+<tr>
+<td><strong>版本管理</strong></td>
+<td>Changesets</td>
+<td>自动化版本号 + Changelog</td>
+</tr>
+<tr>
+<td><strong>发布</strong></td>
+<td>GitHub Actions</td>
+<td>CI/CD 自动发布</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>流程是工具，不是枷锁。团队先跑通最简流程（PR + Commit 规范），再逐步加自动化。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/web-blog/2026/06/25/git-workflow-practice/">Git 工作流实战：从团队规范到自动化流水线</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a></p>
+  <p><span>发布时间:</span>2026年06月25日 - 00:06</p>
+  <p><span>最后更新:</span>2026年06月25日 - 15:06</p>
+  <p><span>原始链接:</span><a href="/web-blog/2026/06/25/git-workflow-practice/" title="Git 工作流实战：从团队规范到自动化流水线">https://lc19990308.github.io/web-blog/2026/06/25/git-workflow-practice/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://lc19990308.github.io/web-blog/2026/06/25/git-workflow-practice/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+    });
+    });  
+</script>
+
+      
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>LC
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://lc19990308.github.io/web-blog/2026/06/25/git-workflow-practice/" title="Git 工作流实战：从团队规范到自动化流水线">https://lc19990308.github.io/web-blog/2026/06/25/git-workflow-practice/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/web-blog/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" ****><i class="fa fa-tag"></i> 工程化</a>
+              <a href="/web-blog/tags/git/" ****><i class="fa fa-tag"></i> git</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/06/25/state-management-guide/" rel="prev" title="前端状态管理选型指南：Zustand vs Jotai vs Pinia vs Redux Toolkit">
+      <i class="fa fa-chevron-left"></i> 前端状态管理选型指南：Zustand vs Jotai vs Pinia vs Redux Toolkit
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/06/25/css-units-complete-guide/" rel="next" title="前端 CSS 单位完全指南：从 px、rem、vw 到容器查询">
+      前端 CSS 单位完全指南：从 px、rem、vw 到容器查询 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%88%86%E6%94%AF%E7%AD%96%E7%95%A5"><span class="nav-number">2.</span> <span class="nav-text">一、分支策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-Git-Flow-%E4%B8%8E-GitHub-Flow-%E5%AF%B9%E6%AF%94"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 Git Flow 与 GitHub Flow 对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E5%88%86%E6%94%AF%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83"><span class="nav-number">2.2.</span> <span class="nav-text">1.2 分支命名规范</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E5%88%86%E6%94%AF%E4%BF%9D%E6%8A%A4%E8%A7%84%E5%88%99"><span class="nav-number">2.3.</span> <span class="nav-text">1.3 分支保护规则</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81Commit-%E8%A7%84%E8%8C%83"><span class="nav-number">3.</span> <span class="nav-text">二、Commit 规范</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-Conventional-Commits"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 Conventional Commits</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E8%89%AF%E5%A5%BD%E7%9A%84%E7%A4%BA%E4%BE%8B"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 良好的示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-Commitizen-%E4%BA%A4%E4%BA%92%E5%BC%8F%E6%8F%90%E4%BA%A4"><span class="nav-number">3.3.</span> <span class="nav-text">2.3 Commitizen 交互式提交</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81Commit-%E8%A7%84%E8%8C%83%E8%87%AA%E5%8A%A8%E5%8C%96"><span class="nav-number">4.</span> <span class="nav-text">三、Commit 规范自动化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-Husky-commitlint"><span class="nav-number">4.1.</span> <span class="nav-text">3.1 Husky + commitlint</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-lint-staged-%E2%80%94-%E6%8F%90%E4%BA%A4%E5%89%8D%E8%87%AA%E5%8A%A8%E6%A3%80%E6%9F%A5%E5%92%8C%E6%A0%BC%E5%BC%8F%E5%8C%96"><span class="nav-number">4.2.</span> <span class="nav-text">3.2 lint-staged — 提交前自动检查和格式化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81Commit-%E4%BF%A1%E6%81%AF%E4%B8%8E-Changelog"><span class="nav-number">5.</span> <span class="nav-text">四、Commit 信息与 Changelog</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E4%BB%8E-Commit-%E7%94%9F%E6%88%90-Changelog"><span class="nav-number">5.1.</span> <span class="nav-text">4.1 从 Commit 生成 Changelog</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81Code-Review-%E6%B5%81%E7%A8%8B"><span class="nav-number">6.</span> <span class="nav-text">五、Code Review 流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-PR-%E6%A8%A1%E6%9D%BF"><span class="nav-number">6.1.</span> <span class="nav-text">5.1 PR 模板</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-Review-%E6%A3%80%E6%9F%A5%E8%A6%81%E7%82%B9"><span class="nav-number">6.2.</span> <span class="nav-text">5.2 Review 检查要点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E7%89%88%E6%9C%AC%E5%8F%91%E5%B8%83%E7%AE%A1%E7%90%86"><span class="nav-number">7.</span> <span class="nav-text">六、版本发布管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-%E8%AF%AD%E4%B9%89%E5%8C%96%E7%89%88%E6%9C%AC"><span class="nav-number">7.1.</span> <span class="nav-text">6.1 语义化版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-Changesets-%E8%87%AA%E5%8A%A8%E5%8C%96%E7%89%88%E6%9C%AC"><span class="nav-number">7.2.</span> <span class="nav-text">6.2 Changesets 自动化版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-%E8%87%AA%E5%8A%A8%E5%8F%91%E5%B8%83-CI"><span class="nav-number">7.3.</span> <span class="nav-text">6.3 自动发布 CI</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E5%B8%B8%E7%94%A8-Git-%E6%8A%80%E5%B7%A7"><span class="nav-number">8.</span> <span class="nav-text">七、常用 Git 技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-%E4%BF%AE%E6%94%B9%E5%8E%86%E5%8F%B2"><span class="nav-number">8.1.</span> <span class="nav-text">7.1 修改历史</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-%E6%9A%82%E5%AD%98%E5%B7%A5%E4%BD%9C"><span class="nav-number">8.2.</span> <span class="nav-text">7.2 暂存工作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-3-%E6%92%A4%E9%94%80%E6%93%8D%E4%BD%9C"><span class="nav-number">8.3.</span> <span class="nav-text">7.3 撤销操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-4-%E6%9F%A5%E6%89%BE-bug-%E7%9A%84%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE"><span class="nav-number">8.4.</span> <span class="nav-text">7.4 查找 bug 的二分查找</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E3%80%81Git-%E9%85%8D%E7%BD%AE%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-number">9.</span> <span class="nav-text">八、Git 配置最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#gitignore-%E9%80%9A%E7%94%A8%E6%A8%A1%E6%9D%BF"><span class="nav-number">9.1.</span> <span class="nav-text">.gitignore 通用模板</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">10.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="LC"
+      src="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+  <p class="site-author-name" itemprop="name">LC</p>
+  <div class="site-description" itemprop="description">专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/web-blog/archives/">
+        
+          <span class="site-state-item-count">110</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/web-blog/categories/">
+          
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/web-blog/tags/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button motion-element"><i class="fa fa-comment"></i>
+    Chat
+  </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lc19990308/web-blog" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lc19990308&#x2F;web-blog" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:jarridaddison4@gmail.com" title="E-Mail → mailto:jarridaddison4@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/web-blog/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=441491828&auto=1&height=66"></iframe>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LC</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>-->
+<div class="powered-by">
+  <i class="fa fa-user-md"></i>
+  <span id="busuanzi_container_site_pv">
+    本站访问量:<span id="busuanzi_value_site_pv"></span>次
+  </span>
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv">
+    本站总访客量：<span id="busuanzi_value_site_uv"></span>人
+  </span>
+</div>
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共166.3k字</span>
+</div>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/web-blog/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/web-blog/js/utils.js"></script>
+
+<script src="/web-blog/js/motion.js"></script>
+
+
+<script src="/web-blog/js/schemes/pisces.js"></script>
+
+
+<script src="/web-blog/js/next-boot.js"></script>
+
+<script src="/web-blog/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/web-blog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+</body>
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</html>

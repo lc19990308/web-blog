@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/web-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/web-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/web-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/web-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/web-blog/css/main.css">
+
+
+<link rel="stylesheet" href="/web-blog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/web-blog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/web-blog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lc19990308.github.io","root":"/web-blog/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="全面梳理前端 CSS 单位体系，涵盖绝对单位、相对单位、视口单位、容器查询单位，以及响应式布局中的单位选型策略">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端 CSS 单位完全指南：从 px、rem、vw 到容器查询">
+<meta property="og:url" content="https://lc19990308.github.io/web-blog/2026/06/25/css-units-complete-guide/index.html">
+<meta property="og:site_name" content="前端技术笔记">
+<meta property="og:description" content="全面梳理前端 CSS 单位体系，涵盖绝对单位、相对单位、视口单位、容器查询单位，以及响应式布局中的单位选型策略">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-25T07:34:22.605Z">
+<meta property="article:author" content="LC">
+<meta property="article:tag" content="css">
+<meta property="article:tag" content="css常用单位">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://lc19990308.github.io/web-blog/2026/06/25/css-units-complete-guide/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>前端 CSS 单位完全指南：从 px、rem、vw 到容器查询 | 前端技术笔记</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/web-blog/atom.xml" title="前端技术笔记" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband">
+    <a target="_blank" rel="noopener" href="https://gitee.com/yaru722" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    </div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/web-blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">前端技术笔记</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录前端路上的思考与实践</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/web-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/web-blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/web-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/web-blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/web-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/lc19990308" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/25/css-units-complete-guide/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+      <meta itemprop="name" content="LC">
+      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端技术笔记">
+    </span>
+      <header class="post-header">
+      
+        <h1 class="post-title" itemprop="name headline">
+          前端 CSS 单位完全指南：从 px、rem、vw 到容器查询
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-06-25 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-25T00:00:00+08:00">2026-06-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/web-blog/categories/css/" itemprop="url" rel="index"><span itemprop="name">css</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">全面梳理前端 CSS 单位体系，涵盖绝对单位、相对单位、视口单位、容器查询单位，以及响应式布局中的单位选型策略</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>CSS 单位看似简单，但选错了会导致布局崩塌、字体忽大忽小、滚动条溢出。</p>
+<p>CSS 单位可以分为三大类：</p>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>单位</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>绝对单位</strong></td>
+<td><code>px</code>, <code>pt</code>, <code>cm</code>, <code>mm</code></td>
+<td>固定大小，不随环境变化</td>
+</tr>
+<tr>
+<td><strong>相对单位</strong></td>
+<td><code>em</code>, <code>rem</code>, <code>%</code></td>
+<td>相对于父元素或根元素</td>
+</tr>
+<tr>
+<td><strong>视口单位</strong></td>
+<td><code>vw</code>, <code>vh</code>, <code>vmin</code>, <code>vmax</code></td>
+<td>相对于视口大小</td>
+</tr>
+<tr>
+<td><strong>容器单位</strong></td>
+<td><code>cqw</code>, <code>cqh</code>, <code>cqi</code>, <code>cqb</code></td>
+<td>相对于容器查询的大小</td>
+</tr>
+<tr>
+<td><strong>其他</strong></td>
+<td><code>ch</code>, <code>ex</code>, <code>lh</code></td>
+<td>相对于字符特性</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="一、绝对单位"><a href="#一、绝对单位" class="headerlink" title="一、绝对单位"></a>一、绝对单位</h2><h3 id="1-1-px（像素）"><a href="#1-1-px（像素）" class="headerlink" title="1.1 px（像素）"></a>1.1 px（像素）</h3><p><code>px</code> 是 CSS 中最常用的单位。它表示 CSS 像素，不是设备物理像素：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.box</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">200px</span>;      <span class="comment">/* 固定宽度 */</span></span><br><span class="line">  <span class="attribute">font-size</span>: <span class="number">16px</span>;   <span class="comment">/* 基准字体大小 */</span></span><br><span class="line">  <span class="attribute">border</span>: <span class="number">1px</span> solid; <span class="comment">/* 1px 边框 */</span></span><br><span class="line">  <span class="attribute">margin</span>: <span class="number">8px</span>;       <span class="comment">/* 固定外边距 */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>1px 不等于 1 个物理像素</strong>：</p>
+<ul>
+<li>在 Retina 屏上，1 个 CSS px = 2 个或 3 个物理像素</li>
+<li><code>window.devicePixelRatio</code> 可以查看当前设备的比例</li>
+</ul>
+<p><strong>适用场景</strong>：</p>
+<ul>
+<li>边框 <code>border: 1px solid</code></li>
+<li>固定尺寸的小图标、头像</li>
+<li>最小间距（如 <code>gap: 4px</code>）</li>
+</ul>
+<h3 id="1-2-其他绝对单位"><a href="#1-2-其他绝对单位" class="headerlink" title="1.2 其他绝对单位"></a>1.2 其他绝对单位</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 很少使用，了解即可 */</span></span><br><span class="line"><span class="selector-class">.box</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">1in</span>;     <span class="comment">/* 英寸 — 1in = 96px */</span></span><br><span class="line">  <span class="attribute">height</span>: <span class="number">2cm</span>;    <span class="comment">/* 厘米 */</span></span><br><span class="line">  <span class="attribute">margin</span>: <span class="number">10mm</span>;   <span class="comment">/* 毫米 */</span></span><br><span class="line">  <span class="attribute">font-size</span>: <span class="number">12pt</span>; <span class="comment">/* 磅 — 1pt = 1/72 英寸 = 1.333px */</span></span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">1pc</span>;   <span class="comment">/* 派卡 — 1pc = 12pt = 16px */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>建议</strong>：除了 <code>px</code>，其他绝对单位在前端开发中极少使用（除非制作打印样式）。</p>
+<hr>
+<h2 id="二、相对单位"><a href="#二、相对单位" class="headerlink" title="二、相对单位"></a>二、相对单位</h2><h3 id="2-1-em"><a href="#2-1-em" class="headerlink" title="2.1 em"></a>2.1 em</h3><p><code>em</code> 相对于<strong>当前元素或父元素的字体大小</strong>：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.parent</span> &#123;</span><br><span class="line">  <span class="attribute">font-size</span>: <span class="number">16px</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.child</span> &#123;</span><br><span class="line">  <span class="attribute">font-size</span>: <span class="number">1.5em</span>;  <span class="comment">/* = 16px × 1.5 = 24px */</span></span><br><span class="line">  <span class="attribute">margin-bottom</span>: <span class="number">1em</span>; <span class="comment">/* = 当前字体大小 24px */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>em 的嵌套陷阱</strong>：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">html</span> &#123; <span class="attribute">font-size</span>: <span class="number">16px</span>; &#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.level1</span> &#123; <span class="attribute">font-size</span>: <span class="number">1.2em</span>; &#125; <span class="comment">/* 16 × 1.2 = 19.2px */</span></span><br><span class="line"><span class="selector-class">.level2</span> &#123; <span class="attribute">font-size</span>: <span class="number">1.2em</span>; &#125; <span class="comment">/* 19.2 × 1.2 = 23.04px */</span></span><br><span class="line"><span class="selector-class">.level3</span> &#123; <span class="attribute">font-size</span>: <span class="number">1.2em</span>; &#125; <span class="comment">/* 23.04 × 1.2 = 27.65px */</span></span><br></pre></td></tr></table></figure>
+
+<p>嵌套越深，字体越大——这就是 <strong>em 的复合效应</strong>。有时这是你要的效果，但更多时候是 bug。</p>
+<p><strong>使用建议</strong>：<code>em</code> 更适合用于：</p>
+<ul>
+<li>相对于当前字体大小的间距（<code>padding</code>、<code>margin</code>）</li>
+<li>按钮内的图标大小</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.button</span> &#123;</span><br><span class="line">  <span class="attribute">font-size</span>: <span class="number">14px</span>;</span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">0.5em</span> <span class="number">1em</span>;  <span class="comment">/* 上下 7px，左右 14px */</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.button</span> <span class="selector-class">.icon</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">1em</span>;           <span class="comment">/* 与文字大小相同 = 14px */</span></span><br><span class="line">  <span class="attribute">height</span>: <span class="number">1em</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-rem（推荐）"><a href="#2-2-rem（推荐）" class="headerlink" title="2.2 rem（推荐）"></a>2.2 rem（推荐）</h3><p><code>rem</code> 相对于<strong>根元素（html）的字体大小</strong>，不存在嵌套复合问题：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 设置基准 */</span></span><br><span class="line"><span class="selector-tag">html</span> &#123;</span><br><span class="line">  <span class="attribute">font-size</span>: <span class="number">16px</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">h1</span> &#123;</span><br><span class="line">  <span class="attribute">font-size</span>: <span class="number">2rem</span>;     <span class="comment">/* = 16 × 2 = 32px */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">p</span> &#123;</span><br><span class="line">  <span class="attribute">font-size</span>: <span class="number">1rem</span>;     <span class="comment">/* = 16px */</span></span><br><span class="line">  <span class="attribute">margin-bottom</span>: <span class="number">1rem</span>; <span class="comment">/* = 16px */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.card</span> &#123;</span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">1.5rem</span>;     <span class="comment">/* = 24px */</span></span><br><span class="line">  <span class="attribute">border-radius</span>: <span class="number">0.5rem</span>; <span class="comment">/* = 8px */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>rem 的响应式适配</strong>：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 媒体查询改变基准，所有 rem 单位自动缩放 */</span></span><br><span class="line"><span class="selector-tag">html</span> &#123;</span><br><span class="line">  <span class="attribute">font-size</span>: <span class="number">16px</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@media</span> (<span class="attribute">max-width</span>: <span class="number">768px</span>) &#123;</span><br><span class="line">  <span class="selector-tag">html</span> &#123;</span><br><span class="line">    <span class="attribute">font-size</span>: <span class="number">14px</span>;  <span class="comment">/* 手机端缩小基准，所有 rem 等比例缩小 */</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@media</span> (<span class="attribute">max-width</span>: <span class="number">480px</span>) &#123;</span><br><span class="line">  <span class="selector-tag">html</span> &#123;</span><br><span class="line">    <span class="attribute">font-size</span>: <span class="number">12px</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>实际经验</strong>：</p>
+<ul>
+<li>字体大小用 <code>rem</code>（方便整体缩放）</li>
+<li>组件内间距用 <code>rem</code> 或 <code>em</code></li>
+<li>边框用 <code>px</code></li>
+</ul>
+<h3 id="2-3-百分比（-）"><a href="#2-3-百分比（-）" class="headerlink" title="2.3 百分比（%）"></a>2.3 百分比（%）</h3><p>百分比相对于<strong>父元素的同属性值</strong>：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.parent</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">800px</span>;</span><br><span class="line">  <span class="attribute">font-size</span>: <span class="number">20px</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.child</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">50%</span>;          <span class="comment">/* = 400px（相对于父宽度） */</span></span><br><span class="line">  <span class="attribute">font-size</span>: <span class="number">80%</span>;      <span class="comment">/* = 16px（相对于父字体大小） */</span></span><br><span class="line">  <span class="attribute">padding-bottom</span>: <span class="number">25%</span>; <span class="comment">/* = 200px（相对于父宽度！） */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>关键细节</strong>：</p>
+<ul>
+<li><code>width: 50%</code> → 父元素宽度的 50%</li>
+<li><code>height: 50%</code> → 父元素<strong>必须有显式高度</strong>才生效</li>
+<li><code>padding/margin</code> 的百分比 → <strong>相对于父元素宽度</strong>（不是高度！）</li>
+<li><code>font-size: 80%</code> → 相对于父元素字体大小</li>
+</ul>
+<p><strong>宽高比占位技巧</strong>：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 保持 16:9 比例 */</span></span><br><span class="line"><span class="selector-class">.video-container</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100%</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">padding-bottom</span>: <span class="number">56.25%</span>; <span class="comment">/* 9/16 = 0.5625 */</span></span><br><span class="line">  <span class="attribute">position</span>: relative;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.video-container</span> <span class="selector-tag">iframe</span> &#123;</span><br><span class="line">  <span class="attribute">position</span>: absolute;</span><br><span class="line">  <span class="attribute">top</span>: <span class="number">0</span>; <span class="attribute">left</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100%</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100%</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="三、视口单位"><a href="#三、视口单位" class="headerlink" title="三、视口单位"></a>三、视口单位</h2><p>视口单位相对于<strong>浏览器视口</strong>（viewport）的大小：</p>
+<table>
+<thead>
+<tr>
+<th>单位</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>1vw</code></td>
+<td>视口宽度的 1%</td>
+</tr>
+<tr>
+<td><code>1vh</code></td>
+<td>视口高度的 1%</td>
+</tr>
+<tr>
+<td><code>1vmin</code></td>
+<td>min(1vw, 1vh)</td>
+</tr>
+<tr>
+<td><code>1vmax</code></td>
+<td>max(1vw, 1vh)</td>
+</tr>
+</tbody></table>
+<h3 id="3-1-全屏布局"><a href="#3-1-全屏布局" class="headerlink" title="3.1 全屏布局"></a>3.1 全屏布局</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.hero</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100vw</span>;   <span class="comment">/* 全屏宽度 */</span></span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100vh</span>;  <span class="comment">/* 全屏高度 */</span></span><br><span class="line">  <span class="attribute">display</span>: flex;</span><br><span class="line">  <span class="attribute">align-items</span>: center;</span><br><span class="line">  <span class="attribute">justify-content</span>: center;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.fullscreen-section</span> &#123;</span><br><span class="line">  <span class="attribute">min-height</span>: <span class="number">100vh</span>; <span class="comment">/* 至少占满一屏 */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-响应式字体"><a href="#3-2-响应式字体" class="headerlink" title="3.2 响应式字体"></a>3.2 响应式字体</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 随着视口变化平滑缩放 */</span></span><br><span class="line"><span class="selector-class">.hero-title</span> &#123;</span><br><span class="line">  <span class="attribute">font-size</span>: <span class="built_in">calc</span>(<span class="number">24px</span> + <span class="number">2vw</span>);</span><br><span class="line">  <span class="comment">/* 最小 24px，视口越宽字体越大 */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* clamp 实现的范围控制（推荐） */</span></span><br><span class="line"><span class="selector-class">.hero-title</span> &#123;</span><br><span class="line">  <span class="attribute">font-size</span>: <span class="built_in">clamp</span>(<span class="number">1.5rem</span>, <span class="number">4vw</span>, <span class="number">3rem</span>);</span><br><span class="line">  <span class="comment">/* 最小 1.5rem，首选 4vw，最大 3rem */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.body-text</span> &#123;</span><br><span class="line">  <span class="attribute">font-size</span>: <span class="built_in">clamp</span>(<span class="number">14px</span>, <span class="number">1.5vw</span>, <span class="number">18px</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-100vw-的问题"><a href="#3-3-100vw-的问题" class="headerlink" title="3.3 100vw 的问题"></a>3.3 100vw 的问题</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* ❌ 100vw 忽略滚动条宽度，会导致水平溢出 */</span></span><br><span class="line"><span class="selector-class">.full-width</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100vw</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* ✅ 修复 */</span></span><br><span class="line"><span class="selector-class">.full-width</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100%</span>;</span><br><span class="line">  <span class="comment">/* 或 */</span></span><br><span class="line">  <span class="attribute">width</span>: <span class="built_in">calc</span>(<span class="number">100vw</span> - <span class="number">17px</span>); <span class="comment">/* 手动减去滚动条（不推荐） */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-4-dvh-svh-lvh（动态视口单位）"><a href="#3-4-dvh-svh-lvh（动态视口单位）" class="headerlink" title="3.4 dvh / svh / lvh（动态视口单位）"></a>3.4 dvh / svh / lvh（动态视口单位）</h3><p>移动浏览器地址栏隐藏/显示时，<code>100vh</code> 的值会变化。新单位解决这个问题：</p>
+<table>
+<thead>
+<tr>
+<th>单位</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>100dvh</code></td>
+<td>动态视口高度（随地址栏变化）</td>
+</tr>
+<tr>
+<td><code>100svh</code></td>
+<td>最小视口高度（地址栏展开时）</td>
+</tr>
+<tr>
+<td><code>100lvh</code></td>
+<td>最大视口高度（地址栏收起时）</td>
+</tr>
+</tbody></table>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 移动端全屏推荐使用 dvh */</span></span><br><span class="line"><span class="selector-class">.mobile-fullscreen</span> &#123;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100</span>dvh;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="四、容器查询单位（CSS-2025）"><a href="#四、容器查询单位（CSS-2025）" class="headerlink" title="四、容器查询单位（CSS 2025）"></a>四、容器查询单位（CSS 2025）</h2><p>容器查询让组件可以<strong>根据自身容器的大小</strong>响应，而不是视口：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 定义容器 */</span></span><br><span class="line"><span class="selector-class">.card-container</span> &#123;</span><br><span class="line">  container-type: inline-size;</span><br><span class="line">  container-name: card;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 根据容器宽度响应 */</span></span><br><span class="line"><span class="keyword">@container</span> card (<span class="attribute">min-width</span>: <span class="number">400px</span>) &#123;</span><br><span class="line">  <span class="selector-class">.card</span> &#123;</span><br><span class="line">    <span class="attribute">display</span>: grid;</span><br><span class="line">    grid-template-<span class="attribute">columns</span>: <span class="number">200px</span> <span class="number">1</span>fr;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@container</span> card (<span class="attribute">max-width</span>: <span class="number">399px</span>) &#123;</span><br><span class="line">  <span class="selector-class">.card</span> &#123;</span><br><span class="line">    <span class="attribute">display</span>: flex;</span><br><span class="line">    <span class="attribute">flex-direction</span>: column;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-1-容器查询单位"><a href="#4-1-容器查询单位" class="headerlink" title="4.1 容器查询单位"></a>4.1 容器查询单位</h3><table>
+<thead>
+<tr>
+<th>单位</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>1cqw</code></td>
+<td>容器宽度的 1%</td>
+</tr>
+<tr>
+<td><code>1cqh</code></td>
+<td>容器高度的 1%</td>
+</tr>
+<tr>
+<td><code>1cqi</code></td>
+<td>容器内联尺寸的 1%</td>
+</tr>
+<tr>
+<td><code>1cqb</code></td>
+<td>容器块向尺寸的 1%</td>
+</tr>
+<tr>
+<td><code>1cqmin</code></td>
+<td>min(1cqw, 1cqh)</td>
+</tr>
+<tr>
+<td><code>1cqmax</code></td>
+<td>max(1cqw, 1cqh)</td>
+</tr>
+</tbody></table>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.card</span> &#123;</span><br><span class="line">  container-type: inline-size;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.card-title</span> &#123;</span><br><span class="line">  <span class="comment">/* 根据容器宽度缩放字体 */</span></span><br><span class="line">  <span class="attribute">font-size</span>: <span class="built_in">clamp</span>(<span class="number">1rem</span>, <span class="number">5</span>cqi, <span class="number">2rem</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.card-actions</span> &#123;</span><br><span class="line">  <span class="comment">/* 容器窄时垂直排列，宽时水平排列 */</span></span><br><span class="line">  <span class="attribute">flex-direction</span>: column;</span><br><span class="line">  gap: <span class="number">1</span>cqw;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@container</span> (<span class="attribute">min-width</span>: <span class="number">300px</span>) &#123;</span><br><span class="line">  <span class="selector-class">.card-actions</span> &#123;</span><br><span class="line">    <span class="attribute">flex-direction</span>: row;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="五、其他特殊单位"><a href="#五、其他特殊单位" class="headerlink" title="五、其他特殊单位"></a>五、其他特殊单位</h2><h3 id="5-1-ch-—-字符宽度"><a href="#5-1-ch-—-字符宽度" class="headerlink" title="5.1 ch — 字符宽度"></a>5.1 ch — 字符宽度</h3><p><code>1ch</code> 等于当前字体中字符 <code>0</code> 的宽度：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 限制文本宽度为 60 个字符（阅读体验最佳） */</span></span><br><span class="line"><span class="selector-class">.article</span> &#123;</span><br><span class="line">  <span class="attribute">max-width</span>: <span class="number">60ch</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 等宽字体下，ch 特别有用 */</span></span><br><span class="line"><span class="selector-class">.code-block</span> &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: <span class="string">&#x27;Fira Code&#x27;</span>, monospace;</span><br><span class="line">  <span class="attribute">max-width</span>: <span class="number">80ch</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 输入框宽度根据字符数 */</span></span><br><span class="line"><span class="selector-tag">input</span><span class="selector-attr">[name=<span class="string">&quot;phone&quot;</span>]</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">11ch</span>; <span class="comment">/* 11 位手机号 */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2-ex-—-字符-x-高度"><a href="#5-2-ex-—-字符-x-高度" class="headerlink" title="5.2 ex — 字符 x 高度"></a>5.2 ex — 字符 x 高度</h3><p><code>1ex</code> 等于当前字体中字符 <code>x</code> 的高度（约等于小写字母高度）：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 让图标与文字垂直居中 */</span></span><br><span class="line"><span class="selector-class">.icon</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">1ex</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">1ex</span>;</span><br><span class="line">  <span class="attribute">vertical-align</span>: middle;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-3-lh-—-行高"><a href="#5-3-lh-—-行高" class="headerlink" title="5.3 lh — 行高"></a>5.3 lh — 行高</h3><p><code>1lh</code> 等于当前元素的行高：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.text-line</span> &#123;</span><br><span class="line">  <span class="attribute">line-height</span>: <span class="number">1.5</span>;</span><br><span class="line">  <span class="attribute">margin-bottom</span>: <span class="number">1</span>lh; <span class="comment">/* 等于一行的高度 */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="六、单位选型决策树"><a href="#六、单位选型决策树" class="headerlink" title="六、单位选型决策树"></a>六、单位选型决策树</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">这个值是做什么的？</span><br><span class="line">├── 边框、阴影、最小间距 → px</span><br><span class="line">├── 字体大小</span><br><span class="line">│   ├── 需要响应式缩放 → rem + clamp()</span><br><span class="line">│   ├── 相对于父元素 → em</span><br><span class="line">│   └── 固定大小 → px</span><br><span class="line">├── 宽度</span><br><span class="line">│   ├── 相对于父容器 → %</span><br><span class="line">│   ├── 相对于视口 → vw</span><br><span class="line">│   ├── 相对于容器 → cqw</span><br><span class="line">│   └── 相对于字符 → ch（文本）</span><br><span class="line">├── 高度</span><br><span class="line">│   ├── 全屏 → 100vh / 100dvh</span><br><span class="line">│   ├── 相对于父容器 → %（父必须有高度）</span><br><span class="line">│   └── 内容自适应 → auto（默认）</span><br><span class="line">└── 间距（padding/margin）</span><br><span class="line">    ├── 相对于字体 → em（组件内）</span><br><span class="line">    ├── 相对于基准 → rem（全局统一）</span><br><span class="line">    └── 固定值 → px</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="七、移动端适配方案"><a href="#七、移动端适配方案" class="headerlink" title="七、移动端适配方案"></a>七、移动端适配方案</h2><h3 id="7-1-rem-方案（经典）"><a href="#7-1-rem-方案（经典）" class="headerlink" title="7.1 rem 方案（经典）"></a>7.1 rem 方案（经典）</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 配合 JS 动态设置 html font-size */</span></span><br><span class="line"><span class="selector-tag">html</span> &#123;</span><br><span class="line">  <span class="attribute">font-size</span>: <span class="built_in">calc</span>(<span class="number">100vw</span> / <span class="number">375</span> * <span class="number">16</span>);</span><br><span class="line">  <span class="comment">/* 以 375px 设计稿为基准，16px = 1rem */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 动态设置</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">setRem</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> width = <span class="built_in">document</span>.documentElement.clientWidth</span><br><span class="line">  <span class="keyword">const</span> baseWidth = <span class="number">375</span></span><br><span class="line">  <span class="keyword">const</span> baseFontSize = <span class="number">16</span></span><br><span class="line">  <span class="built_in">document</span>.documentElement.style.fontSize =</span><br><span class="line">    (width / baseWidth * baseFontSize) + <span class="string">&#x27;px&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line">setRem()</span><br><span class="line"><span class="built_in">window</span>.addEventListener(<span class="string">&#x27;resize&#x27;</span>, setRem)</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-2-clamp-vw-方案（现代）"><a href="#7-2-clamp-vw-方案（现代）" class="headerlink" title="7.2 clamp + vw 方案（现代）"></a>7.2 clamp + vw 方案（现代）</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 不需要 JS，纯 CSS 就能实现等比例缩放 */</span></span><br><span class="line"><span class="selector-tag">html</span> &#123;</span><br><span class="line">  <span class="attribute">font-size</span>: <span class="built_in">clamp</span>(<span class="number">12px</span>, <span class="built_in">calc</span>(<span class="number">100vw</span> / <span class="number">375</span> * <span class="number">16</span>), <span class="number">20px</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 使用范例 */</span></span><br><span class="line"><span class="selector-class">.card</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">327px</span>;                   <span class="comment">/* 固定值 */</span></span><br><span class="line">  <span class="attribute">width</span>: <span class="built_in">calc</span>(<span class="number">327</span> / <span class="number">375</span> * <span class="number">100vw</span>); <span class="comment">/* 等比例 */</span></span><br><span class="line">  <span class="attribute">width</span>: <span class="built_in">clamp</span>(<span class="number">280px</span>, <span class="number">87.2vw</span>, <span class="number">480px</span>); <span class="comment">/* 带范围控制 */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="八、面试题"><a href="#八、面试题" class="headerlink" title="八、面试题"></a>八、面试题</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 1. 以下两个元素宽度分别是多少？ */</span></span><br><span class="line"><span class="selector-class">.parent</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">200px</span>;</span><br><span class="line">  <span class="attribute">font-size</span>: <span class="number">20px</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.child-em</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">10em</span>;    <span class="comment">/* ? */</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.child-rem</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">10rem</span>;   <span class="comment">/* ? */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 答案：</span></span><br><span class="line"><span class="comment">   .child-em: 10 × 20px = 200px（相对于父字体）</span></span><br><span class="line"><span class="comment">   .child-rem: 10 × 16px = 160px（相对于根字体）</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 2. body 的高度是多少？ */</span></span><br><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">50%</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* 答案：0px（因为 html 没有显式高度，50% 无效）*/</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 3. padding-bottom: 50% 相对于什么？ */</span></span><br><span class="line"><span class="selector-class">.card</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">300px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">200px</span>;</span><br><span class="line">  <span class="attribute">padding-bottom</span>: <span class="number">50%</span>; <span class="comment">/* ? */</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* 答案：150px（相对于父元素宽度 300px）*/</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><table>
+<thead>
+<tr>
+<th>单位</th>
+<th>相对于</th>
+<th>推荐场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>px</code></td>
+<td>绝对</td>
+<td>边框、最小间距、固定尺寸</td>
+</tr>
+<tr>
+<td><code>%</code></td>
+<td>父元素</td>
+<td>布局宽度、响应式比例</td>
+</tr>
+<tr>
+<td><code>em</code></td>
+<td>父字体</td>
+<td>组件内间距、图标大小</td>
+</tr>
+<tr>
+<td><code>rem</code></td>
+<td>根字体</td>
+<td>全局字体、统一间距</td>
+</tr>
+<tr>
+<td><code>vw/vh</code></td>
+<td>视口</td>
+<td>全屏布局、响应式字体</td>
+</tr>
+<tr>
+<td><code>dvh/svh/lvh</code></td>
+<td>动态视口</td>
+<td>移动端全屏</td>
+</tr>
+<tr>
+<td><code>ch</code></td>
+<td>字符 0 宽度</td>
+<td>文本宽度控制</td>
+</tr>
+<tr>
+<td><code>cqw/cqi</code></td>
+<td>容器</td>
+<td>组件级响应式</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>核心原则：用 <code>rem</code> 做全局尺度，用 <code>px</code> 做固定细节，用 <code>%</code> 做流式布局，用 <code>clamp()</code> 做范围可控的响应式值。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/web-blog/2026/06/25/css-units-complete-guide/">前端 CSS 单位完全指南：从 px、rem、vw 到容器查询</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a></p>
+  <p><span>发布时间:</span>2026年06月25日 - 00:06</p>
+  <p><span>最后更新:</span>2026年06月25日 - 15:06</p>
+  <p><span>原始链接:</span><a href="/web-blog/2026/06/25/css-units-complete-guide/" title="前端 CSS 单位完全指南：从 px、rem、vw 到容器查询">https://lc19990308.github.io/web-blog/2026/06/25/css-units-complete-guide/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://lc19990308.github.io/web-blog/2026/06/25/css-units-complete-guide/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+    });
+    });  
+</script>
+
+      
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>LC
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://lc19990308.github.io/web-blog/2026/06/25/css-units-complete-guide/" title="前端 CSS 单位完全指南：从 px、rem、vw 到容器查询">https://lc19990308.github.io/web-blog/2026/06/25/css-units-complete-guide/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/web-blog/tags/css/" ****><i class="fa fa-tag"></i> css</a>
+              <a href="/web-blog/tags/css%E5%B8%B8%E7%94%A8%E5%8D%95%E4%BD%8D/" ****><i class="fa fa-tag"></i> css常用单位</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/06/25/git-workflow-practice/" rel="prev" title="Git 工作流实战：从团队规范到自动化流水线">
+      <i class="fa fa-chevron-left"></i> Git 工作流实战：从团队规范到自动化流水线
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/06/25/eslint-prettier-setup-guide/" rel="next" title="ESLint + Prettier 工程化配置：从入门到团队规范">
+      ESLint + Prettier 工程化配置：从入门到团队规范 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E7%BB%9D%E5%AF%B9%E5%8D%95%E4%BD%8D"><span class="nav-number">2.</span> <span class="nav-text">一、绝对单位</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-px%EF%BC%88%E5%83%8F%E7%B4%A0%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 px（像素）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E5%85%B6%E4%BB%96%E7%BB%9D%E5%AF%B9%E5%8D%95%E4%BD%8D"><span class="nav-number">2.2.</span> <span class="nav-text">1.2 其他绝对单位</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E7%9B%B8%E5%AF%B9%E5%8D%95%E4%BD%8D"><span class="nav-number">3.</span> <span class="nav-text">二、相对单位</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-em"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 em</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-rem%EF%BC%88%E6%8E%A8%E8%8D%90%EF%BC%89"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 rem（推荐）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E7%99%BE%E5%88%86%E6%AF%94%EF%BC%88-%EF%BC%89"><span class="nav-number">3.3.</span> <span class="nav-text">2.3 百分比（%）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E8%A7%86%E5%8F%A3%E5%8D%95%E4%BD%8D"><span class="nav-number">4.</span> <span class="nav-text">三、视口单位</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E5%85%A8%E5%B1%8F%E5%B8%83%E5%B1%80"><span class="nav-number">4.1.</span> <span class="nav-text">3.1 全屏布局</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E5%93%8D%E5%BA%94%E5%BC%8F%E5%AD%97%E4%BD%93"><span class="nav-number">4.2.</span> <span class="nav-text">3.2 响应式字体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-100vw-%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">4.3.</span> <span class="nav-text">3.3 100vw 的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-dvh-svh-lvh%EF%BC%88%E5%8A%A8%E6%80%81%E8%A7%86%E5%8F%A3%E5%8D%95%E4%BD%8D%EF%BC%89"><span class="nav-number">4.4.</span> <span class="nav-text">3.4 dvh &#x2F; svh &#x2F; lvh（动态视口单位）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E5%AE%B9%E5%99%A8%E6%9F%A5%E8%AF%A2%E5%8D%95%E4%BD%8D%EF%BC%88CSS-2025%EF%BC%89"><span class="nav-number">5.</span> <span class="nav-text">四、容器查询单位（CSS 2025）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E5%AE%B9%E5%99%A8%E6%9F%A5%E8%AF%A2%E5%8D%95%E4%BD%8D"><span class="nav-number">5.1.</span> <span class="nav-text">4.1 容器查询单位</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E5%85%B6%E4%BB%96%E7%89%B9%E6%AE%8A%E5%8D%95%E4%BD%8D"><span class="nav-number">6.</span> <span class="nav-text">五、其他特殊单位</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-ch-%E2%80%94-%E5%AD%97%E7%AC%A6%E5%AE%BD%E5%BA%A6"><span class="nav-number">6.1.</span> <span class="nav-text">5.1 ch — 字符宽度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-ex-%E2%80%94-%E5%AD%97%E7%AC%A6-x-%E9%AB%98%E5%BA%A6"><span class="nav-number">6.2.</span> <span class="nav-text">5.2 ex — 字符 x 高度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-lh-%E2%80%94-%E8%A1%8C%E9%AB%98"><span class="nav-number">6.3.</span> <span class="nav-text">5.3 lh — 行高</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E5%8D%95%E4%BD%8D%E9%80%89%E5%9E%8B%E5%86%B3%E7%AD%96%E6%A0%91"><span class="nav-number">7.</span> <span class="nav-text">六、单位选型决策树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E7%A7%BB%E5%8A%A8%E7%AB%AF%E9%80%82%E9%85%8D%E6%96%B9%E6%A1%88"><span class="nav-number">8.</span> <span class="nav-text">七、移动端适配方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-rem-%E6%96%B9%E6%A1%88%EF%BC%88%E7%BB%8F%E5%85%B8%EF%BC%89"><span class="nav-number">8.1.</span> <span class="nav-text">7.1 rem 方案（经典）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-clamp-vw-%E6%96%B9%E6%A1%88%EF%BC%88%E7%8E%B0%E4%BB%A3%EF%BC%89"><span class="nav-number">8.2.</span> <span class="nav-text">7.2 clamp + vw 方案（现代）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98"><span class="nav-number">9.</span> <span class="nav-text">八、面试题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">10.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="LC"
+      src="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+  <p class="site-author-name" itemprop="name">LC</p>
+  <div class="site-description" itemprop="description">专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/web-blog/archives/">
+        
+          <span class="site-state-item-count">110</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/web-blog/categories/">
+          
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/web-blog/tags/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button motion-element"><i class="fa fa-comment"></i>
+    Chat
+  </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lc19990308/web-blog" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lc19990308&#x2F;web-blog" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:jarridaddison4@gmail.com" title="E-Mail → mailto:jarridaddison4@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/web-blog/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=441491828&auto=1&height=66"></iframe>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LC</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>-->
+<div class="powered-by">
+  <i class="fa fa-user-md"></i>
+  <span id="busuanzi_container_site_pv">
+    本站访问量:<span id="busuanzi_value_site_pv"></span>次
+  </span>
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv">
+    本站总访客量：<span id="busuanzi_value_site_uv"></span>人
+  </span>
+</div>
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共166.3k字</span>
+</div>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/web-blog/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/web-blog/js/utils.js"></script>
+
+<script src="/web-blog/js/motion.js"></script>
+
+
+<script src="/web-blog/js/schemes/pisces.js"></script>
+
+
+<script src="/web-blog/js/next-boot.js"></script>
+
+<script src="/web-blog/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/web-blog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+</body>
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</html>

@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/web-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/web-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/web-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/web-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/web-blog/css/main.css">
+
+
+<link rel="stylesheet" href="/web-blog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/web-blog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/web-blog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lc19990308.github.io","root":"/web-blog/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="深度对比主流 CSS&#x2F;JS 动画方案：Animate.css、Motion One、GSAP、Framer Motion、Lottie，从性能、功能、体积到适用场景全面分析">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSS 动画库选型与实战：Animate.css、Motion One、GSAP 对比指南">
+<meta property="og:url" content="https://lc19990308.github.io/web-blog/2026/06/25/css-animation-library-guide/index.html">
+<meta property="og:site_name" content="前端技术笔记">
+<meta property="og:description" content="深度对比主流 CSS&#x2F;JS 动画方案：Animate.css、Motion One、GSAP、Framer Motion、Lottie，从性能、功能、体积到适用场景全面分析">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-25T07:35:45.676Z">
+<meta property="article:author" content="LC">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="css">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://lc19990308.github.io/web-blog/2026/06/25/css-animation-library-guide/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>CSS 动画库选型与实战：Animate.css、Motion One、GSAP 对比指南 | 前端技术笔记</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/web-blog/atom.xml" title="前端技术笔记" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband">
+    <a target="_blank" rel="noopener" href="https://gitee.com/yaru722" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    </div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/web-blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">前端技术笔记</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录前端路上的思考与实践</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/web-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/web-blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/web-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/web-blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/web-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/lc19990308" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/25/css-animation-library-guide/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+      <meta itemprop="name" content="LC">
+      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端技术笔记">
+    </span>
+      <header class="post-header">
+      
+        <h1 class="post-title" itemprop="name headline">
+          CSS 动画库选型与实战：Animate.css、Motion One、GSAP 对比指南
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-06-25 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-25T00:00:00+08:00">2026-06-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/web-blog/categories/css/" itemprop="url" rel="index"><span itemprop="name">css</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">深度对比主流 CSS/JS 动画方案：Animate.css、Motion One、GSAP、Framer Motion、Lottie，从性能、功能、体积到适用场景全面分析</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前端动画有很多方案：纯 CSS transition/animation、JS 驱动的动画库、SVG/Lottie 动效、Canvas/WebGL。</p>
+<p>本文聚焦最主流的五个动画库/框架：</p>
+<table>
+<thead>
+<tr>
+<th>库</th>
+<th>类型</th>
+<th>体积</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Animate.css</strong></td>
+<td>CSS 类库</td>
+<td>~20KB</td>
+<td>快速添加简单进入/离开动画</td>
+</tr>
+<tr>
+<td><strong>Motion One</strong></td>
+<td>JS + WAAPI</td>
+<td>~12KB</td>
+<td>高性能、声明式动画</td>
+</tr>
+<tr>
+<td><strong>GSAP</strong></td>
+<td>JS 动画引擎</td>
+<td>~30KB</td>
+<td>复杂时间线、交互式动画</td>
+</tr>
+<tr>
+<td><strong>Framer Motion</strong></td>
+<td>React 组件</td>
+<td>~35KB</td>
+<td>React 项目、声明式动画</td>
+</tr>
+<tr>
+<td><strong>Lottie</strong></td>
+<td>JSON 动画</td>
+<td>~10KB</td>
+<td>设计师导出的复杂动效</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="一、Animate-css-—-零成本的-CSS-动画"><a href="#一、Animate-css-—-零成本的-CSS-动画" class="headerlink" title="一、Animate.css — 零成本的 CSS 动画"></a>一、Animate.css — 零成本的 CSS 动画</h2><h3 id="1-1-安装"><a href="#1-1-安装" class="headerlink" title="1.1 安装"></a>1.1 安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm install animate.css</span><br><span class="line"><span class="comment"># 或 CDN：</span></span><br><span class="line"><span class="comment"># &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css&quot;&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-基本使用"><a href="#1-2-基本使用" class="headerlink" title="1.2 基本使用"></a>1.2 基本使用</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 只需添加 class --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h1</span> <span class="attr">class</span>=<span class="string">&quot;animate__animated animate__bounce&quot;</span>&gt;</span>Hello World<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 进入动画 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;animate__animated animate__fadeInUp&quot;</span>&gt;</span>淡入上升<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 强调动画 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">&quot;animate__animated animate__pulse animate__infinite&quot;</span>&gt;</span>持续脉冲<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// JS 控制</span></span><br><span class="line"><span class="keyword">const</span> el = <span class="built_in">document</span>.querySelector(<span class="string">&#x27;.card&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加动画</span></span><br><span class="line">el.classList.add(<span class="string">&#x27;animate__animated&#x27;</span>, <span class="string">&#x27;animate__fadeInUp&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 动画结束后移除</span></span><br><span class="line">el.addEventListener(<span class="string">&#x27;animationend&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  el.classList.remove(<span class="string">&#x27;animate__animated&#x27;</span>, <span class="string">&#x27;animate__fadeInUp&#x27;</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-3-自定义配置"><a href="#1-3-自定义配置" class="headerlink" title="1.3 自定义配置"></a>1.3 自定义配置</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 自定义时长和延迟 */</span></span><br><span class="line"><span class="selector-class">.my-element</span> &#123;</span><br><span class="line">  --animate-duration: <span class="number">0.5s</span>;    <span class="comment">/* 动画时长 */</span></span><br><span class="line">  --animate-delay: <span class="number">0.3s</span>;       <span class="comment">/* 动画延迟 */</span></span><br><span class="line">  --animate-repeat: <span class="number">2</span>;         <span class="comment">/* 重复次数 */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-4-可用动画分类"><a href="#1-4-可用动画分类" class="headerlink" title="1.4 可用动画分类"></a>1.4 可用动画分类</h3><table>
+<thead>
+<tr>
+<th>分类</th>
+<th>代表动画</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>进入</strong></td>
+<td>bounceIn, fadeIn, fadeInUp, fadeInDown, slideInLeft, zoomIn</td>
+</tr>
+<tr>
+<td><strong>退出</strong></td>
+<td>bounceOut, fadeOut, fadeOutDown, slideOutRight, zoomOut</td>
+</tr>
+<tr>
+<td><strong>强调</strong></td>
+<td>bounce, flash, pulse, rubberBand, shake, swing, tada, wobble</td>
+</tr>
+<tr>
+<td><strong>其他</strong></td>
+<td>flip, rotateIn, lightSpeedIn, jackInTheBox</td>
+</tr>
+</tbody></table>
+<h3 id="1-5-优缺点"><a href="#1-5-优缺点" class="headerlink" title="1.5 优缺点"></a>1.5 优缺点</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">✅ 优点：零代码、开箱即用、选择丰富、仅 ~20KB</span><br><span class="line">❌ 缺点：不可定制、不交互、不能控制中间状态</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="二、Motion-One-—-高性能轻量方案"><a href="#二、Motion-One-—-高性能轻量方案" class="headerlink" title="二、Motion One — 高性能轻量方案"></a>二、Motion One — 高性能轻量方案</h2><p>Motion One 基于 <strong>Web Animations API（WAAPI）</strong>，性能优于 JS 驱动方案：</p>
+<h3 id="2-1-安装"><a href="#2-1-安装" class="headerlink" title="2.1 安装"></a>2.1 安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install motion</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-基本使用"><a href="#2-2-基本使用" class="headerlink" title="2.2 基本使用"></a>2.2 基本使用</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; animate, scroll, inView &#125; <span class="keyword">from</span> <span class="string">&#x27;motion&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 基础动画</span></span><br><span class="line">animate(<span class="string">&#x27;.card&#x27;</span>, &#123; <span class="attr">opacity</span>: [<span class="number">0</span>, <span class="number">1</span>], <span class="attr">transform</span>: [<span class="string">&#x27;translateY(50px)&#x27;</span>, <span class="string">&#x27;translateY(0)&#x27;</span>] &#125;, &#123;</span><br><span class="line">  <span class="attr">duration</span>: <span class="number">0.5</span>,</span><br><span class="line">  <span class="attr">easing</span>: <span class="string">&#x27;ease-out&#x27;</span>,</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 滚动触发</span></span><br><span class="line">scroll(</span><br><span class="line">  animate(<span class="string">&#x27;.progress-bar&#x27;</span>, &#123; <span class="attr">scaleX</span>: [<span class="number">0</span>, <span class="number">1</span>] &#125;),</span><br><span class="line">  &#123; <span class="attr">target</span>: <span class="built_in">document</span>.querySelector(<span class="string">&#x27;.article&#x27;</span>) &#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 进入视口</span></span><br><span class="line">inView(<span class="string">&#x27;.section&#x27;</span>, <span class="function">(<span class="params">&#123; target &#125;</span>) =&gt;</span> &#123;</span><br><span class="line">  animate(target, &#123; <span class="attr">opacity</span>: <span class="number">1</span>, <span class="attr">transform</span>: <span class="string">&#x27;none&#x27;</span> &#125;, &#123; <span class="attr">duration</span>: <span class="number">0.6</span> &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-关键帧动画"><a href="#2-3-关键帧动画" class="headerlink" title="2.3 关键帧动画"></a>2.3 关键帧动画</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">animate(<span class="string">&#x27;.ball&#x27;</span>, &#123;</span><br><span class="line">  <span class="attr">transform</span>: [</span><br><span class="line">    <span class="string">&#x27;translateY(0px)&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;translateY(-100px)&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;translateY(0px)&#x27;</span>,</span><br><span class="line">  ],</span><br><span class="line">  <span class="attr">borderRadius</span>: [<span class="string">&#x27;50%&#x27;</span>, <span class="string">&#x27;50%&#x27;</span>, <span class="string">&#x27;0%&#x27;</span>],</span><br><span class="line">&#125;, &#123;</span><br><span class="line">  <span class="attr">duration</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="attr">easing</span>: <span class="string">&#x27;ease-in-out&#x27;</span>,</span><br><span class="line">  <span class="attr">repeat</span>: <span class="literal">Infinity</span>,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-4-时间线"><a href="#2-4-时间线" class="headerlink" title="2.4 时间线"></a>2.4 时间线</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; timeline &#125; <span class="keyword">from</span> <span class="string">&#x27;motion&#x27;</span></span><br><span class="line"></span><br><span class="line">timeline([</span><br><span class="line">  [<span class="string">&#x27;.box-1&#x27;</span>, &#123; <span class="attr">opacity</span>: [<span class="number">0</span>, <span class="number">1</span>] &#125;, &#123; <span class="attr">duration</span>: <span class="number">0.3</span> &#125;],</span><br><span class="line">  [<span class="string">&#x27;.box-2&#x27;</span>, &#123; <span class="attr">transform</span>: [<span class="string">&#x27;scale(0)&#x27;</span>, <span class="string">&#x27;scale(1)&#x27;</span>] &#125;, &#123; <span class="attr">duration</span>: <span class="number">0.4</span>, <span class="attr">at</span>: <span class="number">0.2</span> &#125;],</span><br><span class="line">  [<span class="string">&#x27;.box-3&#x27;</span>, &#123; <span class="attr">x</span>: [<span class="number">100</span>, <span class="number">0</span>] &#125;, &#123; <span class="attr">duration</span>: <span class="number">0.5</span>, <span class="attr">at</span>: <span class="string">&#x27;-0.2&#x27;</span> &#125;],</span><br><span class="line">])</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-5-优缺点"><a href="#2-5-优缺点" class="headerlink" title="2.5 优缺点"></a>2.5 优缺点</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">✅ 优点：性能好（WAAPI）、体积小（~12KB）、API 简洁、支持滚动驱动</span><br><span class="line">❌ 缺点：社区较小、不支持 IE、复杂交互不如 GSAP</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="三、GSAP-—-专业级动画引擎"><a href="#三、GSAP-—-专业级动画引擎" class="headerlink" title="三、GSAP — 专业级动画引擎"></a>三、GSAP — 专业级动画引擎</h2><p>GSAP（GreenSock Animation Platform）是前端动画的事实标准。</p>
+<h3 id="3-1-安装"><a href="#3-1-安装" class="headerlink" title="3.1 安装"></a>3.1 安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install gsap</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-基础-Tween"><a href="#3-2-基础-Tween" class="headerlink" title="3.2 基础 Tween"></a>3.2 基础 Tween</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gsap <span class="keyword">from</span> <span class="string">&#x27;gsap&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 基础动画</span></span><br><span class="line">gsap.to(<span class="string">&#x27;.box&#x27;</span>, &#123;</span><br><span class="line">  <span class="attr">x</span>: <span class="number">200</span>,           <span class="comment">// 向右移动 200px</span></span><br><span class="line">  <span class="attr">rotation</span>: <span class="number">360</span>,    <span class="comment">// 旋转 360 度</span></span><br><span class="line">  <span class="attr">scale</span>: <span class="number">1.5</span>,</span><br><span class="line">  <span class="attr">duration</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="attr">ease</span>: <span class="string">&#x27;power2.out&#x27;</span>,</span><br><span class="line">  <span class="attr">delay</span>: <span class="number">0.5</span>,</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 从指定状态开始</span></span><br><span class="line">gsap.from(<span class="string">&#x27;.card&#x27;</span>, &#123;</span><br><span class="line">  <span class="attr">opacity</span>: <span class="number">0</span>,</span><br><span class="line">  <span class="attr">y</span>: <span class="number">50</span>,</span><br><span class="line">  <span class="attr">stagger</span>: <span class="number">0.1</span>,     <span class="comment">// 每个元素依次延迟 0.1s</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 从当前到指定再到另一个</span></span><br><span class="line">gsap.fromTo(<span class="string">&#x27;.box&#x27;</span>, </span><br><span class="line">  &#123; <span class="attr">x</span>: -<span class="number">100</span>, <span class="attr">opacity</span>: <span class="number">0</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">x</span>: <span class="number">0</span>, <span class="attr">opacity</span>: <span class="number">1</span>, <span class="attr">duration</span>: <span class="number">0.8</span> &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-时间线（Timeline）"><a href="#3-3-时间线（Timeline）" class="headerlink" title="3.3 时间线（Timeline）"></a>3.3 时间线（Timeline）</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> tl = gsap.timeline(&#123; <span class="attr">defaults</span>: &#123; <span class="attr">duration</span>: <span class="number">0.5</span>, <span class="attr">ease</span>: <span class="string">&#x27;power2.out&#x27;</span> &#125; &#125;)</span><br><span class="line"></span><br><span class="line">tl.to(<span class="string">&#x27;.header&#x27;</span>, &#123; <span class="attr">y</span>: <span class="number">0</span>, <span class="attr">opacity</span>: <span class="number">1</span> &#125;)</span><br><span class="line">  .to(<span class="string">&#x27;.title&#x27;</span>, &#123; <span class="attr">x</span>: <span class="number">0</span>, <span class="attr">opacity</span>: <span class="number">1</span> &#125;, <span class="string">&#x27;-=0.3&#x27;</span>)  <span class="comment">// 与前一个重叠 0.3s</span></span><br><span class="line">  .to(<span class="string">&#x27;.content&#x27;</span>, &#123; <span class="attr">opacity</span>: <span class="number">1</span> &#125;, <span class="string">&#x27;+=0.2&#x27;</span>)       <span class="comment">// 延迟 0.2s</span></span><br><span class="line">  .to(<span class="string">&#x27;.button&#x27;</span>, &#123; <span class="attr">scale</span>: <span class="number">1</span> &#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-4-ScrollTrigger-插件"><a href="#3-4-ScrollTrigger-插件" class="headerlink" title="3.4 ScrollTrigger 插件"></a>3.4 ScrollTrigger 插件</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; ScrollTrigger &#125; <span class="keyword">from</span> <span class="string">&#x27;gsap/ScrollTrigger&#x27;</span></span><br><span class="line">gsap.registerPlugin(ScrollTrigger)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 滚动触发的动画</span></span><br><span class="line">gsap.to(<span class="string">&#x27;.progress-bar&#x27;</span>, &#123;</span><br><span class="line">  <span class="attr">scaleX</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="attr">scrollTrigger</span>: &#123;</span><br><span class="line">    <span class="attr">trigger</span>: <span class="string">&#x27;.article&#x27;</span>,</span><br><span class="line">    <span class="attr">start</span>: <span class="string">&#x27;top center&#x27;</span>,</span><br><span class="line">    <span class="attr">end</span>: <span class="string">&#x27;bottom top&#x27;</span>,</span><br><span class="line">    <span class="attr">scrub</span>: <span class="literal">true</span>,        <span class="comment">// 滚到哪播到哪</span></span><br><span class="line">    <span class="attr">markers</span>: <span class="literal">false</span>,     <span class="comment">// 调试标记</span></span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 视差效果</span></span><br><span class="line">gsap.to(<span class="string">&#x27;.parallax-bg&#x27;</span>, &#123;</span><br><span class="line">  <span class="attr">y</span>: <span class="number">200</span>,</span><br><span class="line">  <span class="attr">ease</span>: <span class="string">&#x27;none&#x27;</span>,</span><br><span class="line">  <span class="attr">scrollTrigger</span>: &#123;</span><br><span class="line">    <span class="attr">trigger</span>: <span class="string">&#x27;.section&#x27;</span>,</span><br><span class="line">    <span class="attr">start</span>: <span class="string">&#x27;top bottom&#x27;</span>,</span><br><span class="line">    <span class="attr">end</span>: <span class="string">&#x27;bottom top&#x27;</span>,</span><br><span class="line">    <span class="attr">scrub</span>: <span class="literal">true</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-5-缓动函数"><a href="#3-5-缓动函数" class="headerlink" title="3.5 缓动函数"></a>3.5 缓动函数</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// GSAP 内置大量缓动</span></span><br><span class="line">gsap.to(<span class="string">&#x27;.box&#x27;</span>, &#123; <span class="attr">x</span>: <span class="number">300</span>, <span class="attr">ease</span>: <span class="string">&#x27;power2.out&#x27;</span> &#125;)     <span class="comment">// 缓出</span></span><br><span class="line">gsap.to(<span class="string">&#x27;.box&#x27;</span>, &#123; <span class="attr">x</span>: <span class="number">300</span>, <span class="attr">ease</span>: <span class="string">&#x27;bounce.out&#x27;</span> &#125;)     <span class="comment">// 弹跳</span></span><br><span class="line">gsap.to(<span class="string">&#x27;.box&#x27;</span>, &#123; <span class="attr">x</span>: <span class="number">300</span>, <span class="attr">ease</span>: <span class="string">&#x27;elastic.out(1, 0.3)&#x27;</span> &#125;) <span class="comment">// 弹性</span></span><br><span class="line">gsap.to(<span class="string">&#x27;.box&#x27;</span>, &#123; <span class="attr">x</span>: <span class="number">300</span>, <span class="attr">ease</span>: <span class="string">&#x27;steps(12)&#x27;</span> &#125;)      <span class="comment">// 逐帧</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-6-优缺点"><a href="#3-6-优缺点" class="headerlink" title="3.6 优缺点"></a>3.6 优缺点</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">✅ 优点：功能最强、时间线强大、ScrollTrigger 出色、浏览器兼容好</span><br><span class="line">❌ 缺点：体积较大（~30KB）、学习曲线陡、商业项目需付费许可</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="四、Framer-Motion-—-React-动画首选"><a href="#四、Framer-Motion-—-React-动画首选" class="headerlink" title="四、Framer Motion — React 动画首选"></a>四、Framer Motion — React 动画首选</h2><h3 id="4-1-安装"><a href="#4-1-安装" class="headerlink" title="4.1 安装"></a>4.1 安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install framer-motion</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2-基本使用"><a href="#4-2-基本使用" class="headerlink" title="4.2 基本使用"></a>4.2 基本使用</h3><figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; motion &#125; <span class="keyword">from</span> <span class="string">&#x27;framer-motion&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">App</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="xml"><span class="tag">&lt;<span class="name">motion.div</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">      <span class="attr">initial</span>=<span class="string">&#123;&#123;</span> <span class="attr">opacity:</span> <span class="attr">0</span>, <span class="attr">y:</span> <span class="attr">50</span> &#125;&#125;</span></span></span><br><span class="line"><span class="tag"><span class="xml">      <span class="attr">animate</span>=<span class="string">&#123;&#123;</span> <span class="attr">opacity:</span> <span class="attr">1</span>, <span class="attr">y:</span> <span class="attr">0</span> &#125;&#125;</span></span></span><br><span class="line"><span class="tag"><span class="xml">      <span class="attr">transition</span>=<span class="string">&#123;&#123;</span> <span class="attr">duration:</span> <span class="attr">0.5</span>, <span class="attr">ease:</span> &#x27;<span class="attr">easeOut</span>&#x27; &#125;&#125;</span></span></span><br><span class="line"><span class="tag"><span class="xml">    &gt;</span></span></span><br><span class="line"><span class="xml">      Hello World</span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;/<span class="name">motion.div</span>&gt;</span></span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3-动画变体（Variants）"><a href="#4-3-动画变体（Variants）" class="headerlink" title="4.3 动画变体（Variants）"></a>4.3 动画变体（Variants）</h3><figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> variants = &#123;</span><br><span class="line">  <span class="attr">hidden</span>: &#123; <span class="attr">opacity</span>: <span class="number">0</span>, <span class="attr">y</span>: <span class="number">50</span> &#125;,</span><br><span class="line">  <span class="attr">visible</span>: <span class="function">(<span class="params">i</span>) =&gt;</span> (&#123;</span><br><span class="line">    <span class="attr">opacity</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="attr">y</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="attr">transition</span>: &#123; <span class="attr">delay</span>: i * <span class="number">0.1</span> &#125;,</span><br><span class="line">  &#125;),</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">List</span>(<span class="params">&#123; items &#125;</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="xml"><span class="tag">&lt;<span class="name">motion.ul</span> <span class="attr">initial</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">animate</span>=<span class="string">&quot;visible&quot;</span>&gt;</span></span></span><br><span class="line"><span class="xml">      &#123;items.map((item, i) =&gt; (</span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">motion.li</span> <span class="attr">key</span>=<span class="string">&#123;item&#125;</span> <span class="attr">custom</span>=<span class="string">&#123;i&#125;</span> <span class="attr">variants</span>=<span class="string">&#123;variants&#125;</span>&gt;</span></span></span><br><span class="line"><span class="xml">          &#123;item&#125;</span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;/<span class="name">motion.li</span>&gt;</span></span></span><br><span class="line"><span class="xml">      ))&#125;</span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;/<span class="name">motion.ul</span>&gt;</span></span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-4-手势动画"><a href="#4-4-手势动画" class="headerlink" title="4.4 手势动画"></a>4.4 手势动画</h3><figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;motion.div</span><br><span class="line">  whileHover=&#123;&#123; <span class="attr">scale</span>: <span class="number">1.05</span> &#125;&#125;</span><br><span class="line">  whileTap=&#123;&#123; <span class="attr">scale</span>: <span class="number">0.95</span> &#125;&#125;</span><br><span class="line">  drag=<span class="string">&quot;x&quot;</span></span><br><span class="line">  dragConstraints=&#123;&#123; <span class="attr">left</span>: -<span class="number">100</span>, <span class="attr">right</span>: <span class="number">100</span> &#125;&#125;</span><br><span class="line">  onDragEnd=&#123;<span class="function">(<span class="params">event, info</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (info.offset.x &gt; <span class="number">100</span>) &#123;</span><br><span class="line">      <span class="comment">// 滑动超过 100px 触发</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;&#125;</span><br><span class="line">&gt;</span><br><span class="line">  拖拽我</span><br><span class="line">&lt;/motion.div&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-5-AnimatePresence-—-进出动画"><a href="#4-5-AnimatePresence-—-进出动画" class="headerlink" title="4.5 AnimatePresence — 进出动画"></a>4.5 AnimatePresence — 进出动画</h3><figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; AnimatePresence, motion &#125; <span class="keyword">from</span> <span class="string">&#x27;framer-motion&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Notifications</span>(<span class="params">&#123; notifications &#125;</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="xml"><span class="tag">&lt;<span class="name">AnimatePresence</span>&gt;</span></span></span><br><span class="line"><span class="xml">      &#123;notifications.map(n =&gt; (</span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">motion.div</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">          <span class="attr">key</span>=<span class="string">&#123;n.id&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">          <span class="attr">initial</span>=<span class="string">&#123;&#123;</span> <span class="attr">opacity:</span> <span class="attr">0</span>, <span class="attr">x:</span> <span class="attr">100</span> &#125;&#125;</span></span></span><br><span class="line"><span class="tag"><span class="xml">          <span class="attr">animate</span>=<span class="string">&#123;&#123;</span> <span class="attr">opacity:</span> <span class="attr">1</span>, <span class="attr">x:</span> <span class="attr">0</span> &#125;&#125;</span></span></span><br><span class="line"><span class="tag"><span class="xml">          <span class="attr">exit</span>=<span class="string">&#123;&#123;</span> <span class="attr">opacity:</span> <span class="attr">0</span>, <span class="attr">x:</span> <span class="attr">-100</span> &#125;&#125;</span></span></span><br><span class="line"><span class="tag"><span class="xml">        &gt;</span></span></span><br><span class="line"><span class="xml">          &#123;n.text&#125;</span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;/<span class="name">motion.div</span>&gt;</span></span></span><br><span class="line"><span class="xml">      ))&#125;</span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;/<span class="name">AnimatePresence</span>&gt;</span></span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-6-优缺点"><a href="#4-6-优缺点" class="headerlink" title="4.6 优缺点"></a>4.6 优缺点</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">✅ 优点：React 原生、声明式 API、手势支持、AnimatePresence 进出动画</span><br><span class="line">❌ 缺点：仅限 React、体积较大（~35KB）</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="五、Lottie-—-设计师驱动的复杂动画"><a href="#五、Lottie-—-设计师驱动的复杂动画" class="headerlink" title="五、Lottie — 设计师驱动的复杂动画"></a>五、Lottie — 设计师驱动的复杂动画</h2><p>Lottie 播放由设计师在 After Effects 中制作并导出为 JSON 的动画：</p>
+<h3 id="5-1-安装"><a href="#5-1-安装" class="headerlink" title="5.1 安装"></a>5.1 安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install lottie-web</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2-基本使用"><a href="#5-2-基本使用" class="headerlink" title="5.2 基本使用"></a>5.2 基本使用</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> lottie <span class="keyword">from</span> <span class="string">&#x27;lottie-web&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> animation = lottie.loadAnimation(&#123;</span><br><span class="line">  <span class="attr">container</span>: <span class="built_in">document</span>.getElementById(<span class="string">&#x27;animation-container&#x27;</span>),</span><br><span class="line">  <span class="attr">renderer</span>: <span class="string">&#x27;svg&#x27;</span>,        <span class="comment">// &#x27;svg&#x27; | &#x27;canvas&#x27; | &#x27;html&#x27;</span></span><br><span class="line">  <span class="attr">loop</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">autoplay</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">path</span>: <span class="string">&#x27;/animations/loading.json&#x27;</span>, <span class="comment">// 设计师导出的 JSON</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 控制播放</span></span><br><span class="line">animation.play()</span><br><span class="line">animation.pause()</span><br><span class="line">animation.stop()</span><br><span class="line">animation.goToAndStop(<span class="number">30</span>, <span class="literal">true</span>) <span class="comment">// 跳到第 30 帧</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 播放进度</span></span><br><span class="line">animation.addEventListener(<span class="string">&#x27;progress&#x27;</span>, <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`进度: <span class="subst">$&#123;e.detail&#125;</span>%`</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-3-按需加载与分段播放"><a href="#5-3-按需加载与分段播放" class="headerlink" title="5.3 按需加载与分段播放"></a>5.3 按需加载与分段播放</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 预加载</span></span><br><span class="line">lottie.loadAnimation(&#123;</span><br><span class="line">  <span class="attr">container</span>: el,</span><br><span class="line">  <span class="attr">path</span>: <span class="string">&#x27;/animations/checkmark.json&#x27;</span>,</span><br><span class="line">  <span class="attr">autoplay</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">loop</span>: <span class="literal">false</span>,</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 分段播放（从第 10 帧到第 50 帧）</span></span><br><span class="line">animation.playSegments([<span class="number">10</span>, <span class="number">50</span>], <span class="literal">true</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-4-优缺点"><a href="#5-4-优缺点" class="headerlink" title="5.4 优缺点"></a>5.4 优缺点</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">✅ 优点：设计师直接导出、高度复杂、可控性强</span><br><span class="line">❌ 缺点：依赖设计师、JSON 文件可能很大、交互能力有限</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="六、五款方案选型对比"><a href="#六、五款方案选型对比" class="headerlink" title="六、五款方案选型对比"></a>六、五款方案选型对比</h2><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>Animate.css</th>
+<th>Motion One</th>
+<th>GSAP</th>
+<th>Framer Motion</th>
+<th>Lottie</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>技术类型</strong></td>
+<td>CSS</td>
+<td>JS + WAAPI</td>
+<td>JS</td>
+<td>React 组件</td>
+<td>JSON + JS</td>
+</tr>
+<tr>
+<td><strong>体积</strong></td>
+<td>~20KB CSS</td>
+<td>~12KB JS</td>
+<td>~30KB JS</td>
+<td>~35KB JS</td>
+<td>~10KB JS</td>
+</tr>
+<tr>
+<td><strong>学习曲线</strong></td>
+<td>⭐ 极低</td>
+<td>⭐⭐ 低</td>
+<td>⭐⭐⭐⭐ 高</td>
+<td>⭐⭐⭐ 中</td>
+<td>⭐⭐ 低</td>
+</tr>
+<tr>
+<td><strong>交互能力</strong></td>
+<td>无</td>
+<td>中</td>
+<td>强</td>
+<td>强</td>
+<td>低</td>
+</tr>
+<tr>
+<td><strong>复杂动画</strong></td>
+<td>仅基础</td>
+<td>中等</td>
+<td>最强</td>
+<td>强</td>
+<td>强（设计师）</td>
+</tr>
+<tr>
+<td><strong>滚动驱动</strong></td>
+<td>无</td>
+<td>✅ 内置</td>
+<td>✅ 插件</td>
+<td>✅ 内置</td>
+<td>无</td>
+</tr>
+<tr>
+<td><strong>时间线</strong></td>
+<td>无</td>
+<td>✅ 基础</td>
+<td>✅ 专业</td>
+<td>✅ 声明式</td>
+<td>无</td>
+</tr>
+<tr>
+<td><strong>React 支持</strong></td>
+<td>通用</td>
+<td>通用</td>
+<td>通用</td>
+<td>✅ 原生</td>
+<td>通用</td>
+</tr>
+<tr>
+<td><strong>兼容性</strong></td>
+<td>好</td>
+<td>中（需 WAAPI）</td>
+<td>好</td>
+<td>好</td>
+<td>好</td>
+</tr>
+<tr>
+<td><strong>价格</strong></td>
+<td>MIT</td>
+<td>MIT</td>
+<td>商业许可</td>
+<td>MIT</td>
+<td>MIT</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="七、实战选型建议"><a href="#七、实战选型建议" class="headerlink" title="七、实战选型建议"></a>七、实战选型建议</h2><h3 id="7-1-选型决策树"><a href="#7-1-选型决策树" class="headerlink" title="7.1 选型决策树"></a>7.1 选型决策树</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">项目类型是什么？</span><br><span class="line">├── 纯展示站、简单进入动画 → Animate.css（够用）</span><br><span class="line">├── React 项目</span><br><span class="line">│   ├── 日常动效 → Framer Motion</span><br><span class="line">│   └── 复杂交互 → GSAP + Framer Motion 混用</span><br><span class="line">├── 高性能要求（滚动/视差）</span><br><span class="line">│   ├── Motion One（轻量）</span><br><span class="line">│   └── GSAP + ScrollTrigger（功能最强）</span><br><span class="line">├── 设计团队产出动效</span><br><span class="line">│   └── Lottie</span><br><span class="line">└── 只是偶尔用几个动画</span><br><span class="line">    └── 手写 CSS animation（零依赖）</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-2-手写-CSS-动画-vs-库"><a href="#7-2-手写-CSS-动画-vs-库" class="headerlink" title="7.2 手写 CSS 动画 vs 库"></a>7.2 手写 CSS 动画 vs 库</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 简单的 fadeIn 完全不需要库 */</span></span><br><span class="line"><span class="selector-class">.fade-in</span> &#123;</span><br><span class="line">  <span class="attribute">opacity</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">animation</span>: fadeIn <span class="number">0.5s</span> ease-out forwards;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@keyframes</span> fadeIn &#123;</span><br><span class="line">  <span class="selector-tag">to</span> &#123; <span class="attribute">opacity</span>: <span class="number">1</span>; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 脉冲按钮 */</span></span><br><span class="line"><span class="selector-class">.pulse-btn</span> &#123;</span><br><span class="line">  <span class="attribute">animation</span>: pulse <span class="number">2s</span> infinite;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@keyframes</span> pulse &#123;</span><br><span class="line">  <span class="number">0%</span>, <span class="number">100%</span> &#123; <span class="attribute">transform</span>: <span class="built_in">scale</span>(<span class="number">1</span>); &#125;</span><br><span class="line">  <span class="number">50%</span> &#123; <span class="attribute">transform</span>: <span class="built_in">scale</span>(<span class="number">1.05</span>); &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>推荐原则</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">动画复杂度            → 推荐方案</span><br><span class="line">────────────────────────────────</span><br><span class="line">简单 CSS 过渡         → CSS transition</span><br><span class="line">单次进入动画          → Animate.css / 手写 CSS animation</span><br><span class="line">滚动触发              → Motion One / GSAP ScrollTrigger</span><br><span class="line">交互/拖拽             → GSAP / Framer Motion</span><br><span class="line">复杂时间线            → GSAP</span><br><span class="line">设计师导出            → Lottie</span><br><span class="line">React 项目日常动效    → Framer Motion</span><br><span class="line">按钮/悬浮微动效      → CSS transition（零依赖）</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="八、性能注意事项"><a href="#八、性能注意事项" class="headerlink" title="八、性能注意事项"></a>八、性能注意事项</h2><h3 id="8-1-触发重排-vs-合成"><a href="#8-1-触发重排-vs-合成" class="headerlink" title="8.1 触发重排 vs 合成"></a>8.1 触发重排 vs 合成</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* ❌ 触发重排（layout 变化），性能差 */</span></span><br><span class="line"><span class="attribute">animation</span>: moveLeft <span class="number">0.3s</span>;</span><br><span class="line"><span class="keyword">@keyframes</span> moveLeft &#123;</span><br><span class="line">  <span class="selector-tag">from</span> &#123; <span class="attribute">margin-left</span>: <span class="number">0</span>; &#125;</span><br><span class="line">  <span class="selector-tag">to</span> &#123; <span class="attribute">margin-left</span>: <span class="number">100px</span>; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* ✅ 触发合成（仅 composite），性能好 */</span></span><br><span class="line"><span class="attribute">animation</span>: moveLeft <span class="number">0.3s</span>;</span><br><span class="line"><span class="keyword">@keyframes</span> moveLeft &#123;</span><br><span class="line">  <span class="selector-tag">from</span> &#123; <span class="attribute">transform</span>: <span class="built_in">translateX</span>(<span class="number">0</span>); &#125;</span><br><span class="line">  <span class="selector-tag">to</span> &#123; <span class="attribute">transform</span>: <span class="built_in">translateX</span>(<span class="number">100px</span>); &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="8-2-优先使用的属性"><a href="#8-2-优先使用的属性" class="headerlink" title="8.2 优先使用的属性"></a>8.2 优先使用的属性</h3><table>
+<thead>
+<tr>
+<th>高性能（触发合成）</th>
+<th>低性能（触发重排）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>transform</code></td>
+<td><code>width</code>、<code>height</code></td>
+</tr>
+<tr>
+<td><code>opacity</code></td>
+<td><code>margin</code>、<code>padding</code></td>
+</tr>
+<tr>
+<td><code>filter</code>（部分）</td>
+<td><code>left</code>、<code>top</code></td>
+</tr>
+<tr>
+<td><code>clip-path</code></td>
+<td><code>border-radius</code></td>
+</tr>
+</tbody></table>
+<h3 id="8-3-will-change"><a href="#8-3-will-change" class="headerlink" title="8.3 will-change"></a>8.3 will-change</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 提前告知浏览器该元素将发生动画 */</span></span><br><span class="line"><span class="selector-class">.animated-element</span> &#123;</span><br><span class="line">  will-change: transform, opacity;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 使用完记得移除，避免消耗过多内存 */</span></span><br><span class="line"><span class="comment">/* 或用 JS 动态添加 */</span></span><br><span class="line">el<span class="selector-class">.style</span><span class="selector-class">.willChange</span> = &#x27;<span class="attribute">transform</span>&#x27;</span><br><span class="line">// 动画结束后</span><br><span class="line">setTimeout(() =&gt; &#123; el<span class="selector-class">.style</span><span class="selector-class">.willChange</span> = &#x27;<span class="attribute">auto</span>&#x27; &#125;, <span class="number">1000</span>)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><table>
+<thead>
+<tr>
+<th>你的需求</th>
+<th>最佳选择</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>零代码、开箱即用</td>
+<td>Animate.css</td>
+</tr>
+<tr>
+<td>轻量、高性能</td>
+<td>Motion One</td>
+</tr>
+<tr>
+<td>滚动视差、复杂交互</td>
+<td>GSAP + ScrollTrigger</td>
+</tr>
+<tr>
+<td>React 项目</td>
+<td>Framer Motion</td>
+</tr>
+<tr>
+<td>设计师动效</td>
+<td>Lottie</td>
+</tr>
+<tr>
+<td>极其简单</td>
+<td>手写 CSS animation</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>动画的核心原则：<strong>少即是多</strong>。不是所有元素都需要动画，动画应当有目的——引导视线、反馈交互、传递状态。好的动效用户甚至不会注意到它，但坏的动效一定会被用户注意到。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/web-blog/2026/06/25/css-animation-library-guide/">CSS 动画库选型与实战：Animate.css、Motion One、GSAP 对比指南</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a></p>
+  <p><span>发布时间:</span>2026年06月25日 - 00:06</p>
+  <p><span>最后更新:</span>2026年06月25日 - 15:06</p>
+  <p><span>原始链接:</span><a href="/web-blog/2026/06/25/css-animation-library-guide/" title="CSS 动画库选型与实战：Animate.css、Motion One、GSAP 对比指南">https://lc19990308.github.io/web-blog/2026/06/25/css-animation-library-guide/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://lc19990308.github.io/web-blog/2026/06/25/css-animation-library-guide/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+    });
+    });  
+</script>
+
+      
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>LC
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://lc19990308.github.io/web-blog/2026/06/25/css-animation-library-guide/" title="CSS 动画库选型与实战：Animate.css、Motion One、GSAP 对比指南">https://lc19990308.github.io/web-blog/2026/06/25/css-animation-library-guide/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/web-blog/tags/JavaScript/" ****><i class="fa fa-tag"></i> JavaScript</a>
+              <a href="/web-blog/tags/css/" ****><i class="fa fa-tag"></i> css</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/06/25/data-persistence-guide/" rel="prev" title="前端数据持久化方案：IndexedDB、localForage 与 SQLite/WASM">
+      <i class="fa fa-chevron-left"></i> 前端数据持久化方案：IndexedDB、localForage 与 SQLite/WASM
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/06/25/css-2025-new-features/" rel="next" title="CSS 2025 新特性全景：has()、View Transitions、CSS Layers、Scroll-Driven Animations">
+      CSS 2025 新特性全景：has()、View Transitions、CSS Layers、Scroll-Driven Animations <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81Animate-css-%E2%80%94-%E9%9B%B6%E6%88%90%E6%9C%AC%E7%9A%84-CSS-%E5%8A%A8%E7%94%BB"><span class="nav-number">2.</span> <span class="nav-text">一、Animate.css — 零成本的 CSS 动画</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E5%AE%89%E8%A3%85"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="nav-number">2.2.</span> <span class="nav-text">1.2 基本使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E8%87%AA%E5%AE%9A%E4%B9%89%E9%85%8D%E7%BD%AE"><span class="nav-number">2.3.</span> <span class="nav-text">1.3 自定义配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-%E5%8F%AF%E7%94%A8%E5%8A%A8%E7%94%BB%E5%88%86%E7%B1%BB"><span class="nav-number">2.4.</span> <span class="nav-text">1.4 可用动画分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-5-%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">2.5.</span> <span class="nav-text">1.5 优缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81Motion-One-%E2%80%94-%E9%AB%98%E6%80%A7%E8%83%BD%E8%BD%BB%E9%87%8F%E6%96%B9%E6%A1%88"><span class="nav-number">3.</span> <span class="nav-text">二、Motion One — 高性能轻量方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%AE%89%E8%A3%85"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 基本使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E5%85%B3%E9%94%AE%E5%B8%A7%E5%8A%A8%E7%94%BB"><span class="nav-number">3.3.</span> <span class="nav-text">2.3 关键帧动画</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-%E6%97%B6%E9%97%B4%E7%BA%BF"><span class="nav-number">3.4.</span> <span class="nav-text">2.4 时间线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">3.5.</span> <span class="nav-text">2.5 优缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81GSAP-%E2%80%94-%E4%B8%93%E4%B8%9A%E7%BA%A7%E5%8A%A8%E7%94%BB%E5%BC%95%E6%93%8E"><span class="nav-number">4.</span> <span class="nav-text">三、GSAP — 专业级动画引擎</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E5%AE%89%E8%A3%85"><span class="nav-number">4.1.</span> <span class="nav-text">3.1 安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E5%9F%BA%E7%A1%80-Tween"><span class="nav-number">4.2.</span> <span class="nav-text">3.2 基础 Tween</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E6%97%B6%E9%97%B4%E7%BA%BF%EF%BC%88Timeline%EF%BC%89"><span class="nav-number">4.3.</span> <span class="nav-text">3.3 时间线（Timeline）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-ScrollTrigger-%E6%8F%92%E4%BB%B6"><span class="nav-number">4.4.</span> <span class="nav-text">3.4 ScrollTrigger 插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-%E7%BC%93%E5%8A%A8%E5%87%BD%E6%95%B0"><span class="nav-number">4.5.</span> <span class="nav-text">3.5 缓动函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-6-%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">4.6.</span> <span class="nav-text">3.6 优缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81Framer-Motion-%E2%80%94-React-%E5%8A%A8%E7%94%BB%E9%A6%96%E9%80%89"><span class="nav-number">5.</span> <span class="nav-text">四、Framer Motion — React 动画首选</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E5%AE%89%E8%A3%85"><span class="nav-number">5.1.</span> <span class="nav-text">4.1 安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="nav-number">5.2.</span> <span class="nav-text">4.2 基本使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-%E5%8A%A8%E7%94%BB%E5%8F%98%E4%BD%93%EF%BC%88Variants%EF%BC%89"><span class="nav-number">5.3.</span> <span class="nav-text">4.3 动画变体（Variants）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-%E6%89%8B%E5%8A%BF%E5%8A%A8%E7%94%BB"><span class="nav-number">5.4.</span> <span class="nav-text">4.4 手势动画</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-5-AnimatePresence-%E2%80%94-%E8%BF%9B%E5%87%BA%E5%8A%A8%E7%94%BB"><span class="nav-number">5.5.</span> <span class="nav-text">4.5 AnimatePresence — 进出动画</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-6-%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">5.6.</span> <span class="nav-text">4.6 优缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81Lottie-%E2%80%94-%E8%AE%BE%E8%AE%A1%E5%B8%88%E9%A9%B1%E5%8A%A8%E7%9A%84%E5%A4%8D%E6%9D%82%E5%8A%A8%E7%94%BB"><span class="nav-number">6.</span> <span class="nav-text">五、Lottie — 设计师驱动的复杂动画</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%E5%AE%89%E8%A3%85"><span class="nav-number">6.1.</span> <span class="nav-text">5.1 安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="nav-number">6.2.</span> <span class="nav-text">5.2 基本使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-%E6%8C%89%E9%9C%80%E5%8A%A0%E8%BD%BD%E4%B8%8E%E5%88%86%E6%AE%B5%E6%92%AD%E6%94%BE"><span class="nav-number">6.3.</span> <span class="nav-text">5.3 按需加载与分段播放</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-4-%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">6.4.</span> <span class="nav-text">5.4 优缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E4%BA%94%E6%AC%BE%E6%96%B9%E6%A1%88%E9%80%89%E5%9E%8B%E5%AF%B9%E6%AF%94"><span class="nav-number">7.</span> <span class="nav-text">六、五款方案选型对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E5%AE%9E%E6%88%98%E9%80%89%E5%9E%8B%E5%BB%BA%E8%AE%AE"><span class="nav-number">8.</span> <span class="nav-text">七、实战选型建议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-%E9%80%89%E5%9E%8B%E5%86%B3%E7%AD%96%E6%A0%91"><span class="nav-number">8.1.</span> <span class="nav-text">7.1 选型决策树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-%E6%89%8B%E5%86%99-CSS-%E5%8A%A8%E7%94%BB-vs-%E5%BA%93"><span class="nav-number">8.2.</span> <span class="nav-text">7.2 手写 CSS 动画 vs 库</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E6%80%A7%E8%83%BD%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">9.</span> <span class="nav-text">八、性能注意事项</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#8-1-%E8%A7%A6%E5%8F%91%E9%87%8D%E6%8E%92-vs-%E5%90%88%E6%88%90"><span class="nav-number">9.1.</span> <span class="nav-text">8.1 触发重排 vs 合成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-2-%E4%BC%98%E5%85%88%E4%BD%BF%E7%94%A8%E7%9A%84%E5%B1%9E%E6%80%A7"><span class="nav-number">9.2.</span> <span class="nav-text">8.2 优先使用的属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-3-will-change"><span class="nav-number">9.3.</span> <span class="nav-text">8.3 will-change</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">10.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="LC"
+      src="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+  <p class="site-author-name" itemprop="name">LC</p>
+  <div class="site-description" itemprop="description">专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/web-blog/archives/">
+        
+          <span class="site-state-item-count">110</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/web-blog/categories/">
+          
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/web-blog/tags/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button motion-element"><i class="fa fa-comment"></i>
+    Chat
+  </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lc19990308/web-blog" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lc19990308&#x2F;web-blog" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:jarridaddison4@gmail.com" title="E-Mail → mailto:jarridaddison4@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/web-blog/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=441491828&auto=1&height=66"></iframe>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LC</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>-->
+<div class="powered-by">
+  <i class="fa fa-user-md"></i>
+  <span id="busuanzi_container_site_pv">
+    本站访问量:<span id="busuanzi_value_site_pv"></span>次
+  </span>
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv">
+    本站总访客量：<span id="busuanzi_value_site_uv"></span>人
+  </span>
+</div>
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共166.3k字</span>
+</div>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/web-blog/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/web-blog/js/utils.js"></script>
+
+<script src="/web-blog/js/motion.js"></script>
+
+
+<script src="/web-blog/js/schemes/pisces.js"></script>
+
+
+<script src="/web-blog/js/next-boot.js"></script>
+
+<script src="/web-blog/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/web-blog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+</body>
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</html>

@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/web-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/web-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/web-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/web-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/web-blog/css/main.css">
+
+
+<link rel="stylesheet" href="/web-blog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/web-blog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/web-blog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lc19990308.github.io","root":"/web-blog/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="深入 Vue 3.5 响应式系统源码，剖析 Proxy&#x2F;Ref&#x2F;Reactive 的实现原理、响应式链路追踪机制，以及相比 3.0-3.4 的性能优化演进">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue 3.5 响应式原理深度剖析：从源码看响应式演进">
+<meta property="og:url" content="https://lc19990308.github.io/web-blog/2026/06/25/vue3-5-reactivity-deep-dive/index.html">
+<meta property="og:site_name" content="前端技术笔记">
+<meta property="og:description" content="深入 Vue 3.5 响应式系统源码，剖析 Proxy&#x2F;Ref&#x2F;Reactive 的实现原理、响应式链路追踪机制，以及相比 3.0-3.4 的性能优化演进">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-25T07:09:08.999Z">
+<meta property="article:author" content="LC">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="vue3">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://lc19990308.github.io/web-blog/2026/06/25/vue3-5-reactivity-deep-dive/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Vue 3.5 响应式原理深度剖析：从源码看响应式演进 | 前端技术笔记</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/web-blog/atom.xml" title="前端技术笔记" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband">
+    <a target="_blank" rel="noopener" href="https://gitee.com/yaru722" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    </div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/web-blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">前端技术笔记</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录前端路上的思考与实践</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/web-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/web-blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/web-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/web-blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/web-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/lc19990308" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/25/vue3-5-reactivity-deep-dive/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+      <meta itemprop="name" content="LC">
+      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端技术笔记">
+    </span>
+      <header class="post-header">
+      
+        <h1 class="post-title" itemprop="name headline">
+          Vue 3.5 响应式原理深度剖析：从源码看响应式演进
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-06-25 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-25T00:00:00+08:00">2026-06-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/web-blog/categories/vue3/" itemprop="url" rel="index"><span itemprop="name">vue3</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">深入 Vue 3.5 响应式系统源码，剖析 Proxy/Ref/Reactive 的实现原理、响应式链路追踪机制，以及相比 3.0-3.4 的性能优化演进</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Vue 3 的响应式系统经历了数个大版本的迭代。从 3.0 的 <code>Proxy</code> 基础实现，到 3.4 的 <code>响应式优化</code>，再到 <strong>3.5 对响应式链路的全面重构</strong>，每一次演进都在提升性能和开发体验。</p>
+<p>本文将深入 Vue 3.5 的响应式源码，剖析三个核心问题：</p>
+<ol>
+<li><strong>响应式数据如何被追踪？</strong></li>
+<li><strong>依赖收集和派发更新的链路是怎样的？</strong></li>
+<li><strong>3.5 相比之前版本做了哪些关键优化？</strong></li>
+</ol>
+<hr>
+<h2 id="一、响应式核心：Proxy-Reflect"><a href="#一、响应式核心：Proxy-Reflect" class="headerlink" title="一、响应式核心：Proxy + Reflect"></a>一、响应式核心：Proxy + Reflect</h2><h3 id="1-1-基础原理"><a href="#1-1-基础原理" class="headerlink" title="1.1 基础原理"></a>1.1 基础原理</h3><p>Vue 3 的核心响应式基于 <strong>Proxy</strong>（代理）和 <strong>Reflect</strong>（反射）：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 简化版 reactive 实现</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">reactive</span>(<span class="params">target</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Proxy</span>(target, &#123;</span><br><span class="line">    <span class="function"><span class="title">get</span>(<span class="params">target, key, receiver</span>)</span> &#123;</span><br><span class="line">      <span class="comment">// 依赖收集：谁在读取这个值？</span></span><br><span class="line">      track(target, key)</span><br><span class="line">      <span class="keyword">return</span> <span class="built_in">Reflect</span>.get(target, key, receiver)</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="function"><span class="title">set</span>(<span class="params">target, key, value, receiver</span>)</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> result = <span class="built_in">Reflect</span>.set(target, key, value, receiver)</span><br><span class="line">      <span class="comment">// 派发更新：值变了，通知订阅者</span></span><br><span class="line">      trigger(target, key)</span><br><span class="line">      <span class="keyword">return</span> result</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>为什么要用 <code>Reflect</code> 而不是直接 <code>target[key]</code>？</strong></p>
+<p>关键在 <strong><code>this</code> 指向</strong>。当对象继承时，<code>Reflect.get</code> 能正确传递 <code>receiver</code>（调用者），保证 <code>this</code> 指向正确：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> parent = &#123; <span class="keyword">get</span> <span class="title">foo</span>() &#123; <span class="keyword">return</span> <span class="built_in">this</span>.bar &#125;, <span class="attr">bar</span>: <span class="number">1</span> &#125;</span><br><span class="line"><span class="keyword">const</span> child = &#123; <span class="attr">bar</span>: <span class="number">2</span> &#125;</span><br><span class="line"><span class="built_in">Object</span>.setPrototypeOf(child, parent)</span><br><span class="line"></span><br><span class="line">child.foo <span class="comment">// 2 — 正确，this 指向 child</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-Proxy-的局限性"><a href="#1-2-Proxy-的局限性" class="headerlink" title="1.2 Proxy 的局限性"></a>1.2 Proxy 的局限性</h3><p>Vue 3 的 Reactive 基于 Proxy，但 Proxy 有局限性：</p>
+<ul>
+<li><strong>原始类型（string/number/boolean）不能代理</strong> → 需用 <code>ref()</code></li>
+<li><strong>深层响应式需要递归代理</strong> → 性能开销</li>
+<li><strong>数组索引和 length 变更的特殊处理</strong> → 额外复杂度</li>
+</ul>
+<hr>
+<h2 id="二、依赖收集系统：track-与-trigger"><a href="#二、依赖收集系统：track-与-trigger" class="headerlink" title="二、依赖收集系统：track 与 trigger"></a>二、依赖收集系统：track 与 trigger</h2><h3 id="2-1-三层数据结构"><a href="#2-1-三层数据结构" class="headerlink" title="2.1 三层数据结构"></a>2.1 三层数据结构</h3><p>Vue 的依赖收集维护了一个三层嵌套的 Map 结构：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">targetMap (WeakMap)</span><br><span class="line">  └── target (对象) → depsMap (Map)</span><br><span class="line">        └── key (属性名) → dep (Set)</span><br><span class="line">              └── effect (副作用函数)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 核心数据结构</span></span><br><span class="line"><span class="keyword">const</span> targetMap = <span class="keyword">new</span> <span class="built_in">WeakMap</span>() <span class="comment">// 弱引用，对象可被 GC</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">track</span>(<span class="params">target, key</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!activeEffect) <span class="keyword">return</span> <span class="comment">// 没有活跃的 effect，跳过</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> depsMap = targetMap.get(target)</span><br><span class="line">  <span class="keyword">if</span> (!depsMap) targetMap.set(target, (depsMap = <span class="keyword">new</span> <span class="built_in">Map</span>()))</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> dep = depsMap.get(key)</span><br><span class="line">  <span class="keyword">if</span> (!dep) depsMap.set(key, (dep = <span class="keyword">new</span> <span class="built_in">Set</span>()))</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 将当前活跃的 effect 添加进依赖</span></span><br><span class="line">  dep.add(activeEffect)</span><br><span class="line">  activeEffect.deps.push(dep) <span class="comment">// 双向关联，便于 cleanup</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>为什么用 WeakMap？</strong> — 当响应式对象不再被引用时，WeakMap 的键（对象）可以被垃圾回收，避免内存泄漏。而 Map 的键是强引用，对象不会被回收。</p>
+<h3 id="2-2-effect-的-cleanup-机制"><a href="#2-2-effect-的-cleanup-机制" class="headerlink" title="2.2 effect 的 cleanup 机制"></a>2.2 effect 的 cleanup 机制</h3><p>每次 effect 重新运行前，会清空旧的依赖关系，重新收集：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">cleanup</span>(<span class="params">effect</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; deps &#125; = effect</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; deps.length; i++) &#123;</span><br><span class="line">    deps[i].delete(effect)</span><br><span class="line">  &#125;</span><br><span class="line">  deps.length = <span class="number">0</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">runEffect</span>(<span class="params">effect</span>) </span>&#123;</span><br><span class="line">  cleanup(effect)</span><br><span class="line">  activeEffect = effect</span><br><span class="line">  effect.fn() <span class="comment">// 重新执行，触发 track 重新收集</span></span><br><span class="line">  activeEffect = <span class="literal">null</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这种 <strong>先清空再收集</strong> 的机制保证了依赖是精确的、不会残留。</p>
+<hr>
+<h2 id="三、reactive-实现细节"><a href="#三、reactive-实现细节" class="headerlink" title="三、reactive 实现细节"></a>三、reactive 实现细节</h2><h3 id="3-1-深层响应式"><a href="#3-1-深层响应式" class="headerlink" title="3.1 深层响应式"></a>3.1 深层响应式</h3><p>Vue 3 的 <code>reactive()</code> 在读取时按需递归代理，而不是在初始化时全量递归：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createReactiveObject</span>(<span class="params">target</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 已经代理过的，返回已有代理</span></span><br><span class="line">  <span class="keyword">if</span> (target[ReactiveFlags.IS_REACTIVE]) <span class="keyword">return</span> target</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> proxy = <span class="keyword">new</span> <span class="built_in">Proxy</span>(target, baseHandlers)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 标记已代理</span></span><br><span class="line">  proxy[ReactiveFlags.IS_REACTIVE] = <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> proxy</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// getter 中按需递归</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createGetter</span>(<span class="params">isReadonly = <span class="literal">false</span>, shallow = <span class="literal">false</span></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">get</span>(<span class="params">target, key, receiver</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> value = <span class="built_in">Reflect</span>.get(target, key, receiver)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 只对对象类型递归</span></span><br><span class="line">    <span class="keyword">if</span> (!shallow &amp;&amp; isObject(value)) &#123;</span><br><span class="line">      <span class="keyword">return</span> isReadonly ? readonly(value) : reactive(value)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> value</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-reactive-的缓存"><a href="#3-2-reactive-的缓存" class="headerlink" title="3.2 reactive 的缓存"></a>3.2 reactive 的缓存</h3><p>Vue 3.5 使用 <strong>全局缓存</strong> 避免重复代理：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> reactiveMap = <span class="keyword">new</span> <span class="built_in">WeakMap</span>() <span class="comment">// 原始对象 → 代理对象</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">reactive</span>(<span class="params">target</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 命中缓存</span></span><br><span class="line">  <span class="keyword">const</span> existingProxy = reactiveMap.get(target)</span><br><span class="line">  <span class="keyword">if</span> (existingProxy) <span class="keyword">return</span> existingProxy</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 已代理过的，不重复代理</span></span><br><span class="line">  <span class="keyword">if</span> (target[ReactiveFlags.IS_REACTIVE]) <span class="keyword">return</span> target</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> proxy = <span class="keyword">new</span> <span class="built_in">Proxy</span>(target, mutableHandlers)</span><br><span class="line">  reactiveMap.set(target, proxy)</span><br><span class="line">  <span class="keyword">return</span> proxy</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="四、ref-的底层实现"><a href="#四、ref-的底层实现" class="headerlink" title="四、ref 的底层实现"></a>四、ref 的底层实现</h2><h3 id="4-1-为什么需要-ref？"><a href="#4-1-为什么需要-ref？" class="headerlink" title="4.1 为什么需要 ref？"></a>4.1 为什么需要 ref？</h3><p>原始类型（number、string、boolean）无法被 Proxy 代理，所以 Vue 用 <strong>ref</strong> 包装它们：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">ref</span>(<span class="params">value</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> createRef(value, <span class="literal">false</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createRef</span>(<span class="params">rawValue, shallow</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 已包装过的 ref 直接返回</span></span><br><span class="line">  <span class="keyword">if</span> (isRef(rawValue)) <span class="keyword">return</span> rawValue</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> RefImpl(rawValue, shallow)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RefImpl</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">value, __v_isShallow</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.__v_isShallow = __v_isShallow</span><br><span class="line">    <span class="built_in">this</span>.dep = <span class="literal">undefined</span> <span class="comment">// 依赖集合</span></span><br><span class="line">    <span class="built_in">this</span>.__v_isRef = <span class="literal">true</span></span><br><span class="line">    <span class="built_in">this</span>._rawValue = toRaw(value)</span><br><span class="line">    <span class="built_in">this</span>._value = toReactive(value) <span class="comment">// 如果值是对象，转为 reactive</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">get</span> <span class="title">value</span>() &#123;</span><br><span class="line">    trackRefValue(<span class="built_in">this</span>) <span class="comment">// 读取时收集依赖</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>._value</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">set</span> <span class="title">value</span>(<span class="params">newVal</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (hasChanged(toRaw(newVal), <span class="built_in">this</span>._rawValue)) &#123;</span><br><span class="line">      <span class="built_in">this</span>._rawValue = toRaw(newVal)</span><br><span class="line">      <span class="built_in">this</span>._value = toReactive(newVal)</span><br><span class="line">      triggerRefValue(<span class="built_in">this</span>) <span class="comment">// 设置时触发更新</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>关键细节</strong>：<code>toReactive</code> 会将对象类型的 ref 值自动转为 <code>reactive</code>，所以 <code>ref(&#123; count: 0 &#125;)</code> 内部实际上是一个 reactive 对象。</p>
+<h3 id="4-2-shallowRef"><a href="#4-2-shallowRef" class="headerlink" title="4.2 shallowRef"></a>4.2 shallowRef</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">shallowRef</span>(<span class="params">value</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> createRef(value, <span class="literal">true</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 与 ref 的区别：传入的对象不会被 reactive 包裹</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="五、computed-的实现"><a href="#五、computed-的实现" class="headerlink" title="五、computed 的实现"></a>五、computed 的实现</h2><p><code>computed</code> 本质是一个 <strong>惰性求值的 effect</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ComputedRefImpl</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">getter</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>._value = <span class="literal">undefined</span></span><br><span class="line">    <span class="built_in">this</span>._dirty = <span class="literal">true</span> <span class="comment">// 脏标记</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">this</span>.effect = <span class="keyword">new</span> ReactiveEffect(getter, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// 调度器：依赖变化时标记脏</span></span><br><span class="line">      <span class="keyword">if</span> (!<span class="built_in">this</span>._dirty) &#123;</span><br><span class="line">        <span class="built_in">this</span>._dirty = <span class="literal">true</span></span><br><span class="line">        triggerRefValue(<span class="built_in">this</span>) <span class="comment">// 通知 computed 的订阅者</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">get</span> <span class="title">value</span>() &#123;</span><br><span class="line">    trackRefValue(<span class="built_in">this</span>) <span class="comment">// 收集对 computed 的依赖</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">this</span>._dirty) &#123;</span><br><span class="line">      <span class="built_in">this</span>._dirty = <span class="literal">false</span></span><br><span class="line">      <span class="built_in">this</span>._value = <span class="built_in">this</span>.effect.run() <span class="comment">// 重新求值</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>._value</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>脏标记机制（_dirty）</strong>：</p>
+<ul>
+<li>首次读取时计算值，<code>_dirty = false</code></li>
+<li>依赖发生变化时，调度器将 <code>_dirty</code> 置为 <code>true</code>，但<strong>不重新求值</strong></li>
+<li>下次读取时发现 <code>_dirty === true</code>，重新计算</li>
+<li>这实现了<strong>惰性求值</strong>：只有用到 computed 时才重新计算</li>
+</ul>
+<hr>
+<h2 id="六、Vue-3-5-的响应式优化演进"><a href="#六、Vue-3-5-的响应式优化演进" class="headerlink" title="六、Vue 3.5 的响应式优化演进"></a>六、Vue 3.5 的响应式优化演进</h2><h3 id="6-1-Vue-3-0-→-3-2：基础-Proxy-实现"><a href="#6-1-Vue-3-0-→-3-2：基础-Proxy-实现" class="headerlink" title="6.1 Vue 3.0 → 3.2：基础 Proxy 实现"></a>6.1 Vue 3.0 → 3.2：基础 Proxy 实现</h3><ul>
+<li>3.0：首次引入 Proxy 响应式</li>
+<li>3.2：<code>ref</code> 解包优化、<code>defineComponent</code> 类型增强</li>
+</ul>
+<h3 id="6-2-Vue-3-3-→-3-4：响应式性能优化"><a href="#6-2-Vue-3-3-→-3-4：响应式性能优化" class="headerlink" title="6.2 Vue 3.3 → 3.4：响应式性能优化"></a>6.2 Vue 3.3 → 3.4：响应式性能优化</h3><ul>
+<li>3.3：<code>defineModel</code>、泛型组件</li>
+<li>3.4：响应式<strong>运算量减少</strong>，避免不必要的嵌套响应式转换</li>
+</ul>
+<h3 id="6-3-Vue-3-5-关键优化"><a href="#6-3-Vue-3-5-关键优化" class="headerlink" title="6.3 Vue 3.5 关键优化"></a>6.3 Vue 3.5 关键优化</h3><p><strong>1. 响应式链路追踪优化</strong></p>
+<p>3.5 优化了依赖收集的执行路径，减少了不必要的函数调用：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 3.4 及之前：每次 track 都执行完整的 Map 查找</span></span><br><span class="line"><span class="comment">// 3.5：在热点路径上做了缓存和短路判断</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">track</span>(<span class="params">target, type, key</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 3.5 新增：快速跳过没有 activeEffect 的情况</span></span><br><span class="line">  <span class="keyword">if</span> (!shouldTrack || !activeEffect) <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 3.5 优化：使用箭头函数减少闭包开销</span></span><br><span class="line">  <span class="comment">// ... 内部实现更紧凑</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>2. <code>reactive</code> 在大数据量场景的初始化性能提升</strong></p>
+<p>对大数组和深层对象做了优化，减少初始化的递归次数。</p>
+<p><strong>3. 内存占用降低</strong></p>
+<p>通过更精细的 WeakMap 管理和 dep 集合的复用，减少了整体内存占用。</p>
+<p><strong>4. watch 回调优化</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 3.5 watch 深层监听更高效</span></span><br><span class="line">watch(obj, <span class="function">(<span class="params">newVal, oldVal</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;对象变化了&#x27;</span>)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">// 3.5 内部使用更高效的遍历方式，减少深层遍历开销</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="七、实战：手写简化版响应式系统"><a href="#七、实战：手写简化版响应式系统" class="headerlink" title="七、实战：手写简化版响应式系统"></a>七、实战：手写简化版响应式系统</h2><p>结合以上知识，实现一个微型响应式系统：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// reactive.js — 微型响应式系统</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> activeEffect = <span class="literal">null</span></span><br><span class="line"><span class="keyword">const</span> targetMap = <span class="keyword">new</span> <span class="built_in">WeakMap</span>()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">reactive</span>(<span class="params">target</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> target !== <span class="string">&#x27;object&#x27;</span> || target === <span class="literal">null</span>) <span class="keyword">return</span> target</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Proxy</span>(target, &#123;</span><br><span class="line">    <span class="function"><span class="title">get</span>(<span class="params">target, key, receiver</span>)</span> &#123;</span><br><span class="line">      track(target, key)</span><br><span class="line">      <span class="keyword">const</span> value = <span class="built_in">Reflect</span>.get(target, key, receiver)</span><br><span class="line">      <span class="comment">// 深层递归</span></span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">typeof</span> value === <span class="string">&#x27;object&#x27;</span> &amp;&amp; value !== <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> reactive(value)</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> value</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="function"><span class="title">set</span>(<span class="params">target, key, value, receiver</span>)</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> oldValue = target[key]</span><br><span class="line">      <span class="keyword">const</span> result = <span class="built_in">Reflect</span>.set(target, key, value, receiver)</span><br><span class="line">      <span class="keyword">if</span> (oldValue !== value) &#123;</span><br><span class="line">        trigger(target, key)</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> result</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">track</span>(<span class="params">target, key</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!activeEffect) <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> depsMap = targetMap.get(target)</span><br><span class="line">  <span class="keyword">if</span> (!depsMap) targetMap.set(target, (depsMap = <span class="keyword">new</span> <span class="built_in">Map</span>()))</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> dep = depsMap.get(key)</span><br><span class="line">  <span class="keyword">if</span> (!dep) depsMap.set(key, (dep = <span class="keyword">new</span> <span class="built_in">Set</span>()))</span><br><span class="line"></span><br><span class="line">  dep.add(activeEffect)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">trigger</span>(<span class="params">target, key</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> depsMap = targetMap.get(target)</span><br><span class="line">  <span class="keyword">if</span> (!depsMap) <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> dep = depsMap.get(key)</span><br><span class="line">  <span class="keyword">if</span> (dep) &#123;</span><br><span class="line">    dep.forEach(<span class="function"><span class="params">effect</span> =&gt;</span> effect())</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">watchEffect</span>(<span class="params">fn</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> effect = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    activeEffect = effect</span><br><span class="line">    fn()</span><br><span class="line">    activeEffect = <span class="literal">null</span></span><br><span class="line">  &#125;</span><br><span class="line">  effect()</span><br><span class="line">  <span class="keyword">return</span> <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 清理</span></span><br><span class="line">    targetMap.forEach(<span class="function"><span class="params">depsMap</span> =&gt;</span> &#123;</span><br><span class="line">      depsMap.forEach(<span class="function"><span class="params">dep</span> =&gt;</span> dep.delete(effect))</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用示例</span></span><br><span class="line"><span class="keyword">const</span> state = reactive(&#123; <span class="attr">count</span>: <span class="number">0</span>, <span class="attr">name</span>: <span class="string">&#x27;Vue&#x27;</span> &#125;)</span><br><span class="line"></span><br><span class="line">watchEffect(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`count: <span class="subst">$&#123;state.count&#125;</span>`</span>)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">// 输出: count: 0</span></span><br><span class="line"></span><br><span class="line">state.count++  <span class="comment">// 输出: count: 1</span></span><br><span class="line">state.name = <span class="string">&#x27;Vue 3.5&#x27;</span>  <span class="comment">// 不触发（未读取 name）</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
+<li><strong>Vue 3 响应式核心</strong>是 <code>Proxy + Reflect + WeakMap</code> 三层依赖追踪结构</li>
+<li><strong>reactive</strong> 处理对象，按需深层递归；<strong>ref</strong> 包装原始类型，内部用 <code>toReactive</code> 统一</li>
+<li><strong>computed</strong> 基于脏标记实现惰性求值，只有被读取时才重新计算</li>
+<li><strong>Vue 3.5</strong> 在响应式链路追踪、大数据量初始化和内存占用上做了优化</li>
+<li>理解响应式原理能帮助写出更高效的 Vue 代码，避免常见的响应式丢失陷阱</li>
+</ol>
+<blockquote>
+<p>建议阅读 Vue 3.5 源码入口 <code>packages/reactivity/src/</code> 深入理解。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/web-blog/2026/06/25/vue3-5-reactivity-deep-dive/">Vue 3.5 响应式原理深度剖析：从源码看响应式演进</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a></p>
+  <p><span>发布时间:</span>2026年06月25日 - 00:06</p>
+  <p><span>最后更新:</span>2026年06月25日 - 15:06</p>
+  <p><span>原始链接:</span><a href="/web-blog/2026/06/25/vue3-5-reactivity-deep-dive/" title="Vue 3.5 响应式原理深度剖析：从源码看响应式演进">https://lc19990308.github.io/web-blog/2026/06/25/vue3-5-reactivity-deep-dive/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://lc19990308.github.io/web-blog/2026/06/25/vue3-5-reactivity-deep-dive/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+    });
+    });  
+</script>
+
+      
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>LC
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://lc19990308.github.io/web-blog/2026/06/25/vue3-5-reactivity-deep-dive/" title="Vue 3.5 响应式原理深度剖析：从源码看响应式演进">https://lc19990308.github.io/web-blog/2026/06/25/vue3-5-reactivity-deep-dive/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/web-blog/tags/JavaScript/" ****><i class="fa fa-tag"></i> JavaScript</a>
+              <a href="/web-blog/tags/vue3/" ****><i class="fa fa-tag"></i> vue3</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/06/25/vite-plugin-development-practice/" rel="prev" title="Vite 6 插件开发实战：从 Loader 到 HMR 自定义">
+      <i class="fa fa-chevron-left"></i> Vite 6 插件开发实战：从 Loader 到 HMR 自定义
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/06/25/web-performance-api-guide/" rel="next" title="Web 性能 API 完全指南：Performance Observer、LCP、CLS、INP 实战">
+      Web 性能 API 完全指南：Performance Observer、LCP、CLS、INP 实战 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%93%8D%E5%BA%94%E5%BC%8F%E6%A0%B8%E5%BF%83%EF%BC%9AProxy-Reflect"><span class="nav-number">2.</span> <span class="nav-text">一、响应式核心：Proxy + Reflect</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E5%9F%BA%E7%A1%80%E5%8E%9F%E7%90%86"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 基础原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-Proxy-%E7%9A%84%E5%B1%80%E9%99%90%E6%80%A7"><span class="nav-number">2.2.</span> <span class="nav-text">1.2 Proxy 的局限性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E4%BE%9D%E8%B5%96%E6%94%B6%E9%9B%86%E7%B3%BB%E7%BB%9F%EF%BC%9Atrack-%E4%B8%8E-trigger"><span class="nav-number">3.</span> <span class="nav-text">二、依赖收集系统：track 与 trigger</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E4%B8%89%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 三层数据结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-effect-%E7%9A%84-cleanup-%E6%9C%BA%E5%88%B6"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 effect 的 cleanup 机制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81reactive-%E5%AE%9E%E7%8E%B0%E7%BB%86%E8%8A%82"><span class="nav-number">4.</span> <span class="nav-text">三、reactive 实现细节</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E6%B7%B1%E5%B1%82%E5%93%8D%E5%BA%94%E5%BC%8F"><span class="nav-number">4.1.</span> <span class="nav-text">3.1 深层响应式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-reactive-%E7%9A%84%E7%BC%93%E5%AD%98"><span class="nav-number">4.2.</span> <span class="nav-text">3.2 reactive 的缓存</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81ref-%E7%9A%84%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0"><span class="nav-number">5.</span> <span class="nav-text">四、ref 的底层实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81-ref%EF%BC%9F"><span class="nav-number">5.1.</span> <span class="nav-text">4.1 为什么需要 ref？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-shallowRef"><span class="nav-number">5.2.</span> <span class="nav-text">4.2 shallowRef</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81computed-%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">6.</span> <span class="nav-text">五、computed 的实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81Vue-3-5-%E7%9A%84%E5%93%8D%E5%BA%94%E5%BC%8F%E4%BC%98%E5%8C%96%E6%BC%94%E8%BF%9B"><span class="nav-number">7.</span> <span class="nav-text">六、Vue 3.5 的响应式优化演进</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-Vue-3-0-%E2%86%92-3-2%EF%BC%9A%E5%9F%BA%E7%A1%80-Proxy-%E5%AE%9E%E7%8E%B0"><span class="nav-number">7.1.</span> <span class="nav-text">6.1 Vue 3.0 → 3.2：基础 Proxy 实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-Vue-3-3-%E2%86%92-3-4%EF%BC%9A%E5%93%8D%E5%BA%94%E5%BC%8F%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="nav-number">7.2.</span> <span class="nav-text">6.2 Vue 3.3 → 3.4：响应式性能优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-Vue-3-5-%E5%85%B3%E9%94%AE%E4%BC%98%E5%8C%96"><span class="nav-number">7.3.</span> <span class="nav-text">6.3 Vue 3.5 关键优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E5%AE%9E%E6%88%98%EF%BC%9A%E6%89%8B%E5%86%99%E7%AE%80%E5%8C%96%E7%89%88%E5%93%8D%E5%BA%94%E5%BC%8F%E7%B3%BB%E7%BB%9F"><span class="nav-number">8.</span> <span class="nav-text">七、实战：手写简化版响应式系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">9.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="LC"
+      src="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+  <p class="site-author-name" itemprop="name">LC</p>
+  <div class="site-description" itemprop="description">专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/web-blog/archives/">
+        
+          <span class="site-state-item-count">110</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/web-blog/categories/">
+          
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/web-blog/tags/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button motion-element"><i class="fa fa-comment"></i>
+    Chat
+  </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lc19990308/web-blog" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lc19990308&#x2F;web-blog" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:jarridaddison4@gmail.com" title="E-Mail → mailto:jarridaddison4@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/web-blog/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=441491828&auto=1&height=66"></iframe>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LC</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>-->
+<div class="powered-by">
+  <i class="fa fa-user-md"></i>
+  <span id="busuanzi_container_site_pv">
+    本站访问量:<span id="busuanzi_value_site_pv"></span>次
+  </span>
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv">
+    本站总访客量：<span id="busuanzi_value_site_uv"></span>人
+  </span>
+</div>
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共166.3k字</span>
+</div>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/web-blog/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/web-blog/js/utils.js"></script>
+
+<script src="/web-blog/js/motion.js"></script>
+
+
+<script src="/web-blog/js/schemes/pisces.js"></script>
+
+
+<script src="/web-blog/js/next-boot.js"></script>
+
+<script src="/web-blog/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/web-blog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+</body>
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</html>

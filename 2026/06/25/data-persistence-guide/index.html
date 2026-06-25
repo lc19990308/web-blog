@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/web-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/web-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/web-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/web-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/web-blog/css/main.css">
+
+
+<link rel="stylesheet" href="/web-blog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/web-blog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/web-blog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lc19990308.github.io","root":"/web-blog/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="系统对比浏览器端数据持久化方案，从 localStorage 到 IndexedDB，再到 SQLite&#x2F;WASM，涵盖 API 使用、性能对比和选型建议">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端数据持久化方案：IndexedDB、localForage 与 SQLite&#x2F;WASM">
+<meta property="og:url" content="https://lc19990308.github.io/web-blog/2026/06/25/data-persistence-guide/index.html">
+<meta property="og:site_name" content="前端技术笔记">
+<meta property="og:description" content="系统对比浏览器端数据持久化方案，从 localStorage 到 IndexedDB，再到 SQLite&#x2F;WASM，涵盖 API 使用、性能对比和选型建议">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-25T07:16:11.675Z">
+<meta property="article:author" content="LC">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="架构">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://lc19990308.github.io/web-blog/2026/06/25/data-persistence-guide/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>前端数据持久化方案：IndexedDB、localForage 与 SQLite/WASM | 前端技术笔记</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/web-blog/atom.xml" title="前端技术笔记" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband">
+    <a target="_blank" rel="noopener" href="https://gitee.com/yaru722" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    </div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/web-blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">前端技术笔记</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录前端路上的思考与实践</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/web-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/web-blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/web-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/web-blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/web-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/lc19990308" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/25/data-persistence-guide/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+      <meta itemprop="name" content="LC">
+      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端技术笔记">
+    </span>
+      <header class="post-header">
+      
+        <h1 class="post-title" itemprop="name headline">
+          前端数据持久化方案：IndexedDB、localForage 与 SQLite/WASM
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-06-25 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-25T00:00:00+08:00">2026-06-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/web-blog/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">系统对比浏览器端数据持久化方案，从 localStorage 到 IndexedDB，再到 SQLite/WASM，涵盖 API 使用、性能对比和选型建议</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前端应用的复杂度越来越高，需要本地存储的数据也越来越多：</p>
+<ul>
+<li>离线缓存用户的操作草稿</li>
+<li>客户端全文搜索索引</li>
+<li>缓存复杂的表单状态</li>
+<li>图片等大文件的本地存储</li>
+<li>PWA 离线应用的完整数据</li>
+</ul>
+<p>浏览器提供了多种存储方案，但各有适用场景：</p>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>容量</th>
+<th>同步/异步</th>
+<th>查询能力</th>
+<th>兼容性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>localStorage</strong></td>
+<td>~5MB</td>
+<td>同步</td>
+<td>无</td>
+<td>全部</td>
+</tr>
+<tr>
+<td><strong>sessionStorage</strong></td>
+<td>~5MB</td>
+<td>同步</td>
+<td>无</td>
+<td>全部</td>
+</tr>
+<tr>
+<td><strong>Cookie</strong></td>
+<td>~4KB</td>
+<td>同步</td>
+<td>无</td>
+<td>全部</td>
+</tr>
+<tr>
+<td><strong>IndexedDB</strong></td>
+<td>几乎无限</td>
+<td>异步</td>
+<td>索引、游标、范围查询</td>
+<td>全部</td>
+</tr>
+<tr>
+<td><strong>Cache API</strong></td>
+<td>视磁盘</td>
+<td>异步</td>
+<td>按请求匹配</td>
+<td>部分</td>
+</tr>
+<tr>
+<td><strong>OPFS</strong></td>
+<td>视磁盘</td>
+<td>异步</td>
+<td>文件系统操作</td>
+<td>Chromium</td>
+</tr>
+<tr>
+<td><strong>SQLite/WASM</strong></td>
+<td>视磁盘</td>
+<td>异步</td>
+<td>完整 SQL</td>
+<td>大部分</td>
+</tr>
+</tbody></table>
+<p>本文重点讲解 <strong>IndexedDB</strong> 及其封装库 <strong>localForage</strong>，以及新兴的 <strong>SQLite/WASM</strong> 方案。</p>
+<hr>
+<h2 id="一、localStorage-的极限"><a href="#一、localStorage-的极限" class="headerlink" title="一、localStorage 的极限"></a>一、localStorage 的极限</h2><h3 id="1-1-现状分析"><a href="#1-1-现状分析" class="headerlink" title="1.1 现状分析"></a>1.1 现状分析</h3><p>localStorage 虽然简单，但限制明显：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 优点：简单</span></span><br><span class="line"><span class="built_in">localStorage</span>.setItem(<span class="string">&#x27;theme&#x27;</span>, <span class="string">&#x27;dark&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> theme = <span class="built_in">localStorage</span>.getItem(<span class="string">&#x27;theme&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 缺点1：容量限制（5MB，部分浏览器更少）</span></span><br><span class="line"><span class="comment">// 缺点2：同步阻塞主线程</span></span><br><span class="line"><span class="comment">// 缺点3：只能存字符串</span></span><br><span class="line"><span class="built_in">localStorage</span>.setItem(<span class="string">&#x27;user&#x27;</span>, <span class="built_in">JSON</span>.stringify(&#123; <span class="attr">name</span>: <span class="string">&#x27;LC&#x27;</span>, <span class="attr">roles</span>: [<span class="string">&#x27;admin&#x27;</span>] &#125;))</span><br><span class="line"></span><br><span class="line"><span class="comment">// 缺点4：不能查询</span></span><br><span class="line"><span class="comment">// 想找到所有 role 为 admin 的用户？只能遍历全量数据</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">findByRole</span>(<span class="params">role</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> results = []</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="built_in">localStorage</span>.length; i++) &#123;</span><br><span class="line">    <span class="keyword">const</span> key = <span class="built_in">localStorage</span>.key(i)</span><br><span class="line">    <span class="keyword">if</span> (key.startsWith(<span class="string">&#x27;user_&#x27;</span>)) &#123;</span><br><span class="line">      <span class="keyword">const</span> user = <span class="built_in">JSON</span>.parse(<span class="built_in">localStorage</span>.getItem(key))</span><br><span class="line">      <span class="keyword">if</span> (user.roles.includes(role)) results.push(user)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> results</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-适用场景"><a href="#1-2-适用场景" class="headerlink" title="1.2 适用场景"></a>1.2 适用场景</h3><ul>
+<li>✅ 简单配置项（主题、语言偏好）</li>
+<li>✅ 非敏感的小数据</li>
+<li>❌ 大数据（超过 5MB 的缓存）</li>
+<li>❌ 结构化数据（需要查询）</li>
+</ul>
+<hr>
+<h2 id="二、IndexedDB-基础"><a href="#二、IndexedDB-基础" class="headerlink" title="二、IndexedDB 基础"></a>二、IndexedDB 基础</h2><h3 id="2-1-核心概念"><a href="#2-1-核心概念" class="headerlink" title="2.1 核心概念"></a>2.1 核心概念</h3><p>IndexedDB 是一个<strong>浏览器内置的 NoSQL 数据库</strong>：</p>
+<ul>
+<li><strong>Database</strong> — 数据库，每个域名可建多个</li>
+<li><strong>Object Store</strong> — 类似表（table），存对象</li>
+<li><strong>Index</strong> — 索引，加速查询</li>
+<li><strong>Transaction</strong> — 事务，保证数据一致性</li>
+<li><strong>Cursor</strong> — 游标，遍历数据</li>
+</ul>
+<h3 id="2-2-打开数据库"><a href="#2-2-打开数据库" class="headerlink" title="2.2 打开数据库"></a>2.2 打开数据库</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">openDB</span>(<span class="params">dbName, version = <span class="number">1</span></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> request = indexedDB.open(dbName, version)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 首次创建或版本升级时触发</span></span><br><span class="line">    request.onupgradeneeded = <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> db = event.target.result</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 创建对象存储（表）</span></span><br><span class="line">      <span class="keyword">if</span> (!db.objectStoreNames.contains(<span class="string">&#x27;users&#x27;</span>)) &#123;</span><br><span class="line">        <span class="keyword">const</span> store = db.createObjectStore(<span class="string">&#x27;users&#x27;</span>, &#123;</span><br><span class="line">          <span class="attr">keyPath</span>: <span class="string">&#x27;id&#x27;</span>,        <span class="comment">// 主键字段</span></span><br><span class="line">          <span class="attr">autoIncrement</span>: <span class="literal">false</span>,  <span class="comment">// 是否自增</span></span><br><span class="line">        &#125;)</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建索引</span></span><br><span class="line">        store.createIndex(<span class="string">&#x27;email&#x27;</span>, <span class="string">&#x27;email&#x27;</span>, &#123; <span class="attr">unique</span>: <span class="literal">true</span> &#125;)</span><br><span class="line">        store.createIndex(<span class="string">&#x27;role&#x27;</span>, <span class="string">&#x27;role&#x27;</span>, &#123; <span class="attr">unique</span>: <span class="literal">false</span> &#125;)</span><br><span class="line">        store.createIndex(<span class="string">&#x27;name_age&#x27;</span>, [<span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;age&#x27;</span>], &#123; <span class="attr">unique</span>: <span class="literal">false</span> &#125;)</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (!db.objectStoreNames.contains(<span class="string">&#x27;posts&#x27;</span>)) &#123;</span><br><span class="line">        <span class="keyword">const</span> store = db.createObjectStore(<span class="string">&#x27;posts&#x27;</span>, &#123;</span><br><span class="line">          <span class="attr">keyPath</span>: <span class="string">&#x27;id&#x27;</span>,</span><br><span class="line">          <span class="attr">autoIncrement</span>: <span class="literal">true</span>,</span><br><span class="line">        &#125;)</span><br><span class="line">        store.createIndex(<span class="string">&#x27;authorId&#x27;</span>, <span class="string">&#x27;authorId&#x27;</span>, &#123; <span class="attr">unique</span>: <span class="literal">false</span> &#125;)</span><br><span class="line">        store.createIndex(<span class="string">&#x27;createdAt&#x27;</span>, <span class="string">&#x27;createdAt&#x27;</span>, &#123; <span class="attr">unique</span>: <span class="literal">false</span> &#125;)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    request.onsuccess = <span class="function">(<span class="params">event</span>) =&gt;</span> resolve(event.target.result)</span><br><span class="line">    request.onerror = <span class="function">(<span class="params">event</span>) =&gt;</span> reject(event.target.error)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-CRUD-操作"><a href="#2-3-CRUD-操作" class="headerlink" title="2.3 CRUD 操作"></a>2.3 CRUD 操作</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 增</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">addUser</span>(<span class="params">db, user</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> tx = db.transaction(<span class="string">&#x27;users&#x27;</span>, <span class="string">&#x27;readwrite&#x27;</span>) <span class="comment">// 读写事务</span></span><br><span class="line">  <span class="keyword">const</span> store = tx.objectStore(<span class="string">&#x27;users&#x27;</span>)</span><br><span class="line">  store.add(user) <span class="comment">// 如果主键已存在会报错，用 put 会覆盖</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    tx.oncomplete = <span class="function">() =&gt;</span> resolve()</span><br><span class="line">    tx.onerror = <span class="function">(<span class="params">e</span>) =&gt;</span> reject(e.target.error)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 查（主键）</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">getUser</span>(<span class="params">db, id</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> tx = db.transaction(<span class="string">&#x27;users&#x27;</span>, <span class="string">&#x27;readonly&#x27;</span>)</span><br><span class="line">  <span class="keyword">const</span> store = tx.objectStore(<span class="string">&#x27;users&#x27;</span>)</span><br><span class="line">  <span class="keyword">const</span> request = store.get(id)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">    request.onsuccess = <span class="function">() =&gt;</span> resolve(request.result)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 查（索引）</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">getUsersByRole</span>(<span class="params">db, role</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> tx = db.transaction(<span class="string">&#x27;users&#x27;</span>, <span class="string">&#x27;readonly&#x27;</span>)</span><br><span class="line">  <span class="keyword">const</span> store = tx.objectStore(<span class="string">&#x27;users&#x27;</span>)</span><br><span class="line">  <span class="keyword">const</span> index = store.index(<span class="string">&#x27;role&#x27;</span>)</span><br><span class="line">  <span class="keyword">const</span> request = index.getAll(role) <span class="comment">// 按索引值查询所有匹配</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">    request.onsuccess = <span class="function">() =&gt;</span> resolve(request.result)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 范围查询</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">getUsersByAgeRange</span>(<span class="params">db, minAge, maxAge</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> tx = db.transaction(<span class="string">&#x27;users&#x27;</span>, <span class="string">&#x27;readonly&#x27;</span>)</span><br><span class="line">  <span class="keyword">const</span> store = tx.objectStore(<span class="string">&#x27;users&#x27;</span>)</span><br><span class="line">  <span class="keyword">const</span> index = store.index(<span class="string">&#x27;name_age&#x27;</span>)</span><br><span class="line">  <span class="keyword">const</span> range = IDBKeyRange.bound(</span><br><span class="line">    [<span class="string">&#x27;&#x27;</span>, minAge],    <span class="comment">// 下界</span></span><br><span class="line">    [<span class="string">&#x27;\uffff&#x27;</span>, maxAge], <span class="comment">// 上界</span></span><br><span class="line">  )</span><br><span class="line">  <span class="keyword">const</span> request = index.openCursor(range)</span><br><span class="line">  <span class="keyword">const</span> results = []</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">    request.onsuccess = <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> cursor = event.target.result</span><br><span class="line">      <span class="keyword">if</span> (cursor) &#123;</span><br><span class="line">        results.push(cursor.value)</span><br><span class="line">        cursor.continue()</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        resolve(results)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 改</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">updateUser</span>(<span class="params">db, user</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> tx = db.transaction(<span class="string">&#x27;users&#x27;</span>, <span class="string">&#x27;readwrite&#x27;</span>)</span><br><span class="line">  <span class="keyword">const</span> store = tx.objectStore(<span class="string">&#x27;users&#x27;</span>)</span><br><span class="line">  store.put(user) <span class="comment">// put 覆盖，add 会报错</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    tx.oncomplete = <span class="function">() =&gt;</span> resolve()</span><br><span class="line">    tx.onerror = <span class="function">(<span class="params">e</span>) =&gt;</span> reject(e.target.error)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 删</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">deleteUser</span>(<span class="params">db, id</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> tx = db.transaction(<span class="string">&#x27;users&#x27;</span>, <span class="string">&#x27;readwrite&#x27;</span>)</span><br><span class="line">  <span class="keyword">const</span> store = tx.objectStore(<span class="string">&#x27;users&#x27;</span>)</span><br><span class="line">  store.delete(id)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">    tx.oncomplete = <span class="function">() =&gt;</span> resolve()</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-4-批量操作"><a href="#2-4-批量操作" class="headerlink" title="2.4 批量操作"></a>2.4 批量操作</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">batchSavePosts</span>(<span class="params">db, posts</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> tx = db.transaction(<span class="string">&#x27;posts&#x27;</span>, <span class="string">&#x27;readwrite&#x27;</span>)</span><br><span class="line">  <span class="keyword">const</span> store = tx.objectStore(<span class="string">&#x27;posts&#x27;</span>)</span><br><span class="line"></span><br><span class="line">  posts.forEach(<span class="function">(<span class="params">post</span>) =&gt;</span> store.put(post))</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    tx.oncomplete = <span class="function">() =&gt;</span> resolve()</span><br><span class="line">    tx.onerror = <span class="function">(<span class="params">e</span>) =&gt;</span> reject(e.target.error)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="三、localForage-—-IndexedDB-的优雅封装"><a href="#三、localForage-—-IndexedDB-的优雅封装" class="headerlink" title="三、localForage — IndexedDB 的优雅封装"></a>三、localForage — IndexedDB 的优雅封装</h2><p>原生 IndexedDB API 的<strong>回调嵌套和复杂度</strong>劝退了很多人。localForage 提供了 localStorage 风格的 API，但底层使用 IndexedDB：</p>
+<h3 id="3-1-安装"><a href="#3-1-安装" class="headerlink" title="3.1 安装"></a>3.1 安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i localforage</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-基础使用"><a href="#3-2-基础使用" class="headerlink" title="3.2 基础使用"></a>3.2 基础使用</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> localforage <span class="keyword">from</span> <span class="string">&#x27;localforage&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 配置实例</span></span><br><span class="line"><span class="keyword">const</span> userStore = localforage.createInstance(&#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;myApp&#x27;</span>,</span><br><span class="line">  <span class="attr">storeName</span>: <span class="string">&#x27;users&#x27;</span>,     <span class="comment">// 相当于表名</span></span><br><span class="line">  <span class="attr">driver</span>: [               <span class="comment">// 驱动优先级：IndexedDB &gt; WebSQL &gt; localStorage</span></span><br><span class="line">    localforage.INDEXEDDB,</span><br><span class="line">    localforage.WEBSQL,</span><br><span class="line">    localforage.LOCALSTORAGE,</span><br><span class="line">  ],</span><br><span class="line">  <span class="attr">version</span>: <span class="number">1.0</span>,</span><br><span class="line">  <span class="attr">description</span>: <span class="string">&#x27;用户数据缓存&#x27;</span>,</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// CURD — 完全像 localStorage 一样</span></span><br><span class="line"><span class="keyword">await</span> userStore.setItem(<span class="string">&#x27;user_1&#x27;</span>, &#123; <span class="attr">id</span>: <span class="number">1</span>, <span class="attr">name</span>: <span class="string">&#x27;LC&#x27;</span>, <span class="attr">roles</span>: [<span class="string">&#x27;admin&#x27;</span>] &#125;)</span><br><span class="line"><span class="keyword">const</span> user = <span class="keyword">await</span> userStore.getItem(<span class="string">&#x27;user_1&#x27;</span>)</span><br><span class="line"><span class="keyword">await</span> userStore.removeItem(<span class="string">&#x27;user_1&#x27;</span>)</span><br><span class="line"><span class="keyword">await</span> userStore.clear()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 遍历所有键</span></span><br><span class="line"><span class="keyword">const</span> keys = <span class="keyword">await</span> userStore.keys()</span><br><span class="line"><span class="keyword">const</span> values = <span class="keyword">await</span> <span class="built_in">Promise</span>.all(</span><br><span class="line">  keys.map(<span class="function">(<span class="params">key</span>) =&gt;</span> userStore.getItem(key))</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取存储大小</span></span><br><span class="line"><span class="keyword">const</span> size = <span class="keyword">await</span> localforage.getSerializer().then(<span class="function"><span class="params">serializer</span> =&gt;</span> serializer.serialize())</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">`存储大小: <span class="subst">$&#123;(size.length / <span class="number">1024</span>).toFixed(<span class="number">1</span>)&#125;</span> KB`</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-配置多个-Store"><a href="#3-3-配置多个-Store" class="headerlink" title="3.3 配置多个 Store"></a>3.3 配置多个 Store</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> stores = &#123;</span><br><span class="line">  <span class="attr">users</span>: localforage.createInstance(&#123; <span class="attr">name</span>: <span class="string">&#x27;myApp&#x27;</span>, <span class="attr">storeName</span>: <span class="string">&#x27;users&#x27;</span> &#125;),</span><br><span class="line">  <span class="attr">posts</span>: localforage.createInstance(&#123; <span class="attr">name</span>: <span class="string">&#x27;myApp&#x27;</span>, <span class="attr">storeName</span>: <span class="string">&#x27;posts&#x27;</span> &#125;),</span><br><span class="line">  <span class="attr">drafts</span>: localforage.createInstance(&#123; <span class="attr">name</span>: <span class="string">&#x27;myApp&#x27;</span>, <span class="attr">storeName</span>: <span class="string">&#x27;drafts&#x27;</span> &#125;),</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用</span></span><br><span class="line"><span class="keyword">await</span> stores.users.setItem(<span class="string">&#x27;user_1&#x27;</span>, userData)</span><br><span class="line"><span class="keyword">const</span> drafts = <span class="keyword">await</span> stores.drafts.getItem(<span class="string">&#x27;draft_blog_001&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-4-封装业务缓存"><a href="#3-4-封装业务缓存" class="headerlink" title="3.4 封装业务缓存"></a>3.4 封装业务缓存</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// cache.js — 通用缓存模块</span></span><br><span class="line"><span class="keyword">import</span> localforage <span class="keyword">from</span> <span class="string">&#x27;localforage&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> cache = localforage.createInstance(&#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;appCache&#x27;</span>,</span><br><span class="line">  <span class="attr">storeName</span>: <span class="string">&#x27;apiCache&#x27;</span>,</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> DEFAULT_TTL = <span class="number">5</span> * <span class="number">60</span> * <span class="number">1000</span> <span class="comment">// 5分钟</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> apiCache = &#123;</span><br><span class="line">  <span class="keyword">async</span> <span class="function"><span class="title">get</span>(<span class="params">key</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> entry = <span class="keyword">await</span> cache.getItem(key)</span><br><span class="line">    <span class="keyword">if</span> (!entry) <span class="keyword">return</span> <span class="literal">null</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 检查是否过期</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">Date</span>.now() - entry.timestamp &gt; (entry.ttl || DEFAULT_TTL)) &#123;</span><br><span class="line">      <span class="keyword">await</span> cache.removeItem(key)</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">null</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> entry.data</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  <span class="keyword">async</span> <span class="function"><span class="title">set</span>(<span class="params">key, data, ttl</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">await</span> cache.setItem(key, &#123;</span><br><span class="line">      data,</span><br><span class="line">      <span class="attr">timestamp</span>: <span class="built_in">Date</span>.now(),</span><br><span class="line">      ttl,</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  <span class="keyword">async</span> <span class="function"><span class="title">remove</span>(<span class="params">key</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">await</span> cache.removeItem(key)</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  <span class="keyword">async</span> <span class="function"><span class="title">clear</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="keyword">await</span> cache.clear()</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  <span class="keyword">async</span> <span class="function"><span class="title">getCacheSize</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> serializer = <span class="keyword">await</span> localforage.getSerializer()</span><br><span class="line">    <span class="keyword">const</span> serialized = <span class="keyword">await</span> serializer.serialize()</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="attr">bytes</span>: serialized.length,</span><br><span class="line">      <span class="attr">kilobytes</span>: (serialized.length / <span class="number">1024</span>).toFixed(<span class="number">1</span>),</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用</span></span><br><span class="line"><span class="keyword">const</span> data = <span class="keyword">await</span> apiCache.get(<span class="string">&#x27;api/articles&#x27;</span>)</span><br><span class="line"><span class="keyword">if</span> (data) &#123;</span><br><span class="line">  renderArticles(data)</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> fresh = <span class="keyword">await</span> fetchArticles()</span><br><span class="line">  <span class="keyword">await</span> apiCache.set(<span class="string">&#x27;api/articles&#x27;</span>, fresh, <span class="number">10</span> * <span class="number">60</span> * <span class="number">1000</span>) <span class="comment">// 10分钟过期</span></span><br><span class="line">  renderArticles(fresh)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="四、高级：IndexedDB-复杂查询封装"><a href="#四、高级：IndexedDB-复杂查询封装" class="headerlink" title="四、高级：IndexedDB 复杂查询封装"></a>四、高级：IndexedDB 复杂查询封装</h2><h3 id="4-1-通用-DAO-层"><a href="#4-1-通用-DAO-层" class="headerlink" title="4.1 通用 DAO 层"></a>4.1 通用 DAO 层</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// dao.js — 通用数据访问层</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BaseDAO</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">dbName, storeName</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.dbName = dbName</span><br><span class="line">    <span class="built_in">this</span>.storeName = storeName</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">async</span> <span class="function"><span class="title">getDB</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">this</span>.db) <span class="keyword">return</span> <span class="built_in">this</span>.db</span><br><span class="line">    <span class="built_in">this</span>.db = <span class="keyword">await</span> openDB(<span class="built_in">this</span>.dbName)</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.db</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">async</span> <span class="function"><span class="title">findById</span>(<span class="params">id</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> db = <span class="keyword">await</span> <span class="built_in">this</span>.getDB()</span><br><span class="line">    <span class="keyword">const</span> tx = db.transaction(<span class="built_in">this</span>.storeName, <span class="string">&#x27;readonly&#x27;</span>)</span><br><span class="line">    <span class="keyword">const</span> store = tx.objectStore(<span class="built_in">this</span>.storeName)</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> req = store.get(id)</span><br><span class="line">      req.onsuccess = <span class="function">() =&gt;</span> resolve(req.result)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">async</span> <span class="function"><span class="title">findByIndex</span>(<span class="params">indexName, value</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> db = <span class="keyword">await</span> <span class="built_in">this</span>.getDB()</span><br><span class="line">    <span class="keyword">const</span> tx = db.transaction(<span class="built_in">this</span>.storeName, <span class="string">&#x27;readonly&#x27;</span>)</span><br><span class="line">    <span class="keyword">const</span> store = tx.objectStore(<span class="built_in">this</span>.storeName)</span><br><span class="line">    <span class="keyword">const</span> index = store.index(indexName)</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> req = index.getAll(value)</span><br><span class="line">      req.onsuccess = <span class="function">() =&gt;</span> resolve(req.result)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">async</span> <span class="function"><span class="title">findAll</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> db = <span class="keyword">await</span> <span class="built_in">this</span>.getDB()</span><br><span class="line">    <span class="keyword">const</span> tx = db.transaction(<span class="built_in">this</span>.storeName, <span class="string">&#x27;readonly&#x27;</span>)</span><br><span class="line">    <span class="keyword">const</span> store = tx.objectStore(<span class="built_in">this</span>.storeName)</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> req = store.getAll()</span><br><span class="line">      req.onsuccess = <span class="function">() =&gt;</span> resolve(req.result)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">async</span> <span class="function"><span class="title">paginate</span>(<span class="params">page, pageSize = <span class="number">20</span>, orderBy = <span class="string">&#x27;id&#x27;</span></span>)</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> db = <span class="keyword">await</span> <span class="built_in">this</span>.getDB()</span><br><span class="line">    <span class="keyword">const</span> tx = db.transaction(<span class="built_in">this</span>.storeName, <span class="string">&#x27;readonly&#x27;</span>)</span><br><span class="line">    <span class="keyword">const</span> store = tx.objectStore(<span class="built_in">this</span>.storeName)</span><br><span class="line">    <span class="keyword">const</span> index = store.index(orderBy)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> results = []</span><br><span class="line">      <span class="keyword">let</span> count = <span class="number">0</span></span><br><span class="line">      <span class="keyword">const</span> skip = (page - <span class="number">1</span>) * pageSize</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 反向遍历</span></span><br><span class="line">      <span class="keyword">const</span> req = index.openCursor(<span class="literal">null</span>, <span class="string">&#x27;prev&#x27;</span>)</span><br><span class="line">      req.onsuccess = <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> cursor = event.target.result</span><br><span class="line">        <span class="keyword">if</span> (!cursor) &#123;</span><br><span class="line">          resolve(&#123; <span class="attr">data</span>: results.reverse(), page, pageSize &#125;)</span><br><span class="line">          <span class="keyword">return</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        count++</span><br><span class="line">        <span class="keyword">if</span> (count &gt; skip &amp;&amp; results.length &lt; pageSize) &#123;</span><br><span class="line">          results.push(cursor.value)</span><br><span class="line">        &#125;</span><br><span class="line">        cursor.continue()</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">async</span> <span class="function"><span class="title">count</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> db = <span class="keyword">await</span> <span class="built_in">this</span>.getDB()</span><br><span class="line">    <span class="keyword">const</span> tx = db.transaction(<span class="built_in">this</span>.storeName, <span class="string">&#x27;readonly&#x27;</span>)</span><br><span class="line">    <span class="keyword">const</span> store = tx.objectStore(<span class="built_in">this</span>.storeName)</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> req = store.count()</span><br><span class="line">      req.onsuccess = <span class="function">() =&gt;</span> resolve(req.result)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">async</span> <span class="function"><span class="title">save</span>(<span class="params">data</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> db = <span class="keyword">await</span> <span class="built_in">this</span>.getDB()</span><br><span class="line">    <span class="keyword">const</span> tx = db.transaction(<span class="built_in">this</span>.storeName, <span class="string">&#x27;readwrite&#x27;</span>)</span><br><span class="line">    <span class="keyword">const</span> store = tx.objectStore(<span class="built_in">this</span>.storeName)</span><br><span class="line">    store.put(data)</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">      tx.oncomplete = <span class="function">() =&gt;</span> resolve(data)</span><br><span class="line">      tx.onerror = <span class="function">(<span class="params">e</span>) =&gt;</span> reject(e.target.error)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">async</span> <span class="function"><span class="title">delete</span>(<span class="params">id</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> db = <span class="keyword">await</span> <span class="built_in">this</span>.getDB()</span><br><span class="line">    <span class="keyword">const</span> tx = db.transaction(<span class="built_in">this</span>.storeName, <span class="string">&#x27;readwrite&#x27;</span>)</span><br><span class="line">    <span class="keyword">const</span> store = tx.objectStore(<span class="built_in">this</span>.storeName)</span><br><span class="line">    store.delete(id)</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">      tx.oncomplete = <span class="function">() =&gt;</span> resolve()</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用</span></span><br><span class="line"><span class="keyword">const</span> userDAO = <span class="keyword">new</span> BaseDAO(<span class="string">&#x27;myAppDB&#x27;</span>, <span class="string">&#x27;users&#x27;</span>)</span><br><span class="line"><span class="keyword">await</span> userDAO.save(&#123; <span class="attr">id</span>: <span class="number">1</span>, <span class="attr">name</span>: <span class="string">&#x27;LC&#x27;</span>, <span class="attr">role</span>: <span class="string">&#x27;admin&#x27;</span> &#125;)</span><br><span class="line"><span class="keyword">const</span> admins = <span class="keyword">await</span> userDAO.findByIndex(<span class="string">&#x27;role&#x27;</span>, <span class="string">&#x27;admin&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> &#123; data, page &#125; = <span class="keyword">await</span> userDAO.paginate(<span class="number">1</span>, <span class="number">10</span>, <span class="string">&#x27;createdAt&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="五、SQLite-WASM-在浏览器中的应用"><a href="#五、SQLite-WASM-在浏览器中的应用" class="headerlink" title="五、SQLite/WASM 在浏览器中的应用"></a>五、SQLite/WASM 在浏览器中的应用</h2><h3 id="5-1-什么是-SQLite-WASM？"><a href="#5-1-什么是-SQLite-WASM？" class="headerlink" title="5.1 什么是 SQLite/WASM？"></a>5.1 什么是 SQLite/WASM？</h3><p>SQLite 通过 WebAssembly 编译运行在浏览器中，让前端可以用 SQL 操作本地数据库：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装 @sqlite.org/sqlite-wasm 或 sql.js</span></span><br><span class="line">npm i sql.js</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2-使用-sql-js"><a href="#5-2-使用-sql-js" class="headerlink" title="5.2 使用 sql.js"></a>5.2 使用 sql.js</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> initSqlJs <span class="keyword">from</span> <span class="string">&#x27;sql.js&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">initDB</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> SQL = <span class="keyword">await</span> initSqlJs(&#123;</span><br><span class="line">    <span class="attr">locateFile</span>: <span class="function">(<span class="params">file</span>) =&gt;</span> <span class="string">`https://sql.js.org/dist/<span class="subst">$&#123;file&#125;</span>`</span>,</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 从 localStorage 恢复上次的数据库</span></span><br><span class="line">  <span class="keyword">const</span> saved = <span class="built_in">localStorage</span>.getItem(<span class="string">&#x27;sqlite_db&#x27;</span>)</span><br><span class="line">  <span class="keyword">const</span> db = saved</span><br><span class="line">    ? <span class="keyword">new</span> SQL.Database(<span class="keyword">new</span> <span class="built_in">Uint8Array</span>(<span class="built_in">JSON</span>.parse(saved)))</span><br><span class="line">    : <span class="keyword">new</span> SQL.Database()</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> db</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">saveDB</span>(<span class="params">db</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 持久化到 localStorage（或 IndexedDB）</span></span><br><span class="line">  <span class="keyword">const</span> data = db.export()</span><br><span class="line">  <span class="keyword">const</span> buffer = Buffer.from(data)</span><br><span class="line">  <span class="built_in">localStorage</span>.setItem(<span class="string">&#x27;sqlite_db&#x27;</span>, <span class="built_in">JSON</span>.stringify([...buffer]))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">main</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> db = <span class="keyword">await</span> initDB()</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 建表</span></span><br><span class="line">  db.run(<span class="string">`</span></span><br><span class="line"><span class="string">    CREATE TABLE IF NOT EXISTS articles (</span></span><br><span class="line"><span class="string">      id INTEGER PRIMARY KEY AUTOINCREMENT,</span></span><br><span class="line"><span class="string">      title TEXT NOT NULL,</span></span><br><span class="line"><span class="string">      content TEXT,</span></span><br><span class="line"><span class="string">      created_at DATETIME DEFAULT CURRENT_TIMESTAMP</span></span><br><span class="line"><span class="string">    )</span></span><br><span class="line"><span class="string">  `</span>)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 插入</span></span><br><span class="line">  db.run(<span class="string">&#x27;INSERT INTO articles (title, content) VALUES (?, ?)&#x27;</span>, [</span><br><span class="line">    <span class="string">&#x27;SQLite in Browser&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;用 SQL 操作浏览器数据库！&#x27;</span>,</span><br><span class="line">  ])</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 查询</span></span><br><span class="line">  <span class="keyword">const</span> result = db.exec(<span class="string">&#x27;SELECT * FROM articles ORDER BY created_at DESC&#x27;</span>)</span><br><span class="line">  <span class="built_in">console</span>.log(result[<span class="number">0</span>]?.values)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 保存</span></span><br><span class="line">  saveDB(db)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-3-SQLite-WASM-vs-IndexedDB"><a href="#5-3-SQLite-WASM-vs-IndexedDB" class="headerlink" title="5.3 SQLite/WASM vs IndexedDB"></a>5.3 SQLite/WASM vs IndexedDB</h3><table>
+<thead>
+<tr>
+<th>对比维度</th>
+<th>IndexedDB</th>
+<th>SQLite/WASM</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>查询能力</strong></td>
+<td>索引 + 游标</td>
+<td>完整 SQL（JOIN、GROUP BY、子查询）</td>
+</tr>
+<tr>
+<td><strong>学习成本</strong></td>
+<td>需要学习 NoSQL 模式</td>
+<td>会用 SQL 就行</td>
+</tr>
+<tr>
+<td><strong>性能</strong></td>
+<td>原生，性能好</td>
+<td>WASM 有额外开销</td>
+</tr>
+<tr>
+<td><strong>包体积</strong></td>
+<td>无额外引入</td>
+<td>sql.js ~1MB (WASM)</td>
+</tr>
+<tr>
+<td><strong>迁移</strong></td>
+<td>导出 JSON</td>
+<td>导出 .sqlite 文件，与其他平台兼容</td>
+</tr>
+</tbody></table>
+<h3 id="5-4-选型建议"><a href="#5-4-选型建议" class="headerlink" title="5.4 选型建议"></a>5.4 选型建议</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">需要复杂 SQL 查询</span><br><span class="line">├── 是 → SQLite/WASM（数据量 10MB+ 且需要 JOIN）</span><br><span class="line">├── 并且需要同步到服务端 → SQLite（导出 .sqlite 文件即可同步）</span><br><span class="line">└── 否 → IndexedDB + localForage（轻量、速度快）</span><br><span class="line"></span><br><span class="line">数据量大（&gt;50MB）</span><br><span class="line">├── 全文搜索 → SQLite FTS5</span><br><span class="line">├── 图片/文件 → Cache API 或 OPFS</span><br><span class="line">└── 结构化数据 → IndexedDB</span><br><span class="line"></span><br><span class="line">离线优先应用</span><br><span class="line">├── 简单数据同步 → IndexedDB</span><br><span class="line">├── 复杂 CRUD + 同步 → SQLite/WASM</span><br><span class="line">└── 纯离线应用 → PWA + Cache API + IndexedDB</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="六、实际项目中的缓存策略"><a href="#六、实际项目中的缓存策略" class="headerlink" title="六、实际项目中的缓存策略"></a>六、实际项目中的缓存策略</h2><h3 id="6-1-分层缓存架构"><a href="#6-1-分层缓存架构" class="headerlink" title="6.1 分层缓存架构"></a>6.1 分层缓存架构</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// cache-layer.js</span></span><br><span class="line"><span class="comment">// 内存 → localStorage → IndexedDB → 网络</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CacheLayer</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">options = &#123;&#125;</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.memory = <span class="keyword">new</span> <span class="built_in">Map</span>()           <span class="comment">// L1：内存缓存</span></span><br><span class="line">    <span class="built_in">this</span>.ttl = options.ttl || <span class="number">5</span> * <span class="number">60</span> * <span class="number">1000</span></span><br><span class="line">    <span class="built_in">this</span>.maxMemory = options.maxMemory || <span class="number">100</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// L2：持久化</span></span><br><span class="line">    <span class="built_in">this</span>.storage = localforage.createInstance(&#123;</span><br><span class="line">      <span class="attr">name</span>: options.dbName || <span class="string">&#x27;appCache&#x27;</span>,</span><br><span class="line">      <span class="attr">storeName</span>: options.storeName || <span class="string">&#x27;layer2&#x27;</span>,</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">async</span> <span class="function"><span class="title">get</span>(<span class="params">key</span>)</span> &#123;</span><br><span class="line">    <span class="comment">// 1. 内存缓存（最快）</span></span><br><span class="line">    <span class="keyword">const</span> memCached = <span class="built_in">this</span>.memory.get(key)</span><br><span class="line">    <span class="keyword">if</span> (memCached) &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="built_in">Date</span>.now() - memCached.timestamp &lt; <span class="built_in">this</span>.ttl) &#123;</span><br><span class="line">        <span class="keyword">return</span> memCached.data</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="built_in">this</span>.memory.delete(key)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. IndexedDB 持久缓存</span></span><br><span class="line">    <span class="keyword">const</span> persistent = <span class="keyword">await</span> <span class="built_in">this</span>.storage.getItem(key)</span><br><span class="line">    <span class="keyword">if</span> (persistent) &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="built_in">Date</span>.now() - persistent.timestamp &lt; (persistent.ttl || <span class="built_in">this</span>.ttl)) &#123;</span><br><span class="line">        <span class="comment">// 写回内存</span></span><br><span class="line">        <span class="built_in">this</span>.setMemory(key, persistent.data)</span><br><span class="line">        <span class="keyword">return</span> persistent.data</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">await</span> <span class="built_in">this</span>.storage.removeItem(key)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">async</span> <span class="function"><span class="title">set</span>(<span class="params">key, data, ttl</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.setMemory(key, data)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">await</span> <span class="built_in">this</span>.storage.setItem(key, &#123;</span><br><span class="line">      data,</span><br><span class="line">      <span class="attr">timestamp</span>: <span class="built_in">Date</span>.now(),</span><br><span class="line">      <span class="attr">ttl</span>: ttl || <span class="built_in">this</span>.ttl,</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="title">setMemory</span>(<span class="params">key, data</span>)</span> &#123;</span><br><span class="line">    <span class="comment">// LRU：缓存超限时删除最旧的</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">this</span>.memory.size &gt;= <span class="built_in">this</span>.maxMemory) &#123;</span><br><span class="line">      <span class="keyword">const</span> firstKey = <span class="built_in">this</span>.memory.keys().next().value</span><br><span class="line">      <span class="built_in">this</span>.memory.delete(firstKey)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">this</span>.memory.set(key, &#123; data, <span class="attr">timestamp</span>: <span class="built_in">Date</span>.now() &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">async</span> <span class="function"><span class="title">remove</span>(<span class="params">key</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.memory.delete(key)</span><br><span class="line">    <span class="keyword">await</span> <span class="built_in">this</span>.storage.removeItem(key)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">async</span> <span class="function"><span class="title">clear</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.memory.clear()</span><br><span class="line">    <span class="keyword">await</span> <span class="built_in">this</span>.storage.clear()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-2-配合-Service-Worker"><a href="#6-2-配合-Service-Worker" class="headerlink" title="6.2 配合 Service Worker"></a>6.2 配合 Service Worker</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sw.js — Service Worker 缓存策略</span></span><br><span class="line">self.addEventListener(<span class="string">&#x27;fetch&#x27;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// API 请求走 NetworkFirst</span></span><br><span class="line">  <span class="keyword">if</span> (event.request.url.includes(<span class="string">&#x27;/api/&#x27;</span>)) &#123;</span><br><span class="line">    event.respondWith(networkFirst(event.request))</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 静态资源走 CacheFirst</span></span><br><span class="line">  <span class="keyword">if</span> (event.request.url.match(<span class="regexp">/\.(js|css|png|jpg)$/</span>)) &#123;</span><br><span class="line">    event.respondWith(cacheFirst(event.request))</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">networkFirst</span>(<span class="params">request</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> response = <span class="keyword">await</span> fetch(request)</span><br><span class="line">    <span class="keyword">const</span> cache = <span class="keyword">await</span> caches.open(<span class="string">&#x27;api-cache&#x27;</span>)</span><br><span class="line">    cache.put(request, response.clone())</span><br><span class="line">    <span class="keyword">return</span> response</span><br><span class="line">  &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">    <span class="keyword">const</span> cached = <span class="keyword">await</span> caches.match(request)</span><br><span class="line">    <span class="keyword">return</span> cached || <span class="keyword">new</span> Response(<span class="built_in">JSON</span>.stringify(&#123; <span class="attr">error</span>: <span class="string">&#x27;离线&#x27;</span> &#125;), &#123;</span><br><span class="line">      <span class="attr">status</span>: <span class="number">503</span>,</span><br><span class="line">      <span class="attr">headers</span>: &#123; <span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;application/json&#x27;</span> &#125;,</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">cacheFirst</span>(<span class="params">request</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> cached = <span class="keyword">await</span> caches.match(request)</span><br><span class="line">  <span class="keyword">if</span> (cached) <span class="keyword">return</span> cached</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> response = <span class="keyword">await</span> fetch(request)</span><br><span class="line">  <span class="keyword">const</span> cache = <span class="keyword">await</span> caches.open(<span class="string">&#x27;static-cache&#x27;</span>)</span><br><span class="line">  cache.put(request, response.clone())</span><br><span class="line">  <span class="keyword">return</span> response</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="七、存储容量与清理策略"><a href="#七、存储容量与清理策略" class="headerlink" title="七、存储容量与清理策略"></a>七、存储容量与清理策略</h2><h3 id="7-1-查看存储使用量"><a href="#7-1-查看存储使用量" class="headerlink" title="7.1 查看存储使用量"></a>7.1 查看存储使用量</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">getStorageUsage</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (navigator.storage?.estimate) &#123;</span><br><span class="line">    <span class="keyword">const</span> estimate = <span class="keyword">await</span> navigator.storage.estimate()</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`已使用: <span class="subst">$&#123;(estimate.usage <span class="regexp">/ 1024 /</span> <span class="number">1024</span>).toFixed(<span class="number">1</span>)&#125;</span> MB`</span>)</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`总配额: <span class="subst">$&#123;(estimate.quota <span class="regexp">/ 1024 /</span> <span class="number">1024</span>).toFixed(<span class="number">1</span>)&#125;</span> MB`</span>)</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`使用率: <span class="subst">$&#123;(estimate.usage / estimate.quota * <span class="number">100</span>).toFixed(<span class="number">1</span>)&#125;</span>%`</span>)</span><br><span class="line">    <span class="keyword">return</span> estimate</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 请求持久化（用户确认后数据不会被浏览器主动清除）</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">requestPersist</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (navigator.storage?.persist) &#123;</span><br><span class="line">    <span class="keyword">const</span> isPersisted = <span class="keyword">await</span> navigator.storage.persisted()</span><br><span class="line">    <span class="keyword">if</span> (!isPersisted) &#123;</span><br><span class="line">      <span class="keyword">const</span> granted = <span class="keyword">await</span> navigator.storage.persist()</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">`持久化存储: <span class="subst">$&#123;granted ? <span class="string">&#x27;已授予&#x27;</span> : <span class="string">&#x27;未授予&#x27;</span>&#125;</span>`</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> isPersisted</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-2-自动清理策略"><a href="#7-2-自动清理策略" class="headerlink" title="7.2 自动清理策略"></a>7.2 自动清理策略</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StorageManager</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">maxSizeMB = <span class="number">50</span></span>)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.maxSize = maxSizeMB * <span class="number">1024</span> * <span class="number">1024</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">async</span> <span class="function"><span class="title">ensureSpace</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> usage = <span class="keyword">await</span> getStorageUsage()</span><br><span class="line">    <span class="keyword">if</span> (!usage || usage.usage &lt; <span class="built_in">this</span>.maxSize) <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 超限时清理最旧的缓存</span></span><br><span class="line">    <span class="keyword">const</span> cache = localforage.createInstance(&#123;</span><br><span class="line">      <span class="attr">name</span>: <span class="string">&#x27;appCache&#x27;</span>,</span><br><span class="line">      <span class="attr">storeName</span>: <span class="string">&#x27;autoClean&#x27;</span>,</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> keys = <span class="keyword">await</span> cache.keys()</span><br><span class="line">    <span class="keyword">const</span> entries = <span class="keyword">await</span> <span class="built_in">Promise</span>.all(</span><br><span class="line">      keys.map(<span class="keyword">async</span> (key) =&gt; (&#123;</span><br><span class="line">        key,</span><br><span class="line">        <span class="attr">entry</span>: <span class="keyword">await</span> cache.getItem(key),</span><br><span class="line">      &#125;))</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 按时间戳排序，删除最旧的 30%</span></span><br><span class="line">    entries.sort(<span class="function">(<span class="params">a, b</span>) =&gt;</span> a.entry.timestamp - b.entry.timestamp)</span><br><span class="line">    <span class="keyword">const</span> deleteCount = <span class="built_in">Math</span>.ceil(entries.length * <span class="number">0.3</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; deleteCount; i++) &#123;</span><br><span class="line">      <span class="keyword">await</span> cache.removeItem(entries[i].key)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`已清理 <span class="subst">$&#123;deleteCount&#125;</span> 条缓存`</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="方案选型总表"><a href="#方案选型总表" class="headerlink" title="方案选型总表"></a>方案选型总表</h3><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>推荐方案</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>主题、偏好等小配置</td>
+<td>localStorage</td>
+<td>简单，同步读</td>
+</tr>
+<tr>
+<td>表单草稿、用户数据</td>
+<td>localForage</td>
+<td>API 优雅，自动降级</td>
+</tr>
+<tr>
+<td>大量结构化数据</td>
+<td>IndexedDB</td>
+<td>索引查询，容量大</td>
+</tr>
+<tr>
+<td>离线 CRUD 应用</td>
+<td>IndexedDB + 同步逻辑</td>
+<td>完整的数据操作能力</td>
+</tr>
+<tr>
+<td>需要复杂 SQL</td>
+<td>SQLite/WASM</td>
+<td>JOIN、聚合、全文搜索</td>
+</tr>
+<tr>
+<td>大文件（图片/视频）</td>
+<td>Cache API / OPFS</td>
+<td>专为大文件设计</td>
+</tr>
+<tr>
+<td>PWA 离线</td>
+<td>Cache API + IndexedDB</td>
+<td>Service Worker 配合</td>
+</tr>
+</tbody></table>
+<h3 id="建议"><a href="#建议" class="headerlink" title="建议"></a>建议</h3><ol>
+<li><strong>能用 localStorage 不要上 IndexedDB</strong> — 简单场景不需要复杂方案</li>
+<li><strong>优先使用 localForage</strong> — 比原生 IndexedDB API 好 10 倍</li>
+<li><strong>数据量大时分层缓存</strong> — 内存 → 持久化 → 网络</li>
+<li><strong>记得清理过期数据</strong> — 不清理的缓存等于内存泄漏</li>
+<li><strong>关注存储配额</strong> — 使用 <code>navigator.storage.estimate</code> 做监控</li>
+</ol>
+<blockquote>
+<p>数据持久化的核心原则：把正确的数据放在正确的位置，存最短的时间。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/web-blog/2026/06/25/data-persistence-guide/">前端数据持久化方案：IndexedDB、localForage 与 SQLite/WASM</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a></p>
+  <p><span>发布时间:</span>2026年06月25日 - 00:06</p>
+  <p><span>最后更新:</span>2026年06月25日 - 15:06</p>
+  <p><span>原始链接:</span><a href="/web-blog/2026/06/25/data-persistence-guide/" title="前端数据持久化方案：IndexedDB、localForage 与 SQLite/WASM">https://lc19990308.github.io/web-blog/2026/06/25/data-persistence-guide/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://lc19990308.github.io/web-blog/2026/06/25/data-persistence-guide/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+    });
+    });  
+</script>
+
+      
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>LC
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://lc19990308.github.io/web-blog/2026/06/25/data-persistence-guide/" title="前端数据持久化方案：IndexedDB、localForage 与 SQLite&#x2F;WASM">https://lc19990308.github.io/web-blog/2026/06/25/data-persistence-guide/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/web-blog/tags/JavaScript/" ****><i class="fa fa-tag"></i> JavaScript</a>
+              <a href="/web-blog/tags/%E6%9E%B6%E6%9E%84/" ****><i class="fa fa-tag"></i> 架构</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/06/25/eslint-prettier-setup-guide/" rel="prev" title="ESLint + Prettier 工程化配置：从入门到团队规范">
+      <i class="fa fa-chevron-left"></i> ESLint + Prettier 工程化配置：从入门到团队规范
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/06/25/css-animation-library-guide/" rel="next" title="CSS 动画库选型与实战：Animate.css、Motion One、GSAP 对比指南">
+      CSS 动画库选型与实战：Animate.css、Motion One、GSAP 对比指南 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81localStorage-%E7%9A%84%E6%9E%81%E9%99%90"><span class="nav-number">2.</span> <span class="nav-text">一、localStorage 的极限</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E7%8E%B0%E7%8A%B6%E5%88%86%E6%9E%90"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 现状分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">2.2.</span> <span class="nav-text">1.2 适用场景</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81IndexedDB-%E5%9F%BA%E7%A1%80"><span class="nav-number">3.</span> <span class="nav-text">二、IndexedDB 基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 核心概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E6%89%93%E5%BC%80%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 打开数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-CRUD-%E6%93%8D%E4%BD%9C"><span class="nav-number">3.3.</span> <span class="nav-text">2.3 CRUD 操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-%E6%89%B9%E9%87%8F%E6%93%8D%E4%BD%9C"><span class="nav-number">3.4.</span> <span class="nav-text">2.4 批量操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81localForage-%E2%80%94-IndexedDB-%E7%9A%84%E4%BC%98%E9%9B%85%E5%B0%81%E8%A3%85"><span class="nav-number">4.</span> <span class="nav-text">三、localForage — IndexedDB 的优雅封装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E5%AE%89%E8%A3%85"><span class="nav-number">4.1.</span> <span class="nav-text">3.1 安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8"><span class="nav-number">4.2.</span> <span class="nav-text">3.2 基础使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E9%85%8D%E7%BD%AE%E5%A4%9A%E4%B8%AA-Store"><span class="nav-number">4.3.</span> <span class="nav-text">3.3 配置多个 Store</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-%E5%B0%81%E8%A3%85%E4%B8%9A%E5%8A%A1%E7%BC%93%E5%AD%98"><span class="nav-number">4.4.</span> <span class="nav-text">3.4 封装业务缓存</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E9%AB%98%E7%BA%A7%EF%BC%9AIndexedDB-%E5%A4%8D%E6%9D%82%E6%9F%A5%E8%AF%A2%E5%B0%81%E8%A3%85"><span class="nav-number">5.</span> <span class="nav-text">四、高级：IndexedDB 复杂查询封装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E9%80%9A%E7%94%A8-DAO-%E5%B1%82"><span class="nav-number">5.1.</span> <span class="nav-text">4.1 通用 DAO 层</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81SQLite-WASM-%E5%9C%A8%E6%B5%8F%E8%A7%88%E5%99%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">6.</span> <span class="nav-text">五、SQLite&#x2F;WASM 在浏览器中的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%E4%BB%80%E4%B9%88%E6%98%AF-SQLite-WASM%EF%BC%9F"><span class="nav-number">6.1.</span> <span class="nav-text">5.1 什么是 SQLite&#x2F;WASM？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-%E4%BD%BF%E7%94%A8-sql-js"><span class="nav-number">6.2.</span> <span class="nav-text">5.2 使用 sql.js</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-SQLite-WASM-vs-IndexedDB"><span class="nav-number">6.3.</span> <span class="nav-text">5.3 SQLite&#x2F;WASM vs IndexedDB</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-4-%E9%80%89%E5%9E%8B%E5%BB%BA%E8%AE%AE"><span class="nav-number">6.4.</span> <span class="nav-text">5.4 选型建议</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E5%AE%9E%E9%99%85%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E7%BC%93%E5%AD%98%E7%AD%96%E7%95%A5"><span class="nav-number">7.</span> <span class="nav-text">六、实际项目中的缓存策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-%E5%88%86%E5%B1%82%E7%BC%93%E5%AD%98%E6%9E%B6%E6%9E%84"><span class="nav-number">7.1.</span> <span class="nav-text">6.1 分层缓存架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-%E9%85%8D%E5%90%88-Service-Worker"><span class="nav-number">7.2.</span> <span class="nav-text">6.2 配合 Service Worker</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E5%AD%98%E5%82%A8%E5%AE%B9%E9%87%8F%E4%B8%8E%E6%B8%85%E7%90%86%E7%AD%96%E7%95%A5"><span class="nav-number">8.</span> <span class="nav-text">七、存储容量与清理策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-%E6%9F%A5%E7%9C%8B%E5%AD%98%E5%82%A8%E4%BD%BF%E7%94%A8%E9%87%8F"><span class="nav-number">8.1.</span> <span class="nav-text">7.1 查看存储使用量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-%E8%87%AA%E5%8A%A8%E6%B8%85%E7%90%86%E7%AD%96%E7%95%A5"><span class="nav-number">8.2.</span> <span class="nav-text">7.2 自动清理策略</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">9.</span> <span class="nav-text">总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%A1%88%E9%80%89%E5%9E%8B%E6%80%BB%E8%A1%A8"><span class="nav-number">9.1.</span> <span class="nav-text">方案选型总表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%BA%E8%AE%AE"><span class="nav-number">9.2.</span> <span class="nav-text">建议</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="LC"
+      src="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+  <p class="site-author-name" itemprop="name">LC</p>
+  <div class="site-description" itemprop="description">专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/web-blog/archives/">
+        
+          <span class="site-state-item-count">110</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/web-blog/categories/">
+          
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/web-blog/tags/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button motion-element"><i class="fa fa-comment"></i>
+    Chat
+  </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lc19990308/web-blog" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lc19990308&#x2F;web-blog" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:jarridaddison4@gmail.com" title="E-Mail → mailto:jarridaddison4@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/web-blog/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=441491828&auto=1&height=66"></iframe>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LC</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>-->
+<div class="powered-by">
+  <i class="fa fa-user-md"></i>
+  <span id="busuanzi_container_site_pv">
+    本站访问量:<span id="busuanzi_value_site_pv"></span>次
+  </span>
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv">
+    本站总访客量：<span id="busuanzi_value_site_uv"></span>人
+  </span>
+</div>
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共166.3k字</span>
+</div>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/web-blog/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/web-blog/js/utils.js"></script>
+
+<script src="/web-blog/js/motion.js"></script>
+
+
+<script src="/web-blog/js/schemes/pisces.js"></script>
+
+
+<script src="/web-blog/js/next-boot.js"></script>
+
+<script src="/web-blog/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/web-blog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+</body>
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</html>

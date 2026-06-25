@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/web-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/web-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/web-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/web-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/web-blog/css/main.css">
+
+
+<link rel="stylesheet" href="/web-blog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/web-blog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/web-blog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lc19990308.github.io","root":"/web-blog/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="深入浏览器同源策略与跨域资源共享（CORS）机制，涵盖简单请求&#x2F;预检请求、各种跨域解决方案、常见错误排查与代理配置">
+<meta property="og:type" content="article">
+<meta property="og:title" content="跨域与 CORS 完全解析：从同源策略到代理配置">
+<meta property="og:url" content="https://lc19990308.github.io/web-blog/2026/06/25/cors-cross-origin-guide/index.html">
+<meta property="og:site_name" content="前端技术笔记">
+<meta property="og:description" content="深入浏览器同源策略与跨域资源共享（CORS）机制，涵盖简单请求&#x2F;预检请求、各种跨域解决方案、常见错误排查与代理配置">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-25T07:47:39.144Z">
+<meta property="article:author" content="LC">
+<meta property="article:tag" content="网络协议">
+<meta property="article:tag" content="浏览器">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://lc19990308.github.io/web-blog/2026/06/25/cors-cross-origin-guide/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>跨域与 CORS 完全解析：从同源策略到代理配置 | 前端技术笔记</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/web-blog/atom.xml" title="前端技术笔记" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband">
+    <a target="_blank" rel="noopener" href="https://gitee.com/yaru722" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    </div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/web-blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">前端技术笔记</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录前端路上的思考与实践</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/web-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/web-blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/web-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/web-blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/web-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/lc19990308" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/25/cors-cross-origin-guide/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+      <meta itemprop="name" content="LC">
+      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端技术笔记">
+    </span>
+      <header class="post-header">
+      
+        <h1 class="post-title" itemprop="name headline">
+          跨域与 CORS 完全解析：从同源策略到代理配置
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-06-25 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-25T00:00:00+08:00">2026-06-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/web-blog/categories/%E6%B5%8F%E8%A7%88%E5%99%A8/" itemprop="url" rel="index"><span itemprop="name">浏览器</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">深入浏览器同源策略与跨域资源共享（CORS）机制，涵盖简单请求/预检请求、各种跨域解决方案、常见错误排查与代理配置</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Access to fetch at &#x27;https://api.example.com/data&#x27; from origin &#x27;http://localhost:3000&#x27;</span><br><span class="line">has been blocked by CORS policy.</span><br></pre></td></tr></table></figure>
+
+<p>这是前端开发者最常见的报错之一。</p>
+<p>CORS 本身并不复杂，但很多开发者只知其然而不知其所以然。本文从底层原理到各种场景的解决方案，完整覆盖跨域问题。</p>
+<hr>
+<h2 id="一、同源策略"><a href="#一、同源策略" class="headerlink" title="一、同源策略"></a>一、同源策略</h2><h3 id="1-1-什么是同源？"><a href="#1-1-什么是同源？" class="headerlink" title="1.1 什么是同源？"></a>1.1 什么是同源？</h3><p>浏览器的<strong>同源策略</strong>限制了一个源的文档或脚本如何与另一个源的资源进行交互。</p>
+<p>“同源”指<strong>协议 + 域名 + 端口</strong>三者完全一致：</p>
+<table>
+<thead>
+<tr>
+<th>URL</th>
+<th>与 <code>https://example.com/page</code> 是否同源</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>https://example.com/other</code></td>
+<td>✅ 同源（路径不同）</td>
+</tr>
+<tr>
+<td><code>https://example.com:443/page</code></td>
+<td>✅ 同源（默认端口 443）</td>
+</tr>
+<tr>
+<td><code>http://example.com/page</code></td>
+<td>❌ 协议不同（http vs https）</td>
+</tr>
+<tr>
+<td><code>https://api.example.com/page</code></td>
+<td>❌ 子域名不同</td>
+</tr>
+<tr>
+<td><code>https://example.com:8080/page</code></td>
+<td>❌ 端口不同</td>
+</tr>
+</tbody></table>
+<h3 id="1-2-非同源的限制"><a href="#1-2-非同源的限制" class="headerlink" title="1.2 非同源的限制"></a>1.2 非同源的限制</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1. Cookie / localStorage / IndexedDB 不可读取</span><br><span class="line">2. DOM 不可操作（iframe 跨域）</span><br><span class="line">3. AJAX 请求会被拦截（响应能收到，但 JS 不能读取）</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意</strong>：同源策略限制的是 JS 读取响应，<strong>请求还是会发出去的</strong>。这也是 CSRF 攻击能发生的原因。</p>
+<hr>
+<h2 id="二、CORS-的工作原理"><a href="#二、CORS-的工作原理" class="headerlink" title="二、CORS 的工作原理"></a>二、CORS 的工作原理</h2><p>CORS（Cross-Origin Resource Sharing）是浏览器和服务器的”协议”——服务器通过 HTTP 头告诉浏览器：”这个跨域请求是允许的”。</p>
+<h3 id="2-1-简单请求"><a href="#2-1-简单请求" class="headerlink" title="2.1 简单请求"></a>2.1 简单请求</h3><p>满足以下所有条件的请求是”简单请求”：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1. 方法：GET、HEAD、POST 之一</span><br><span class="line">2. 请求头只包含安全字段（Accept、Accept-Language、Content-Language、Content-Type）</span><br><span class="line">3. Content-Type 必须是：text/plain、multipart/form-data、application/x-www-form-urlencoded</span><br></pre></td></tr></table></figure>
+
+<p>简单请求的流程：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 浏览器自动添加 Origin 头</span><br><span class="line"><span class="keyword">GET</span> <span class="string">/api/data</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Origin</span><span class="punctuation">: </span>https://my-app.com</span><br><span class="line"></span><br><span class="line"><span class="apache"><span class="comment"># 服务器返回允许的源</span></span></span><br><span class="line"><span class="apache"><span class="attribute">HTTP</span>/<span class="number">1</span>.<span class="number">1</span> <span class="number">200</span> OK</span></span><br><span class="line"><span class="apache"><span class="attribute">Access</span>-Control-<span class="literal">Allow</span>-Origin: https://my-app.com</span></span><br><span class="line"><span class="apache"><span class="comment"># 或 *（允许所有源）</span></span></span><br><span class="line"><span class="apache"></span></span><br><span class="line"><span class="apache"><span class="comment"># 浏览器检查响应头，允许则返回给 JS，否则阻断</span></span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-预检请求（Preflight）"><a href="#2-2-预检请求（Preflight）" class="headerlink" title="2.2 预检请求（Preflight）"></a>2.2 预检请求（Preflight）</h3><p>不满足简单条件的请求，浏览器会先发一个 <strong>OPTIONS 请求</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 以下请求会触发预检</span></span><br><span class="line">fetch(<span class="string">&#x27;https://api.example.com/data&#x27;</span>, &#123;</span><br><span class="line">  <span class="attr">method</span>: <span class="string">&#x27;PUT&#x27;</span>,</span><br><span class="line">  <span class="attr">headers</span>: &#123;</span><br><span class="line">    <span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;application/json&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;X-Custom-Header&#x27;</span>: <span class="string">&#x27;custom&#x27;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>浏览器先发 OPTIONS：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">OPTIONS</span> <span class="string">/data</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Origin</span><span class="punctuation">: </span>https://my-app.com</span><br><span class="line"><span class="attribute">Access-Control-Request-Method</span><span class="punctuation">: </span>PUT</span><br><span class="line"><span class="attribute">Access-Control-Request-Headers</span><span class="punctuation">: </span>content-type, x-custom-header</span><br><span class="line"></span><br><span class="line"><span class="apache"><span class="comment"># 服务器返回</span></span></span><br><span class="line"><span class="apache"><span class="attribute">HTTP</span>/<span class="number">1</span>.<span class="number">1</span> <span class="number">204</span> No Content</span></span><br><span class="line"><span class="apache"><span class="attribute">Access</span>-Control-<span class="literal">Allow</span>-Origin: https://my-app.com</span></span><br><span class="line"><span class="apache"><span class="attribute">Access</span>-Control-<span class="literal">Allow</span>-Methods: GET, POST, PUT, DELETE</span></span><br><span class="line"><span class="apache"><span class="attribute">Access</span>-Control-<span class="literal">Allow</span>-Headers: content-type, x-custom-header</span></span><br><span class="line"><span class="apache"><span class="attribute">Access</span>-Control-Max-Age: <span class="number">86400</span>   # 预检结果缓存 <span class="number">1</span> 天</span></span><br></pre></td></tr></table></figure>
+
+<p>预检通过后，才发起真正的请求。</p>
+<h3 id="2-3-响应头详解"><a href="#2-3-响应头详解" class="headerlink" title="2.3 响应头详解"></a>2.3 响应头详解</h3><figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Access-Control-Allow-Origin</span><span class="punctuation">: </span>https://my-app.com</span><br><span class="line"># 允许的源（不能同时写多个！需要动态判断）</span><br><span class="line"></span><br><span class="line"><span class="attribute">Access-Control-Allow-Origin</span><span class="punctuation">: </span>*</span><br><span class="line"># 允许所有源（不能带凭据）</span><br><span class="line"></span><br><span class="line"><span class="attribute">Access-Control-Allow-Methods</span><span class="punctuation">: </span>GET, POST, PUT, DELETE</span><br><span class="line"># 允许的方法</span><br><span class="line"></span><br><span class="line"><span class="attribute">Access-Control-Allow-Headers</span><span class="punctuation">: </span>Content-Type, Authorization</span><br><span class="line"># 允许的自定义请求头</span><br><span class="line"></span><br><span class="line"><span class="attribute">Access-Control-Expose-Headers</span><span class="punctuation">: </span>X-Total-Count, X-RateLimit</span><br><span class="line"># 暴露给 JS 的非默认响应头</span><br><span class="line"></span><br><span class="line"><span class="attribute">Access-Control-Allow-Credentials</span><span class="punctuation">: </span>true</span><br><span class="line"># 允许携带 Cookie（Allow-Origin 不能是 *）</span><br><span class="line"></span><br><span class="line"><span class="attribute">Access-Control-Max-Age</span><span class="punctuation">: </span>86400</span><br><span class="line"># 预检结果缓存时间（秒）</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="三、跨域解决方案"><a href="#三、跨域解决方案" class="headerlink" title="三、跨域解决方案"></a>三、跨域解决方案</h2><h3 id="3-1-后端配置-CORS（推荐）"><a href="#3-1-后端配置-CORS（推荐）" class="headerlink" title="3.1 后端配置 CORS（推荐）"></a>3.1 后端配置 CORS（推荐）</h3><p><strong>Express</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> express = <span class="built_in">require</span>(<span class="string">&#x27;express&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> app = express()</span><br><span class="line"></span><br><span class="line">app.use(<span class="function">(<span class="params">req, res, next</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> allowedOrigins = [</span><br><span class="line">    <span class="string">&#x27;https://my-app.com&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;https://staging.my-app.com&#x27;</span>,</span><br><span class="line">  ]</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> origin = req.headers.origin</span><br><span class="line">  <span class="keyword">if</span> (allowedOrigins.includes(origin)) &#123;</span><br><span class="line">    res.setHeader(<span class="string">&#x27;Access-Control-Allow-Origin&#x27;</span>, origin)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  res.setHeader(<span class="string">&#x27;Access-Control-Allow-Methods&#x27;</span>, <span class="string">&#x27;GET, POST, PUT, DELETE, OPTIONS&#x27;</span>)</span><br><span class="line">  res.setHeader(<span class="string">&#x27;Access-Control-Allow-Headers&#x27;</span>, <span class="string">&#x27;Content-Type, Authorization&#x27;</span>)</span><br><span class="line">  res.setHeader(<span class="string">&#x27;Access-Control-Allow-Credentials&#x27;</span>, <span class="string">&#x27;true&#x27;</span>)</span><br><span class="line">  res.setHeader(<span class="string">&#x27;Access-Control-Max-Age&#x27;</span>, <span class="string">&#x27;86400&#x27;</span>)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 预检请求直接返回 204</span></span><br><span class="line">  <span class="keyword">if</span> (req.method === <span class="string">&#x27;OPTIONS&#x27;</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> res.sendStatus(<span class="number">204</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  next()</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p><strong>Nginx</strong>：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">location</span> /api/ &#123;</span><br><span class="line">        <span class="attribute">if</span> ($request_method = <span class="string">&#x27;OPTIONS&#x27;</span>) &#123;</span><br><span class="line">            <span class="attribute">add_header</span> Access-Control-Allow-Origin $http_origin;</span><br><span class="line">            <span class="attribute">add_header</span> Access-Control-Allow-Methods <span class="string">&#x27;GET, POST, PUT, DELETE, OPTIONS&#x27;</span>;</span><br><span class="line">            <span class="attribute">add_header</span> Access-Control-Allow-Headers <span class="string">&#x27;Content-Type, Authorization&#x27;</span>;</span><br><span class="line">            <span class="attribute">add_header</span> Access-Control-Max-Age <span class="number">86400</span>;</span><br><span class="line">            <span class="attribute">return</span> <span class="number">204</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="attribute">add_header</span> Access-Control-Allow-Origin $http_origin;</span><br><span class="line">        <span class="attribute">add_header</span> Access-Control-Allow-Credentials <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">        <span class="attribute">proxy_pass</span> http://backend:3000;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-开发环境代理（Vite）"><a href="#3-2-开发环境代理（Vite）" class="headerlink" title="3.2 开发环境代理（Vite）"></a>3.2 开发环境代理（Vite）</h3><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vite.config.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> defineConfig(&#123;</span><br><span class="line">  <span class="attr">server</span>: &#123;</span><br><span class="line">    <span class="attr">proxy</span>: &#123;</span><br><span class="line">      <span class="string">&#x27;/api&#x27;</span>: &#123;</span><br><span class="line">        <span class="attr">target</span>: <span class="string">&#x27;https://api.example.com&#x27;</span>,</span><br><span class="line">        <span class="attr">changeOrigin</span>: <span class="literal">true</span>,       <span class="comment">// 修改请求的 Origin 头</span></span><br><span class="line">        <span class="attr">rewrite</span>: <span class="function">(<span class="params">path</span>) =&gt;</span> path.replace(<span class="regexp">/^\/api/</span>, <span class="string">&#x27;&#x27;</span>),</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="string">&#x27;/uploads&#x27;</span>: &#123;</span><br><span class="line">        <span class="attr">target</span>: <span class="string">&#x27;https://cdn.example.com&#x27;</span>,</span><br><span class="line">        <span class="attr">changeOrigin</span>: <span class="literal">true</span>,</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p><strong>原理</strong>：开发环境下，浏览器请求同源的 <code>/api/xxx</code>，Vite Dev Server 收到后转发到目标服务器，再把响应返回给浏览器。浏览器始终认为请求是同源的。</p>
+<h3 id="3-3-JSONP（仅-GET，已过时）"><a href="#3-3-JSONP（仅-GET，已过时）" class="headerlink" title="3.3 JSONP（仅 GET，已过时）"></a>3.3 JSONP（仅 GET，已过时）</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span><br><span class="line"><span class="javascript"><span class="function"><span class="keyword">function</span> <span class="title">handleResponse</span>(<span class="params">data</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">  <span class="built_in">console</span>.log(<span class="string">&#x27;跨域数据:&#x27;</span>, data)</span></span><br><span class="line"><span class="javascript">&#125;</span></span><br><span class="line"><span class="javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 利用 &lt;script&gt; 不受跨域限制的特性 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://api.example.com/data?callback=handleResponse&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 服务器返回：</span></span><br><span class="line">handleResponse(&#123; <span class="attr">name</span>: <span class="string">&#x27;LC&#x27;</span>, <span class="attr">age</span>: <span class="number">25</span> &#125;)</span><br></pre></td></tr></table></figure>
+
+<p><strong>限制</strong>：只支持 GET，有安全风险。</p>
+<h3 id="3-4-WebSocket（天然跨域）"><a href="#3-4-WebSocket（天然跨域）" class="headerlink" title="3.4 WebSocket（天然跨域）"></a>3.4 WebSocket（天然跨域）</h3><p>WebSocket 不受同源策略限制：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> ws = <span class="keyword">new</span> WebSocket(<span class="string">&#x27;wss://api.example.com/socket&#x27;</span>)</span><br><span class="line">ws.onmessage = <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;收到数据:&#x27;</span>, event.data)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="四、带凭据的请求（Cookie-Authorization）"><a href="#四、带凭据的请求（Cookie-Authorization）" class="headerlink" title="四、带凭据的请求（Cookie / Authorization）"></a>四、带凭据的请求（Cookie / Authorization）</h2><h3 id="4-1-credentials-include"><a href="#4-1-credentials-include" class="headerlink" title="4.1 credentials: include"></a>4.1 credentials: include</h3><p>当跨域请求需要携带 Cookie 或 HTTP Basic Auth 时：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 前端</span></span><br><span class="line">fetch(<span class="string">&#x27;https://api.example.com/user&#x27;</span>, &#123;</span><br><span class="line">  <span class="attr">credentials</span>: <span class="string">&#x27;include&#x27;</span>,  <span class="comment">// 携带 Cookie</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 或 XMLHttpRequest</span></span><br><span class="line"><span class="keyword">const</span> xhr = <span class="keyword">new</span> XMLHttpRequest()</span><br><span class="line">xhr.withCredentials = <span class="literal">true</span></span><br><span class="line">xhr.open(<span class="string">&#x27;GET&#x27;</span>, <span class="string">&#x27;https://api.example.com/user&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p><strong>服务器三要素</strong>：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Access-Control-Allow-Origin</span><span class="punctuation">: </span>https://my-app.com   # 不能是 *</span><br><span class="line"><span class="attribute">Access-Control-Allow-Credentials</span><span class="punctuation">: </span>true</span><br><span class="line"><span class="attribute">Access-Control-Expose-Headers</span><span class="punctuation">: </span>Set-Cookie</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2-常见问题"><a href="#4-2-常见问题" class="headerlink" title="4.2 常见问题"></a>4.2 常见问题</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ❌ 错误1：Allow-Origin 用 *</span></span><br><span class="line">Access-Control-Allow-Origin: *</span><br><span class="line"><span class="comment">// 当 credentials: include 时，浏览器会拒绝</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ❌ 错误2：前端忘了 credentials</span></span><br><span class="line">fetch(<span class="string">&#x27;https://api.example.com/user&#x27;</span>)</span><br><span class="line"><span class="comment">// 浏览器不会发送 Cookie</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ❌ 错误3：多个 Origin</span></span><br><span class="line">Access-Control-Allow-Origin: https:<span class="comment">//a.com, https://b.com</span></span><br><span class="line"><span class="comment">// 只能写一个！需用动态逻辑判断</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="五、常见-CORS-错误与排查"><a href="#五、常见-CORS-错误与排查" class="headerlink" title="五、常见 CORS 错误与排查"></a>五、常见 CORS 错误与排查</h2><h3 id="5-1-错误信息分析"><a href="#5-1-错误信息分析" class="headerlink" title="5.1 错误信息分析"></a>5.1 错误信息分析</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># 错误1：缺少 Access-Control-Allow-Origin</span><br><span class="line">Response to preflight request doesn&#x27;t pass access control check:</span><br><span class="line">No &#x27;Access-Control-Allow-Origin&#x27; header is present</span><br><span class="line"></span><br><span class="line"># 错误2：凭据模式下 Origin 不能是 *</span><br><span class="line">Response to preflight request doesn&#x27;t pass access control check:</span><br><span class="line">The value of &#x27;Access-Control-Allow-Origin&#x27; in the response must not be the wildcard &#x27;*&#x27;</span><br><span class="line"></span><br><span class="line"># 错误3：请求头不在允许列表</span><br><span class="line">Request header field authorization is not allowed by</span><br><span class="line">Access-Control-Allow-Headers in preflight response</span><br><span class="line"></span><br><span class="line"># 错误4：方法不允许</span><br><span class="line">Method PUT is not allowed by Access-Control-Allow-Methods in preflight response</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2-排查步骤"><a href="#5-2-排查步骤" class="headerlink" title="5.2 排查步骤"></a>5.2 排查步骤</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1. 打开 DevTools → Network → 确认请求是否发出</span><br><span class="line">2. 查看请求头：Origin 是否正确</span><br><span class="line">3. 查看响应头：是否有 Access-Control-Allow-Origin</span><br><span class="line">4. 如果有 OPTIONS 请求：检查预检响应头</span><br><span class="line">5. 如果是 credentials: include：确认 Allow-Origin 不是 *</span><br><span class="line">6. 如果使用自定义头：确认在 Allow-Headers 中</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-3-调试工具"><a href="#5-3-调试工具" class="headerlink" title="5.3 调试工具"></a>5.3 调试工具</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 用 curl 模拟跨域请求</span></span><br><span class="line">curl -H <span class="string">&quot;Origin: https://my-app.com&quot;</span> \</span><br><span class="line">  -H <span class="string">&quot;Access-Control-Request-Method: POST&quot;</span> \</span><br><span class="line">  -X OPTIONS \</span><br><span class="line">  -v https://api.example.com/data</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看响应头</span></span><br><span class="line">curl -I -H <span class="string">&quot;Origin: https://my-app.com&quot;</span> \</span><br><span class="line">  https://api.example.com/data</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="六、其他跨域场景"><a href="#六、其他跨域场景" class="headerlink" title="六、其他跨域场景"></a>六、其他跨域场景</h2><h3 id="6-1-iframe-跨域通信"><a href="#6-1-iframe-跨域通信" class="headerlink" title="6.1 iframe 跨域通信"></a>6.1 iframe 跨域通信</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 父页面</span></span><br><span class="line"><span class="keyword">const</span> iframe = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;my-iframe&#x27;</span>)</span><br><span class="line">iframe.contentWindow.postMessage(&#123; <span class="attr">type</span>: <span class="string">&#x27;greeting&#x27;</span>, <span class="attr">data</span>: <span class="string">&#x27;hello&#x27;</span> &#125;, <span class="string">&#x27;https://child.com&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 子页面</span></span><br><span class="line"><span class="built_in">window</span>.addEventListener(<span class="string">&#x27;message&#x27;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (event.origin !== <span class="string">&#x27;https://parent.com&#x27;</span>) <span class="keyword">return</span> <span class="comment">// 重要：验证来源</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;收到:&#x27;</span>, event.data)</span><br><span class="line">  event.source.postMessage(&#123; <span class="attr">type</span>: <span class="string">&#x27;response&#x27;</span>, <span class="attr">data</span>: <span class="string">&#x27;hi&#x27;</span> &#125;, event.origin)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-2-跨域图片"><a href="#6-2-跨域图片" class="headerlink" title="6.2 跨域图片"></a>6.2 跨域图片</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 图片默认可以跨域加载 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;https://cdn.example.com/photo.jpg&quot;</span> <span class="attr">crossorigin</span>=<span class="string">&quot;anonymous&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 读取 Canvas 中的跨域图片需要 CORS</span></span><br><span class="line"><span class="keyword">const</span> img = <span class="keyword">new</span> Image()</span><br><span class="line">img.crossOrigin = <span class="string">&#x27;anonymous&#x27;</span></span><br><span class="line">img.src = <span class="string">&#x27;https://cdn.example.com/photo.jpg&#x27;</span></span><br><span class="line">img.onload = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  canvas.drawImage(img, <span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">  canvas.toDataURL() <span class="comment">// 需要 CORS</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-3-跨域字体"><a href="#6-3-跨域字体" class="headerlink" title="6.3 跨域字体"></a>6.3 跨域字体</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 字体文件也需要 CORS */</span></span><br><span class="line"><span class="keyword">@font-face</span> &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: <span class="string">&#x27;CustomFont&#x27;</span>;</span><br><span class="line">  <span class="attribute">src</span>: <span class="built_in">url</span>(<span class="string">&#x27;https://cdn.example.com/font.woff2&#x27;</span>) <span class="built_in">format</span>(<span class="string">&#x27;woff2&#x27;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="七、CORS-流程速查图"><a href="#七、CORS-流程速查图" class="headerlink" title="七、CORS 流程速查图"></a>七、CORS 流程速查图</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">浏览器请求 → 判断是否跨域</span><br><span class="line">  ├── 同源 → 正常请求</span><br><span class="line">  └── 跨域</span><br><span class="line">      ├── 简单请求（GET/POST + 安全头）</span><br><span class="line">      │   └── 发送请求 + Origin → 检查响应头 Allow-Origin</span><br><span class="line">      │       ├── 通过 → JS 获取响应</span><br><span class="line">      │       └── 不通过 → CORS 报错</span><br><span class="line">      └── 非简单请求（PUT/DELETE + 自定义头）</span><br><span class="line">          ├── 先 OPTIONS 预检</span><br><span class="line">          │   ├── 返回 2xx + 允许头 → 发真实请求</span><br><span class="line">          │   └── 返回错误 → 阻断，CORS 报错</span><br><span class="line">          └── 真实请求 → 检查 Allow-Origin</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="八、安全注意事项"><a href="#八、安全注意事项" class="headerlink" title="八、安全注意事项"></a>八、安全注意事项</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ⚠️ 不要这样做：反射 Origin</span></span><br><span class="line"><span class="keyword">const</span> origin = req.headers.origin</span><br><span class="line">res.setHeader(<span class="string">&#x27;Access-Control-Allow-Origin&#x27;</span>, origin)</span><br><span class="line"><span class="comment">// 攻击者可以伪造 Origin 头，绕过限制</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 正确做法：白名单校验</span></span><br><span class="line"><span class="keyword">const</span> allowedOrigins = [<span class="string">&#x27;https://my-app.com&#x27;</span>, <span class="string">&#x27;https://admin.my-app.com&#x27;</span>]</span><br><span class="line"><span class="keyword">if</span> (allowedOrigins.includes(origin)) &#123;</span><br><span class="line">  res.setHeader(<span class="string">&#x27;Access-Control-Allow-Origin&#x27;</span>, origin)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ⚠️ 不要在 CORS 白名单中放危险的网站</span></span><br><span class="line"><span class="comment">// 如果允许了 https://evil.com，那 evil.com 的 JS 就能读取你的 API</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><table>
+<thead>
+<tr>
+<th>方案</th>
+<th>适用场景</th>
+<th>复杂度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>后端 CORS 头</strong></td>
+<td>正规跨域请求</td>
+<td>⭐⭐</td>
+</tr>
+<tr>
+<td><strong>开发代理</strong></td>
+<td>开发阶段</td>
+<td>⭐</td>
+</tr>
+<tr>
+<td><strong>生产 Nginx 代理</strong></td>
+<td>同域代理后端</td>
+<td>⭐</td>
+</tr>
+<tr>
+<td><strong>postMessage</strong></td>
+<td>iframe 通信</td>
+<td>⭐⭐⭐</td>
+</tr>
+<tr>
+<td><strong>WebSocket</strong></td>
+<td>实时通信</td>
+<td>⭐</td>
+</tr>
+<tr>
+<td><strong>JSONP</strong></td>
+<td>仅支持 GET 的旧接口</td>
+<td>⭐（不推荐）</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>CORS 的错误信息看似复杂，但排查思路很简单：先看请求头 Origin 对不对，再看响应头 Allow-Origin 是否匹配，最后检查 credentials 和预检配置。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/web-blog/2026/06/25/cors-cross-origin-guide/">跨域与 CORS 完全解析：从同源策略到代理配置</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a></p>
+  <p><span>发布时间:</span>2026年06月25日 - 00:06</p>
+  <p><span>最后更新:</span>2026年06月25日 - 15:06</p>
+  <p><span>原始链接:</span><a href="/web-blog/2026/06/25/cors-cross-origin-guide/" title="跨域与 CORS 完全解析：从同源策略到代理配置">https://lc19990308.github.io/web-blog/2026/06/25/cors-cross-origin-guide/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://lc19990308.github.io/web-blog/2026/06/25/cors-cross-origin-guide/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+    });
+    });  
+</script>
+
+      
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>LC
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://lc19990308.github.io/web-blog/2026/06/25/cors-cross-origin-guide/" title="跨域与 CORS 完全解析：从同源策略到代理配置">https://lc19990308.github.io/web-blog/2026/06/25/cors-cross-origin-guide/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/web-blog/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" ****><i class="fa fa-tag"></i> 网络协议</a>
+              <a href="/web-blog/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" ****><i class="fa fa-tag"></i> 浏览器</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/06/25/build-tools-comparison/" rel="prev" title="前端构建工具对比：Vite vs Webpack vs Turbopack vs Rspack">
+      <i class="fa fa-chevron-left"></i> 前端构建工具对比：Vite vs Webpack vs Turbopack vs Rspack
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/06/25/browser-caching-guide/" rel="next" title="浏览器缓存策略完全指南：强缓存、协商缓存与 CDN 实战">
+      浏览器缓存策略完全指南：强缓存、协商缓存与 CDN 实战 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5"><span class="nav-number">2.</span> <span class="nav-text">一、同源策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E4%BB%80%E4%B9%88%E6%98%AF%E5%90%8C%E6%BA%90%EF%BC%9F"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 什么是同源？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E9%9D%9E%E5%90%8C%E6%BA%90%E7%9A%84%E9%99%90%E5%88%B6"><span class="nav-number">2.2.</span> <span class="nav-text">1.2 非同源的限制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81CORS-%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">二、CORS 的工作原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E7%AE%80%E5%8D%95%E8%AF%B7%E6%B1%82"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 简单请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E9%A2%84%E6%A3%80%E8%AF%B7%E6%B1%82%EF%BC%88Preflight%EF%BC%89"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 预检请求（Preflight）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E5%93%8D%E5%BA%94%E5%A4%B4%E8%AF%A6%E8%A7%A3"><span class="nav-number">3.3.</span> <span class="nav-text">2.3 响应头详解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E8%B7%A8%E5%9F%9F%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">4.</span> <span class="nav-text">三、跨域解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E5%90%8E%E7%AB%AF%E9%85%8D%E7%BD%AE-CORS%EF%BC%88%E6%8E%A8%E8%8D%90%EF%BC%89"><span class="nav-number">4.1.</span> <span class="nav-text">3.1 后端配置 CORS（推荐）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E4%BB%A3%E7%90%86%EF%BC%88Vite%EF%BC%89"><span class="nav-number">4.2.</span> <span class="nav-text">3.2 开发环境代理（Vite）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-JSONP%EF%BC%88%E4%BB%85-GET%EF%BC%8C%E5%B7%B2%E8%BF%87%E6%97%B6%EF%BC%89"><span class="nav-number">4.3.</span> <span class="nav-text">3.3 JSONP（仅 GET，已过时）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-WebSocket%EF%BC%88%E5%A4%A9%E7%84%B6%E8%B7%A8%E5%9F%9F%EF%BC%89"><span class="nav-number">4.4.</span> <span class="nav-text">3.4 WebSocket（天然跨域）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E5%B8%A6%E5%87%AD%E6%8D%AE%E7%9A%84%E8%AF%B7%E6%B1%82%EF%BC%88Cookie-Authorization%EF%BC%89"><span class="nav-number">5.</span> <span class="nav-text">四、带凭据的请求（Cookie &#x2F; Authorization）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-credentials-include"><span class="nav-number">5.1.</span> <span class="nav-text">4.1 credentials: include</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="nav-number">5.2.</span> <span class="nav-text">4.2 常见问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E5%B8%B8%E8%A7%81-CORS-%E9%94%99%E8%AF%AF%E4%B8%8E%E6%8E%92%E6%9F%A5"><span class="nav-number">6.</span> <span class="nav-text">五、常见 CORS 错误与排查</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%E9%94%99%E8%AF%AF%E4%BF%A1%E6%81%AF%E5%88%86%E6%9E%90"><span class="nav-number">6.1.</span> <span class="nav-text">5.1 错误信息分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-%E6%8E%92%E6%9F%A5%E6%AD%A5%E9%AA%A4"><span class="nav-number">6.2.</span> <span class="nav-text">5.2 排查步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7"><span class="nav-number">6.3.</span> <span class="nav-text">5.3 调试工具</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E5%85%B6%E4%BB%96%E8%B7%A8%E5%9F%9F%E5%9C%BA%E6%99%AF"><span class="nav-number">7.</span> <span class="nav-text">六、其他跨域场景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-iframe-%E8%B7%A8%E5%9F%9F%E9%80%9A%E4%BF%A1"><span class="nav-number">7.1.</span> <span class="nav-text">6.1 iframe 跨域通信</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-%E8%B7%A8%E5%9F%9F%E5%9B%BE%E7%89%87"><span class="nav-number">7.2.</span> <span class="nav-text">6.2 跨域图片</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-%E8%B7%A8%E5%9F%9F%E5%AD%97%E4%BD%93"><span class="nav-number">7.3.</span> <span class="nav-text">6.3 跨域字体</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81CORS-%E6%B5%81%E7%A8%8B%E9%80%9F%E6%9F%A5%E5%9B%BE"><span class="nav-number">8.</span> <span class="nav-text">七、CORS 流程速查图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E5%AE%89%E5%85%A8%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">9.</span> <span class="nav-text">八、安全注意事项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">10.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="LC"
+      src="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+  <p class="site-author-name" itemprop="name">LC</p>
+  <div class="site-description" itemprop="description">专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/web-blog/archives/">
+        
+          <span class="site-state-item-count">110</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/web-blog/categories/">
+          
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/web-blog/tags/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button motion-element"><i class="fa fa-comment"></i>
+    Chat
+  </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lc19990308/web-blog" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lc19990308&#x2F;web-blog" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:jarridaddison4@gmail.com" title="E-Mail → mailto:jarridaddison4@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/web-blog/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=441491828&auto=1&height=66"></iframe>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LC</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>-->
+<div class="powered-by">
+  <i class="fa fa-user-md"></i>
+  <span id="busuanzi_container_site_pv">
+    本站访问量:<span id="busuanzi_value_site_pv"></span>次
+  </span>
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv">
+    本站总访客量：<span id="busuanzi_value_site_uv"></span>人
+  </span>
+</div>
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共166.3k字</span>
+</div>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/web-blog/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/web-blog/js/utils.js"></script>
+
+<script src="/web-blog/js/motion.js"></script>
+
+
+<script src="/web-blog/js/schemes/pisces.js"></script>
+
+
+<script src="/web-blog/js/next-boot.js"></script>
+
+<script src="/web-blog/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/web-blog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+</body>
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</html>

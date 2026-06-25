@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/web-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/web-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/web-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/web-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/web-blog/css/main.css">
+
+
+<link rel="stylesheet" href="/web-blog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/web-blog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/web-blog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lc19990308.github.io","root":"/web-blog/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="JavaScript 不是逐行解释执行的——它先编译后运行。理解编译原理，才能真正理解作用域、提升和闭包">
+<meta property="og:type" content="article">
+<meta property="og:title" content="你不知道的JavaScript（一）：JavaScript 编译原理与作用域">
+<meta property="og:url" content="https://lc19990308.github.io/web-blog/2026/06/25/posts/ydkjs-01-compilation-and-scope/index.html">
+<meta property="og:site_name" content="前端技术笔记">
+<meta property="og:description" content="JavaScript 不是逐行解释执行的——它先编译后运行。理解编译原理，才能真正理解作用域、提升和闭包">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-25T07:19:19.545Z">
+<meta property="article:author" content="LC">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="你不知道的javascript">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://lc19990308.github.io/web-blog/2026/06/25/posts/ydkjs-01-compilation-and-scope/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>你不知道的JavaScript（一）：JavaScript 编译原理与作用域 | 前端技术笔记</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/web-blog/atom.xml" title="前端技术笔记" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband">
+    <a target="_blank" rel="noopener" href="https://gitee.com/yaru722" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    </div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/web-blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">前端技术笔记</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录前端路上的思考与实践</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/web-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/web-blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/web-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/web-blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/web-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/lc19990308" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/25/posts/ydkjs-01-compilation-and-scope/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+      <meta itemprop="name" content="LC">
+      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端技术笔记">
+    </span>
+      <header class="post-header">
+      
+        <h1 class="post-title" itemprop="name headline">
+          你不知道的JavaScript（一）：JavaScript 编译原理与作用域
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-06-25 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-25T00:00:00+08:00">2026-06-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/web-blog/categories/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/" itemprop="url" rel="index"><span itemprop="name">你不知道的javascript</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">JavaScript 不是逐行解释执行的——它先编译后运行。理解编译原理，才能真正理解作用域、提升和闭包</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>很多开发者以为 JavaScript 是”解释型语言，逐行执行”。这是一个常见的误解。</p>
+<p>事实上，<strong>JavaScript 引擎在执行代码之前会先编译</strong>。虽然编译过程非常短暂（微秒级），但理解这个编译过程是理解作用域的基石。</p>
+<hr>
+<h2 id="一、一段代码是如何执行的？"><a href="#一、一段代码是如何执行的？" class="headerlink" title="一、一段代码是如何执行的？"></a>一、一段代码是如何执行的？</h2><p>看这段代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<p>你觉得这一行发生了什么？”给变量 a 分配内存，赋值为 2”——这是大多数人的答案。但实际上它经历了<strong>编译阶段</strong>和<strong>执行阶段</strong>。</p>
+<h3 id="1-1-三个角色"><a href="#1-1-三个角色" class="headerlink" title="1.1 三个角色"></a>1.1 三个角色</h3><p>JavaScript 程序执行涉及三个角色：</p>
+<table>
+<thead>
+<tr>
+<th>角色</th>
+<th>职责</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>引擎（Engine）</strong></td>
+<td>从头到尾负责整个程序的编译和执行</td>
+</tr>
+<tr>
+<td><strong>编译器（Compiler）</strong></td>
+<td>负责词法分析、语法分析、生成可执行代码</td>
+</tr>
+<tr>
+<td><strong>作用域（Scope）</strong></td>
+<td>负责收集并维护所有声明的标识符（变量），确定当前执行代码对这些标识符的访问权限</td>
+</tr>
+</tbody></table>
+<h3 id="1-2-编译阶段"><a href="#1-2-编译阶段" class="headerlink" title="1.2 编译阶段"></a>1.2 编译阶段</h3><p>当引擎遇到 <code>var a = 2</code> 时，编译器做了这两件事：</p>
+<p><strong>第一步：编译（声明）</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 编译器遇到 var a，询问作用域：</span></span><br><span class="line"><span class="comment">// &quot;在当前作用域中，有没有一个叫 a 的变量？&quot;</span></span><br><span class="line"><span class="comment">// 没有 → 作用域声明一个新变量 a</span></span><br><span class="line"><span class="comment">// 有 → 跳过声明</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>第二步：执行（赋值）</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 引擎运行时代码：a = 2</span></span><br><span class="line"><span class="comment">// 引擎询问作用域：</span></span><br><span class="line"><span class="comment">// &quot;在当前作用域中，能找到变量 a 吗？&quot;</span></span><br><span class="line"><span class="comment">// 找到 → 赋值 2</span></span><br><span class="line"><span class="comment">// 没找到 → 抛出 ReferenceError</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="二、LHS-查询与-RHS-查询"><a href="#二、LHS-查询与-RHS-查询" class="headerlink" title="二、LHS 查询与 RHS 查询"></a>二、LHS 查询与 RHS 查询</h2><p>引擎在作用域中查找变量时，执行两种不同的查询：</p>
+<h3 id="2-1-什么是-LHS-和-RHS？"><a href="#2-1-什么是-LHS-和-RHS？" class="headerlink" title="2.1 什么是 LHS 和 RHS？"></a>2.1 什么是 LHS 和 RHS？</h3><p>把变量放在<strong>赋值操作的左侧</strong>和<strong>右侧</strong>来理解：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// RHS：取出 a 的值（右手边，被使用）</span></span><br><span class="line"><span class="built_in">console</span>.log(a)</span><br><span class="line"></span><br><span class="line"><span class="comment">// LHS：找到 a 的位置，准备赋值（左手边，被赋值）</span></span><br><span class="line">a = <span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 组合情况</span></span><br><span class="line"><span class="keyword">var</span> b = a + <span class="number">1</span></span><br><span class="line"><span class="comment">// b: LHS（被赋值）</span></span><br><span class="line"><span class="comment">// a: RHS（取值）</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-识别-LHS-RHS"><a href="#2-2-识别-LHS-RHS" class="headerlink" title="2.2 识别 LHS/RHS"></a>2.2 识别 LHS/RHS</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">a</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 隐式 LHS：调用时 a = 2（形参赋值）</span></span><br><span class="line">  <span class="keyword">var</span> b = a</span><br><span class="line">  <span class="comment">// b: LHS, a: RHS</span></span><br><span class="line">  <span class="keyword">return</span> a + b</span><br><span class="line">  <span class="comment">// a: RHS, b: RHS</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> c = foo(<span class="number">2</span>)</span><br><span class="line"><span class="comment">// c: LHS, foo: RHS</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>区分技巧</strong>：如果变量出现在赋值操作的<strong>左边</strong>（被赋值的位置），就是 LHS；如果是<strong>右边</strong>（被读取的位置），就是 RHS。</p>
+<h3 id="2-3-LHS-和-RHS-失败时的不同行为"><a href="#2-3-LHS-和-RHS-失败时的不同行为" class="headerlink" title="2.3 LHS 和 RHS 失败时的不同行为"></a>2.3 LHS 和 RHS 失败时的不同行为</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// RHS 失败 → ReferenceError（变量未声明）</span></span><br><span class="line">  <span class="built_in">console</span>.log(b) <span class="comment">// ❌ ReferenceError: b is not defined</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// LHS 失败 → 非严格模式下自动创建全局变量</span></span><br><span class="line">  a = <span class="number">1</span> <span class="comment">// 没报错，但创建了全局变量 a</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">test()</span><br><span class="line"><span class="built_in">console</span>.log(a) <span class="comment">// 1（污染了全局作用域）</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&quot;use strict&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 严格模式下，LHS 失败也会报 ReferenceError</span></span><br><span class="line">  a = <span class="number">1</span> <span class="comment">// ❌ ReferenceError</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-4-面试题"><a href="#2-4-面试题" class="headerlink" title="2.4 面试题"></a>2.4 面试题</h3><p>理解 LHS/RHS 就能答对这道经典面试题：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(a) <span class="comment">// 输出什么？</span></span><br><span class="line"><span class="keyword">var</span> a = <span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>答案</strong>：<code>undefined</code></p>
+<p><strong>过程</strong>：</p>
+<ol>
+<li>编译阶段：<code>var a</code> 被提升，声明变量 a</li>
+<li>执行阶段：<code>console.log(a)</code> RHS 查询 a 的值</li>
+<li>此时 a 还没被赋值，所以值为 <code>undefined</code></li>
+</ol>
+<hr>
+<h2 id="三、作用域的嵌套"><a href="#三、作用域的嵌套" class="headerlink" title="三、作用域的嵌套"></a>三、作用域的嵌套</h2><p>作用域是<strong>嵌套</strong>的，就像大楼的房间：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">outer</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> a = <span class="number">1</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">inner</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> b = <span class="number">2</span></span><br><span class="line">    <span class="comment">// 可以访问 a 和 b</span></span><br><span class="line">    <span class="built_in">console</span>.log(a + b) <span class="comment">// 3</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">innermost</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="keyword">var</span> c = <span class="number">3</span></span><br><span class="line">      <span class="comment">// 可以访问 a, b, c</span></span><br><span class="line">      <span class="built_in">console</span>.log(a + b + c) <span class="comment">// 6</span></span><br><span class="line">    &#125;</span><br><span class="line">    innermost()</span><br><span class="line">  &#125;</span><br><span class="line">  inner()</span><br><span class="line">  <span class="comment">// 不能访问 b</span></span><br><span class="line">  <span class="comment">// console.log(b) // ReferenceError</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">outer()</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-1-作用域查找规则"><a href="#3-1-作用域查找规则" class="headerlink" title="3.1 作用域查找规则"></a>3.1 作用域查找规则</h3><p>引擎从<strong>当前执行的作用域</strong>开始查找变量，逐级向上，直到找到为止：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> globalVar = <span class="string">&#x27;global&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> fooVar = <span class="string">&#x27;foo&#x27;</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">bar</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> barVar = <span class="string">&#x27;bar&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">console</span>.log(barVar) <span class="comment">// 当前作用域找到 → &#x27;bar&#x27;</span></span><br><span class="line">    <span class="built_in">console</span>.log(fooVar) <span class="comment">// 上一层找到 → &#x27;foo&#x27;</span></span><br><span class="line">    <span class="built_in">console</span>.log(globalVar) <span class="comment">// 全局作用域找到 → &#x27;global&#x27;</span></span><br><span class="line">    <span class="built_in">console</span>.log(notExist) <span class="comment">// 所有作用域都没找到 → ReferenceError</span></span><br><span class="line">  &#125;</span><br><span class="line">  bar()</span><br><span class="line">&#125;</span><br><span class="line">foo()</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-遮蔽效应（Shadowing）"><a href="#3-2-遮蔽效应（Shadowing）" class="headerlink" title="3.2 遮蔽效应（Shadowing）"></a>3.2 遮蔽效应（Shadowing）</h3><p>当内层作用域声明了与外层同名的变量，内层的变量会”遮蔽”外层：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> name = <span class="string">&#x27;Global&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> name = <span class="string">&#x27;Foo&#x27;</span></span><br><span class="line">  <span class="built_in">console</span>.log(name) <span class="comment">// &#x27;Foo&#x27;（内层遮蔽了外层）</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">bar</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> name = <span class="string">&#x27;Bar&#x27;</span></span><br><span class="line">    <span class="built_in">console</span>.log(name) <span class="comment">// &#x27;Bar&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line">  bar()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">foo()</span><br><span class="line"><span class="built_in">console</span>.log(name) <span class="comment">// &#x27;Global&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>注意</strong>：JavaScript 不支持越过遮蔽直接访问外层同名变量（除非用 <code>window.name</code> 访问全局变量）。</p>
+<hr>
+<h2 id="四、编译原理的启示"><a href="#四、编译原理的启示" class="headerlink" title="四、编译原理的启示"></a>四、编译原理的启示</h2><p>理解编译原理后，很多奇怪的现象就清楚了：</p>
+<h3 id="4-1-为什么函数声明可以提升？"><a href="#4-1-为什么函数声明可以提升？" class="headerlink" title="4.1 为什么函数声明可以提升？"></a>4.1 为什么函数声明可以提升？</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">foo() <span class="comment">// &#x27;Hello&#x27; — 为什么不会报错？</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;Hello&#x27;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>因为在编译阶段，函数声明被整个提升到作用域顶部。变量声明 <code>var</code> 也会提升，但赋值不移。</p>
+<h3 id="4-2-为什么函数表达式不行？"><a href="#4-2-为什么函数表达式不行？" class="headerlink" title="4.2 为什么函数表达式不行？"></a>4.2 为什么函数表达式不行？</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">bar() <span class="comment">// ❌ TypeError: bar is not a function</span></span><br><span class="line"><span class="keyword">var</span> bar = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;Hello&#x27;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>var bar</code> 被提升了（值为 <code>undefined</code>），但赋值在运行时才发生。所以执行 <code>bar()</code> 时，bar 是 <code>undefined</code>，不是一个可调用的函数。</p>
+<h3 id="4-3-LHS-RHS-真实案例"><a href="#4-3-LHS-RHS-真实案例" class="headerlink" title="4.3 LHS/RHS 真实案例"></a>4.3 LHS/RHS 真实案例</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 猜输出</span></span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> a = b = <span class="number">3</span></span><br><span class="line">&#125;)()</span><br><span class="line"><span class="built_in">console</span>.log(b) <span class="comment">// ?</span></span><br><span class="line"><span class="built_in">console</span>.log(a) <span class="comment">// ?</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>答案</strong>：<code>3</code>，<code>ReferenceError: a is not defined</code></p>
+<p><strong>解析</strong>：</p>
+<ul>
+<li><code>var a = b = 3</code> 等价于 <code>var a = 3; b = 3</code></li>
+<li><code>var a</code> → LHS，找到函数作用域的 a</li>
+<li><code>b = 3</code> → LHS，函数作用域没有 b，外层也没有 → 非严格模式下创建全局变量 b</li>
+<li>函数执行完后，a 被销毁，b 留在全局</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&quot;use strict&quot;</span></span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> a = b = <span class="number">3</span></span><br><span class="line">&#125;)()</span><br><span class="line"><span class="comment">// 严格模式下两者都报 ReferenceError</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="五、回到那行代码"><a href="#五、回到那行代码" class="headerlink" title="五、回到那行代码"></a>五、回到那行代码</h2><p>现在再看开头那行 <code>var a = 2</code>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">编译阶段：</span><br><span class="line">  编译器：var a — 作用域，有 a 吗？→ 没有，声明它</span><br><span class="line">执行阶段：</span><br><span class="line">  引擎：a = 2 — 作用域，有 a 吗？→ 有，赋值 2</span><br></pre></td></tr></table></figure>
+
+<p>整个过程分成了<strong>编译期（声明）</strong>和<strong>运行期（赋值）</strong>。理解这两个阶段的分离，是理解 JavaScript 其他一切高级概念的基础。</p>
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
+<li><strong>JavaScript 是先编译后执行的语言</strong>，不是纯解释型</li>
+<li><strong>LHS 查询</strong>：找变量容器（赋值目标）；<strong>RHS 查询</strong>：取变量的值（赋值源）</li>
+<li><strong>作用域嵌套查找</strong>：从当前作用域向外，直到全局</li>
+<li><strong>LHS 失败</strong>：非严格模式创建全局变量，严格模式报 ReferenceError</li>
+<li><strong>RHS 失败</strong>：始终报 ReferenceError</li>
+<li>编译阶段处理声明，执行阶段处理赋值——<strong>提升</strong>由此而来</li>
+</ol>
+<blockquote>
+<p>下一篇将深入<strong>词法作用域</strong>，讲解 JavaScript 作用域的静态特性。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/web-blog/2026/06/25/posts/ydkjs-01-compilation-and-scope/">你不知道的JavaScript（一）：JavaScript 编译原理与作用域</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a></p>
+  <p><span>发布时间:</span>2026年06月25日 - 00:06</p>
+  <p><span>最后更新:</span>2026年06月25日 - 15:06</p>
+  <p><span>原始链接:</span><a href="/web-blog/2026/06/25/posts/ydkjs-01-compilation-and-scope/" title="你不知道的JavaScript（一）：JavaScript 编译原理与作用域">https://lc19990308.github.io/web-blog/2026/06/25/posts/ydkjs-01-compilation-and-scope/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://lc19990308.github.io/web-blog/2026/06/25/posts/ydkjs-01-compilation-and-scope/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+    });
+    });  
+</script>
+
+      
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>LC
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://lc19990308.github.io/web-blog/2026/06/25/posts/ydkjs-01-compilation-and-scope/" title="你不知道的JavaScript（一）：JavaScript 编译原理与作用域">https://lc19990308.github.io/web-blog/2026/06/25/posts/ydkjs-01-compilation-and-scope/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/web-blog/tags/JavaScript/" ****><i class="fa fa-tag"></i> JavaScript</a>
+              <a href="/web-blog/tags/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/" ****><i class="fa fa-tag"></i> 你不知道的javascript</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/06/16/Pinia%E4%BD%BF%E7%94%A8%E8%BE%B9%E7%95%8C/" rel="prev" title="Pinia 使用边界：什么该放 Store，什么不该放">
+      <i class="fa fa-chevron-left"></i> Pinia 使用边界：什么该放 Store，什么不该放
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/06/25/vite-plugin-development-practice/" rel="next" title="Vite 6 插件开发实战：从 Loader 到 HMR 自定义">
+      Vite 6 插件开发实战：从 Loader 到 HMR 自定义 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E4%B8%80%E6%AE%B5%E4%BB%A3%E7%A0%81%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">一、一段代码是如何执行的？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E4%B8%89%E4%B8%AA%E8%A7%92%E8%89%B2"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 三个角色</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E7%BC%96%E8%AF%91%E9%98%B6%E6%AE%B5"><span class="nav-number">2.2.</span> <span class="nav-text">1.2 编译阶段</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81LHS-%E6%9F%A5%E8%AF%A2%E4%B8%8E-RHS-%E6%9F%A5%E8%AF%A2"><span class="nav-number">3.</span> <span class="nav-text">二、LHS 查询与 RHS 查询</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E4%BB%80%E4%B9%88%E6%98%AF-LHS-%E5%92%8C-RHS%EF%BC%9F"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 什么是 LHS 和 RHS？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E8%AF%86%E5%88%AB-LHS-RHS"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 识别 LHS&#x2F;RHS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-LHS-%E5%92%8C-RHS-%E5%A4%B1%E8%B4%A5%E6%97%B6%E7%9A%84%E4%B8%8D%E5%90%8C%E8%A1%8C%E4%B8%BA"><span class="nav-number">3.3.</span> <span class="nav-text">2.3 LHS 和 RHS 失败时的不同行为</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-%E9%9D%A2%E8%AF%95%E9%A2%98"><span class="nav-number">3.4.</span> <span class="nav-text">2.4 面试题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E4%BD%9C%E7%94%A8%E5%9F%9F%E7%9A%84%E5%B5%8C%E5%A5%97"><span class="nav-number">4.</span> <span class="nav-text">三、作用域的嵌套</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E4%BD%9C%E7%94%A8%E5%9F%9F%E6%9F%A5%E6%89%BE%E8%A7%84%E5%88%99"><span class="nav-number">4.1.</span> <span class="nav-text">3.1 作用域查找规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E9%81%AE%E8%94%BD%E6%95%88%E5%BA%94%EF%BC%88Shadowing%EF%BC%89"><span class="nav-number">4.2.</span> <span class="nav-text">3.2 遮蔽效应（Shadowing）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E7%9A%84%E5%90%AF%E7%A4%BA"><span class="nav-number">5.</span> <span class="nav-text">四、编译原理的启示</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E4%B8%BA%E4%BB%80%E4%B9%88%E5%87%BD%E6%95%B0%E5%A3%B0%E6%98%8E%E5%8F%AF%E4%BB%A5%E6%8F%90%E5%8D%87%EF%BC%9F"><span class="nav-number">5.1.</span> <span class="nav-text">4.1 为什么函数声明可以提升？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E4%B8%BA%E4%BB%80%E4%B9%88%E5%87%BD%E6%95%B0%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%B8%8D%E8%A1%8C%EF%BC%9F"><span class="nav-number">5.2.</span> <span class="nav-text">4.2 为什么函数表达式不行？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-LHS-RHS-%E7%9C%9F%E5%AE%9E%E6%A1%88%E4%BE%8B"><span class="nav-number">5.3.</span> <span class="nav-text">4.3 LHS&#x2F;RHS 真实案例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E5%9B%9E%E5%88%B0%E9%82%A3%E8%A1%8C%E4%BB%A3%E7%A0%81"><span class="nav-number">6.</span> <span class="nav-text">五、回到那行代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="LC"
+      src="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+  <p class="site-author-name" itemprop="name">LC</p>
+  <div class="site-description" itemprop="description">专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/web-blog/archives/">
+        
+          <span class="site-state-item-count">110</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/web-blog/categories/">
+          
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/web-blog/tags/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button motion-element"><i class="fa fa-comment"></i>
+    Chat
+  </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lc19990308/web-blog" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lc19990308&#x2F;web-blog" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:jarridaddison4@gmail.com" title="E-Mail → mailto:jarridaddison4@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/web-blog/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=441491828&auto=1&height=66"></iframe>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LC</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>-->
+<div class="powered-by">
+  <i class="fa fa-user-md"></i>
+  <span id="busuanzi_container_site_pv">
+    本站访问量:<span id="busuanzi_value_site_pv"></span>次
+  </span>
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv">
+    本站总访客量：<span id="busuanzi_value_site_uv"></span>人
+  </span>
+</div>
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共166.3k字</span>
+</div>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/web-blog/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/web-blog/js/utils.js"></script>
+
+<script src="/web-blog/js/motion.js"></script>
+
+
+<script src="/web-blog/js/schemes/pisces.js"></script>
+
+
+<script src="/web-blog/js/next-boot.js"></script>
+
+<script src="/web-blog/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/web-blog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+</body>
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</html>

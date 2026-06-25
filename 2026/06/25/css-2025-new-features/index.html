@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/web-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/web-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/web-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/web-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/web-blog/css/main.css">
+
+
+<link rel="stylesheet" href="/web-blog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/web-blog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/web-blog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lc19990308.github.io","root":"/web-blog/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="四大 CSS 重磅新特性的原理与实战，涵盖 :has() 选择器、View Transitions API、@layer 层级管理、以及滚动驱动动画">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSS 2025 新特性全景：has()、View Transitions、CSS Layers、Scroll-Driven Animations">
+<meta property="og:url" content="https://lc19990308.github.io/web-blog/2026/06/25/css-2025-new-features/index.html">
+<meta property="og:site_name" content="前端技术笔记">
+<meta property="og:description" content="四大 CSS 重磅新特性的原理与实战，涵盖 :has() 选择器、View Transitions API、@layer 层级管理、以及滚动驱动动画">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-25T07:09:36.680Z">
+<meta property="article:author" content="LC">
+<meta property="article:tag" content="css">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://lc19990308.github.io/web-blog/2026/06/25/css-2025-new-features/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>CSS 2025 新特性全景：has()、View Transitions、CSS Layers、Scroll-Driven Animations | 前端技术笔记</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/web-blog/atom.xml" title="前端技术笔记" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband">
+    <a target="_blank" rel="noopener" href="https://gitee.com/yaru722" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    </div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/web-blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">前端技术笔记</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录前端路上的思考与实践</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/web-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/web-blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/web-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/web-blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/web-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/lc19990308" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/25/css-2025-new-features/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+      <meta itemprop="name" content="LC">
+      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端技术笔记">
+    </span>
+      <header class="post-header">
+      
+        <h1 class="post-title" itemprop="name headline">
+          CSS 2025 新特性全景：has()、View Transitions、CSS Layers、Scroll-Driven Animations
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-06-25 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-25T00:00:00+08:00">2026-06-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/web-blog/categories/css/" itemprop="url" rel="index"><span itemprop="name">css</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">四大 CSS 重磅新特性的原理与实战，涵盖 :has() 选择器、View Transitions API、@layer 层级管理、以及滚动驱动动画</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>CSS 在 2023-2025 年迎来了近年来最密集的更新。四个重量级特性正在改变前端开发者写 CSS 的方式：</p>
+<ul>
+<li><strong><code>:has()</code></strong> — 父级选择器，终于可以根据子元素状态选择父元素</li>
+<li><strong>View Transitions API</strong> — 原生页面过渡动画</li>
+<li><strong><code>@layer</code></strong> — 显式控制样式层叠优先级</li>
+<li><strong>Scroll-Driven Animations</strong> — 纯 CSS 滚动驱动动画</li>
+</ul>
+<p>本文逐一实战讲解，附完整可运行示例。</p>
+<hr>
+<h2 id="一、-has-—-终于有了父级选择器"><a href="#一、-has-—-终于有了父级选择器" class="headerlink" title="一、:has() — 终于有了父级选择器"></a>一、:has() — 终于有了父级选择器</h2><h3 id="1-1-基础语法"><a href="#1-1-基础语法" class="headerlink" title="1.1 基础语法"></a>1.1 基础语法</h3><p><code>:has()</code> 是一个 <strong>关系伪类</strong>，它选择<strong>包含指定子元素或后继元素的父元素</strong>：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 选择包含 &lt;img&gt; 的 &lt;article&gt; */</span></span><br><span class="line"><span class="selector-tag">article</span><span class="selector-pseudo">:has</span>(<span class="selector-tag">img</span>) &#123;</span><br><span class="line">  <span class="attribute">display</span>: grid;</span><br><span class="line">  grid-template-<span class="attribute">columns</span>: <span class="number">1</span>fr <span class="number">2</span>fr;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 选择包含 class=&quot;error&quot; 元素的表单组 */</span></span><br><span class="line"><span class="selector-class">.form-group</span><span class="selector-pseudo">:has</span>(<span class="selector-class">.error</span>) <span class="selector-tag">input</span> &#123;</span><br><span class="line">  <span class="attribute">border-color</span>: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-实战场景"><a href="#1-2-实战场景" class="headerlink" title="1.2 实战场景"></a>1.2 实战场景</h3><p><strong>场景一：表单验证样式</strong></p>
+<p>以前我们只能用 JS 加类名，现在纯 CSS 搞定：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 输入框校验状态 */</span></span><br><span class="line"><span class="selector-class">.input-group</span><span class="selector-pseudo">:has</span>(<span class="selector-tag">input</span><span class="selector-pseudo">:valid</span>)<span class="selector-pseudo">::after</span> &#123;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">&#x27;✓&#x27;</span>;</span><br><span class="line">  <span class="attribute">color</span>: green;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.input-group</span><span class="selector-pseudo">:has</span>(<span class="selector-tag">input</span><span class="selector-pseudo">:invalid</span><span class="selector-pseudo">:not</span>(<span class="selector-pseudo">:placeholder-shown</span>))<span class="selector-pseudo">::after</span> &#123;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">&#x27;✗&#x27;</span>;</span><br><span class="line">  <span class="attribute">color</span>: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>场景二：卡片选中状态高亮</strong></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.card-list</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: flex;</span><br><span class="line">  gap: <span class="number">16px</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.card</span><span class="selector-pseudo">:has</span>(<span class="selector-tag">input</span><span class="selector-pseudo">:checked</span>) &#123;</span><br><span class="line">  <span class="attribute">border-color</span>: <span class="number">#409eff</span>;</span><br><span class="line">  <span class="attribute">box-shadow</span>: <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">2px</span> <span class="built_in">rgba</span>(<span class="number">64</span>,<span class="number">158</span>,<span class="number">255</span>,<span class="number">0.3</span>);</span><br><span class="line">  <span class="attribute">background</span>: <span class="number">#f0f9ff</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>场景三：根据相邻元素调整布局</strong></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 选择 &lt;h2&gt; 后面紧跟着 &lt;p&gt; 的 h2 */</span></span><br><span class="line"><span class="selector-tag">h2</span><span class="selector-pseudo">:has</span>(+ <span class="selector-tag">p</span>) &#123;</span><br><span class="line">  <span class="attribute">margin-bottom</span>: <span class="number">8px</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 选择包含两个以上子元素的父容器 */</span></span><br><span class="line"><span class="selector-class">.card</span><span class="selector-pseudo">:has</span>(&gt; <span class="selector-pseudo">:nth-child</span>(<span class="number">2</span>)) &#123;</span><br><span class="line">  grid-column: span <span class="number">2</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-3-性能注意事项"><a href="#1-3-性能注意事项" class="headerlink" title="1.3 性能注意事项"></a>1.3 性能注意事项</h3><p><code>:has()</code> 的 <strong>计算成本较高</strong>，因为浏览器需要扫描子元素来确定匹配。建议：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* ❌ 不推荐：深层嵌套的 :has() */</span></span><br><span class="line"><span class="selector-tag">body</span><span class="selector-pseudo">:has</span>(<span class="selector-tag">div</span><span class="selector-pseudo">:has</span>(<span class="selector-tag">span</span><span class="selector-pseudo">:has</span>(<span class="selector-class">.icon</span>))) &#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* ✅ 推荐：尽量浅层，限制后代选择器深度 */</span></span><br><span class="line"><span class="selector-class">.card</span><span class="selector-pseudo">:has</span>(<span class="selector-class">.icon</span>) &#123; &#125;  <span class="comment">/* 直接后代选择 &gt; 更高效 */</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="二、View-Transitions-API-—-原生页面过渡"><a href="#二、View-Transitions-API-—-原生页面过渡" class="headerlink" title="二、View Transitions API — 原生页面过渡"></a>二、View Transitions API — 原生页面过渡</h2><h3 id="2-1-原理"><a href="#2-1-原理" class="headerlink" title="2.1 原理"></a>2.1 原理</h3><p>View Transitions 是浏览器原生的<strong>页面状态切换动画机制</strong>。它快照当前的页面状态（<code>old</code>），切换到新状态（<code>new</code>），然后插值生成过渡动画：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 基础用法：页面导航过渡 */</span></span><br><span class="line">::<span class="built_in">view-transition-old</span>(root) &#123;</span><br><span class="line">  animation: <span class="number">300ms</span> ease-out both fade-out;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">::<span class="built_in">view-transition-new</span>(root) &#123;</span><br><span class="line">  animation: <span class="number">300ms</span> ease-in both fade-in;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@keyframes</span> fade-out &#123;</span><br><span class="line">  <span class="selector-tag">to</span> &#123; <span class="attribute">opacity</span>: <span class="number">0</span>; <span class="attribute">transform</span>: <span class="built_in">scale</span>(<span class="number">0.95</span>); &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@keyframes</span> fade-in &#123;</span><br><span class="line">  <span class="selector-tag">from</span> &#123; <span class="attribute">opacity</span>: <span class="number">0</span>; <span class="attribute">transform</span>: <span class="built_in">scale</span>(<span class="number">1.05</span>); &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-实战：列表到详情页过渡"><a href="#2-2-实战：列表到详情页过渡" class="headerlink" title="2.2 实战：列表到详情页过渡"></a>2.2 实战：列表到详情页过渡</h3><p>HTML：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;gallery&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;card&quot;</span> <span class="attr">style</span>=<span class="string">&quot;view-transition-name: card-1&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;photo1.jpg&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h3</span>&gt;</span>照片 1<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;card&quot;</span> <span class="attr">style</span>=<span class="string">&quot;view-transition-name: card-2&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;photo2.jpg&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h3</span>&gt;</span>照片 2<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>CSS：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 点击卡片放大到全屏的过渡 */</span></span><br><span class="line"><span class="selector-class">.card</span> &#123;</span><br><span class="line">  <span class="attribute">cursor</span>: pointer;</span><br><span class="line">  view-<span class="attribute">transition</span>-name: <span class="built_in">var</span>(--card-name);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 旧视图缩小 */</span></span><br><span class="line">::<span class="built_in">view-transition-old</span>(.card-<span class="number">1</span>) &#123;</span><br><span class="line">  animation: <span class="number">300ms</span> ease-in both shrink;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 新视图放大 */</span></span><br><span class="line">::<span class="built_in">view-transition-new</span>(.card-<span class="number">1</span>) &#123;</span><br><span class="line">  animation: <span class="number">300ms</span> ease-out both expand;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@keyframes</span> shrink &#123;</span><br><span class="line">  <span class="selector-tag">to</span> &#123; <span class="attribute">opacity</span>: <span class="number">0</span>; <span class="attribute">transform</span>: <span class="built_in">scale</span>(<span class="number">0.8</span>); &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@keyframes</span> expand &#123;</span><br><span class="line">  <span class="selector-tag">from</span> &#123; <span class="attribute">opacity</span>: <span class="number">0.3</span>; <span class="attribute">transform</span>: <span class="built_in">scale</span>(<span class="number">1.2</span>); &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-MPA-跨页面过渡"><a href="#2-3-MPA-跨页面过渡" class="headerlink" title="2.3 MPA 跨页面过渡"></a>2.3 MPA 跨页面过渡</h3><p>2025 年 View Transitions 已支持跨文档（MPA 多页应用）：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 跨页面过渡动画 */</span></span><br><span class="line"><span class="keyword">@view-transition</span> &#123;</span><br><span class="line">  navigation: auto;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 从列表页到详情页 */</span></span><br><span class="line"><span class="selector-tag">html</span><span class="selector-pseudo">:active</span>-view-<span class="attribute">transition</span>-type(forwards) &#123;</span><br><span class="line">  &amp;::<span class="built_in">view-transition-old</span>(root) &#123;</span><br><span class="line">    animation: <span class="number">300ms</span> slide-left-out;</span><br><span class="line">  &#125;</span><br><span class="line">  &amp;::<span class="built_in">view-transition-new</span>(root) &#123;</span><br><span class="line">    animation: <span class="number">300ms</span> slide-left-in;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="三、-layer-—-样式层叠控制"><a href="#三、-layer-—-样式层叠控制" class="headerlink" title="三、@layer — 样式层叠控制"></a>三、@layer — 样式层叠控制</h2><h3 id="3-1-问题背景"><a href="#3-1-问题背景" class="headerlink" title="3.1 问题背景"></a>3.1 问题背景</h3><p>传统 CSS 的层叠优先级取决于<strong>顺序</strong>和<strong>选择器权重</strong>，难以控制第三方库的样式优先级：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 第三方 UI 库的样式 */</span></span><br><span class="line"><span class="selector-class">.button</span> &#123; <span class="attribute">background</span>: blue; &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 想覆盖它的样式，但必须提高权重或用 !important */</span></span><br><span class="line"><span class="selector-class">.my-app</span> <span class="selector-class">.button</span> &#123; <span class="attribute">background</span>: red; &#125;  <span class="comment">/* 依赖权重 */</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-layer-解决方案"><a href="#3-2-layer-解决方案" class="headerlink" title="3.2 @layer 解决方案"></a>3.2 @layer 解决方案</h3><p><code>@layer</code> 让开发者显式声明层叠顺序：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 定义层叠顺序：越靠后优先级越高 */</span></span><br><span class="line"><span class="keyword">@layer</span> reset, base, components, utilities;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 在各自层中定义样式 */</span></span><br><span class="line"><span class="keyword">@layer</span> reset &#123;</span><br><span class="line">  * &#123; <span class="attribute">margin</span>: <span class="number">0</span>; <span class="attribute">padding</span>: <span class="number">0</span>; <span class="attribute">box-sizing</span>: border-box; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@layer</span> base &#123;</span><br><span class="line">  <span class="selector-tag">body</span> &#123; <span class="attribute">font-family</span>: system-ui, sans-serif; <span class="attribute">line-height</span>: <span class="number">1.6</span>; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@layer</span> components &#123;</span><br><span class="line">  <span class="selector-class">.button</span> &#123;</span><br><span class="line">    <span class="attribute">padding</span>: <span class="number">8px</span> <span class="number">16px</span>;</span><br><span class="line">    <span class="attribute">background</span>: <span class="number">#409eff</span>;</span><br><span class="line">    <span class="attribute">color</span>: white;</span><br><span class="line">    <span class="attribute">border-radius</span>: <span class="number">6px</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@layer</span> utilities &#123;</span><br><span class="line">  <span class="selector-class">.mt-4</span> &#123; <span class="attribute">margin-top</span>: <span class="number">16px</span>; &#125;</span><br><span class="line">  <span class="selector-class">.text-center</span> &#123; <span class="attribute">text-align</span>: center; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-覆盖第三方库样式"><a href="#3-3-覆盖第三方库样式" class="headerlink" title="3.3 覆盖第三方库样式"></a>3.3 覆盖第三方库样式</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 将第三方样式放入低优先级层 */</span></span><br><span class="line"><span class="keyword">@layer</span> vendor &#123;</span><br><span class="line">  <span class="keyword">@import</span> <span class="string">&#x27;element-plus/dist/index.css&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 自己的样式放在更高优先级层 */</span></span><br><span class="line"><span class="keyword">@layer</span> app &#123;</span><br><span class="line">  <span class="selector-class">.el-button</span> &#123;</span><br><span class="line">    <span class="attribute">border-radius</span>: <span class="number">8px</span>;  <span class="comment">/* 覆盖 Element Plus 的圆角 */</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>效果</strong>：<code>app</code> 层的样式永远高于 <code>vendor</code> 层，无需担心选择器权重问题。</p>
+<h3 id="3-4-嵌套层"><a href="#3-4-嵌套层" class="headerlink" title="3.4 嵌套层"></a>3.4 嵌套层</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@layer</span> components &#123;</span><br><span class="line">  <span class="keyword">@layer</span> button &#123;</span><br><span class="line">    <span class="selector-class">.btn</span> &#123; <span class="attribute">padding</span>: <span class="number">8px</span> <span class="number">16px</span>; &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">@layer</span> card &#123;</span><br><span class="line">    <span class="selector-class">.card</span> &#123; <span class="attribute">padding</span>: <span class="number">16px</span>; <span class="attribute">border-radius</span>: <span class="number">8px</span>; &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 嵌套层中使用点语法引用 */</span></span><br><span class="line"><span class="keyword">@layer</span> components.button &#123;</span><br><span class="line">  <span class="selector-class">.btn-primary</span> &#123; <span class="attribute">background</span>: <span class="number">#409eff</span>; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="四、Scroll-Driven-Animations-—-滚动驱动动画"><a href="#四、Scroll-Driven-Animations-—-滚动驱动动画" class="headerlink" title="四、Scroll-Driven Animations — 滚动驱动动画"></a>四、Scroll-Driven Animations — 滚动驱动动画</h2><h3 id="4-1-基础概念"><a href="#4-1-基础概念" class="headerlink" title="4.1 基础概念"></a>4.1 基础概念</h3><p>以前实现滚动动画需要 Intersection Observer + JS 或 ScrollTrigger 等库。现在纯 CSS 即可实现：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 基础用法：滚动进度条 */</span></span><br><span class="line"><span class="keyword">@keyframes</span> progress &#123;</span><br><span class="line">  <span class="selector-tag">from</span> &#123; <span class="attribute">width</span>: <span class="number">0%</span>; &#125;</span><br><span class="line">  <span class="selector-tag">to</span> &#123; <span class="attribute">width</span>: <span class="number">100%</span>; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.progress-bar</span> &#123;</span><br><span class="line">  <span class="attribute">animation</span>: progress linear;</span><br><span class="line">  <span class="attribute">animation</span>-timeline: <span class="built_in">scroll</span>(root);  <span class="comment">/* 监听根元素的滚动 */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 滚动触发范围：从滚动容器 0% 到 100% */</span></span><br></pre></td></tr></table></figure>
+
+<p><strong><code>animation-timeline</code></strong> 属性有以下几个值：</p>
+<ul>
+<li><code>scroll()</code> — 滚动进度（0-100%）</li>
+<li><code>view()</code> — 元素在视口中的可见度（0-100%）</li>
+<li>或一个 <code>ScrollTimeline</code> 实例名称</li>
+</ul>
+<h3 id="4-2-实战：滚动驱动的视差效果"><a href="#4-2-实战：滚动驱动的视差效果" class="headerlink" title="4.2 实战：滚动驱动的视差效果"></a>4.2 实战：滚动驱动的视差效果</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.parallax-section</span> &#123;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100vh</span>;</span><br><span class="line">  <span class="attribute">display</span>: flex;</span><br><span class="line">  <span class="attribute">align-items</span>: center;</span><br><span class="line">  <span class="attribute">justify-content</span>: center;</span><br><span class="line">  <span class="attribute">font-size</span>: <span class="number">4rem</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.parallax-title</span> &#123;</span><br><span class="line">  <span class="attribute">animation</span>: parallax-fade linear;</span><br><span class="line">  <span class="attribute">animation</span>-timeline: <span class="built_in">view</span>();</span><br><span class="line">  <span class="attribute">animation</span>-range: entry <span class="number">0%</span> exit <span class="number">100%</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@keyframes</span> parallax-fade &#123;</span><br><span class="line">  entry <span class="number">0%</span> &#123;</span><br><span class="line">    <span class="attribute">opacity</span>: <span class="number">0</span>;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">translateY</span>(<span class="number">100px</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  entry <span class="number">100%</span> &#123;</span><br><span class="line">    <span class="attribute">opacity</span>: <span class="number">1</span>;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">translateY</span>(<span class="number">0</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  exit <span class="number">0%</span> &#123;</span><br><span class="line">    <span class="attribute">opacity</span>: <span class="number">1</span>;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">translateY</span>(<span class="number">0</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  exit <span class="number">100%</span> &#123;</span><br><span class="line">    <span class="attribute">opacity</span>: <span class="number">0</span>;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">translateY</span>(-<span class="number">100px</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>效果</strong>：标题在进入视口时从下往上淡入，离开时向上淡出。</p>
+<h3 id="4-3-实战：自动播放的轮播图"><a href="#4-3-实战：自动播放的轮播图" class="headerlink" title="4.3 实战：自动播放的轮播图"></a>4.3 实战：自动播放的轮播图</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.carousel-track</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: flex;</span><br><span class="line">  <span class="attribute">overflow-x</span>: auto;</span><br><span class="line">  scroll-snap-type: x mandatory;</span><br><span class="line">  <span class="attribute">animation</span>: auto-scroll linear;</span><br><span class="line">  <span class="attribute">animation</span>-timeline: <span class="built_in">scroll</span>(self);  <span class="comment">/* 监听自身的滚动 */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.carousel-item</span> &#123;</span><br><span class="line">  scroll-snap-align: start;</span><br><span class="line">  <span class="attribute">min-width</span>: <span class="number">100%</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 滚动指示器（类似进度条） */</span></span><br><span class="line"><span class="selector-class">.carousel-indicator</span> &#123;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">4px</span>;</span><br><span class="line">  <span class="attribute">background</span>: <span class="number">#409eff</span>;</span><br><span class="line">  <span class="attribute">animation</span>: progress linear;</span><br><span class="line">  <span class="attribute">animation</span>-timeline: <span class="built_in">scroll</span>(self of .carousel-track);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-4-animation-range-控制"><a href="#4-4-animation-range-控制" class="headerlink" title="4.4 animation-range 控制"></a>4.4 animation-range 控制</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 控制动画作用的滚动范围 */</span></span><br><span class="line"><span class="selector-class">.element</span> &#123;</span><br><span class="line">  <span class="attribute">animation</span>: fade-in linear;</span><br><span class="line">  <span class="attribute">animation</span>-timeline: <span class="built_in">view</span>();</span><br><span class="line">  <span class="attribute">animation</span>-range: contain <span class="number">0%</span> contain <span class="number">100%</span>;  <span class="comment">/* 元素完全在视口内时动画 */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 不同的范围单位 */</span></span><br><span class="line"><span class="attribute">animation</span>-range: entry <span class="number">0%</span> exit <span class="number">100%</span>;      <span class="comment">/* 进入视口到完全离开 */</span></span><br><span class="line"><span class="attribute">animation</span>-range: contain <span class="number">0%</span> contain <span class="number">100%</span>; <span class="comment">/* 完全在视口内时 */</span></span><br><span class="line"><span class="attribute">animation</span>-range: cover <span class="number">0%</span> cover <span class="number">100%</span>;     <span class="comment">/* 从开始进入到最后离开 */</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="五、综合实战：一个沉浸式落地页"><a href="#五、综合实战：一个沉浸式落地页" class="headerlink" title="五、综合实战：一个沉浸式落地页"></a>五、综合实战：一个沉浸式落地页</h2><p>结合以上四个特性，实现一个高交互性的落地页：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;zh-CN&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="css"></span></span><br><span class="line"><span class="css">    <span class="comment">/* 1. @layer 管理样式优先级 */</span></span></span><br><span class="line"><span class="css">    <span class="keyword">@layer</span> base, components, effects;</span></span><br><span class="line"><span class="css"></span></span><br><span class="line"><span class="css">    <span class="keyword">@layer</span> base &#123;</span></span><br><span class="line"><span class="css">      * &#123; <span class="attribute">margin</span>: <span class="number">0</span>; <span class="attribute">padding</span>: <span class="number">0</span>; <span class="attribute">box-sizing</span>: border-box; &#125;</span></span><br><span class="line"><span class="css">      <span class="selector-tag">body</span> &#123; <span class="attribute">font-family</span>: system-ui; <span class="attribute">background</span>: <span class="number">#0a0a1a</span>; <span class="attribute">color</span>: <span class="number">#fff</span>; &#125;</span></span><br><span class="line"><span class="css">      <span class="selector-tag">section</span> &#123; <span class="attribute">height</span>: <span class="number">100vh</span>; <span class="attribute">display</span>: flex; <span class="attribute">align-items</span>: center; <span class="attribute">justify-content</span>: center; &#125;</span></span><br><span class="line"><span class="css">    &#125;</span></span><br><span class="line"><span class="css"></span></span><br><span class="line"><span class="css">    <span class="keyword">@layer</span> components &#123;</span></span><br><span class="line"><span class="css">      <span class="selector-class">.hero-title</span> &#123; <span class="attribute">font-size</span>: <span class="built_in">clamp</span>(<span class="number">2rem</span>, <span class="number">6vw</span>, <span class="number">6rem</span>); <span class="attribute">text-align</span>: center; &#125;</span></span><br><span class="line"><span class="css">      <span class="selector-class">.card</span> &#123; <span class="attribute">padding</span>: <span class="number">2rem</span>; <span class="attribute">background</span>: <span class="built_in">rgba</span>(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">0.05</span>); <span class="attribute">border-radius</span>: <span class="number">1rem</span>; backdrop-<span class="attribute">filter</span>: <span class="built_in">blur</span>(<span class="number">10px</span>); &#125;</span></span><br><span class="line"><span class="css"></span></span><br><span class="line"><span class="css">      <span class="comment">/* 3. :has() 实现卡片交互 */</span></span></span><br><span class="line"><span class="css">      <span class="selector-class">.card</span><span class="selector-pseudo">:has</span>(<span class="selector-pseudo">:hover</span>) &#123; <span class="attribute">background</span>: <span class="built_in">rgba</span>(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">0.1</span>); <span class="attribute">transform</span>: <span class="built_in">translateY</span>(-<span class="number">4px</span>); &#125;</span></span><br><span class="line"><span class="css">      <span class="selector-class">.card</span><span class="selector-pseudo">:hover</span> &#123; <span class="attribute">border-color</span>: <span class="number">#60a5fa</span>; &#125;</span></span><br><span class="line"><span class="css">    &#125;</span></span><br><span class="line"><span class="css"></span></span><br><span class="line"><span class="css">    <span class="keyword">@layer</span> effects &#123;</span></span><br><span class="line"><span class="css">      <span class="comment">/* 4. 滚动驱动动画 */</span></span></span><br><span class="line"><span class="css">      <span class="selector-class">.card</span> &#123;</span></span><br><span class="line"><span class="css">        <span class="attribute">animation</span>: card-enter linear;</span></span><br><span class="line"><span class="css">        <span class="attribute">animation</span>-timeline: <span class="built_in">view</span>();</span></span><br><span class="line"><span class="css">        <span class="attribute">animation</span>-range: entry <span class="number">0%</span> entry <span class="number">100%</span>;</span></span><br><span class="line"><span class="css">      &#125;</span></span><br><span class="line"><span class="css"></span></span><br><span class="line"><span class="css">      <span class="keyword">@keyframes</span> card-enter &#123;</span></span><br><span class="line"><span class="css">        entry <span class="number">0%</span> &#123; <span class="attribute">opacity</span>: <span class="number">0</span>; <span class="attribute">transform</span>: <span class="built_in">translateY</span>(<span class="number">60px</span>) <span class="built_in">scale</span>(<span class="number">0.9</span>); &#125;</span></span><br><span class="line"><span class="css">        entry <span class="number">100%</span> &#123; <span class="attribute">opacity</span>: <span class="number">1</span>; <span class="attribute">transform</span>: <span class="built_in">translateY</span>(<span class="number">0</span>) <span class="built_in">scale</span>(<span class="number">1</span>); &#125;</span></span><br><span class="line"><span class="css">      &#125;</span></span><br><span class="line"><span class="css"></span></span><br><span class="line"><span class="css">      <span class="comment">/* 5. View Transitions 页面切换 */</span></span></span><br><span class="line"><span class="css">      ::<span class="built_in">view-transition-old</span>(root) &#123;</span></span><br><span class="line"><span class="css">        animation: <span class="number">400ms</span> ease-out both fade-scale-out;</span></span><br><span class="line"><span class="css">      &#125;</span></span><br><span class="line"><span class="css">      ::<span class="built_in">view-transition-new</span>(root) &#123;</span></span><br><span class="line"><span class="css">        animation: <span class="number">400ms</span> ease-in both fade-scale-in;</span></span><br><span class="line"><span class="css">      &#125;</span></span><br><span class="line"><span class="css"></span></span><br><span class="line"><span class="css">      <span class="keyword">@keyframes</span> fade-scale-out &#123;</span></span><br><span class="line"><span class="css">        <span class="selector-tag">to</span> &#123; <span class="attribute">opacity</span>: <span class="number">0</span>; <span class="attribute">transform</span>: <span class="built_in">scale</span>(<span class="number">0.95</span>); &#125;</span></span><br><span class="line"><span class="css">      &#125;</span></span><br><span class="line"><span class="css">      <span class="keyword">@keyframes</span> fade-scale-in &#123;</span></span><br><span class="line"><span class="css">        <span class="selector-tag">from</span> &#123; <span class="attribute">opacity</span>: <span class="number">0</span>; <span class="attribute">transform</span>: <span class="built_in">scale</span>(<span class="number">1.05</span>); &#125;</span></span><br><span class="line"><span class="css">      &#125;</span></span><br><span class="line"><span class="css">    &#125;</span></span><br><span class="line"><span class="css">  </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- 实际内容 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">section</span> <span class="attr">class</span>=<span class="string">&quot;hero&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span> <span class="attr">class</span>=<span class="string">&quot;hero-title&quot;</span>&gt;</span>CSS 2025<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">section</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>核心能力</th>
+<th>兼容性状态（2025）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong><code>:has()</code></strong></td>
+<td>父级选择器、状态驱动样式</td>
+<td>全面支持</td>
+</tr>
+<tr>
+<td><strong>View Transitions</strong></td>
+<td>原生页面过渡动画</td>
+<td>Chrome/Edge 全量，Safari 部分</td>
+</tr>
+<tr>
+<td><strong><code>@layer</code></strong></td>
+<td>显式层叠优先级控制</td>
+<td>全面支持</td>
+</tr>
+<tr>
+<td><strong>Scroll-Driven Animations</strong></td>
+<td>纯 CSS 滚动驱动动画</td>
+<td>Chrome/Edge 全量</td>
+</tr>
+</tbody></table>
+<p>这四个特性让 CSS 从<strong>声明式样式语言</strong>向<strong>交互式样式平台</strong>迈出了一大步。<code>:has()</code> 解决了选择器的能力缺口，View Transitions 提供了原生级过渡，<code>@layer</code> 解决了样式冲突管理，Scroll-Driven Animations 把动画控制权交给了滚动容器。</p>
+<blockquote>
+<p>建议在实际项目中使用 @layer 重构样式组织方式，然后逐步引入 :has() 和 Scroll-Driven Animations 增强交互体验。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/web-blog/2026/06/25/css-2025-new-features/">CSS 2025 新特性全景：has()、View Transitions、CSS Layers、Scroll-Driven Animations</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a></p>
+  <p><span>发布时间:</span>2026年06月25日 - 00:06</p>
+  <p><span>最后更新:</span>2026年06月25日 - 15:06</p>
+  <p><span>原始链接:</span><a href="/web-blog/2026/06/25/css-2025-new-features/" title="CSS 2025 新特性全景：has()、View Transitions、CSS Layers、Scroll-Driven Animations">https://lc19990308.github.io/web-blog/2026/06/25/css-2025-new-features/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://lc19990308.github.io/web-blog/2026/06/25/css-2025-new-features/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+    });
+    });  
+</script>
+
+      
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>LC
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://lc19990308.github.io/web-blog/2026/06/25/css-2025-new-features/" title="CSS 2025 新特性全景：has()、View Transitions、CSS Layers、Scroll-Driven Animations">https://lc19990308.github.io/web-blog/2026/06/25/css-2025-new-features/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/web-blog/tags/css/" ****><i class="fa fa-tag"></i> css</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/06/25/css-animation-library-guide/" rel="prev" title="CSS 动画库选型与实战：Animate.css、Motion One、GSAP 对比指南">
+      <i class="fa fa-chevron-left"></i> CSS 动画库选型与实战：Animate.css、Motion One、GSAP 对比指南
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/06/25/component-testing-strategy/" rel="next" title="前端组件测试策略：从渲染测试到交互测试（Vitest + Testing Library）">
+      前端组件测试策略：从渲染测试到交互测试（Vitest + Testing Library） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81-has-%E2%80%94-%E7%BB%88%E4%BA%8E%E6%9C%89%E4%BA%86%E7%88%B6%E7%BA%A7%E9%80%89%E6%8B%A9%E5%99%A8"><span class="nav-number">2.</span> <span class="nav-text">一、:has() — 终于有了父级选择器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 基础语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E5%AE%9E%E6%88%98%E5%9C%BA%E6%99%AF"><span class="nav-number">2.2.</span> <span class="nav-text">1.2 实战场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E6%80%A7%E8%83%BD%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">2.3.</span> <span class="nav-text">1.3 性能注意事项</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81View-Transitions-API-%E2%80%94-%E5%8E%9F%E7%94%9F%E9%A1%B5%E9%9D%A2%E8%BF%87%E6%B8%A1"><span class="nav-number">3.</span> <span class="nav-text">二、View Transitions API — 原生页面过渡</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%8E%9F%E7%90%86"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%AE%9E%E6%88%98%EF%BC%9A%E5%88%97%E8%A1%A8%E5%88%B0%E8%AF%A6%E6%83%85%E9%A1%B5%E8%BF%87%E6%B8%A1"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 实战：列表到详情页过渡</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-MPA-%E8%B7%A8%E9%A1%B5%E9%9D%A2%E8%BF%87%E6%B8%A1"><span class="nav-number">3.3.</span> <span class="nav-text">2.3 MPA 跨页面过渡</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81-layer-%E2%80%94-%E6%A0%B7%E5%BC%8F%E5%B1%82%E5%8F%A0%E6%8E%A7%E5%88%B6"><span class="nav-number">4.</span> <span class="nav-text">三、@layer — 样式层叠控制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E9%97%AE%E9%A2%98%E8%83%8C%E6%99%AF"><span class="nav-number">4.1.</span> <span class="nav-text">3.1 问题背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-layer-%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">4.2.</span> <span class="nav-text">3.2 @layer 解决方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E8%A6%86%E7%9B%96%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93%E6%A0%B7%E5%BC%8F"><span class="nav-number">4.3.</span> <span class="nav-text">3.3 覆盖第三方库样式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-%E5%B5%8C%E5%A5%97%E5%B1%82"><span class="nav-number">4.4.</span> <span class="nav-text">3.4 嵌套层</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81Scroll-Driven-Animations-%E2%80%94-%E6%BB%9A%E5%8A%A8%E9%A9%B1%E5%8A%A8%E5%8A%A8%E7%94%BB"><span class="nav-number">5.</span> <span class="nav-text">四、Scroll-Driven Animations — 滚动驱动动画</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="nav-number">5.1.</span> <span class="nav-text">4.1 基础概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E5%AE%9E%E6%88%98%EF%BC%9A%E6%BB%9A%E5%8A%A8%E9%A9%B1%E5%8A%A8%E7%9A%84%E8%A7%86%E5%B7%AE%E6%95%88%E6%9E%9C"><span class="nav-number">5.2.</span> <span class="nav-text">4.2 实战：滚动驱动的视差效果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-%E5%AE%9E%E6%88%98%EF%BC%9A%E8%87%AA%E5%8A%A8%E6%92%AD%E6%94%BE%E7%9A%84%E8%BD%AE%E6%92%AD%E5%9B%BE"><span class="nav-number">5.3.</span> <span class="nav-text">4.3 实战：自动播放的轮播图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-animation-range-%E6%8E%A7%E5%88%B6"><span class="nav-number">5.4.</span> <span class="nav-text">4.4 animation-range 控制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E7%BB%BC%E5%90%88%E5%AE%9E%E6%88%98%EF%BC%9A%E4%B8%80%E4%B8%AA%E6%B2%89%E6%B5%B8%E5%BC%8F%E8%90%BD%E5%9C%B0%E9%A1%B5"><span class="nav-number">6.</span> <span class="nav-text">五、综合实战：一个沉浸式落地页</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="LC"
+      src="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+  <p class="site-author-name" itemprop="name">LC</p>
+  <div class="site-description" itemprop="description">专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/web-blog/archives/">
+        
+          <span class="site-state-item-count">110</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/web-blog/categories/">
+          
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/web-blog/tags/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button motion-element"><i class="fa fa-comment"></i>
+    Chat
+  </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lc19990308/web-blog" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lc19990308&#x2F;web-blog" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:jarridaddison4@gmail.com" title="E-Mail → mailto:jarridaddison4@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/web-blog/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=441491828&auto=1&height=66"></iframe>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LC</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>-->
+<div class="powered-by">
+  <i class="fa fa-user-md"></i>
+  <span id="busuanzi_container_site_pv">
+    本站访问量:<span id="busuanzi_value_site_pv"></span>次
+  </span>
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv">
+    本站总访客量：<span id="busuanzi_value_site_uv"></span>人
+  </span>
+</div>
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共166.3k字</span>
+</div>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/web-blog/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/web-blog/js/utils.js"></script>
+
+<script src="/web-blog/js/motion.js"></script>
+
+
+<script src="/web-blog/js/schemes/pisces.js"></script>
+
+
+<script src="/web-blog/js/next-boot.js"></script>
+
+<script src="/web-blog/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/web-blog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+</body>
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</html>

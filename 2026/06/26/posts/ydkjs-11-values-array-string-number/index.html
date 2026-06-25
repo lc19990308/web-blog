@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/web-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/web-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/web-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/web-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/web-blog/css/main.css">
+
+
+<link rel="stylesheet" href="/web-blog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/web-blog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/web-blog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lc19990308.github.io","root":"/web-blog/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="深入 JavaScript 中数组、字符串、数字三大值类型的底层行为：稀疏数组、类数组、数字的整数范围、字符串的码点与码元">
+<meta property="og:type" content="article">
+<meta property="og:title" content="你不知道的JavaScript（十一）：值的底层机制——数组、字符串、数字的特殊行为">
+<meta property="og:url" content="https://lc19990308.github.io/web-blog/2026/06/26/posts/ydkjs-11-values-array-string-number/index.html">
+<meta property="og:site_name" content="前端技术笔记">
+<meta property="og:description" content="深入 JavaScript 中数组、字符串、数字三大值类型的底层行为：稀疏数组、类数组、数字的整数范围、字符串的码点与码元">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-25T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-25T07:22:22.699Z">
+<meta property="article:author" content="LC">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="你不知道的javascript">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://lc19990308.github.io/web-blog/2026/06/26/posts/ydkjs-11-values-array-string-number/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>你不知道的JavaScript（十一）：值的底层机制——数组、字符串、数字的特殊行为 | 前端技术笔记</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/web-blog/atom.xml" title="前端技术笔记" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband">
+    <a target="_blank" rel="noopener" href="https://gitee.com/yaru722" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    </div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/web-blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">前端技术笔记</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录前端路上的思考与实践</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/web-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/web-blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/web-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/web-blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/web-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/lc19990308" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/26/posts/ydkjs-11-values-array-string-number/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+      <meta itemprop="name" content="LC">
+      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端技术笔记">
+    </span>
+      <header class="post-header">
+      
+        <h1 class="post-title" itemprop="name headline">
+          你不知道的JavaScript（十一）：值的底层机制——数组、字符串、数字的特殊行为
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-06-26 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-26T00:00:00+08:00">2026-06-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/web-blog/categories/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/" itemprop="url" rel="index"><span itemprop="name">你不知道的javascript</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">深入 JavaScript 中数组、字符串、数字三大值类型的底层行为：稀疏数组、类数组、数字的整数范围、字符串的码点与码元</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>JavaScript 中的数组、字符串和数字看起来简单，但底层有很多”反直觉”的行为：</p>
+<ul>
+<li>数组为什么可以用字符串做索引？</li>
+<li>类数组（Array-Like）到底是什么？</li>
+<li>字符串的长度为什么不是字符数？</li>
+<li>数字的安全整数范围是多少？</li>
+</ul>
+<p>本文逐一深入这些值的底层机制。</p>
+<hr>
+<h2 id="一、数组"><a href="#一、数组" class="headerlink" title="一、数组"></a>一、数组</h2><h3 id="1-1-数组不是数组"><a href="#1-1-数组不是数组" class="headerlink" title="1.1 数组不是数组"></a>1.1 数组不是数组</h3><p>JavaScript 的”数组”不是真正意义上的数组——它实际上是<strong>对象</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> arr) <span class="comment">// &#x27;object&#x27;</span></span><br><span class="line"><span class="built_in">console</span>.log(arr <span class="keyword">instanceof</span> <span class="built_in">Array</span>) <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 底层：arr 本质上是一个对象</span></span><br><span class="line"><span class="comment">// &#123; &#x27;0&#x27;: 1, &#x27;1&#x27;: 2, &#x27;2&#x27;: 3, length: 3 &#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-可以用字符串做索引"><a href="#1-2-可以用字符串做索引" class="headerlink" title="1.2 可以用字符串做索引"></a>1.2 可以用字符串做索引</h3><p>因为数组本质是对象，所以可以用字符串索引：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = []</span><br><span class="line">arr[<span class="number">0</span>] = <span class="string">&#x27;数字索引&#x27;</span></span><br><span class="line">arr[<span class="string">&#x27;foo&#x27;</span>] = <span class="string">&#x27;字符串索引&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(arr[<span class="number">0</span>])      <span class="comment">// &#x27;数字索引&#x27;</span></span><br><span class="line"><span class="built_in">console</span>.log(arr[<span class="string">&#x27;foo&#x27;</span>])  <span class="comment">// &#x27;字符串索引&#x27;</span></span><br><span class="line"><span class="built_in">console</span>.log(arr.length)  <span class="comment">// 1（字符串索引不影响 length）</span></span><br></pre></td></tr></table></figure>
+
+<p>当字符串索引可以转为正整数时，它会像数字索引一样工作：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = []</span><br><span class="line">arr[<span class="string">&#x27;3&#x27;</span>] = <span class="string">&#x27;第三个位置&#x27;</span></span><br><span class="line"><span class="built_in">console</span>.log(arr.length) <span class="comment">// 4（&#x27;3&#x27; 被当作数字 3）</span></span><br><span class="line"><span class="built_in">console</span>.log(arr[<span class="number">3</span>])     <span class="comment">// &#x27;第三个位置&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="1-3-稀疏数组（Sparse-Arrays）"><a href="#1-3-稀疏数组（Sparse-Arrays）" class="headerlink" title="1.3 稀疏数组（Sparse Arrays）"></a>1.3 稀疏数组（Sparse Arrays）</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, , , <span class="number">4</span>]  <span class="comment">// 逗号之间有空位</span></span><br><span class="line"><span class="built_in">console</span>.log(arr.length) <span class="comment">// 4</span></span><br><span class="line"><span class="built_in">console</span>.log(arr[<span class="number">0</span>])     <span class="comment">// 1</span></span><br><span class="line"><span class="built_in">console</span>.log(arr[<span class="number">1</span>])     <span class="comment">// undefined（实际是 empty）</span></span><br><span class="line"><span class="built_in">console</span>.log(arr[<span class="number">2</span>])     <span class="comment">// undefined（empty）</span></span><br><span class="line"><span class="built_in">console</span>.log(arr[<span class="number">3</span>])     <span class="comment">// 4</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// empty 和 undefined 的微妙区别</span></span><br><span class="line"><span class="comment">// empty 表示这个索引&quot;不存在&quot;</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">0</span> <span class="keyword">in</span> arr)  <span class="comment">// true（索引 0 存在）</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">1</span> <span class="keyword">in</span> arr)  <span class="comment">// false（索引 1 不存在！）</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">2</span> <span class="keyword">in</span> arr)  <span class="comment">// false</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">3</span> <span class="keyword">in</span> arr)  <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>稀疏数组对数组方法的影响</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> sparse = [<span class="number">1</span>, , , <span class="number">4</span>]</span><br><span class="line"><span class="keyword">const</span> dense = [<span class="number">1</span>, <span class="literal">undefined</span>, <span class="literal">undefined</span>, <span class="number">4</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// forEach 跳过空位</span></span><br><span class="line">sparse.forEach(<span class="function">(<span class="params">v, i</span>) =&gt;</span> <span class="built_in">console</span>.log(i, v)) <span class="comment">// 0:1, 3:4</span></span><br><span class="line">dense.forEach(<span class="function">(<span class="params">v, i</span>) =&gt;</span> <span class="built_in">console</span>.log(i, v))  <span class="comment">// 0:1, 1:undefined, 2:undefined, 3:4</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// map 保留空位</span></span><br><span class="line"><span class="built_in">console</span>.log(sparse.map(<span class="function"><span class="params">v</span> =&gt;</span> v * <span class="number">2</span>)) <span class="comment">// [2, empty × 2, 8]</span></span><br><span class="line"><span class="built_in">console</span>.log(dense.map(<span class="function"><span class="params">v</span> =&gt;</span> v * <span class="number">2</span>))  <span class="comment">// [2, NaN, NaN, 8]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// join 把空位处理为空字符串</span></span><br><span class="line"><span class="built_in">console</span>.log(sparse.join(<span class="string">&#x27;-&#x27;</span>)) <span class="comment">// &#x27;1--4&#x27;</span></span><br><span class="line"><span class="built_in">console</span>.log(dense.join(<span class="string">&#x27;-&#x27;</span>))  <span class="comment">// &#x27;1--4&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Array.from 填充空位</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Array</span>.from([<span class="number">1</span>, , , <span class="number">4</span>])) <span class="comment">// [1, undefined, undefined, 4]</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="1-4-类数组（Array-Like）"><a href="#1-4-类数组（Array-Like）" class="headerlink" title="1.4 类数组（Array-Like）"></a>1.4 类数组（Array-Like）</h3><p>具有 <code>length</code> 属性和按数字索引的元素的”对象”：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 类数组对象</span></span><br><span class="line"><span class="keyword">const</span> arrayLike = &#123;</span><br><span class="line">  <span class="number">0</span>: <span class="string">&#x27;a&#x27;</span>,</span><br><span class="line">  <span class="number">1</span>: <span class="string">&#x27;b&#x27;</span>,</span><br><span class="line">  <span class="number">2</span>: <span class="string">&#x27;c&#x27;</span>,</span><br><span class="line">  <span class="attr">length</span>: <span class="number">3</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(arrayLike[<span class="number">0</span>]) <span class="comment">// &#x27;a&#x27;</span></span><br><span class="line"><span class="built_in">console</span>.log(arrayLike.length) <span class="comment">// 3</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 类数组不是数组</span></span><br><span class="line"><span class="built_in">Array</span>.isArray(arrayLike) <span class="comment">// false</span></span><br><span class="line">arrayLike.push(<span class="string">&#x27;d&#x27;</span>)      <span class="comment">// ❌ TypeError</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 将类数组转为真正的数组</span></span><br><span class="line"><span class="keyword">const</span> arr1 = <span class="built_in">Array</span>.prototype.slice.call(arrayLike)</span><br><span class="line"><span class="keyword">const</span> arr2 = <span class="built_in">Array</span>.from(arrayLike) <span class="comment">// ✅ 推荐</span></span><br><span class="line"><span class="keyword">const</span> arr3 = [...arrayLike]        <span class="comment">// ✅ 需有迭代器（Array.from 更通用）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 常见的类数组</span></span><br><span class="line"><span class="comment">// arguments（旧式函数）</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="built_in">arguments</span>) <span class="comment">// Arguments(3) [1, 2, 3]</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="built_in">Array</span>.from(<span class="built_in">arguments</span>)) <span class="comment">// [1, 2, 3]</span></span><br><span class="line">&#125;</span><br><span class="line">foo(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// NodeList（DOM）</span></span><br><span class="line"><span class="comment">// document.querySelectorAll(&#x27;div&#x27;)</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="二、字符串"><a href="#二、字符串" class="headerlink" title="二、字符串"></a>二、字符串</h2><h3 id="2-1-字符串不是字符数组"><a href="#2-1-字符串不是字符数组" class="headerlink" title="2.1 字符串不是字符数组"></a>2.1 字符串不是字符数组</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> str = <span class="string">&#x27;hello&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 可索引（像数组）</span></span><br><span class="line"><span class="built_in">console</span>.log(str[<span class="number">0</span>]) <span class="comment">// &#x27;h&#x27;</span></span><br><span class="line"><span class="built_in">console</span>.log(str.length) <span class="comment">// 5</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 但不可变</span></span><br><span class="line">str[<span class="number">0</span>] = <span class="string">&#x27;H&#x27;</span></span><br><span class="line"><span class="built_in">console</span>.log(str) <span class="comment">// &#x27;hello&#x27;（没变）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 没有数组方法</span></span><br><span class="line">str.push(<span class="string">&#x27;!&#x27;</span>)  <span class="comment">// ❌ TypeError</span></span><br><span class="line">str.join(<span class="string">&#x27;-&#x27;</span>)  <span class="comment">// ❌ TypeError</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 借用数组方法</span></span><br><span class="line"><span class="built_in">Array</span>.prototype.join.call(str, <span class="string">&#x27;-&#x27;</span>) <span class="comment">// &#x27;h-e-l-l-o&#x27;</span></span><br><span class="line"><span class="built_in">Array</span>.prototype.filter.call(str, <span class="function"><span class="params">c</span> =&gt;</span> c &gt; <span class="string">&#x27;k&#x27;</span>).join(<span class="string">&#x27;&#x27;</span>) <span class="comment">// &#x27;l-lo&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-码元（Code-Unit）与码点（Code-Point）"><a href="#2-2-码元（Code-Unit）与码点（Code-Point）" class="headerlink" title="2.2 码元（Code Unit）与码点（Code Point）"></a>2.2 码元（Code Unit）与码点（Code Point）</h3><p>JavaScript 使用 <strong>UTF-16</strong> 编码，大部分字符用一个码元（16 位）表示，但有些字符需要两个码元：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// BMP 字符（基本多语言平面）：一个码元</span></span><br><span class="line"><span class="string">&#x27;hello&#x27;</span>.length     <span class="comment">// 5</span></span><br><span class="line"><span class="string">&#x27;A&#x27;</span>.length         <span class="comment">// 1</span></span><br><span class="line"><span class="string">&#x27;中&#x27;</span>.length        <span class="comment">// 1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 辅助平面字符（如 Emoji）：两个码元</span></span><br><span class="line"><span class="string">&#x27;😀&#x27;</span>.length        <span class="comment">// 2！</span></span><br><span class="line"><span class="string">&#x27;🌍&#x27;</span>.length        <span class="comment">// 2！</span></span><br><span class="line"><span class="string">&#x27;𠮷&#x27;</span>.length        <span class="comment">// 2！（这是汉字&quot;吉&quot;的异体）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 组合字符（字符 + 组合符号）</span></span><br><span class="line"><span class="string">&#x27;é&#x27;</span>.length         <span class="comment">// 1</span></span><br><span class="line"><span class="string">&#x27;e\u0301&#x27;</span>.length   <span class="comment">// 2（e + 重音符号）</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>正确计算”字符”数</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">charCount</span>(<span class="params">str</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 方法1：使用扩展运算符</span></span><br><span class="line">  <span class="keyword">return</span> [...str].length</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">charCount</span>(<span class="params">str</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 方法2：Array.from</span></span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Array</span>.from(str).length</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(charCount(<span class="string">&#x27;😀&#x27;</span>))  <span class="comment">// 1（正确）</span></span><br><span class="line"><span class="built_in">console</span>.log(charCount(<span class="string">&#x27;𠮷&#x27;</span>))  <span class="comment">// 1（正确）</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-反转字符串"><a href="#2-3-反转字符串" class="headerlink" title="2.3 反转字符串"></a>2.3 反转字符串</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 简单反转</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">reverse</span>(<span class="params">str</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> str.split(<span class="string">&#x27;&#x27;</span>).reverse().join(<span class="string">&#x27;&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">reverse(<span class="string">&#x27;hello&#x27;</span>) <span class="comment">// &#x27;olleh&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 但这样不能处理 Emoji</span></span><br><span class="line">reverse(<span class="string">&#x27;hello😀&#x27;</span>) <span class="comment">// &#x27;��olleh&#x27;（Emoji 被拆开）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 正确反转</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">reverseSafe</span>(<span class="params">str</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> [...str].reverse().join(<span class="string">&#x27;&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">reverseSafe(<span class="string">&#x27;hello😀&#x27;</span>) <span class="comment">// &#x27;😀olleh&#x27; ✅</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="三、数字"><a href="#三、数字" class="headerlink" title="三、数字"></a>三、数字</h2><h3 id="3-1-数字的表示范围"><a href="#3-1-数字的表示范围" class="headerlink" title="3.1 数字的表示范围"></a>3.1 数字的表示范围</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 最大值</span></span><br><span class="line"><span class="built_in">Number</span>.MAX_VALUE        <span class="comment">// 1.7976931348623157e+308</span></span><br><span class="line"><span class="built_in">Number</span>.MIN_VALUE        <span class="comment">// 5e-324（正数最小值）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 安全整数范围（能精确表示的整数）</span></span><br><span class="line"><span class="built_in">Number</span>.MAX_SAFE_INTEGER <span class="comment">// 9007199254740991 (2^53 - 1)</span></span><br><span class="line"><span class="built_in">Number</span>.MIN_SAFE_INTEGER <span class="comment">// -9007199254740991</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 不安全整数示例</span></span><br><span class="line"><span class="number">9007199254740991</span> + <span class="number">1</span>     <span class="comment">// 9007199254740992 ✅</span></span><br><span class="line"><span class="number">9007199254740991</span> + <span class="number">2</span>     <span class="comment">// 9007199254740992 ❌（精度丢失！）</span></span><br><span class="line"><span class="number">9007199254740991</span> + <span class="number">3</span>     <span class="comment">// 9007199254740994 ❌</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>为什么是 2^53 - 1？</strong></p>
+<p>64 位双精度浮点数中，1 位符号位，11 位指数位，52 位尾数位。加上隐含的 1，实际上可以精确表示 53 位二进制整数。超过这个范围就会出现精度丢失。</p>
+<h3 id="3-2-整数的判断"><a href="#3-2-整数的判断" class="headerlink" title="3.2 整数的判断"></a>3.2 整数的判断</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 判断是否为整数</span></span><br><span class="line"><span class="built_in">Number</span>.isInteger(<span class="number">42</span>)       <span class="comment">// true</span></span><br><span class="line"><span class="built_in">Number</span>.isInteger(<span class="number">3.14</span>)     <span class="comment">// false</span></span><br><span class="line"><span class="built_in">Number</span>.isInteger(<span class="number">42.0</span>)     <span class="comment">// true（42.0 === 42）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 判断是否为安全整数</span></span><br><span class="line"><span class="built_in">Number</span>.isSafeInteger(<span class="number">42</span>)               <span class="comment">// true</span></span><br><span class="line"><span class="built_in">Number</span>.isSafeInteger(<span class="number">9007199254740991</span>) <span class="comment">// true</span></span><br><span class="line"><span class="built_in">Number</span>.isSafeInteger(<span class="number">9007199254740992</span>) <span class="comment">// false！</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 老方式的整数判断</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isInteger</span>(<span class="params">num</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">typeof</span> num === <span class="string">&#x27;number&#x27;</span> &amp;&amp; num % <span class="number">1</span> === <span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-数字的各种进制"><a href="#3-3-数字的各种进制" class="headerlink" title="3.3 数字的各种进制"></a>3.3 数字的各种进制</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 二进制</span></span><br><span class="line"><span class="number">0b1111</span>  <span class="comment">// 15</span></span><br><span class="line"><span class="number">0b1010</span>  <span class="comment">// 10</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 八进制（严格模式只能使用前缀 0o）</span></span><br><span class="line"><span class="number">0o17</span>    <span class="comment">// 15（推荐）</span></span><br><span class="line"><span class="comment">// 017   // 旧写法，严格模式禁用</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 十六进制</span></span><br><span class="line"><span class="number">0xFF</span>    <span class="comment">// 255</span></span><br><span class="line"><span class="number">0x1A</span>    <span class="comment">// 26</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 转换成其他进制</span></span><br><span class="line">(<span class="number">255</span>).toString(<span class="number">16</span>)  <span class="comment">// &#x27;ff&#x27;</span></span><br><span class="line">(<span class="number">255</span>).toString(<span class="number">2</span>)   <span class="comment">// &#x27;11111111&#x27;</span></span><br><span class="line">(<span class="number">255</span>).toString(<span class="number">8</span>)   <span class="comment">// &#x27;377&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 从其他进制解析</span></span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">&#x27;ff&#x27;</span>, <span class="number">16</span>)  <span class="comment">// 255</span></span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">&#x27;11111111&#x27;</span>, <span class="number">2</span>) <span class="comment">// 255</span></span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">&#x27;377&#x27;</span>, <span class="number">8</span>)  <span class="comment">// 255</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 注意：parseInt 的第二个参数默认为 16（不是 10）！</span></span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">&#x27;0x10&#x27;</span>)  <span class="comment">// 16</span></span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">&#x27;10&#x27;</span>)    <span class="comment">// 10</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-4-数字的几种奇怪比较"><a href="#3-4-数字的几种奇怪比较" class="headerlink" title="3.4 数字的几种奇怪比较"></a>3.4 数字的几种奇怪比较</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. +0 与 -0</span></span><br><span class="line"><span class="built_in">Object</span>.is(<span class="number">0</span>, -<span class="number">0</span>)   <span class="comment">// false</span></span><br><span class="line"><span class="number">0</span> === -<span class="number">0</span>           <span class="comment">// true ❌</span></span><br><span class="line"><span class="number">1</span> / <span class="number">0</span>   <span class="comment">// Infinity</span></span><br><span class="line"><span class="number">1</span> / -<span class="number">0</span>  <span class="comment">// -Infinity</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. NaN 与 NaN</span></span><br><span class="line"><span class="built_in">Object</span>.is(<span class="literal">NaN</span>, <span class="literal">NaN</span>) <span class="comment">// true（Object.is 可以正确比较）</span></span><br><span class="line"><span class="literal">NaN</span> === <span class="literal">NaN</span>         <span class="comment">// false（经典 bug）</span></span><br><span class="line"><span class="built_in">Number</span>.isNaN(value) <span class="comment">// ✅ 正确判断</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 浮点数</span></span><br><span class="line"><span class="number">0.1</span> + <span class="number">0.2</span> === <span class="number">0.3</span>  <span class="comment">// false（浮点数精度问题）</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="四、值的复制"><a href="#四、值的复制" class="headerlink" title="四、值的复制"></a>四、值的复制</h2><h3 id="4-1-浅复制-vs-深复制"><a href="#4-1-浅复制-vs-深复制" class="headerlink" title="4.1 浅复制 vs 深复制"></a>4.1 浅复制 vs 深复制</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 浅复制：只复制第一层</span></span><br><span class="line"><span class="keyword">const</span> original = &#123; <span class="attr">a</span>: <span class="number">1</span>, <span class="attr">b</span>: &#123; <span class="attr">c</span>: <span class="number">2</span> &#125; &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 浅复制方法</span></span><br><span class="line"><span class="keyword">const</span> copy1 = <span class="built_in">Object</span>.assign(&#123;&#125;, original)</span><br><span class="line"><span class="keyword">const</span> copy2 = &#123; ...original &#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(copy1.b === original.b) <span class="comment">// true（共享引用）</span></span><br><span class="line">copy1.b.c = <span class="number">99</span></span><br><span class="line"><span class="built_in">console</span>.log(original.b.c) <span class="comment">// 99（被改了！）</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 深复制：完全独立的副本</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 方法1：JSON（有限制）</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">deepClone</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">JSON</span>.parse(<span class="built_in">JSON</span>.stringify(obj))</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 问题：不支持 undefined、Symbol、函数、循环引用</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 方法2：structuredClone（现代浏览器，Node 17+）</span></span><br><span class="line"><span class="keyword">const</span> copy = structuredClone(original)</span><br><span class="line"><span class="comment">// 支持大多数类型，但不支持函数、Symbol</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 方法3：递归实现</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">deepClone</span>(<span class="params">value, cache = <span class="keyword">new</span> <span class="built_in">WeakMap</span>()</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (value === <span class="literal">null</span> || <span class="keyword">typeof</span> value !== <span class="string">&#x27;object&#x27;</span>) <span class="keyword">return</span> value</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 处理循环引用</span></span><br><span class="line">  <span class="keyword">if</span> (cache.has(value)) <span class="keyword">return</span> cache.get(value)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 处理 Date</span></span><br><span class="line">  <span class="keyword">if</span> (value <span class="keyword">instanceof</span> <span class="built_in">Date</span>) <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Date</span>(value)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 处理 RegExp</span></span><br><span class="line">  <span class="keyword">if</span> (value <span class="keyword">instanceof</span> <span class="built_in">RegExp</span>) <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">RegExp</span>(value)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 处理数组</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">Array</span>.isArray(value)) &#123;</span><br><span class="line">    <span class="keyword">const</span> result = []</span><br><span class="line">    cache.set(value, result)</span><br><span class="line">    value.forEach(<span class="function">(<span class="params">item, index</span>) =&gt;</span> &#123;</span><br><span class="line">      result[index] = deepClone(item, cache)</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 处理普通对象</span></span><br><span class="line">  <span class="keyword">const</span> result = &#123;&#125;</span><br><span class="line">  cache.set(value, result)</span><br><span class="line">  <span class="built_in">Object</span>.keys(value).forEach(<span class="function"><span class="params">key</span> =&gt;</span> &#123;</span><br><span class="line">    result[key] = deepClone(value[key], cache)</span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="keyword">return</span> result</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
+<li><strong>数组本质是对象</strong>，可以有空位（sparse），类数组可通过 <code>Array.from</code> 转换</li>
+<li><strong>字符串是 UTF-16 编码</strong>，Emoji 等辅助平面字符占 2 个码元（length 为 2）</li>
+<li><strong>安全整数范围</strong>：<code>-(2^53-1)</code> 到 <code>2^53-1</code>，超过可能精度丢失</li>
+<li><strong>值与引用</strong>：原始类型按值传递，对象按引用传递</li>
+<li><strong>深复制</strong>推荐使用 <code>structuredClone</code>（浏览器/Node 17+）或递归实现</li>
+</ol>
+<blockquote>
+<p>下一篇将深入<strong>原生函数</strong>——String、Number、Boolean 等内置构造函数的秘密。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/web-blog/2026/06/26/posts/ydkjs-11-values-array-string-number/">你不知道的JavaScript（十一）：值的底层机制——数组、字符串、数字的特殊行为</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a></p>
+  <p><span>发布时间:</span>2026年06月26日 - 00:06</p>
+  <p><span>最后更新:</span>2026年06月25日 - 15:06</p>
+  <p><span>原始链接:</span><a href="/web-blog/2026/06/26/posts/ydkjs-11-values-array-string-number/" title="你不知道的JavaScript（十一）：值的底层机制——数组、字符串、数字的特殊行为">https://lc19990308.github.io/web-blog/2026/06/26/posts/ydkjs-11-values-array-string-number/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://lc19990308.github.io/web-blog/2026/06/26/posts/ydkjs-11-values-array-string-number/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+    });
+    });  
+</script>
+
+      
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>LC
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://lc19990308.github.io/web-blog/2026/06/26/posts/ydkjs-11-values-array-string-number/" title="你不知道的JavaScript（十一）：值的底层机制——数组、字符串、数字的特殊行为">https://lc19990308.github.io/web-blog/2026/06/26/posts/ydkjs-11-values-array-string-number/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/web-blog/tags/JavaScript/" ****><i class="fa fa-tag"></i> JavaScript</a>
+              <a href="/web-blog/tags/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/" ****><i class="fa fa-tag"></i> 你不知道的javascript</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/06/26/posts/ydkjs-10-type-system/" rel="prev" title="你不知道的JavaScript（十）：JavaScript 的类型系统——七大内置类型深度解析">
+      <i class="fa fa-chevron-left"></i> 你不知道的JavaScript（十）：JavaScript 的类型系统——七大内置类型深度解析
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/06/26/posts/ydkjs-08-prototype-chain/" rel="next" title="你不知道的JavaScript（八）：原型与原型链——JavaScript 继承的底层实现">
+      你不知道的JavaScript（八）：原型与原型链——JavaScript 继承的底层实现 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%95%B0%E7%BB%84"><span class="nav-number">2.</span> <span class="nav-text">一、数组</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%95%B0%E7%BB%84%E4%B8%8D%E6%98%AF%E6%95%B0%E7%BB%84"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 数组不是数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E5%8F%AF%E4%BB%A5%E7%94%A8%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%81%9A%E7%B4%A2%E5%BC%95"><span class="nav-number">2.2.</span> <span class="nav-text">1.2 可以用字符串做索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E7%A8%80%E7%96%8F%E6%95%B0%E7%BB%84%EF%BC%88Sparse-Arrays%EF%BC%89"><span class="nav-number">2.3.</span> <span class="nav-text">1.3 稀疏数组（Sparse Arrays）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-%E7%B1%BB%E6%95%B0%E7%BB%84%EF%BC%88Array-Like%EF%BC%89"><span class="nav-number">2.4.</span> <span class="nav-text">1.4 类数组（Array-Like）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">3.</span> <span class="nav-text">二、字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%8D%E6%98%AF%E5%AD%97%E7%AC%A6%E6%95%B0%E7%BB%84"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 字符串不是字符数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E7%A0%81%E5%85%83%EF%BC%88Code-Unit%EF%BC%89%E4%B8%8E%E7%A0%81%E7%82%B9%EF%BC%88Code-Point%EF%BC%89"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 码元（Code Unit）与码点（Code Point）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E5%8F%8D%E8%BD%AC%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">3.3.</span> <span class="nav-text">2.3 反转字符串</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E6%95%B0%E5%AD%97"><span class="nav-number">4.</span> <span class="nav-text">三、数字</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E6%95%B0%E5%AD%97%E7%9A%84%E8%A1%A8%E7%A4%BA%E8%8C%83%E5%9B%B4"><span class="nav-number">4.1.</span> <span class="nav-text">3.1 数字的表示范围</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E6%95%B4%E6%95%B0%E7%9A%84%E5%88%A4%E6%96%AD"><span class="nav-number">4.2.</span> <span class="nav-text">3.2 整数的判断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E6%95%B0%E5%AD%97%E7%9A%84%E5%90%84%E7%A7%8D%E8%BF%9B%E5%88%B6"><span class="nav-number">4.3.</span> <span class="nav-text">3.3 数字的各种进制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-%E6%95%B0%E5%AD%97%E7%9A%84%E5%87%A0%E7%A7%8D%E5%A5%87%E6%80%AA%E6%AF%94%E8%BE%83"><span class="nav-number">4.4.</span> <span class="nav-text">3.4 数字的几种奇怪比较</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E5%80%BC%E7%9A%84%E5%A4%8D%E5%88%B6"><span class="nav-number">5.</span> <span class="nav-text">四、值的复制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E6%B5%85%E5%A4%8D%E5%88%B6-vs-%E6%B7%B1%E5%A4%8D%E5%88%B6"><span class="nav-number">5.1.</span> <span class="nav-text">4.1 浅复制 vs 深复制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="LC"
+      src="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+  <p class="site-author-name" itemprop="name">LC</p>
+  <div class="site-description" itemprop="description">专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/web-blog/archives/">
+        
+          <span class="site-state-item-count">110</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/web-blog/categories/">
+          
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/web-blog/tags/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button motion-element"><i class="fa fa-comment"></i>
+    Chat
+  </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lc19990308/web-blog" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lc19990308&#x2F;web-blog" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:jarridaddison4@gmail.com" title="E-Mail → mailto:jarridaddison4@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/web-blog/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=441491828&auto=1&height=66"></iframe>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LC</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>-->
+<div class="powered-by">
+  <i class="fa fa-user-md"></i>
+  <span id="busuanzi_container_site_pv">
+    本站访问量:<span id="busuanzi_value_site_pv"></span>次
+  </span>
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv">
+    本站总访客量：<span id="busuanzi_value_site_uv"></span>人
+  </span>
+</div>
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共166.3k字</span>
+</div>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/web-blog/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/web-blog/js/utils.js"></script>
+
+<script src="/web-blog/js/motion.js"></script>
+
+
+<script src="/web-blog/js/schemes/pisces.js"></script>
+
+
+<script src="/web-blog/js/next-boot.js"></script>
+
+<script src="/web-blog/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/web-blog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+</body>
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</html>

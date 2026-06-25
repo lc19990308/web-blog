@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/web-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/web-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/web-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/web-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/web-blog/css/main.css">
+
+
+<link rel="stylesheet" href="/web-blog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/web-blog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/web-blog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lc19990308.github.io","root":"/web-blog/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="深入 Vite 6 插件系统，从插件生命周期、虚拟模块、HMR 处理到实战开发一个完整插件，掌握 Vite 插件的核心开发技巧">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vite 6 插件开发实战：从 Loader 到 HMR 自定义">
+<meta property="og:url" content="https://lc19990308.github.io/web-blog/2026/06/25/vite-plugin-development-practice/index.html">
+<meta property="og:site_name" content="前端技术笔记">
+<meta property="og:description" content="深入 Vite 6 插件系统，从插件生命周期、虚拟模块、HMR 处理到实战开发一个完整插件，掌握 Vite 插件的核心开发技巧">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-25T07:15:29.444Z">
+<meta property="article:author" content="LC">
+<meta property="article:tag" content="工程化">
+<meta property="article:tag" content="JavaScript">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://lc19990308.github.io/web-blog/2026/06/25/vite-plugin-development-practice/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Vite 6 插件开发实战：从 Loader 到 HMR 自定义 | 前端技术笔记</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/web-blog/atom.xml" title="前端技术笔记" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband">
+    <a target="_blank" rel="noopener" href="https://gitee.com/yaru722" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    </div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/web-blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">前端技术笔记</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录前端路上的思考与实践</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/web-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/web-blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/web-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/web-blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/web-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/lc19990308" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/25/vite-plugin-development-practice/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+      <meta itemprop="name" content="LC">
+      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端技术笔记">
+    </span>
+      <header class="post-header">
+      
+        <h1 class="post-title" itemprop="name headline">
+          Vite 6 插件开发实战：从 Loader 到 HMR 自定义
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-06-25 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-25T00:00:00+08:00">2026-06-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/web-blog/categories/%E5%B7%A5%E7%A8%8B%E5%8C%96/" itemprop="url" rel="index"><span itemprop="name">工程化</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">深入 Vite 6 插件系统，从插件生命周期、虚拟模块、HMR 处理到实战开发一个完整插件，掌握 Vite 插件的核心开发技巧</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Vite 已经成为前端构建工具的标配。它的插件系统继承自 Rollup，并增加了 Vite 特有的钩子（HMR、SSR、服务端中间件）。</p>
+<p>本文从零开始，通过 <strong>5 个实战插件</strong> 逐步掌握 Vite 插件的开发：</p>
+<ol>
+<li>基础：必知概念与生命周期</li>
+<li>实战1：自动生成路由配置</li>
+<li>实战2：虚拟模块加载</li>
+<li>实战3：自定义 HMR</li>
+<li>实战4：注入全局变量</li>
+<li>实战5：构建产物优化</li>
+</ol>
+<hr>
+<h2 id="一、Vite-插件基础"><a href="#一、Vite-插件基础" class="headerlink" title="一、Vite 插件基础"></a>一、Vite 插件基础</h2><h3 id="1-1-插件结构"><a href="#1-1-插件结构" class="headerlink" title="1.1 插件结构"></a>1.1 插件结构</h3><p>一个 Vite 插件就是一个<strong>返回对象</strong>的函数：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vite-plugin-example.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">myPlugin</span>(<span class="params">options = &#123;&#125;</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;vite-plugin-example&#x27;</span>,    <span class="comment">// 必填，用于调试和错误提示</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 通用钩子（Rollup 兼容）</span></span><br><span class="line">    <span class="function"><span class="title">resolveId</span>(<span class="params">source, importer</span>)</span> &#123;&#125;,</span><br><span class="line">    <span class="function"><span class="title">load</span>(<span class="params">id</span>)</span> &#123;&#125;,</span><br><span class="line">    <span class="function"><span class="title">transform</span>(<span class="params">code, id</span>)</span> &#123;&#125;,</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Vite 特有钩子</span></span><br><span class="line">    <span class="function"><span class="title">config</span>(<span class="params">config, &#123; command &#125;</span>)</span> &#123;&#125;,</span><br><span class="line">    <span class="function"><span class="title">configureServer</span>(<span class="params">server</span>)</span> &#123;&#125;,</span><br><span class="line">    <span class="function"><span class="title">handleHotUpdate</span>(<span class="params">ctx</span>)</span> &#123;&#125;,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-钩子执行顺序"><a href="#1-2-钩子执行顺序" class="headerlink" title="1.2 钩子执行顺序"></a>1.2 钩子执行顺序</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">服务启动流程：</span><br><span class="line">config → configResolved → configureServer → buildStart → resolveId → load → transform</span><br><span class="line"></span><br><span class="line">模块热更新流程：</span><br><span class="line">handleHotUpdate → 触发浏览器更新</span><br><span class="line"></span><br><span class="line">构建流程：</span><br><span class="line">buildStart → resolveId → load → transform → moduleParsed → generateBundle → writeBundle → closeBundle</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-3-开发环境配置"><a href="#1-3-开发环境配置" class="headerlink" title="1.3 开发环境配置"></a>1.3 开发环境配置</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vite.config.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; defineConfig &#125; <span class="keyword">from</span> <span class="string">&#x27;vite&#x27;</span></span><br><span class="line"><span class="keyword">import</span> vue <span class="keyword">from</span> <span class="string">&#x27;@vitejs/plugin-vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> myPlugin <span class="keyword">from</span> <span class="string">&#x27;./vite-plugin-example&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> defineConfig(&#123;</span><br><span class="line">  <span class="attr">plugins</span>: [</span><br><span class="line">    vue(),</span><br><span class="line">    myPlugin(&#123; <span class="attr">prefix</span>: <span class="string">&#x27;lc&#x27;</span> &#125;),</span><br><span class="line">  ],</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="二、实战1：自动生成路由配置"><a href="#二、实战1：自动生成路由配置" class="headerlink" title="二、实战1：自动生成路由配置"></a>二、实战1：自动生成路由配置</h2><p>这个插件自动扫描 <code>src/views/</code> 目录生成 Vue Router 配置：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vite-plugin-auto-routes.js</span></span><br><span class="line"><span class="keyword">import</span> fs <span class="keyword">from</span> <span class="string">&#x27;node:fs&#x27;</span></span><br><span class="line"><span class="keyword">import</span> path <span class="keyword">from</span> <span class="string">&#x27;node:path&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">autoRoutes</span>(<span class="params">options = &#123;&#125;</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> viewsDir = options.viewsDir || <span class="string">&#x27;src/views&#x27;</span></span><br><span class="line">  <span class="keyword">const</span> outputFile = options.output || <span class="string">&#x27;src/router/auto-routes.js&#x27;</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;vite-plugin-auto-routes&#x27;</span>,</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 在构建启动时扫描目录</span></span><br><span class="line">    <span class="function"><span class="title">buildStart</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">      <span class="built_in">this</span>.generateRoutes()</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="title">configureServer</span>(<span class="params">server</span>)</span> &#123;</span><br><span class="line">      <span class="comment">// 开发模式下监听文件变化</span></span><br><span class="line">      <span class="keyword">const</span> viewsPath = path.resolve(process.cwd(), viewsDir)</span><br><span class="line">      fs.watch(viewsPath, &#123; <span class="attr">recursive</span>: <span class="literal">true</span> &#125;, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.generateRoutes()</span><br><span class="line">        <span class="comment">// 通知浏览器重新加载</span></span><br><span class="line">        server.ws.send(&#123; <span class="attr">type</span>: <span class="string">&#x27;full-reload&#x27;</span> &#125;)</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="title">generateRoutes</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> viewsPath = path.resolve(process.cwd(), viewsDir)</span><br><span class="line">      <span class="keyword">if</span> (!fs.existsSync(viewsPath)) <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">      <span class="keyword">const</span> routes = scanViews(viewsPath, <span class="string">&#x27;&#x27;</span>)</span><br><span class="line">      <span class="keyword">const</span> content = generateRouteCode(routes)</span><br><span class="line"></span><br><span class="line">      fs.writeFileSync(</span><br><span class="line">        path.resolve(process.cwd(), outputFile),</span><br><span class="line">        content,</span><br><span class="line">        <span class="string">&#x27;utf-8&#x27;</span></span><br><span class="line">      )</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">scanViews</span>(<span class="params">dir, basePath</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> entries = fs.readdirSync(dir, &#123; <span class="attr">withFileTypes</span>: <span class="literal">true</span> &#125;)</span><br><span class="line">  <span class="keyword">const</span> routes = []</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> entry <span class="keyword">of</span> entries) &#123;</span><br><span class="line">    <span class="keyword">if</span> (entry.isDirectory()) &#123;</span><br><span class="line">      <span class="comment">// 递归子目录</span></span><br><span class="line">      <span class="keyword">const</span> childRoutes = scanViews(</span><br><span class="line">        path.join(dir, entry.name),</span><br><span class="line">        <span class="string">`<span class="subst">$&#123;basePath&#125;</span>/<span class="subst">$&#123;entry.name&#125;</span>`</span></span><br><span class="line">      )</span><br><span class="line">      routes.push(...childRoutes)</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (entry.name.endsWith(<span class="string">&#x27;.vue&#x27;</span>)) &#123;</span><br><span class="line">      <span class="keyword">const</span> name = path.basename(entry.name, <span class="string">&#x27;.vue&#x27;</span>)</span><br><span class="line">      <span class="keyword">const</span> routePath = name === <span class="string">&#x27;index&#x27;</span> ? basePath || <span class="string">&#x27;/&#x27;</span> : <span class="string">`<span class="subst">$&#123;basePath&#125;</span>/<span class="subst">$&#123;name&#125;</span>`</span></span><br><span class="line"></span><br><span class="line">      routes.push(&#123;</span><br><span class="line">        <span class="attr">path</span>: routePath.toLowerCase().replace(<span class="regexp">/\[(\w+)\]/g</span>, <span class="string">&#x27;:$1&#x27;</span>),</span><br><span class="line">        name,</span><br><span class="line">        <span class="attr">component</span>: path.join(dir, entry.name),</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> routes</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">generateRouteCode</span>(<span class="params">routes</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> imports = routes</span><br><span class="line">    .map(<span class="function">(<span class="params">r, i</span>) =&gt;</span> <span class="string">`const Route<span class="subst">$&#123;i&#125;</span> = () =&gt; import(&#x27;<span class="subst">$&#123;r.component&#125;</span>&#x27;)`</span>)</span><br><span class="line">    .join(<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> routeConfigs = routes</span><br><span class="line">    .map(<span class="function">(<span class="params">r, i</span>) =&gt;</span> <span class="string">`  &#123; path: &#x27;<span class="subst">$&#123;r.path&#125;</span>&#x27;, name: &#x27;<span class="subst">$&#123;r.name&#125;</span>&#x27;, component: Route<span class="subst">$&#123;i&#125;</span> &#125;`</span>)</span><br><span class="line">    .join(<span class="string">&#x27;,\n&#x27;</span>)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="string">`// 此文件由 vite-plugin-auto-routes 自动生成，请勿手动修改</span></span><br><span class="line"><span class="string"><span class="subst">$&#123;imports&#125;</span></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">export default [</span></span><br><span class="line"><span class="string"><span class="subst">$&#123;routeConfigs&#125;</span>,</span></span><br><span class="line"><span class="string">]</span></span><br><span class="line"><span class="string">`</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>使用效果</strong>：在 <code>src/views/</code> 下创建文件即自动生成路由配置，无需手动维护路由表。</p>
+<hr>
+<h2 id="三、实战2：虚拟模块加载"><a href="#三、实战2：虚拟模块加载" class="headerlink" title="三、实战2：虚拟模块加载"></a>三、实战2：虚拟模块加载</h2><p>虚拟模块让插件像真实文件一样被 import，但内容由插件动态生成：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vite-plugin-virtual-i18n.js</span></span><br><span class="line"><span class="comment">// 功能：从 .json 语言包生成虚拟模块，运行时按需加载</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">virtualI18n</span>(<span class="params">options = &#123;&#125;</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> virtualModuleId = <span class="string">&#x27;virtual:i18n&#x27;</span></span><br><span class="line">  <span class="keyword">const</span> resolvedVirtualModuleId = <span class="string">&#x27;\0&#x27;</span> + virtualModuleId</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;vite-plugin-virtual-i18n&#x27;</span>,</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="title">resolveId</span>(<span class="params">id</span>)</span> &#123;</span><br><span class="line">      <span class="comment">// 当 import &#x27;virtual:i18n&#x27; 时，将 id 标记为虚拟模块</span></span><br><span class="line">      <span class="keyword">if</span> (id === virtualModuleId) &#123;</span><br><span class="line">        <span class="keyword">return</span> resolvedVirtualModuleId</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="title">load</span>(<span class="params">id</span>)</span> &#123;</span><br><span class="line">      <span class="comment">// 当需要加载虚拟模块时，动态生成内容</span></span><br><span class="line">      <span class="keyword">if</span> (id === resolvedVirtualModuleId) &#123;</span><br><span class="line">        <span class="keyword">const</span> localesDir = options.localesDir || <span class="string">&#x27;src/locales&#x27;</span></span><br><span class="line">        <span class="keyword">const</span> localeFiles = loadLocaleFiles(path.resolve(localesDir))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">`</span></span><br><span class="line"><span class="string">// 自动生成的国际化模块</span></span><br><span class="line"><span class="string">const messages = <span class="subst">$&#123;<span class="built_in">JSON</span>.stringify(localeFiles.messages)&#125;</span></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">export function t(key, lang = &#x27;zh-CN&#x27;) &#123;</span></span><br><span class="line"><span class="string">  return messages[lang]?.[key] ?? key</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">export function useI18n() &#123;</span></span><br><span class="line"><span class="string">  const lang = document.documentElement.lang || &#x27;zh-CN&#x27;</span></span><br><span class="line"><span class="string">  return &#123;</span></span><br><span class="line"><span class="string">    t: (key) =&gt; t(key, lang),</span></span><br><span class="line"><span class="string">    lang,</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">export default messages</span></span><br><span class="line"><span class="string">`</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">loadLocaleFiles</span>(<span class="params">dir</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> messages = &#123;&#125;</span><br><span class="line">  <span class="keyword">if</span> (!fs.existsSync(dir)) <span class="keyword">return</span> &#123; messages &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> files = fs.readdirSync(dir).filter(<span class="function"><span class="params">f</span> =&gt;</span> f.endsWith(<span class="string">&#x27;.json&#x27;</span>))</span><br><span class="line">  files.forEach(<span class="function">(<span class="params">file</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> lang = path.basename(file, <span class="string">&#x27;.json&#x27;</span>)</span><br><span class="line">    <span class="keyword">const</span> content = fs.readFileSync(path.join(dir, file), <span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">    messages[lang] = <span class="built_in">JSON</span>.parse(content)</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123; messages &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>使用方式</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 组件中直接 import 虚拟模块</span></span><br><span class="line"><span class="keyword">import</span> &#123; t &#125; <span class="keyword">from</span> <span class="string">&#x27;virtual:i18n&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用</span></span><br><span class="line"><span class="built_in">console</span>.log(t(<span class="string">&#x27;common.submit&#x27;</span>))  <span class="comment">// 输出：提交</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="四、实战3：自定义-HMR"><a href="#四、实战3：自定义-HMR" class="headerlink" title="四、实战3：自定义 HMR"></a>四、实战3：自定义 HMR</h2><p>Vite 的 HMR 默认对 Vue SFC、CSS 做了处理，但自定义文件类型需要自己实现：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vite-plugin-custom-hmr.js</span></span><br><span class="line"><span class="comment">// 功能：监听自定义 .page.yaml 文件的修改并触发 HMR</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">customHmrPlugin</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;vite-plugin-custom-hmr&#x27;</span>,</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="title">handleHotUpdate</span>(<span class="params">ctx</span>)</span> &#123;</span><br><span class="line">      <span class="comment">// ctx.file: 变更的文件路径</span></span><br><span class="line">      <span class="comment">// ctx.server: Vite dev server 实例</span></span><br><span class="line">      <span class="comment">// ctx.modules: 受影响的模块列表</span></span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (ctx.file.endsWith(<span class="string">&#x27;.page.yaml&#x27;</span>)) &#123;</span><br><span class="line">        <span class="comment">// 读取新的 YAML 内容</span></span><br><span class="line">        <span class="keyword">const</span> content = fs.readFileSync(ctx.file, <span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 找到依赖此文件的模块</span></span><br><span class="line">        <span class="keyword">const</span> <span class="built_in">module</span> = ctx.server.moduleGraph.getModuleById(</span><br><span class="line">          <span class="string">&#x27;\0&#x27;</span> + <span class="string">&#x27;virtual:page-config&#x27;</span></span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">module</span>) &#123;</span><br><span class="line">          <span class="comment">// 自定义热更新，触发模块重新加载</span></span><br><span class="line">          ctx.server.moduleGraph.invalidateModule(<span class="built_in">module</span>)</span><br><span class="line"></span><br><span class="line">          <span class="comment">// 发送自定义更新事件给浏览器</span></span><br><span class="line">          ctx.server.ws.send(&#123;</span><br><span class="line">            <span class="attr">type</span>: <span class="string">&#x27;custom&#x27;</span>,</span><br><span class="line">            <span class="attr">event</span>: <span class="string">&#x27;page-config-changed&#x27;</span>,</span><br><span class="line">            <span class="attr">data</span>: &#123; <span class="attr">file</span>: ctx.file, content &#125;,</span><br><span class="line">          &#125;)</span><br><span class="line"></span><br><span class="line">          <span class="comment">// 返回空数组阻止默认 HMR</span></span><br><span class="line">          <span class="keyword">return</span> []</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="title">configureServer</span>(<span class="params">server</span>)</span> &#123;</span><br><span class="line">      <span class="comment">// 客户端监听自定义事件</span></span><br><span class="line">      server.ws.on(<span class="string">&#x27;connection&#x27;</span>, <span class="function">(<span class="params">socket</span>) =&gt;</span> &#123;</span><br><span class="line">        socket.send(<span class="built_in">JSON</span>.stringify(&#123;</span><br><span class="line">          <span class="attr">type</span>: <span class="string">&#x27;custom&#x27;</span>,</span><br><span class="line">          <span class="attr">event</span>: <span class="string">&#x27;hmr-ready&#x27;</span>,</span><br><span class="line">        &#125;))</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>客户端监听自定义 HMR</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在应用入口注册</span></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">import</span>.meta.hot) &#123;</span><br><span class="line">  <span class="keyword">import</span>.meta.hot.on(<span class="string">&#x27;page-config-changed&#x27;</span>, <span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;页面配置已更新:&#x27;</span>, data.file)</span><br><span class="line">    <span class="comment">// 重新加载页面配置</span></span><br><span class="line">    <span class="built_in">window</span>.__PAGE_CONFIG__ = data.content</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="五、实战4：注入全局变量"><a href="#五、实战4：注入全局变量" class="headerlink" title="五、实战4：注入全局变量"></a>五、实战4：注入全局变量</h2><p>在生产构建中注入环境变量或版本号：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vite-plugin-inject-global.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">injectGlobalPlugin</span>(<span class="params">options = &#123;&#125;</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> defines = options.defines || &#123;&#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;vite-plugin-inject-global&#x27;</span>,</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="title">config</span>(<span class="params">config, &#123; command &#125;</span>)</span> &#123;</span><br><span class="line">      <span class="comment">// 在 define 中注入全局变量</span></span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="attr">define</span>: &#123;</span><br><span class="line">          <span class="attr">__APP_VERSION__</span>: <span class="built_in">JSON</span>.stringify(process.env.npm_package_version),</span><br><span class="line">          <span class="attr">__BUILD_TIME__</span>: <span class="built_in">JSON</span>.stringify(<span class="keyword">new</span> <span class="built_in">Date</span>().toISOString()),</span><br><span class="line">          <span class="attr">__GIT_HASH__</span>: <span class="built_in">JSON</span>.stringify(getGitHash()),</span><br><span class="line">          ...Object.fromEntries(</span><br><span class="line">            <span class="built_in">Object</span>.entries(defines).map(<span class="function">(<span class="params">[key, value]</span>) =&gt;</span> [</span><br><span class="line">              <span class="string">`__<span class="subst">$&#123;key&#125;</span>__`</span>,</span><br><span class="line">              <span class="built_in">JSON</span>.stringify(value),</span><br><span class="line">            ])</span><br><span class="line">          ),</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="title">transformIndexHtml</span>(<span class="params">html</span>)</span> &#123;</span><br><span class="line">      <span class="comment">// 在 HTML 中注入构建信息</span></span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line">        html,</span><br><span class="line">        <span class="attr">tags</span>: [</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="attr">tag</span>: <span class="string">&#x27;meta&#x27;</span>,</span><br><span class="line">            <span class="attr">attrs</span>: &#123;</span><br><span class="line">              <span class="attr">name</span>: <span class="string">&#x27;build-info&#x27;</span>,</span><br><span class="line">              <span class="attr">content</span>: <span class="string">`version=<span class="subst">$&#123;process.env.npm_package_version&#125;</span>&amp;time=<span class="subst">$&#123;<span class="built_in">Date</span>.now()&#125;</span>`</span>,</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">injectTo</span>: <span class="string">&#x27;head&#x27;</span>,</span><br><span class="line">          &#125;,</span><br><span class="line">        ],</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getGitHash</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">require</span>(<span class="string">&#x27;child_process&#x27;</span>)</span><br><span class="line">      .execSync(<span class="string">&#x27;git rev-parse --short HEAD&#x27;</span>)</span><br><span class="line">      .toString()</span><br><span class="line">      .trim()</span><br><span class="line">  &#125; <span class="keyword">catch</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;unknown&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>使用方式</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在代码中使用注入的全局变量</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">`版本: <span class="subst">$&#123;__APP_VERSION__&#125;</span>`</span>)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">`构建时间: <span class="subst">$&#123;__BUILD_TIME__&#125;</span>`</span>)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">`Git 提交: <span class="subst">$&#123;__GIT_HASH__&#125;</span>`</span>)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="六、实战5：构建产物优化"><a href="#六、实战5：构建产物优化" class="headerlink" title="六、实战5：构建产物优化"></a>六、实战5：构建产物优化</h2><p>压缩特定文件，或提取构建分析报告：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vite-plugin-build-optimizer.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; gzipSync, brotliSync &#125; <span class="keyword">from</span> <span class="string">&#x27;node:zlib&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">buildOptimizer</span>(<span class="params">options = &#123;&#125;</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;vite-plugin-build-optimizer&#x27;</span>,</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 在生成 bundle 后处理</span></span><br><span class="line">    <span class="function"><span class="title">generateBundle</span>(<span class="params">outputOptions, bundle</span>)</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (!options.enableGzip &amp;&amp; !options.enableBrotli &amp;&amp; !options.report) <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">      <span class="keyword">const</span> report = []</span><br><span class="line"></span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">const</span> [fileName, chunk] <span class="keyword">of</span> <span class="built_in">Object</span>.entries(bundle)) &#123;</span><br><span class="line">        <span class="keyword">if</span> (chunk.type !== <span class="string">&#x27;chunk&#x27;</span>) <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> originalSize = chunk.code.length</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Gzip 压缩</span></span><br><span class="line">        <span class="keyword">if</span> (options.enableGzip) &#123;</span><br><span class="line">          <span class="keyword">const</span> gzipped = gzipSync(chunk.code)</span><br><span class="line">          <span class="keyword">const</span> gzipSize = gzipped.length</span><br><span class="line">          <span class="keyword">const</span> ratio = ((<span class="number">1</span> - gzipSize / originalSize) * <span class="number">100</span>).toFixed(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">          <span class="comment">// 输出 .gz 文件</span></span><br><span class="line">          <span class="built_in">this</span>.emitFile(&#123;</span><br><span class="line">            <span class="attr">type</span>: <span class="string">&#x27;asset&#x27;</span>,</span><br><span class="line">            <span class="attr">fileName</span>: <span class="string">`<span class="subst">$&#123;fileName&#125;</span>.gz`</span>,</span><br><span class="line">            <span class="attr">source</span>: gzipped,</span><br><span class="line">          &#125;)</span><br><span class="line"></span><br><span class="line">          report.push(&#123; <span class="attr">file</span>: fileName, <span class="attr">original</span>: originalSize, <span class="attr">gzip</span>: gzipSize, <span class="attr">ratio</span>: <span class="string">`<span class="subst">$&#123;ratio&#125;</span>%`</span> &#125;)</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Brotli 压缩（比 gzip 更优）</span></span><br><span class="line">        <span class="keyword">if</span> (options.enableBrotli) &#123;</span><br><span class="line">          <span class="keyword">const</span> brotlied = brotliSync(chunk.code)</span><br><span class="line">          <span class="built_in">this</span>.emitFile(&#123;</span><br><span class="line">            <span class="attr">type</span>: <span class="string">&#x27;asset&#x27;</span>,</span><br><span class="line">            <span class="attr">fileName</span>: <span class="string">`<span class="subst">$&#123;fileName&#125;</span>.br`</span>,</span><br><span class="line">            <span class="attr">source</span>: brotlied,</span><br><span class="line">          &#125;)</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 查找大文件警告</span></span><br><span class="line">        <span class="keyword">if</span> (originalSize &gt; <span class="number">100</span> * <span class="number">1024</span>) &#123;</span><br><span class="line">          <span class="built_in">console</span>.warn(<span class="string">`⚠️ 大文件: <span class="subst">$&#123;fileName&#125;</span> (<span class="subst">$&#123;(originalSize / <span class="number">1024</span>).toFixed(<span class="number">1</span>)&#125;</span> KB)`</span>)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 生成分析报告</span></span><br><span class="line">      <span class="keyword">if</span> (options.report &amp;&amp; report.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> reportContent = [</span><br><span class="line">          <span class="string">&#x27;## 构建产物大小分析&#x27;</span>,</span><br><span class="line">          <span class="string">&#x27;| 文件 | 原始 | Gzip | 压缩比 |&#x27;</span>,</span><br><span class="line">          <span class="string">&#x27;|------|------|------|--------|&#x27;</span>,</span><br><span class="line">          ...report.map(<span class="function"><span class="params">r</span> =&gt;</span></span><br><span class="line">            <span class="string">`| <span class="subst">$&#123;r.file&#125;</span> | <span class="subst">$&#123;(r.original <span class="regexp">/ 1024).toFixed(1)&#125; KB | $&#123;(r.gzip /</span> <span class="number">1024</span>).toFixed(<span class="number">1</span>)&#125;</span> KB | <span class="subst">$&#123;r.ratio&#125;</span> |`</span></span><br><span class="line">          ),</span><br><span class="line">        ].join(<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="built_in">console</span>.log(reportContent)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 打包完成后输出分析文件</span></span><br><span class="line">    <span class="function"><span class="title">writeBundle</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (options.report) &#123;</span><br><span class="line">        <span class="keyword">const</span> stats = <span class="built_in">this</span>.getBundleStatistics()</span><br><span class="line">        fs.writeFileSync(</span><br><span class="line">          <span class="string">&#x27;dist/bundle-stats.json&#x27;</span>,</span><br><span class="line">          <span class="built_in">JSON</span>.stringify(stats, <span class="literal">null</span>, <span class="number">2</span>)</span><br><span class="line">        )</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="七、插件测试与调试"><a href="#七、插件测试与调试" class="headerlink" title="七、插件测试与调试"></a>七、插件测试与调试</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用 Vitest 测试插件</span></span><br><span class="line"><span class="keyword">import</span> &#123; describe, it, expect &#125; <span class="keyword">from</span> <span class="string">&#x27;vitest&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; build, createServer &#125; <span class="keyword">from</span> <span class="string">&#x27;vite&#x27;</span></span><br><span class="line"><span class="keyword">import</span> autoRoutes <span class="keyword">from</span> <span class="string">&#x27;../vite-plugin-auto-routes&#x27;</span></span><br><span class="line"></span><br><span class="line">describe(<span class="string">&#x27;autoRoutes plugin&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  it(<span class="string">&#x27;should generate route config&#x27;</span>, <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> result = <span class="keyword">await</span> build(&#123;</span><br><span class="line">      <span class="attr">plugins</span>: [autoRoutes(&#123; <span class="attr">viewsDir</span>: <span class="string">&#x27;test/fixtures/views&#x27;</span>, <span class="attr">output</span>: <span class="string">&#x27;/tmp/routes.js&#x27;</span> &#125;)],</span><br><span class="line">      <span class="attr">logLevel</span>: <span class="string">&#x27;silent&#x27;</span>,</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 验证产物包含预期路由</span></span><br><span class="line">    <span class="keyword">const</span> output = fs.readFileSync(<span class="string">&#x27;/tmp/routes.js&#x27;</span>, <span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">    expect(output).toContain(<span class="string">&#x27;home&#x27;</span>)</span><br><span class="line">    expect(output).toContain(<span class="string">&#x27;about&#x27;</span>)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 调试技巧：打印插件执行流程</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">debugPlugin</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;vite-plugin-debug&#x27;</span>,</span><br><span class="line">    <span class="function"><span class="title">configResolved</span>(<span class="params">config</span>)</span> &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">&#x27;[debug] 配置已解析:&#x27;</span>, &#123; <span class="attr">mode</span>: config.mode, <span class="attr">command</span>: config.command &#125;)</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="function"><span class="title">transform</span>(<span class="params">code, id</span>)</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (id.includes(<span class="string">&#x27;src/&#x27;</span>)) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&#x27;[debug] 转换文件:&#x27;</span>, id)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="插件开发速查表"><a href="#插件开发速查表" class="headerlink" title="插件开发速查表"></a>插件开发速查表</h3><table>
+<thead>
+<tr>
+<th>想实现什么</th>
+<th>使用哪个钩子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>修改 Vite 配置</td>
+<td><code>config</code> / <code>configResolved</code></td>
+</tr>
+<tr>
+<td>处理自定义文件类型</td>
+<td><code>transform</code></td>
+</tr>
+<tr>
+<td>创建虚拟模块</td>
+<td><code>resolveId</code> + <code>load</code></td>
+</tr>
+<tr>
+<td>注入全局变量</td>
+<td><code>config</code> 的 define</td>
+</tr>
+<tr>
+<td>自定义 HMR</td>
+<td><code>handleHotUpdate</code> + <code>server.ws.send</code></td>
+</tr>
+<tr>
+<td>添加服务端路由</td>
+<td><code>configureServer</code> 的 <code>server.middlewares.use</code></td>
+</tr>
+<tr>
+<td>修改构建产物</td>
+<td><code>generateBundle</code> / <code>writeBundle</code></td>
+</tr>
+<tr>
+<td>修改 HTML</td>
+<td><code>transformIndexHtml</code></td>
+</tr>
+</tbody></table>
+<h3 id="开发建议"><a href="#开发建议" class="headerlink" title="开发建议"></a>开发建议</h3><ol>
+<li><strong>插件名必须唯一</strong> — 方便调试和错误定位</li>
+<li><strong>虚拟模块用 <code>\0</code> 前缀</strong> — 标记为内部模块，不参与文件系统查询</li>
+<li><strong>HMR 要谨慎</strong> — 返回空数组 <code>[]</code> 阻止默认行为，或返回新模块列表</li>
+<li><strong>SSR 兼容性</strong> — 用 <code>this.meta.watchMode</code> 判断是否开发模式</li>
+<li><strong>错误处理</strong> — 使用 <code>this.warn()</code> 和 <code>this.error()</code> 而不是 <code>console.error</code></li>
+<li><strong>配置校验</strong> — 使用 <code>zod</code> 或简单校验函数验证插件参数</li>
+</ol>
+<blockquote>
+<p>插件是 Vite 生态的核心。三步法：先用已有插件满足需求 → 学习同类型插件的源码 → 写出自己的插件。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/web-blog/2026/06/25/vite-plugin-development-practice/">Vite 6 插件开发实战：从 Loader 到 HMR 自定义</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a></p>
+  <p><span>发布时间:</span>2026年06月25日 - 00:06</p>
+  <p><span>最后更新:</span>2026年06月25日 - 15:06</p>
+  <p><span>原始链接:</span><a href="/web-blog/2026/06/25/vite-plugin-development-practice/" title="Vite 6 插件开发实战：从 Loader 到 HMR 自定义">https://lc19990308.github.io/web-blog/2026/06/25/vite-plugin-development-practice/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://lc19990308.github.io/web-blog/2026/06/25/vite-plugin-development-practice/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+    });
+    });  
+</script>
+
+      
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>LC
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://lc19990308.github.io/web-blog/2026/06/25/vite-plugin-development-practice/" title="Vite 6 插件开发实战：从 Loader 到 HMR 自定义">https://lc19990308.github.io/web-blog/2026/06/25/vite-plugin-development-practice/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/web-blog/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" ****><i class="fa fa-tag"></i> 工程化</a>
+              <a href="/web-blog/tags/JavaScript/" ****><i class="fa fa-tag"></i> JavaScript</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/06/25/posts/ydkjs-01-compilation-and-scope/" rel="prev" title="你不知道的JavaScript（一）：JavaScript 编译原理与作用域">
+      <i class="fa fa-chevron-left"></i> 你不知道的JavaScript（一）：JavaScript 编译原理与作用域
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/06/25/vue3-5-reactivity-deep-dive/" rel="next" title="Vue 3.5 响应式原理深度剖析：从源码看响应式演进">
+      Vue 3.5 响应式原理深度剖析：从源码看响应式演进 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81Vite-%E6%8F%92%E4%BB%B6%E5%9F%BA%E7%A1%80"><span class="nav-number">2.</span> <span class="nav-text">一、Vite 插件基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%8F%92%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 插件结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E9%92%A9%E5%AD%90%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F"><span class="nav-number">2.2.</span> <span class="nav-text">1.2 钩子执行顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="nav-number">2.3.</span> <span class="nav-text">1.3 开发环境配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%AE%9E%E6%88%981%EF%BC%9A%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90%E8%B7%AF%E7%94%B1%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">二、实战1：自动生成路由配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%AE%9E%E6%88%982%EF%BC%9A%E8%99%9A%E6%8B%9F%E6%A8%A1%E5%9D%97%E5%8A%A0%E8%BD%BD"><span class="nav-number">4.</span> <span class="nav-text">三、实战2：虚拟模块加载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E5%AE%9E%E6%88%983%EF%BC%9A%E8%87%AA%E5%AE%9A%E4%B9%89-HMR"><span class="nav-number">5.</span> <span class="nav-text">四、实战3：自定义 HMR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E5%AE%9E%E6%88%984%EF%BC%9A%E6%B3%A8%E5%85%A5%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F"><span class="nav-number">6.</span> <span class="nav-text">五、实战4：注入全局变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E5%AE%9E%E6%88%985%EF%BC%9A%E6%9E%84%E5%BB%BA%E4%BA%A7%E7%89%A9%E4%BC%98%E5%8C%96"><span class="nav-number">7.</span> <span class="nav-text">六、实战5：构建产物优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E6%8F%92%E4%BB%B6%E6%B5%8B%E8%AF%95%E4%B8%8E%E8%B0%83%E8%AF%95"><span class="nav-number">8.</span> <span class="nav-text">七、插件测试与调试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">9.</span> <span class="nav-text">总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%92%E4%BB%B6%E5%BC%80%E5%8F%91%E9%80%9F%E6%9F%A5%E8%A1%A8"><span class="nav-number">9.1.</span> <span class="nav-text">插件开发速查表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%80%E5%8F%91%E5%BB%BA%E8%AE%AE"><span class="nav-number">9.2.</span> <span class="nav-text">开发建议</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="LC"
+      src="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+  <p class="site-author-name" itemprop="name">LC</p>
+  <div class="site-description" itemprop="description">专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/web-blog/archives/">
+        
+          <span class="site-state-item-count">110</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/web-blog/categories/">
+          
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/web-blog/tags/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button motion-element"><i class="fa fa-comment"></i>
+    Chat
+  </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lc19990308/web-blog" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lc19990308&#x2F;web-blog" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:jarridaddison4@gmail.com" title="E-Mail → mailto:jarridaddison4@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/web-blog/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=441491828&auto=1&height=66"></iframe>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LC</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>-->
+<div class="powered-by">
+  <i class="fa fa-user-md"></i>
+  <span id="busuanzi_container_site_pv">
+    本站访问量:<span id="busuanzi_value_site_pv"></span>次
+  </span>
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv">
+    本站总访客量：<span id="busuanzi_value_site_uv"></span>人
+  </span>
+</div>
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共166.3k字</span>
+</div>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/web-blog/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/web-blog/js/utils.js"></script>
+
+<script src="/web-blog/js/motion.js"></script>
+
+
+<script src="/web-blog/js/schemes/pisces.js"></script>
+
+
+<script src="/web-blog/js/next-boot.js"></script>
+
+<script src="/web-blog/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/web-blog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+</body>
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</html>

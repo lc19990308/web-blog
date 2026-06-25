@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/web-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/web-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/web-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/web-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/web-blog/css/main.css">
+
+
+<link rel="stylesheet" href="/web-blog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/web-blog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/web-blog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lc19990308.github.io","root":"/web-blog/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="深入 JavaScript 的语法细节：表达式（Expression）与语句（Statement）的区别、自动分号插入（ASI）、分号规则、以及各种边界语法行为">
+<meta property="og:type" content="article">
+<meta property="og:title" content="你不知道的JavaScript（十八）：JavaScript 语法详解——表达式、语句、ASI 与分号">
+<meta property="og:url" content="https://lc19990308.github.io/web-blog/2026/06/26/posts/ydkjs-18-grammar-and-statements/index.html">
+<meta property="og:site_name" content="前端技术笔记">
+<meta property="og:description" content="深入 JavaScript 的语法细节：表达式（Expression）与语句（Statement）的区别、自动分号插入（ASI）、分号规则、以及各种边界语法行为">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-25T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-25T07:28:33.294Z">
+<meta property="article:author" content="LC">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="你不知道的javascript">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://lc19990308.github.io/web-blog/2026/06/26/posts/ydkjs-18-grammar-and-statements/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>你不知道的JavaScript（十八）：JavaScript 语法详解——表达式、语句、ASI 与分号 | 前端技术笔记</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/web-blog/atom.xml" title="前端技术笔记" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband">
+    <a target="_blank" rel="noopener" href="https://gitee.com/yaru722" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    </div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/web-blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">前端技术笔记</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录前端路上的思考与实践</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/web-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/web-blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/web-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/web-blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/web-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/lc19990308" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/26/posts/ydkjs-18-grammar-and-statements/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+      <meta itemprop="name" content="LC">
+      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端技术笔记">
+    </span>
+      <header class="post-header">
+      
+        <h1 class="post-title" itemprop="name headline">
+          你不知道的JavaScript（十八）：JavaScript 语法详解——表达式、语句、ASI 与分号
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-06-26 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-26T00:00:00+08:00">2026-06-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/web-blog/categories/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/" itemprop="url" rel="index"><span itemprop="name">你不知道的javascript</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">深入 JavaScript 的语法细节：表达式（Expression）与语句（Statement）的区别、自动分号插入（ASI）、分号规则、以及各种边界语法行为</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>很多开发者写 JavaScript 多年，但还是分不清”表达式”和”语句”的区别。</p>
+<p>更不用说关于<strong>分号</strong>的争论了——加还是不加？实际上，理解 ASI（Automatic Semicolon Insertion）规则后，这个争议就不存在了：你知道什么时候可以省略，什么时候必须加。</p>
+<hr>
+<h2 id="一、表达式（Expression）vs-语句（Statement）"><a href="#一、表达式（Expression）vs-语句（Statement）" class="headerlink" title="一、表达式（Expression）vs 语句（Statement）"></a>一、表达式（Expression）vs 语句（Statement）</h2><h3 id="1-1-核心区别"><a href="#1-1-核心区别" class="headerlink" title="1.1 核心区别"></a>1.1 核心区别</h3><p><strong>表达式（Expression）产生一个值，语句（Statement）执行一个动作。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 表达式：产生值</span></span><br><span class="line"><span class="number">42</span>                    <span class="comment">// 值 42</span></span><br><span class="line"><span class="string">&#x27;hello&#x27;</span>               <span class="comment">// 值 &#x27;hello&#x27;</span></span><br><span class="line"><span class="number">1</span> + <span class="number">2</span>                 <span class="comment">// 值 3</span></span><br><span class="line">a                     <span class="comment">// 变量 a 的值</span></span><br><span class="line">a &gt; b ? a : b         <span class="comment">// 条件表达式</span></span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]             <span class="comment">// 数组表达式</span></span><br><span class="line">&#123; <span class="attr">x</span>: <span class="number">1</span> &#125;              <span class="comment">// 对象表达式（在表达式上下文中）</span></span><br><span class="line"><span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;         <span class="comment">// 函数表达式</span></span><br><span class="line">a =&gt; a * <span class="number">2</span>            <span class="comment">// 箭头函数表达式</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 语句：执行动作</span></span><br><span class="line"><span class="keyword">if</span> (a &gt; b) &#123; <span class="keyword">return</span> a &#125;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;&#125;</span><br><span class="line"><span class="keyword">while</span> (<span class="literal">true</span>) &#123;&#125;</span><br><span class="line"><span class="keyword">var</span> a = <span class="number">1</span>             <span class="comment">// 声明语句</span></span><br><span class="line"><span class="keyword">return</span> <span class="number">42</span>             <span class="comment">// 返回语句</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-表达式-vs-语句的上下文"><a href="#1-2-表达式-vs-语句的上下文" class="headerlink" title="1.2 表达式 vs 语句的上下文"></a>1.2 表达式 vs 语句的上下文</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 同样的代码在不同上下文含义不同</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 代码块（语句上下文）</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">// 这是代码块（statement）</span></span><br><span class="line">  <span class="keyword">var</span> a = <span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 对象字面量（表达式上下文）</span></span><br><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  <span class="comment">// 这是对象（expression）</span></span><br><span class="line">  <span class="attr">a</span>: <span class="number">1</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 这是标签语句</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">label</span>: <span class="built_in">console</span>.log(<span class="string">&#x27;hello&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 实际上 &#123; label: ... &#125; 是一个代码块，label 是标签语句</span></span><br><span class="line"><span class="comment">// 不是对象字面量！</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="1-3-语句完成值"><a href="#1-3-语句完成值" class="headerlink" title="1.3 语句完成值"></a>1.3 语句完成值</h3><p>JavaScript 中<strong>语句也有完成值</strong>（Completion Value），但你不能直接获取它：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在浏览器控制台，你会看到完成值</span></span><br><span class="line"><span class="keyword">var</span> a = <span class="number">42</span></span><br><span class="line"><span class="comment">// undefined（var 语句的完成值是 undefined）</span></span><br><span class="line"></span><br><span class="line">b = <span class="number">42</span></span><br><span class="line"><span class="comment">// 42（赋值表达式的完成值是右侧的值）</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="literal">true</span>) &#123; <span class="number">42</span> &#125;</span><br><span class="line"><span class="comment">// 42（块的完成值是最后一条语句的值）</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>eval 可以拿到完成值</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> result = <span class="built_in">eval</span>(<span class="string">&#x27;if (true) &#123; 42 &#125;&#x27;</span>)</span><br><span class="line"><span class="built_in">console</span>.log(result) <span class="comment">// 42（eval 返回块的完成值）</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="二、自动分号插入（ASI）"><a href="#二、自动分号插入（ASI）" class="headerlink" title="二、自动分号插入（ASI）"></a>二、自动分号插入（ASI）</h2><h3 id="2-1-ASI-不是”自动加分号”"><a href="#2-1-ASI-不是”自动加分号”" class="headerlink" title="2.1 ASI 不是”自动加分号”"></a>2.1 ASI 不是”自动加分号”</h3><p>ASI 的完整意思是：</p>
+<blockquote>
+<p>当 JavaScript 引擎<strong>解析时遇到语法错误</strong>，它会尝试在特定位置<strong>插入一个分号</strong>来修复代码。</p>
+</blockquote>
+<p>换句话说：ASI 是一个<strong>错误恢复机制</strong>，不是”在每行末尾加分号”。</p>
+<h3 id="2-2-ASI-触发的三个条件"><a href="#2-2-ASI-触发的三个条件" class="headerlink" title="2.2 ASI 触发的三个条件"></a>2.2 ASI 触发的三个条件</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1. 当下一行代码以 &quot;(&quot; &quot;[&quot; &quot;/&quot; &quot;+&quot; &quot;-&quot; 开头时</span><br><span class="line">2. 当遇到 &quot;&#125;&quot; 时（如果缺少分号）</span><br><span class="line">3. 当遇到 return/throw/break/continue 后紧跟换行时</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 条件1：下一行以 ( 开头</span></span><br><span class="line"><span class="keyword">var</span> a = <span class="number">42</span></span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; &#125;)()</span><br><span class="line"><span class="comment">// → var a = 42(function() &#123;&#125;()) ❌ 类型错误</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 条件2：遇到 &#125;</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 这里不需要分号，但引擎隐式在 &#125; 前插入</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 条件3：return 后换行（重要）</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span>          <span class="comment">// ASI 在这里插入分号！</span></span><br><span class="line">    <span class="number">42</span></span><br><span class="line">&#125;</span><br><span class="line">foo() <span class="comment">// undefined（不是 42！）</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-常见的-ASI-陷阱"><a href="#2-3-常见的-ASI-陷阱" class="headerlink" title="2.3 常见的 ASI 陷阱"></a>2.3 常见的 ASI 陷阱</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 陷阱1：return 换行</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span></span><br><span class="line">  &#123; <span class="attr">value</span>: <span class="number">42</span> &#125;</span><br><span class="line">&#125;</span><br><span class="line">foo() <span class="comment">// undefined ❌</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 应该：</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">bar</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="attr">value</span>: <span class="number">42</span>,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 陷阱2：数组起始行</span></span><br><span class="line"><span class="keyword">const</span> a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">[<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>].forEach(<span class="function"><span class="params">v</span> =&gt;</span> <span class="built_in">console</span>.log(v))</span><br><span class="line"><span class="comment">// → const a = [1, 2, 3][4, 5, 6].forEach(...)</span></span><br><span class="line"><span class="comment">// 取下标 5（即第三个元素），然后调用 forEach ❌</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 修复：加分号</span></span><br><span class="line"><span class="keyword">const</span> a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line">[<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>].forEach(<span class="function"><span class="params">v</span> =&gt;</span> <span class="built_in">console</span>.log(v))</span><br><span class="line"></span><br><span class="line"><span class="comment">// 陷阱3：函数表达式起始行</span></span><br><span class="line"><span class="keyword">const</span> a = <span class="number">42</span></span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="built_in">console</span>.log(<span class="string">&#x27;hello&#x27;</span>) &#125;)()</span><br><span class="line"><span class="comment">// → const a = 42(function() &#123; ... &#125;()) ❌</span></span><br><span class="line"><span class="comment">// 42(...) 是不合法的</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 修复：加分号</span></span><br><span class="line"><span class="keyword">const</span> a = <span class="number">42</span>;</span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="built_in">console</span>.log(<span class="string">&#x27;hello&#x27;</span>) &#125;)()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 陷阱4：以 / 开头</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;hello&#x27;</span>)</span><br><span class="line">/[a-z]/.test(<span class="string">&#x27;a&#x27;</span>)</span><br><span class="line"><span class="comment">// → console.log(&#x27;hello&#x27;)/[a-z]/.test(&#x27;a&#x27;)</span></span><br><span class="line"><span class="comment">// 除法运算 ❌</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="三、分号的最佳实践"><a href="#三、分号的最佳实践" class="headerlink" title="三、分号的最佳实践"></a>三、分号的最佳实践</h2><h3 id="3-1-两种流派"><a href="#3-1-两种流派" class="headerlink" title="3.1 两种流派"></a>3.1 两种流派</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 流派 A：始终加分号（更安全）</span></span><br><span class="line"><span class="keyword">const</span> a = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">const</span> b = <span class="number">2</span>;</span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;safe&#x27;</span>);</span><br><span class="line">&#125;)();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 流派 B：不加分号（更简洁）</span></span><br><span class="line"><span class="keyword">const</span> a = <span class="number">1</span></span><br><span class="line"><span class="keyword">const</span> b = <span class="number">2</span></span><br><span class="line">;(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;safe&#x27;</span>)   <span class="comment">// 但行首要加分号！</span></span><br><span class="line">&#125;)()</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-安全省略分号的三条规则"><a href="#3-2-安全省略分号的三条规则" class="headerlink" title="3.2 安全省略分号的三条规则"></a>3.2 安全省略分号的三条规则</h3><p>如果你选择不加分号（流派 B），必须遵守：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 规则1：语句以 ( 开头时，前面加分号</span></span><br><span class="line"><span class="keyword">const</span> a = <span class="number">42</span></span><br><span class="line">;(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; &#125;)()    <span class="comment">// ✅</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 规则2：语句以 [ 开头时，前面加分号</span></span><br><span class="line"><span class="keyword">const</span> b = <span class="number">42</span></span><br><span class="line">;[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].forEach(fn) <span class="comment">// ✅</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 规则3：以字符串模版开头时，前面加分号</span></span><br><span class="line"><span class="keyword">const</span> c = <span class="number">42</span></span><br><span class="line">;<span class="string">`hello <span class="subst">$&#123;c&#125;</span>`</span>           <span class="comment">// ✅</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-使用-ESLint-保持统一"><a href="#3-3-使用-ESLint-保持统一" class="headerlink" title="3.3 使用 ESLint 保持统一"></a>3.3 使用 ESLint 保持统一</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// .eslintrc</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;rules&quot;</span>: &#123;</span><br><span class="line">    <span class="comment">// 要么：</span></span><br><span class="line">    <span class="string">&quot;semi&quot;</span>: [<span class="string">&quot;error&quot;</span>, <span class="string">&quot;always&quot;</span>],  <span class="comment">// 必须加分号</span></span><br><span class="line">    <span class="comment">// 要么：</span></span><br><span class="line">    <span class="string">&quot;semi&quot;</span>: [<span class="string">&quot;error&quot;</span>, <span class="string">&quot;never&quot;</span>],   <span class="comment">// 从不加分号（但需要正确使用 ASI）</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="四、几种特殊语法"><a href="#四、几种特殊语法" class="headerlink" title="四、几种特殊语法"></a>四、几种特殊语法</h2><h3 id="4-1-标签语句（Label-Statement）"><a href="#4-1-标签语句（Label-Statement）" class="headerlink" title="4.1 标签语句（Label Statement）"></a>4.1 标签语句（Label Statement）</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 给循环加标签，用于 break/continue 跳出多层</span></span><br><span class="line"><span class="attr">outer</span>: <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) &#123;</span><br><span class="line">  <span class="attr">inner</span>: <span class="keyword">for</span> (<span class="keyword">let</span> j = <span class="number">0</span>; j &lt; <span class="number">5</span>; j++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (i === <span class="number">2</span> &amp;&amp; j === <span class="number">2</span>) &#123;</span><br><span class="line">      <span class="keyword">break</span> outer  <span class="comment">// 跳出外层循环</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">console</span>.log(i, j)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 输出 (0,0) (0,1) ... (2,1)，然后退出</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 标签语句的另一个用法——用 break 退出代码块</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;执行&#x27;</span>)</span><br><span class="line">  <span class="keyword">break</span> myblock</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;不会执行&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 这可以用在条件性地跳过代码块</span></span><br><span class="line"><span class="attr">myblock</span>: &#123;</span><br><span class="line">  <span class="keyword">if</span> (condition) <span class="keyword">break</span> myblock</span><br><span class="line">  <span class="comment">// 只有 condition 为 false 时才会执行这里</span></span><br><span class="line">  expensiveOperation()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2-逗号操作符"><a href="#4-2-逗号操作符" class="headerlink" title="4.2 逗号操作符"></a>4.2 逗号操作符</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 逗号操作符：从左到右依次执行，返回最后一个表达式的值</span></span><br><span class="line"><span class="keyword">const</span> a = (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line"><span class="built_in">console</span>.log(a) <span class="comment">// 3</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 典型应用</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>, j = <span class="number">10</span>; i &lt; j; i++, j--) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(i, j)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 另一种应用：简化条件分支</span></span><br><span class="line"><span class="keyword">const</span> result = condition</span><br><span class="line">  ? (doSomething(), doSomethingElse(), <span class="string">&#x27;done&#x27;</span>)</span><br><span class="line">  : <span class="string">&#x27;skipped&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(result) <span class="comment">// &#x27;done&#x27; 或 &#x27;skipped&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3-void-操作符"><a href="#4-3-void-操作符" class="headerlink" title="4.3 void 操作符"></a>4.3 void 操作符</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// void 操作符：执行表达式，返回 undefined</span></span><br><span class="line"><span class="keyword">void</span> <span class="number">0</span>        <span class="comment">// undefined</span></span><br><span class="line"><span class="keyword">void</span> (<span class="number">1</span> + <span class="number">1</span>)  <span class="comment">// undefined</span></span><br><span class="line"><span class="keyword">void</span> fetch(<span class="string">&#x27;/api&#x27;</span>) <span class="comment">// undefined（但仍会发起请求）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 常见用途</span></span><br><span class="line"><span class="comment">// 1. 确保表达式返回 undefined</span></span><br><span class="line">&lt;a href=<span class="string">&quot;javascript:void(0)&quot;</span>&gt;点击&lt;/a&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. void 用于立即执行函数表达式，比 () 包裹更安全</span></span><br><span class="line"><span class="comment">// 因为 void 明确将后面的内容作为表达式处理</span></span><br><span class="line"><span class="keyword">void</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;IIFE with void&#x27;</span>)</span><br><span class="line">&#125;()</span><br><span class="line"><span class="comment">// 对比：(function() &#123; ... &#125;()) — 括号包裹法</span></span><br><span class="line"><span class="comment">// void 方式避免了 ASI 问题（行首无 ( 开头）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 避免箭头函数返回对象被误解</span></span><br><span class="line"><span class="keyword">const</span> fn = <span class="function">() =&gt;</span> <span class="keyword">void</span> doSomething()</span><br><span class="line"><span class="comment">// 明确返回 undefined，而不是 doSomething 的返回值</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-4-typeof-的安全特性"><a href="#4-4-typeof-的安全特性" class="headerlink" title="4.4 typeof 的安全特性"></a>4.4 typeof 的安全特性</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// typeof 永远不会报错——即使变量不存在</span></span><br><span class="line"><span class="keyword">typeof</span> undeclaredVariable <span class="comment">// &#x27;undefined&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 其他操作符会报 ReferenceError</span></span><br><span class="line">undeclaredVariable <span class="comment">// ❌ ReferenceError</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 用来检测全局 API 是否存在</span></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="built_in">Promise</span> !== <span class="string">&#x27;undefined&#x27;</span>) &#123;</span><br><span class="line">  <span class="comment">// 支持 Promise</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="五、运算符优先级与结合性"><a href="#五、运算符优先级与结合性" class="headerlink" title="五、运算符优先级与结合性"></a>五、运算符优先级与结合性</h2><h3 id="5-1-优先级"><a href="#5-1-优先级" class="headerlink" title="5.1 优先级"></a>5.1 优先级</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 优先级高的先执行</span></span><br><span class="line"><span class="number">1</span> + <span class="number">2</span> * <span class="number">3</span>     <span class="comment">// 7（乘法优先）</span></span><br><span class="line">(<span class="number">1</span> + <span class="number">2</span>) * <span class="number">3</span>   <span class="comment">// 9（括号提高优先级）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 完整表（从高到低部分）</span></span><br><span class="line"><span class="comment">// 1. 成员访问 . []</span></span><br><span class="line"><span class="comment">// 2. new (带参数)</span></span><br><span class="line"><span class="comment">// 3. 函数调用 ()</span></span><br><span class="line"><span class="comment">// 4. 一元 ! ~ + - typeof void</span></span><br><span class="line"><span class="comment">// 5. 乘法 * / %</span></span><br><span class="line"><span class="comment">// 6. 加法 + -</span></span><br><span class="line"><span class="comment">// 7. 比较 &lt; &gt; &lt;= &gt;= instanceof</span></span><br><span class="line"><span class="comment">// 8. 相等 == === != !==</span></span><br><span class="line"><span class="comment">// 9. &amp;&amp;</span></span><br><span class="line"><span class="comment">// 10. ||</span></span><br><span class="line"><span class="comment">// 11. 三目 ?:</span></span><br><span class="line"><span class="comment">// 12. 赋值 = += -=</span></span><br><span class="line"><span class="comment">// 13. 逗号 ,</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2-结合性"><a href="#5-2-结合性" class="headerlink" title="5.2 结合性"></a>5.2 结合性</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 左结合：从左到右计算</span></span><br><span class="line"><span class="comment">// 大多数运算符是左结合</span></span><br><span class="line">a - b - c     <span class="comment">// (a - b) - c</span></span><br><span class="line">a = b = c     <span class="comment">// 赋值是右结合：a = (b = c)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 右结合：从右到左计算</span></span><br><span class="line">a = b = c            <span class="comment">// a = (b = c)</span></span><br><span class="line"><span class="keyword">typeof</span> <span class="keyword">typeof</span> <span class="number">42</span>     <span class="comment">// typeof (typeof 42) → typeof &#x27;number&#x27; → &#x27;string&#x27;</span></span><br><span class="line">a ? b : c ? d : e    <span class="comment">// a ? b : (c ? d : e)</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="5-3-常见陷阱"><a href="#5-3-常见陷阱" class="headerlink" title="5.3 常见陷阱"></a>5.3 常见陷阱</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 条件与赋值的优先级</span></span><br><span class="line"><span class="keyword">if</span> (a = b) &#123; &#125;      <span class="comment">// ❌ 赋值表达式返回 b 的值，总是真值</span></span><br><span class="line"><span class="keyword">if</span> (a === b) &#123; &#125;    <span class="comment">// ✅ 正确的比较</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 逗号与赋值的优先级</span></span><br><span class="line"><span class="keyword">const</span> a = (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>) <span class="comment">// 3（逗号表达式）</span></span><br><span class="line"><span class="keyword">const</span> b = <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>   <span class="comment">// ❌ SyntaxError</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. new 的优先级</span></span><br><span class="line"><span class="keyword">new</span> Foo()           <span class="comment">// 带参数：优先级最高</span></span><br><span class="line"><span class="keyword">new</span> Foo             <span class="comment">// 不带参数：优先级较低</span></span><br><span class="line"><span class="keyword">new</span> Foo().bar()     <span class="comment">// (new Foo()).bar()</span></span><br><span class="line"><span class="keyword">new</span> Foo.bar()       <span class="comment">// new (Foo.bar())</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="六、面试题"><a href="#六、面试题" class="headerlink" title="六、面试题"></a>六、面试题</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 题目1：输出什么？</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">value</span>: <span class="number">42</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(foo()) <span class="comment">// undefined（ASI 在 return 后加了分号）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 题目2：输出什么？</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> a)     <span class="comment">// &#x27;undefined&#x27;</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> b)     <span class="comment">// &#x27;undefined&#x27;</span></span><br><span class="line"><span class="comment">// 注意：b 没有声明，但 typeof 不会报错</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 题目3：输出什么？</span></span><br><span class="line"><span class="keyword">const</span> x = <span class="number">1</span></span><br><span class="line"><span class="keyword">const</span> y = <span class="number">2</span></span><br><span class="line"><span class="keyword">const</span> z = x, y, (x + y)</span><br><span class="line"><span class="built_in">console</span>.log(z) <span class="comment">// 1（逗号操作符的优先级问题）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 题目4：输出什么？</span></span><br><span class="line"><span class="keyword">const</span> a = <span class="number">1</span></span><br><span class="line"><span class="keyword">const</span> b = <span class="number">2</span></span><br><span class="line"><span class="keyword">const</span> result = (a++, b++, a + b)</span><br><span class="line"><span class="built_in">console</span>.log(a, b, result) <span class="comment">// 2, 3, 5</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
+<li><strong>表达式产生值，语句执行动作</strong>——这是最根本的区别</li>
+<li><strong>ASI 是错误恢复机制</strong>，不是自动在行尾加分号</li>
+<li><strong>三种触发 ASI 的场景</strong>：行首以 <code>(</code> <code>[</code> <code>/</code> 开头、遇到 <code>&#125;</code>、return 后换行</li>
+<li><strong>不加分号时要手动加分号</strong>在 <code>(</code> <code>[</code> <code>`</code> 开头的行前</li>
+<li><strong>善用逗号操作符</strong>在一行中执行多个表达式</li>
+<li><strong><code>typeof</code> 从不报错</strong>——它是检测变量是否存在的安全方式</li>
+</ol>
+<blockquote>
+<p>下一篇将深入 <strong>JavaScript 的性能测试</strong>——基准分析、JIT 优化陷阱和测量方法。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/web-blog/2026/06/26/posts/ydkjs-18-grammar-and-statements/">你不知道的JavaScript（十八）：JavaScript 语法详解——表达式、语句、ASI 与分号</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a></p>
+  <p><span>发布时间:</span>2026年06月26日 - 00:06</p>
+  <p><span>最后更新:</span>2026年06月25日 - 15:06</p>
+  <p><span>原始链接:</span><a href="/web-blog/2026/06/26/posts/ydkjs-18-grammar-and-statements/" title="你不知道的JavaScript（十八）：JavaScript 语法详解——表达式、语句、ASI 与分号">https://lc19990308.github.io/web-blog/2026/06/26/posts/ydkjs-18-grammar-and-statements/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://lc19990308.github.io/web-blog/2026/06/26/posts/ydkjs-18-grammar-and-statements/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+    });
+    });  
+</script>
+
+      
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>LC
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://lc19990308.github.io/web-blog/2026/06/26/posts/ydkjs-18-grammar-and-statements/" title="你不知道的JavaScript（十八）：JavaScript 语法详解——表达式、语句、ASI 与分号">https://lc19990308.github.io/web-blog/2026/06/26/posts/ydkjs-18-grammar-and-statements/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/web-blog/tags/JavaScript/" ****><i class="fa fa-tag"></i> JavaScript</a>
+              <a href="/web-blog/tags/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/" ****><i class="fa fa-tag"></i> 你不知道的javascript</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/06/26/posts/ydkjs-16-promise/" rel="prev" title="你不知道的JavaScript（十六）：Promise 深入理解——解决回调问题的终极方案">
+      <i class="fa fa-chevron-left"></i> 你不知道的JavaScript（十六）：Promise 深入理解——解决回调问题的终极方案
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/06/26/posts/ydkjs-15-event-loop-and-callbacks/" rel="next" title="你不知道的JavaScript（十五）：事件循环与回调——JavaScript 异步编程基础">
+      你不知道的JavaScript（十五）：事件循环与回调——JavaScript 异步编程基础 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E8%A1%A8%E8%BE%BE%E5%BC%8F%EF%BC%88Expression%EF%BC%89vs-%E8%AF%AD%E5%8F%A5%EF%BC%88Statement%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">一、表达式（Expression）vs 语句（Statement）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%A0%B8%E5%BF%83%E5%8C%BA%E5%88%AB"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 核心区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E8%A1%A8%E8%BE%BE%E5%BC%8F-vs-%E8%AF%AD%E5%8F%A5%E7%9A%84%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="nav-number">2.2.</span> <span class="nav-text">1.2 表达式 vs 语句的上下文</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E8%AF%AD%E5%8F%A5%E5%AE%8C%E6%88%90%E5%80%BC"><span class="nav-number">2.3.</span> <span class="nav-text">1.3 语句完成值</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E8%87%AA%E5%8A%A8%E5%88%86%E5%8F%B7%E6%8F%92%E5%85%A5%EF%BC%88ASI%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">二、自动分号插入（ASI）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-ASI-%E4%B8%8D%E6%98%AF%E2%80%9D%E8%87%AA%E5%8A%A8%E5%8A%A0%E5%88%86%E5%8F%B7%E2%80%9D"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 ASI 不是”自动加分号”</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-ASI-%E8%A7%A6%E5%8F%91%E7%9A%84%E4%B8%89%E4%B8%AA%E6%9D%A1%E4%BB%B6"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 ASI 触发的三个条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E5%B8%B8%E8%A7%81%E7%9A%84-ASI-%E9%99%B7%E9%98%B1"><span class="nav-number">3.3.</span> <span class="nav-text">2.3 常见的 ASI 陷阱</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%88%86%E5%8F%B7%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-number">4.</span> <span class="nav-text">三、分号的最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E4%B8%A4%E7%A7%8D%E6%B5%81%E6%B4%BE"><span class="nav-number">4.1.</span> <span class="nav-text">3.1 两种流派</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E5%AE%89%E5%85%A8%E7%9C%81%E7%95%A5%E5%88%86%E5%8F%B7%E7%9A%84%E4%B8%89%E6%9D%A1%E8%A7%84%E5%88%99"><span class="nav-number">4.2.</span> <span class="nav-text">3.2 安全省略分号的三条规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E4%BD%BF%E7%94%A8-ESLint-%E4%BF%9D%E6%8C%81%E7%BB%9F%E4%B8%80"><span class="nav-number">4.3.</span> <span class="nav-text">3.3 使用 ESLint 保持统一</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E5%87%A0%E7%A7%8D%E7%89%B9%E6%AE%8A%E8%AF%AD%E6%B3%95"><span class="nav-number">5.</span> <span class="nav-text">四、几种特殊语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E6%A0%87%E7%AD%BE%E8%AF%AD%E5%8F%A5%EF%BC%88Label-Statement%EF%BC%89"><span class="nav-number">5.1.</span> <span class="nav-text">4.1 标签语句（Label Statement）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E9%80%97%E5%8F%B7%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="nav-number">5.2.</span> <span class="nav-text">4.2 逗号操作符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-void-%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="nav-number">5.3.</span> <span class="nav-text">4.3 void 操作符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-typeof-%E7%9A%84%E5%AE%89%E5%85%A8%E7%89%B9%E6%80%A7"><span class="nav-number">5.4.</span> <span class="nav-text">4.4 typeof 的安全特性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BC%98%E5%85%88%E7%BA%A7%E4%B8%8E%E7%BB%93%E5%90%88%E6%80%A7"><span class="nav-number">6.</span> <span class="nav-text">五、运算符优先级与结合性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%E4%BC%98%E5%85%88%E7%BA%A7"><span class="nav-number">6.1.</span> <span class="nav-text">5.1 优先级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-%E7%BB%93%E5%90%88%E6%80%A7"><span class="nav-number">6.2.</span> <span class="nav-text">5.2 结合性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-%E5%B8%B8%E8%A7%81%E9%99%B7%E9%98%B1"><span class="nav-number">6.3.</span> <span class="nav-text">5.3 常见陷阱</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98"><span class="nav-number">7.</span> <span class="nav-text">六、面试题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">8.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="LC"
+      src="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+  <p class="site-author-name" itemprop="name">LC</p>
+  <div class="site-description" itemprop="description">专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/web-blog/archives/">
+        
+          <span class="site-state-item-count">110</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/web-blog/categories/">
+          
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/web-blog/tags/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button motion-element"><i class="fa fa-comment"></i>
+    Chat
+  </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lc19990308/web-blog" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lc19990308&#x2F;web-blog" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:jarridaddison4@gmail.com" title="E-Mail → mailto:jarridaddison4@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/web-blog/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=441491828&auto=1&height=66"></iframe>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LC</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>-->
+<div class="powered-by">
+  <i class="fa fa-user-md"></i>
+  <span id="busuanzi_container_site_pv">
+    本站访问量:<span id="busuanzi_value_site_pv"></span>次
+  </span>
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv">
+    本站总访客量：<span id="busuanzi_value_site_uv"></span>人
+  </span>
+</div>
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共166.3k字</span>
+</div>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/web-blog/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/web-blog/js/utils.js"></script>
+
+<script src="/web-blog/js/motion.js"></script>
+
+
+<script src="/web-blog/js/schemes/pisces.js"></script>
+
+
+<script src="/web-blog/js/next-boot.js"></script>
+
+<script src="/web-blog/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/web-blog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+</body>
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</html>

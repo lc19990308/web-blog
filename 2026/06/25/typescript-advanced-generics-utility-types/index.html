@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/web-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/web-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/web-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/web-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/web-blog/css/main.css">
+
+
+<link rel="stylesheet" href="/web-blog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/web-blog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/web-blog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lc19990308.github.io","root":"/web-blog/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="深入 TypeScript 类型系统核心，涵盖泛型约束、内置工具类型（Partial&#x2F;Pick&#x2F;Omit&#x2F;Record）、类型推导与实战模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TypeScript 进阶：泛型、工具类型与实用模式">
+<meta property="og:url" content="https://lc19990308.github.io/web-blog/2026/06/25/typescript-advanced-generics-utility-types/index.html">
+<meta property="og:site_name" content="前端技术笔记">
+<meta property="og:description" content="深入 TypeScript 类型系统核心，涵盖泛型约束、内置工具类型（Partial&#x2F;Pick&#x2F;Omit&#x2F;Record）、类型推导与实战模式">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-25T07:46:11.391Z">
+<meta property="article:author" content="LC">
+<meta property="article:tag" content="TypeScript">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://lc19990308.github.io/web-blog/2026/06/25/typescript-advanced-generics-utility-types/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>TypeScript 进阶：泛型、工具类型与实用模式 | 前端技术笔记</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/web-blog/atom.xml" title="前端技术笔记" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband">
+    <a target="_blank" rel="noopener" href="https://gitee.com/yaru722" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    </div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/web-blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">前端技术笔记</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录前端路上的思考与实践</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/web-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/web-blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/web-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/web-blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/web-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/lc19990308" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/25/typescript-advanced-generics-utility-types/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+      <meta itemprop="name" content="LC">
+      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端技术笔记">
+    </span>
+      <header class="post-header">
+      
+        <h1 class="post-title" itemprop="name headline">
+          TypeScript 进阶：泛型、工具类型与实用模式
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-06-25 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-25T00:00:00+08:00">2026-06-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/web-blog/categories/TypeScript/" itemprop="url" rel="index"><span itemprop="name">TypeScript</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">深入 TypeScript 类型系统核心，涵盖泛型约束、内置工具类型（Partial/Pick/Omit/Record）、类型推导与实战模式</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>入门 TypeScript 很简单——给变量加个类型就行。但真正用好 TypeScript，需要理解它的<strong>类型系统</strong>。</p>
+<p>本文聚焦三个核心进阶主题：</p>
+<ol>
+<li><strong>泛型</strong> — 类型参数化，让类型像函数一样灵活</li>
+<li><strong>工具类型</strong> — Partial、Pick、Omit、Record 等内置工具的原理与组合</li>
+<li><strong>实用模式</strong> — 类型守卫、 branded types、nominal typing</li>
+</ol>
+<hr>
+<h2 id="一、泛型深入"><a href="#一、泛型深入" class="headerlink" title="一、泛型深入"></a>一、泛型深入</h2><h3 id="1-1-基础回顾"><a href="#1-1-基础回顾" class="headerlink" title="1.1 基础回顾"></a>1.1 基础回顾</h3><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 泛型函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">identity</span>&lt;<span class="title">T</span>&gt;(<span class="params">arg: T</span>): <span class="title">T</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> arg</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 显式指定类型 vs 类型推导</span></span><br><span class="line">identity&lt;<span class="built_in">string</span>&gt;(<span class="string">&#x27;hello&#x27;</span>)  <span class="comment">// 显式</span></span><br><span class="line">identity(<span class="string">&#x27;hello&#x27;</span>)           <span class="comment">// 推导为 string</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-泛型约束（extends）"><a href="#1-2-泛型约束（extends）" class="headerlink" title="1.2 泛型约束（extends）"></a>1.2 泛型约束（extends）</h3><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ❌ 没有约束，T 可以是任何类型</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getLength</span>&lt;<span class="title">T</span>&gt;(<span class="params">arg: T</span>): <span class="title">number</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> arg.length  <span class="comment">// ❌ 类型 T 上不存在 length</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 用 extends 约束必须有 length 属性</span></span><br><span class="line"><span class="keyword">interface</span> HasLength &#123;</span><br><span class="line">  <span class="attr">length</span>: <span class="built_in">number</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getLength</span>&lt;<span class="title">T</span> <span class="title">extends</span> <span class="title">HasLength</span>&gt;(<span class="params">arg: T</span>): <span class="title">number</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> arg.length  <span class="comment">// ✅ 现在知道 T 有 length</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">getLength(<span class="string">&#x27;hello&#x27;</span>)   <span class="comment">// 5</span></span><br><span class="line">getLength([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]) <span class="comment">// 3</span></span><br><span class="line">getLength(&#123; <span class="attr">length</span>: <span class="number">10</span> &#125;) <span class="comment">// 10</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="1-3-多泛型参数"><a href="#1-3-多泛型参数" class="headerlink" title="1.3 多泛型参数"></a>1.3 多泛型参数</h3><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 两个泛型参数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">pair</span>&lt;<span class="title">A</span>, <span class="title">B</span>&gt;(<span class="params">a: A, b: B</span>): [<span class="title">A</span>, <span class="title">B</span>] </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> [a, b]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> result = pair(<span class="string">&#x27;name&#x27;</span>, <span class="number">42</span>) <span class="comment">// [string, number]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 一个泛型依赖另一个</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getProperty</span>&lt;<span class="title">T</span>, <span class="title">K</span> <span class="title">extends</span> <span class="title">keyof</span> <span class="title">T</span>&gt;(<span class="params">obj: T, key: K</span>): <span class="title">T</span>[<span class="title">K</span>] </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> obj[key]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> user = &#123; <span class="attr">name</span>: <span class="string">&#x27;LC&#x27;</span>, <span class="attr">age</span>: <span class="number">25</span>, <span class="attr">email</span>: <span class="string">&#x27;lc@test.com&#x27;</span> &#125;</span><br><span class="line">getProperty(user, <span class="string">&#x27;name&#x27;</span>) <span class="comment">// string</span></span><br><span class="line">getProperty(user, <span class="string">&#x27;age&#x27;</span>)  <span class="comment">// number</span></span><br><span class="line">getProperty(user, <span class="string">&#x27;xxx&#x27;</span>)  <span class="comment">// ❌ 类型报错</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="1-4-keyof-索引查询"><a href="#1-4-keyof-索引查询" class="headerlink" title="1.4 keyof 索引查询"></a>1.4 keyof 索引查询</h3><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> User &#123;</span><br><span class="line">  <span class="attr">id</span>: <span class="built_in">number</span></span><br><span class="line">  <span class="attr">name</span>: <span class="built_in">string</span></span><br><span class="line">  <span class="attr">email</span>: <span class="built_in">string</span></span><br><span class="line">  <span class="attr">role</span>: <span class="string">&#x27;admin&#x27;</span> | <span class="string">&#x27;user&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// keyof T 得到所有键的联合类型</span></span><br><span class="line"><span class="keyword">type</span> UserKeys = keyof User <span class="comment">// &#x27;id&#x27; | &#x27;name&#x27; | &#x27;email&#x27; | &#x27;role&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 用 keyof 约束参数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">updateUser</span>&lt;<span class="title">T</span> <span class="title">extends</span> <span class="title">keyof</span> <span class="title">User</span>&gt;(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">  key: T,</span></span></span><br><span class="line"><span class="params"><span class="function">  value: User[T]</span></span></span><br><span class="line"><span class="params"><span class="function"></span>): <span class="title">void</span> </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`更新 <span class="subst">$&#123;key&#125;</span> = <span class="subst">$&#123;value&#125;</span>`</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">updateUser(<span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;New Name&#x27;</span>)  <span class="comment">// ✅</span></span><br><span class="line">updateUser(<span class="string">&#x27;age&#x27;</span>, <span class="number">30</span>)           <span class="comment">// ❌ age 不在 User 中</span></span><br><span class="line">updateUser(<span class="string">&#x27;name&#x27;</span>, <span class="number">123</span>)         <span class="comment">// ❌ 类型不匹配</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="二、内置工具类型"><a href="#二、内置工具类型" class="headerlink" title="二、内置工具类型"></a>二、内置工具类型</h2><h3 id="2-1-Partial-—-所有属性可选"><a href="#2-1-Partial-—-所有属性可选" class="headerlink" title="2.1 Partial — 所有属性可选"></a>2.1 Partial — 所有属性可选</h3><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> User &#123;</span><br><span class="line">  <span class="attr">id</span>: <span class="built_in">number</span></span><br><span class="line">  <span class="attr">name</span>: <span class="built_in">string</span></span><br><span class="line">  <span class="attr">email</span>: <span class="built_in">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 手写实现</span></span><br><span class="line"><span class="keyword">type</span> MyPartial&lt;T&gt; = &#123;</span><br><span class="line">  [P <span class="keyword">in</span> keyof T]?: T[P]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用 Partial 的场景：更新接口</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">updateUser</span>(<span class="params">id: <span class="built_in">number</span>, updates: Partial&lt;User&gt;</span>): <span class="title">void</span> </span>&#123;</span><br><span class="line">  <span class="comment">// updates 可以只传部分字段</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`更新用户 <span class="subst">$&#123;id&#125;</span>:`</span>, updates)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">updateUser(<span class="number">1</span>, &#123; <span class="attr">name</span>: <span class="string">&#x27;LC&#x27;</span> &#125;)           <span class="comment">// ✅</span></span><br><span class="line">updateUser(<span class="number">1</span>, &#123; <span class="attr">name</span>: <span class="string">&#x27;LC&#x27;</span>, <span class="attr">email</span>: <span class="string">&#x27;new@test.com&#x27;</span> &#125;) <span class="comment">// ✅</span></span><br><span class="line">updateUser(<span class="number">1</span>, &#123;&#125;)                       <span class="comment">// ✅（全部可选）</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-Required-—-所有属性必填"><a href="#2-2-Required-—-所有属性必填" class="headerlink" title="2.2 Required — 所有属性必填"></a>2.2 Required — 所有属性必填</h3><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> MyRequired&lt;T&gt; = &#123;</span><br><span class="line">  [P <span class="keyword">in</span> keyof T]-?: T[P]  <span class="comment">// -? 去掉可选标记</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">interface</span> Config &#123;</span><br><span class="line">  url?: <span class="built_in">string</span></span><br><span class="line">  port?: <span class="built_in">number</span></span><br><span class="line">  timeout?: <span class="built_in">number</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> config: Required&lt;Config&gt; = &#123;</span><br><span class="line">  <span class="comment">// 三个字段都必须填</span></span><br><span class="line">  <span class="attr">url</span>: <span class="string">&#x27;https://api.example.com&#x27;</span>,</span><br><span class="line">  <span class="attr">port</span>: <span class="number">8080</span>,</span><br><span class="line">  <span class="attr">timeout</span>: <span class="number">5000</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-Pick-—-选取部分属性"><a href="#2-3-Pick-—-选取部分属性" class="headerlink" title="2.3 Pick — 选取部分属性"></a>2.3 Pick — 选取部分属性</h3><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> MyPick&lt;T, K <span class="keyword">extends</span> keyof T&gt; = &#123;</span><br><span class="line">  [P <span class="keyword">in</span> K]: T[P]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 只取用户的部分信息返回</span></span><br><span class="line"><span class="keyword">type</span> UserPublic = Pick&lt;User, <span class="string">&#x27;name&#x27;</span> | <span class="string">&#x27;email&#x27;</span>&gt;</span><br><span class="line"><span class="comment">// 等价于 &#123; name: string; email: string &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getPublicProfile</span>(<span class="params">user: User</span>): <span class="title">UserPublic</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="attr">name</span>: user.name,</span><br><span class="line">    <span class="attr">email</span>: user.email,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-4-Omit-—-排除部分属性"><a href="#2-4-Omit-—-排除部分属性" class="headerlink" title="2.4 Omit — 排除部分属性"></a>2.4 Omit — 排除部分属性</h3><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> MyOmit&lt;T, K <span class="keyword">extends</span> keyof T&gt; = &#123;</span><br><span class="line">  [P <span class="keyword">in</span> Exclude&lt;keyof T, K&gt;]: T[P]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建用户时不需要 id</span></span><br><span class="line"><span class="keyword">type</span> CreateUser = Omit&lt;User, <span class="string">&#x27;id&#x27;</span>&gt;</span><br><span class="line"><span class="comment">// 等价于 &#123; name: string; email: string; role: string &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createUser</span>(<span class="params">data: CreateUser</span>): <span class="title">User</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123; <span class="attr">id</span>: generateId(), ...data &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-5-Record-—-构造对象类型"><a href="#2-5-Record-—-构造对象类型" class="headerlink" title="2.5 Record — 构造对象类型"></a>2.5 Record — 构造对象类型</h3><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> MyRecord&lt;K <span class="keyword">extends</span> keyof <span class="built_in">any</span>, V&gt; = &#123;</span><br><span class="line">  [P <span class="keyword">in</span> K]: V</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 常用场景：枚举映射</span></span><br><span class="line"><span class="keyword">type</span> Role = <span class="string">&#x27;admin&#x27;</span> | <span class="string">&#x27;user&#x27;</span> | <span class="string">&#x27;guest&#x27;</span></span><br><span class="line"><span class="keyword">type</span> Permissions = Record&lt;Role, <span class="built_in">string</span>[]&gt;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> permissions: Permissions = &#123;</span><br><span class="line">  <span class="attr">admin</span>: [<span class="string">&#x27;read&#x27;</span>, <span class="string">&#x27;write&#x27;</span>, <span class="string">&#x27;delete&#x27;</span>],</span><br><span class="line">  <span class="attr">user</span>: [<span class="string">&#x27;read&#x27;</span>, <span class="string">&#x27;write&#x27;</span>],</span><br><span class="line">  <span class="attr">guest</span>: [<span class="string">&#x27;read&#x27;</span>],</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 缓存映射</span></span><br><span class="line"><span class="keyword">const</span> userCache: Record&lt;<span class="built_in">number</span>, User&gt; = &#123;&#125;</span><br><span class="line">userCache[<span class="number">1</span>] = &#123; <span class="attr">id</span>: <span class="number">1</span>, <span class="attr">name</span>: <span class="string">&#x27;LC&#x27;</span>, <span class="attr">email</span>: <span class="string">&#x27;lc@test.com&#x27;</span> &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-6-Exclude-Extract-—-联合类型过滤"><a href="#2-6-Exclude-Extract-—-联合类型过滤" class="headerlink" title="2.6 Exclude / Extract — 联合类型过滤"></a>2.6 Exclude / Extract — 联合类型过滤</h3><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Exclude&lt;T, U&gt; — 从 T 中排除 U</span></span><br><span class="line"><span class="keyword">type</span> T0 = Exclude&lt;<span class="string">&#x27;a&#x27;</span> | <span class="string">&#x27;b&#x27;</span> | <span class="string">&#x27;c&#x27;</span>, <span class="string">&#x27;a&#x27;</span>&gt;       <span class="comment">// &#x27;b&#x27; | &#x27;c&#x27;</span></span><br><span class="line"><span class="keyword">type</span> T1 = Exclude&lt;<span class="built_in">string</span> | <span class="built_in">number</span> | (<span class="function">() =&gt;</span> <span class="built_in">void</span>), <span class="built_in">Function</span>&gt; <span class="comment">// string | number</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Extract&lt;T, U&gt; — 从 T 中提取 U</span></span><br><span class="line"><span class="keyword">type</span> T2 = Extract&lt;<span class="string">&#x27;a&#x27;</span> | <span class="string">&#x27;b&#x27;</span> | <span class="string">&#x27;c&#x27;</span>, <span class="string">&#x27;a&#x27;</span> | <span class="string">&#x27;f&#x27;</span>&gt; <span class="comment">// &#x27;a&#x27;</span></span><br><span class="line"><span class="keyword">type</span> T3 = Extract&lt;<span class="built_in">string</span> | <span class="built_in">number</span> | (<span class="function">() =&gt;</span> <span class="built_in">void</span>), <span class="built_in">Function</span>&gt; <span class="comment">// () =&gt; void</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 实现</span></span><br><span class="line"><span class="keyword">type</span> MyExclude&lt;T, U&gt; = T <span class="keyword">extends</span> U ? <span class="built_in">never</span> : T</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-7-NonNullable-Readonly"><a href="#2-7-NonNullable-Readonly" class="headerlink" title="2.7 NonNullable / Readonly"></a>2.7 NonNullable / Readonly</h3><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> MyNonNullable&lt;T&gt; = T <span class="keyword">extends</span> <span class="literal">null</span> | <span class="literal">undefined</span> ? <span class="built_in">never</span> : T</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> T4 = NonNullable&lt;<span class="built_in">string</span> | <span class="literal">null</span> | <span class="literal">undefined</span>&gt; <span class="comment">// string</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> MyReadonly&lt;T&gt; = &#123;</span><br><span class="line">  <span class="keyword">readonly</span> [P <span class="keyword">in</span> keyof T]: T[P]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 不可变状态</span></span><br><span class="line"><span class="keyword">type</span> ReadonlyState&lt;T&gt; = &#123;</span><br><span class="line">  <span class="keyword">readonly</span> [P <span class="keyword">in</span> keyof T]: T[P]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="三、工具类型组合应用"><a href="#三、工具类型组合应用" class="headerlink" title="三、工具类型组合应用"></a>三、工具类型组合应用</h2><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> Article &#123;</span><br><span class="line">  <span class="attr">id</span>: <span class="built_in">number</span></span><br><span class="line">  <span class="attr">title</span>: <span class="built_in">string</span></span><br><span class="line">  <span class="attr">content</span>: <span class="built_in">string</span></span><br><span class="line">  <span class="attr">authorId</span>: <span class="built_in">number</span></span><br><span class="line">  <span class="attr">createdAt</span>: <span class="built_in">Date</span></span><br><span class="line">  <span class="attr">updatedAt</span>: <span class="built_in">Date</span></span><br><span class="line">  <span class="attr">published</span>: <span class="built_in">boolean</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建文章：排除自动生成的字段</span></span><br><span class="line"><span class="keyword">type</span> CreateArticle = Omit&lt;Article, <span class="string">&#x27;id&#x27;</span> | <span class="string">&#x27;createdAt&#x27;</span> | <span class="string">&#x27;updatedAt&#x27;</span>&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 更新文章：全部可选，排除 id</span></span><br><span class="line"><span class="keyword">type</span> UpdateArticle = Partial&lt;Omit&lt;Article, <span class="string">&#x27;id&#x27;</span>&gt;&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 列表展示：只选取展示需要的字段</span></span><br><span class="line"><span class="keyword">type</span> ArticleListItem = Pick&lt;Article, <span class="string">&#x27;id&#x27;</span> | <span class="string">&#x27;title&#x27;</span> | <span class="string">&#x27;authorId&#x27;</span> | <span class="string">&#x27;published&#x27;</span> | <span class="string">&#x27;createdAt&#x27;</span>&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 搜索条件：类型安全的筛选器</span></span><br><span class="line"><span class="keyword">type</span> ArticleFilter = Partial&lt;Pick&lt;Article, <span class="string">&#x27;authorId&#x27;</span> | <span class="string">&#x27;published&#x27;</span>&gt;&gt;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">filterArticles</span>(<span class="params">filter: ArticleFilter</span>): <span class="title">Article</span>[] </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> articles.filter(<span class="function"><span class="params">a</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (filter.authorId &amp;&amp; a.authorId !== filter.authorId) <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">    <span class="keyword">if</span> (filter.published !== <span class="literal">undefined</span> &amp;&amp; a.published !== filter.published) <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="四、实用类型模式"><a href="#四、实用类型模式" class="headerlink" title="四、实用类型模式"></a>四、实用类型模式</h2><h3 id="4-1-类型守卫（Type-Guard）"><a href="#4-1-类型守卫（Type-Guard）" class="headerlink" title="4.1 类型守卫（Type Guard）"></a>4.1 类型守卫（Type Guard）</h3><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 自定义类型守卫</span></span><br><span class="line"><span class="keyword">interface</span> Cat &#123; meow(): <span class="built_in">void</span> &#125;</span><br><span class="line"><span class="keyword">interface</span> Dog &#123; bark(): <span class="built_in">void</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isCat</span>(<span class="params">pet: Cat | Dog</span>): <span class="title">pet</span> <span class="title">is</span> <span class="title">Cat</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> (pet <span class="keyword">as</span> Cat).meow !== <span class="literal">undefined</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">handlePet</span>(<span class="params">pet: Cat | Dog</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (isCat(pet)) &#123;</span><br><span class="line">    pet.meow()  <span class="comment">// ✅ 类型收窄为 Cat</span></span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    pet.bark()  <span class="comment">// ✅ 类型收窄为 Dog</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 数组过滤时的类型守卫</span></span><br><span class="line"><span class="keyword">const</span> items: (<span class="built_in">string</span> | <span class="literal">null</span>)[] = [<span class="string">&#x27;hello&#x27;</span>, <span class="literal">null</span>, <span class="string">&#x27;world&#x27;</span>]</span><br><span class="line"><span class="keyword">const</span> strings = items.filter((item): item is <span class="built_in">string</span> =&gt; item !== <span class="literal">null</span>)</span><br><span class="line"><span class="comment">// strings 类型: string[] ✅（不是 (string | null)[]）</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2-Branded-Types（名义类型模拟）"><a href="#4-2-Branded-Types（名义类型模拟）" class="headerlink" title="4.2 Branded Types（名义类型模拟）"></a>4.2 Branded Types（名义类型模拟）</h3><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// TypeScript 类型系统是结构类型（structural typing）</span></span><br><span class="line"><span class="comment">// 以下两个类型是兼容的：</span></span><br><span class="line"><span class="keyword">type</span> UserId = <span class="built_in">string</span></span><br><span class="line"><span class="keyword">type</span> OrderId = <span class="built_in">string</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getUser</span>(<span class="params">id: UserId</span>) </span>&#123;&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getOrder</span>(<span class="params">id: OrderId</span>) </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">getUser(<span class="string">&#x27;123&#x27;</span>)          <span class="comment">// ✅ 正常</span></span><br><span class="line">getUser(getOrderId())   <span class="comment">// ❌ 逻辑错误但类型检查通过</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用 Branded Type 解决</span></span><br><span class="line"><span class="keyword">type</span> Brand&lt;T, B&gt; = T &amp; &#123; <span class="attr">__brand</span>: B &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> UserIdBrand = Brand&lt;<span class="built_in">string</span>, <span class="string">&#x27;UserId&#x27;</span>&gt;</span><br><span class="line"><span class="keyword">type</span> OrderIdBrand = Brand&lt;<span class="built_in">string</span>, <span class="string">&#x27;OrderId&#x27;</span>&gt;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getUser</span>(<span class="params">id: UserIdBrand</span>) </span>&#123;&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getOrder</span>(<span class="params">id: OrderIdBrand</span>) </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> userId = <span class="string">&#x27;user_123&#x27;</span> <span class="keyword">as</span> UserIdBrand</span><br><span class="line"><span class="keyword">const</span> orderId = <span class="string">&#x27;order_456&#x27;</span> <span class="keyword">as</span> OrderIdBrand</span><br><span class="line"></span><br><span class="line">getUser(userId)    <span class="comment">// ✅</span></span><br><span class="line">getUser(orderId)   <span class="comment">// ❌ 类型不兼容！</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3-函数重载"><a href="#4-3-函数重载" class="headerlink" title="4.3 函数重载"></a>4.3 函数重载</h3><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 同一个函数根据参数类型返回不同类型</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">process</span>(<span class="params">data: <span class="built_in">string</span></span>): <span class="title">string</span>[]</span></span><br><span class="line"><span class="function"><span class="function"><span class="keyword">function</span> <span class="title">process</span>(<span class="params">data: <span class="built_in">number</span></span>): <span class="title">number</span></span></span></span><br><span class="line"><span class="function"><span class="function"><span class="function"><span class="keyword">function</span> <span class="title">process</span>(<span class="params">data: <span class="built_in">string</span> | <span class="built_in">number</span></span>): <span class="title">string</span>[] | <span class="title">number</span> </span>&#123;</span></span></span><br><span class="line"><span class="function"><span class="function">  <span class="title">if</span> (<span class="params"><span class="keyword">typeof</span> data === <span class="string">&#x27;string&#x27;</span></span>) </span>&#123;</span></span><br><span class="line"><span class="function">    <span class="title">return</span> <span class="title">data</span>.<span class="title">split</span>(<span class="params"><span class="string">&#x27;&#x27;</span></span>)</span></span><br><span class="line"><span class="function">  &#125;</span></span><br><span class="line"><span class="function">  <span class="title">return</span> <span class="title">data</span> * 2</span></span><br><span class="line"><span class="function">&#125;</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">const</span> <span class="title">result1</span> = <span class="title">process</span>(<span class="params"><span class="string">&#x27;hello&#x27;</span></span>) // <span class="title">string</span>[]</span></span><br><span class="line"><span class="function"><span class="title">const</span> <span class="title">result2</span> = <span class="title">process</span>(<span class="params"><span class="number">42</span></span>)       // <span class="title">number</span></span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-4-satisfies-操作符（TS-4-9）"><a href="#4-4-satisfies-操作符（TS-4-9）" class="headerlink" title="4.4 satisfies 操作符（TS 4.9）"></a>4.4 satisfies 操作符（TS 4.9）</h3><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// satisfies 在保持最精确类型的同时做类型检查</span></span><br><span class="line"><span class="keyword">type</span> Color = <span class="string">&#x27;red&#x27;</span> | <span class="string">&#x27;green&#x27;</span> | <span class="string">&#x27;blue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> palette = &#123;</span><br><span class="line">  <span class="attr">primary</span>: <span class="string">&#x27;blue&#x27;</span>,</span><br><span class="line">  <span class="attr">secondary</span>: <span class="string">&#x27;red&#x27;</span>,</span><br><span class="line">  <span class="attr">accent</span>: <span class="string">&#x27;yellow&#x27;</span>,  <span class="comment">// ❌ &#x27;yellow&#x27; 不是 Color 类型</span></span><br><span class="line">&#125; satisfies Record&lt;<span class="built_in">string</span>, Color&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 对比 satisfies 和显式类型标注：</span></span><br><span class="line"><span class="keyword">const</span> palette1: Record&lt;<span class="built_in">string</span>, Color&gt; = &#123; <span class="attr">primary</span>: <span class="string">&#x27;blue&#x27;</span> &#125;</span><br><span class="line"><span class="comment">// palette1.primary 类型是 string（收窄到 string）</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> palette2 = &#123; <span class="attr">primary</span>: <span class="string">&#x27;blue&#x27;</span> &#125; satisfies Record&lt;<span class="built_in">string</span>, Color&gt;</span><br><span class="line"><span class="comment">// palette2.primary 类型是 &#x27;blue&#x27;（字面量类型 ✅）</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="五、实战：类型安全的-API-客户端"><a href="#五、实战：类型安全的-API-客户端" class="headerlink" title="五、实战：类型安全的 API 客户端"></a>五、实战：类型安全的 API 客户端</h2><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 类型安全的 API 请求封装</span></span><br><span class="line"><span class="keyword">type</span> HttpMethod = <span class="string">&#x27;GET&#x27;</span> | <span class="string">&#x27;POST&#x27;</span> | <span class="string">&#x27;PUT&#x27;</span> | <span class="string">&#x27;DELETE&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">interface</span> ApiResponse&lt;T&gt; &#123;</span><br><span class="line">  <span class="attr">data</span>: T</span><br><span class="line">  <span class="attr">status</span>: <span class="built_in">number</span></span><br><span class="line">  <span class="attr">message</span>: <span class="built_in">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">interface</span> ApiEndpoints &#123;</span><br><span class="line">  <span class="string">&#x27;/api/users&#x27;</span>: &#123; <span class="attr">GET</span>: &#123; <span class="attr">query</span>: &#123; <span class="attr">page</span>: <span class="built_in">number</span> &#125;; response: User[] &#125;; POST: &#123; <span class="attr">body</span>: CreateUser; response: User &#125; &#125;</span><br><span class="line">  <span class="string">&#x27;/api/users/:id&#x27;</span>: &#123; <span class="attr">GET</span>: &#123; <span class="attr">params</span>: &#123; <span class="attr">id</span>: <span class="built_in">number</span> &#125;; response: User &#125;; PUT: &#123; <span class="attr">params</span>: &#123; <span class="attr">id</span>: <span class="built_in">number</span> &#125;; body: UpdateUser; response: User &#125;; DELETE: &#123; <span class="attr">params</span>: &#123; <span class="attr">id</span>: <span class="built_in">number</span> &#125;; response: <span class="built_in">void</span> &#125; &#125;</span><br><span class="line">  <span class="string">&#x27;/api/login&#x27;</span>: &#123; <span class="attr">POST</span>: &#123; <span class="attr">body</span>: &#123; <span class="attr">username</span>: <span class="built_in">string</span>; password: <span class="built_in">string</span> &#125;; response: &#123; <span class="attr">token</span>: <span class="built_in">string</span> &#125; &#125; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> ExtractParams&lt;Path <span class="keyword">extends</span> <span class="built_in">string</span>&gt; =</span><br><span class="line">  Path <span class="keyword">extends</span> <span class="string">`<span class="subst">$&#123;<span class="built_in">string</span>&#125;</span>:<span class="subst">$&#123;infer Param&#125;</span>/<span class="subst">$&#123;infer Rest&#125;</span>`</span></span><br><span class="line">    ? &#123; [K <span class="keyword">in</span> Param | keyof ExtractParams&lt;Rest&gt;]: <span class="built_in">string</span> &#125;</span><br><span class="line">    : Path <span class="keyword">extends</span> <span class="string">`<span class="subst">$&#123;<span class="built_in">string</span>&#125;</span>:<span class="subst">$&#123;infer Param&#125;</span>`</span></span><br><span class="line">      ? &#123; [K <span class="keyword">in</span> Param]: <span class="built_in">string</span> &#125;</span><br><span class="line">      : &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">api</span>&lt;<span class="title">T</span> <span class="title">extends</span> <span class="title">keyof</span> <span class="title">ApiEndpoints</span>,</span></span><br><span class="line"><span class="function">  <span class="title">M</span> <span class="title">extends</span> <span class="title">keyof</span> <span class="title">ApiEndpoints</span>[<span class="title">T</span>] &amp; <span class="title">HttpMethod</span>&gt;(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">  method: M,</span></span></span><br><span class="line"><span class="params"><span class="function">  path: T,</span></span></span><br><span class="line"><span class="params"><span class="function">  options?: &#123;</span></span></span><br><span class="line"><span class="params"><span class="function">    query?: ApiEndpoints[T][M] <span class="keyword">extends</span> &#123; query: infer Q &#125; ? Q : <span class="built_in">never</span></span></span></span><br><span class="line"><span class="params"><span class="function">    body?: ApiEndpoints[T][M] <span class="keyword">extends</span> &#123; body: infer B &#125; ? B : <span class="built_in">never</span></span></span></span><br><span class="line"><span class="params"><span class="function">    params?: ApiEndpoints[T][M] <span class="keyword">extends</span> &#123; params: infer P &#125; ? P : <span class="built_in">never</span></span></span></span><br><span class="line"><span class="params"><span class="function">  &#125;</span></span></span><br><span class="line"><span class="params"><span class="function"></span>): <span class="title">Promise</span>&lt;<span class="title">ApiEndpoints</span>[<span class="title">T</span>][<span class="title">M</span>] <span class="title">extends</span> </span>&#123; response: infer R &#125; ? R : <span class="built_in">never</span>&gt; &#123;</span><br><span class="line">  <span class="keyword">let</span> url = path <span class="keyword">as</span> <span class="built_in">string</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 替换路径参数</span></span><br><span class="line">  <span class="keyword">if</span> (options?.params) &#123;</span><br><span class="line">    <span class="built_in">Object</span>.entries(options.params).forEach(<span class="function">(<span class="params">[k, v]</span>) =&gt;</span> &#123;</span><br><span class="line">      url = url.replace(<span class="string">`:<span class="subst">$&#123;k&#125;</span>`</span>, <span class="built_in">String</span>(v))</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 拼接 query</span></span><br><span class="line">  <span class="keyword">if</span> (options?.query) &#123;</span><br><span class="line">    <span class="keyword">const</span> params = <span class="keyword">new</span> URLSearchParams()</span><br><span class="line">    <span class="built_in">Object</span>.entries(options.query).forEach(<span class="function">(<span class="params">[k, v]</span>) =&gt;</span> params.append(k, <span class="built_in">String</span>(v)))</span><br><span class="line">    url += <span class="string">&#x27;?&#x27;</span> + params.toString()</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> res = <span class="keyword">await</span> fetch(url, &#123;</span><br><span class="line">    <span class="attr">method</span>: method <span class="keyword">as</span> <span class="built_in">string</span>,</span><br><span class="line">    <span class="attr">headers</span>: &#123; <span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;application/json&#x27;</span> &#125;,</span><br><span class="line">    <span class="attr">body</span>: options?.body ? <span class="built_in">JSON</span>.stringify(options.body) : <span class="literal">undefined</span>,</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> res.json()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用 — 完全类型安全</span></span><br><span class="line"><span class="keyword">const</span> users = <span class="keyword">await</span> api(<span class="string">&#x27;GET&#x27;</span>, <span class="string">&#x27;/api/users&#x27;</span>, &#123; <span class="attr">query</span>: &#123; <span class="attr">page</span>: <span class="number">1</span> &#125; &#125;)</span><br><span class="line"><span class="comment">// users: User[] ✅</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> user = <span class="keyword">await</span> api(<span class="string">&#x27;POST&#x27;</span>, <span class="string">&#x27;/api/users&#x27;</span>, &#123; <span class="attr">body</span>: &#123; <span class="attr">name</span>: <span class="string">&#x27;LC&#x27;</span>, <span class="attr">email</span>: <span class="string">&#x27;test@test.com&#x27;</span>, <span class="attr">role</span>: <span class="string">&#x27;user&#x27;</span> &#125; &#125;)</span><br><span class="line"><span class="comment">// user: User ✅</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> detail = <span class="keyword">await</span> api(<span class="string">&#x27;GET&#x27;</span>, <span class="string">&#x27;/api/users/:id&#x27;</span>, &#123; <span class="attr">params</span>: &#123; <span class="attr">id</span>: <span class="number">1</span> &#125; &#125;)</span><br><span class="line"><span class="comment">// detail: User ✅</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><table>
+<thead>
+<tr>
+<th>概念</th>
+<th>用途</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>泛型约束</strong></td>
+<td>限制泛型参数的范围</td>
+<td><code>&lt;T extends HasLength&gt;</code></td>
+</tr>
+<tr>
+<td><strong>keyof</strong></td>
+<td>获取对象所有键的联合</td>
+<td><code>keyof User → &#39;id&#39; | &#39;name&#39;</code></td>
+</tr>
+<tr>
+<td><strong>Partial</strong></td>
+<td>所有属性可选</td>
+<td>更新接口、部分配置</td>
+</tr>
+<tr>
+<td><strong>Pick / Omit</strong></td>
+<td>选取/排除属性</td>
+<td>DTO 转换</td>
+</tr>
+<tr>
+<td><strong>Record</strong></td>
+<td>构造键值对类型</td>
+<td>枚举映射、缓存</td>
+</tr>
+<tr>
+<td><strong>类型守卫</strong></td>
+<td>运行时类型收窄</td>
+<td><code>pet is Cat</code></td>
+</tr>
+<tr>
+<td><strong>satisfies</strong></td>
+<td>保持精确类型时做检查</td>
+<td>TS 4.9+</td>
+</tr>
+<tr>
+<td><strong>Branded Types</strong></td>
+<td>名义类型模拟</td>
+<td>防参数混淆</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>TypeScript 类型系统的强大之处在于：用极少的代码描述极复杂的约束。理解工具类型的实现原理（映射类型 + 条件类型），就能自己写出任何需要的类型工具。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/web-blog/2026/06/25/typescript-advanced-generics-utility-types/">TypeScript 进阶：泛型、工具类型与实用模式</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a></p>
+  <p><span>发布时间:</span>2026年06月25日 - 00:06</p>
+  <p><span>最后更新:</span>2026年06月25日 - 15:06</p>
+  <p><span>原始链接:</span><a href="/web-blog/2026/06/25/typescript-advanced-generics-utility-types/" title="TypeScript 进阶：泛型、工具类型与实用模式">https://lc19990308.github.io/web-blog/2026/06/25/typescript-advanced-generics-utility-types/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://lc19990308.github.io/web-blog/2026/06/25/typescript-advanced-generics-utility-types/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+    });
+    });  
+</script>
+
+      
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>LC
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://lc19990308.github.io/web-blog/2026/06/25/typescript-advanced-generics-utility-types/" title="TypeScript 进阶：泛型、工具类型与实用模式">https://lc19990308.github.io/web-blog/2026/06/25/typescript-advanced-generics-utility-types/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/web-blog/tags/TypeScript/" ****><i class="fa fa-tag"></i> TypeScript</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/06/25/typescript-engineering-guide/" rel="prev" title="TypeScript 工程化：tsconfig 配置、声明文件与项目实战">
+      <i class="fa fa-chevron-left"></i> TypeScript 工程化：tsconfig 配置、声明文件与项目实战
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/06/25/service-worker-pwa-guide/" rel="next" title="Service Worker 与 PWA 完整实战：从离线缓存到推送通知">
+      Service Worker 与 PWA 完整实战：从离线缓存到推送通知 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%B3%9B%E5%9E%8B%E6%B7%B1%E5%85%A5"><span class="nav-number">2.</span> <span class="nav-text">一、泛型深入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E5%9F%BA%E7%A1%80%E5%9B%9E%E9%A1%BE"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 基础回顾</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E6%B3%9B%E5%9E%8B%E7%BA%A6%E6%9D%9F%EF%BC%88extends%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">1.2 泛型约束（extends）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E5%A4%9A%E6%B3%9B%E5%9E%8B%E5%8F%82%E6%95%B0"><span class="nav-number">2.3.</span> <span class="nav-text">1.3 多泛型参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-keyof-%E7%B4%A2%E5%BC%95%E6%9F%A5%E8%AF%A2"><span class="nav-number">2.4.</span> <span class="nav-text">1.4 keyof 索引查询</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%86%85%E7%BD%AE%E5%B7%A5%E5%85%B7%E7%B1%BB%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text">二、内置工具类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-Partial-%E2%80%94-%E6%89%80%E6%9C%89%E5%B1%9E%E6%80%A7%E5%8F%AF%E9%80%89"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 Partial — 所有属性可选</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-Required-%E2%80%94-%E6%89%80%E6%9C%89%E5%B1%9E%E6%80%A7%E5%BF%85%E5%A1%AB"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 Required — 所有属性必填</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-Pick-%E2%80%94-%E9%80%89%E5%8F%96%E9%83%A8%E5%88%86%E5%B1%9E%E6%80%A7"><span class="nav-number">3.3.</span> <span class="nav-text">2.3 Pick — 选取部分属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-Omit-%E2%80%94-%E6%8E%92%E9%99%A4%E9%83%A8%E5%88%86%E5%B1%9E%E6%80%A7"><span class="nav-number">3.4.</span> <span class="nav-text">2.4 Omit — 排除部分属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-Record-%E2%80%94-%E6%9E%84%E9%80%A0%E5%AF%B9%E8%B1%A1%E7%B1%BB%E5%9E%8B"><span class="nav-number">3.5.</span> <span class="nav-text">2.5 Record — 构造对象类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-6-Exclude-Extract-%E2%80%94-%E8%81%94%E5%90%88%E7%B1%BB%E5%9E%8B%E8%BF%87%E6%BB%A4"><span class="nav-number">3.6.</span> <span class="nav-text">2.6 Exclude &#x2F; Extract — 联合类型过滤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-7-NonNullable-Readonly"><span class="nav-number">3.7.</span> <span class="nav-text">2.7 NonNullable &#x2F; Readonly</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%B7%A5%E5%85%B7%E7%B1%BB%E5%9E%8B%E7%BB%84%E5%90%88%E5%BA%94%E7%94%A8"><span class="nav-number">4.</span> <span class="nav-text">三、工具类型组合应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E5%AE%9E%E7%94%A8%E7%B1%BB%E5%9E%8B%E6%A8%A1%E5%BC%8F"><span class="nav-number">5.</span> <span class="nav-text">四、实用类型模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E7%B1%BB%E5%9E%8B%E5%AE%88%E5%8D%AB%EF%BC%88Type-Guard%EF%BC%89"><span class="nav-number">5.1.</span> <span class="nav-text">4.1 类型守卫（Type Guard）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-Branded-Types%EF%BC%88%E5%90%8D%E4%B9%89%E7%B1%BB%E5%9E%8B%E6%A8%A1%E6%8B%9F%EF%BC%89"><span class="nav-number">5.2.</span> <span class="nav-text">4.2 Branded Types（名义类型模拟）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-%E5%87%BD%E6%95%B0%E9%87%8D%E8%BD%BD"><span class="nav-number">5.3.</span> <span class="nav-text">4.3 函数重载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-satisfies-%E6%93%8D%E4%BD%9C%E7%AC%A6%EF%BC%88TS-4-9%EF%BC%89"><span class="nav-number">5.4.</span> <span class="nav-text">4.4 satisfies 操作符（TS 4.9）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E5%AE%9E%E6%88%98%EF%BC%9A%E7%B1%BB%E5%9E%8B%E5%AE%89%E5%85%A8%E7%9A%84-API-%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-number">6.</span> <span class="nav-text">五、实战：类型安全的 API 客户端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="LC"
+      src="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+  <p class="site-author-name" itemprop="name">LC</p>
+  <div class="site-description" itemprop="description">专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/web-blog/archives/">
+        
+          <span class="site-state-item-count">110</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/web-blog/categories/">
+          
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/web-blog/tags/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button motion-element"><i class="fa fa-comment"></i>
+    Chat
+  </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lc19990308/web-blog" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lc19990308&#x2F;web-blog" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:jarridaddison4@gmail.com" title="E-Mail → mailto:jarridaddison4@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/web-blog/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=441491828&auto=1&height=66"></iframe>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LC</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>-->
+<div class="powered-by">
+  <i class="fa fa-user-md"></i>
+  <span id="busuanzi_container_site_pv">
+    本站访问量:<span id="busuanzi_value_site_pv"></span>次
+  </span>
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv">
+    本站总访客量：<span id="busuanzi_value_site_uv"></span>人
+  </span>
+</div>
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共166.3k字</span>
+</div>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/web-blog/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/web-blog/js/utils.js"></script>
+
+<script src="/web-blog/js/motion.js"></script>
+
+
+<script src="/web-blog/js/schemes/pisces.js"></script>
+
+
+<script src="/web-blog/js/next-boot.js"></script>
+
+<script src="/web-blog/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/web-blog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+</body>
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</html>
