@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/web-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/web-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/web-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/web-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/web-blog/css/main.css">
+
+
+<link rel="stylesheet" href="/web-blog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/web-blog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/web-blog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lc19990308.github.io","root":"/web-blog/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="补齐 ES2016（ES7）和 ES2017（ES8）中尚未覆盖的特性：指数运算符 **、尾逗号语法、SharedArrayBuffer 与 Atomics 并发原语">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ES7 与 ES8 补全：指数运算符、尾逗号、SharedArrayBuffer 与 Atomics">
+<meta property="og:url" content="https://lc19990308.github.io/web-blog/2026/06/25/es7-es8-features/index.html">
+<meta property="og:site_name" content="前端技术笔记">
+<meta property="og:description" content="补齐 ES2016（ES7）和 ES2017（ES8）中尚未覆盖的特性：指数运算符 **、尾逗号语法、SharedArrayBuffer 与 Atomics 并发原语">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-25T08:03:48.315Z">
+<meta property="article:author" content="LC">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="ES6">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://lc19990308.github.io/web-blog/2026/06/25/es7-es8-features/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>ES7 与 ES8 补全：指数运算符、尾逗号、SharedArrayBuffer 与 Atomics | 前端技术笔记</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/web-blog/atom.xml" title="前端技术笔记" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband">
+    <a target="_blank" rel="noopener" href="https://gitee.com/yaru722" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    </div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/web-blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">前端技术笔记</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录前端路上的思考与实践</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/web-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/web-blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/web-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/web-blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/web-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/lc19990308" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/25/es7-es8-features/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+      <meta itemprop="name" content="LC">
+      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端技术笔记">
+    </span>
+      <header class="post-header">
+      
+        <h1 class="post-title" itemprop="name headline">
+          ES7 与 ES8 补全：指数运算符、尾逗号、SharedArrayBuffer 与 Atomics
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-06-25 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-25T00:00:00+08:00">2026-06-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/web-blog/categories/ES6/" itemprop="url" rel="index"><span itemprop="name">ES6</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">补齐 ES2016（ES7）和 ES2017（ES8）中尚未覆盖的特性：指数运算符 **、尾逗号语法、SharedArrayBuffer 与 Atomics 并发原语</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>ES2016（ES7）和 ES2017（ES8）的大多数特性已在之前各篇中覆盖：</p>
+<table>
+<thead>
+<tr>
+<th>已覆盖</th>
+<th>所在文章</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Array.prototype.includes</code>（ES7）</td>
+<td>ES6+ 新增数组方法</td>
+</tr>
+<tr>
+<td><code>Async/Await</code>（ES8）</td>
+<td>YDKJS 17</td>
+</tr>
+<tr>
+<td><code>Object.values/entries</code>（ES8）</td>
+<td>ES6 对象增强</td>
+</tr>
+<tr>
+<td><code>Object.getOwnPropertyDescriptors</code>（ES8）</td>
+<td>ES6 对象增强</td>
+</tr>
+<tr>
+<td><code>String.padStart/padEnd</code>（ES8）</td>
+<td>ES6 模板字符串与字符串方法</td>
+</tr>
+</tbody></table>
+<p>本文补齐剩下的三个特性。</p>
+<hr>
+<h2 id="一、指数运算符-（ES2016）"><a href="#一、指数运算符-（ES2016）" class="headerlink" title="一、指数运算符 **（ES2016）"></a>一、指数运算符 <code>**</code>（ES2016）</h2><h3 id="1-1-基础"><a href="#1-1-基础" class="headerlink" title="1.1 基础"></a>1.1 基础</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ES7 引入了 Math.pow 的语法糖</span></span><br><span class="line"><span class="number">2</span> ** <span class="number">3</span>    <span class="comment">// 8（2 的 3 次方）</span></span><br><span class="line"><span class="number">2</span> ** <span class="number">4</span>    <span class="comment">// 16</span></span><br><span class="line"><span class="number">3</span> ** <span class="number">2</span>    <span class="comment">// 9</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 等价于</span></span><br><span class="line"><span class="built_in">Math</span>.pow(<span class="number">2</span>, <span class="number">3</span>)  <span class="comment">// 8</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-指数赋值"><a href="#1-2-指数赋值" class="headerlink" title="1.2 指数赋值 **="></a>1.2 指数赋值 <code>**=</code></h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> x = <span class="number">2</span></span><br><span class="line">x **= <span class="number">3</span>  <span class="comment">// x = 2 ** 3 = 8</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> y = <span class="number">5</span></span><br><span class="line">y **= <span class="number">2</span>  <span class="comment">// y = 25</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="1-3-优先级"><a href="#1-3-优先级" class="headerlink" title="1.3 优先级"></a>1.3 优先级</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// `**` 的优先级高于 `*` 和 `/`</span></span><br><span class="line"><span class="number">2</span> * <span class="number">3</span> ** <span class="number">2</span>     <span class="comment">// 2 * 9 = 18（先计算指数）</span></span><br><span class="line">(<span class="number">2</span> * <span class="number">3</span>) ** <span class="number">2</span>   <span class="comment">// 6 ** 2 = 36</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 结合性：右结合</span></span><br><span class="line"><span class="number">2</span> ** <span class="number">3</span> ** <span class="number">2</span>    <span class="comment">// 2 ** (3 ** 2) = 2 ** 9 = 512</span></span><br><span class="line">(<span class="number">2</span> ** <span class="number">3</span>) ** <span class="number">2</span>  <span class="comment">// 8 ** 2 = 64</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="1-4-与-Math-pow-的区别"><a href="#1-4-与-Math-pow-的区别" class="headerlink" title="1.4 与 Math.pow 的区别"></a>1.4 与 Math.pow 的区别</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 结果相同</span></span><br><span class="line"><span class="number">2</span> ** <span class="number">3</span>           <span class="comment">// 8</span></span><br><span class="line"><span class="built_in">Math</span>.pow(<span class="number">2</span>, <span class="number">3</span>)   <span class="comment">// 8</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 指数运算符支持 BigInt</span></span><br><span class="line"><span class="number">2n</span> ** <span class="number">3n</span>         <span class="comment">// 8n</span></span><br><span class="line"><span class="built_in">Math</span>.pow(<span class="number">2n</span>, <span class="number">3n</span>) <span class="comment">// ❌ TypeError（Math.pow 不支持 BigInt）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// `**` 更简洁，链式调用更清晰</span></span><br><span class="line"><span class="number">2</span> ** <span class="number">3</span> ** <span class="number">4</span>                    <span class="comment">// 2 ** (3 ** 4) = 2 ** 81</span></span><br><span class="line"><span class="built_in">Math</span>.pow(<span class="number">2</span>, <span class="built_in">Math</span>.pow(<span class="number">3</span>, <span class="number">4</span>))    <span class="comment">// 同上，但可读性差</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="二、尾逗号（Trailing-Commas，ES2017）"><a href="#二、尾逗号（Trailing-Commas，ES2017）" class="headerlink" title="二、尾逗号（Trailing Commas，ES2017）"></a>二、尾逗号（Trailing Commas，ES2017）</h2><p>函数参数列表和调用中允许尾逗号：</p>
+<h3 id="2-1-函数参数"><a href="#2-1-函数参数" class="headerlink" title="2.1 函数参数"></a>2.1 函数参数</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ES2017 之前 —— 参数列表最后一个参数不能加逗号</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">a, b</span>) </span>&#123;&#125;     <span class="comment">// ✅</span></span><br><span class="line"><span class="comment">// function foo(a, b,) &#123;&#125; // ❌ SyntaxError</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ES2017 之后 —— 允许</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">a, b,</span>) </span>&#123;&#125;    <span class="comment">// ✅</span></span><br><span class="line"></span><br><span class="line">foo(<span class="number">1</span>, <span class="number">2</span>,)                <span class="comment">// ✅ 调用时也可以</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-为什么要有尾逗号？"><a href="#2-2-为什么要有尾逗号？" class="headerlink" title="2.2 为什么要有尾逗号？"></a>2.2 为什么要有尾逗号？</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 主要目的：减少 git diff</span></span><br><span class="line"><span class="comment">// 不加尾逗号时，加一行会导致上一行也变红</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 没有尾逗号</span></span><br><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  <span class="attr">a</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="attr">b</span>: <span class="number">2</span>,   <span class="comment">// ← 加新属性时这里要加逗号</span></span><br><span class="line">  <span class="attr">c</span>: <span class="number">3</span>    <span class="comment">// ← 这行没有逗号</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 有尾逗号</span></span><br><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  <span class="attr">a</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="attr">b</span>: <span class="number">2</span>,</span><br><span class="line">  <span class="attr">c</span>: <span class="number">3</span>,   <span class="comment">// ← 加新属性时这行不需要改</span></span><br><span class="line">  <span class="attr">d</span>: <span class="number">4</span>,   <span class="comment">// ← 只加这行，前两行 diff 无变化</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># 无尾逗号时的 diff</span><br><span class="line"> const obj = &#123;</span><br><span class="line">   a: 1,</span><br><span class="line"><span class="deletion">-  b: 2          # 这行变了（加了逗号）</span></span><br><span class="line"><span class="addition">+  b: 2,</span></span><br><span class="line"><span class="addition">+  c: 3          # 新行</span></span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"># 有尾逗号时的 diff</span><br><span class="line"> const obj = &#123;</span><br><span class="line">   a: 1,</span><br><span class="line">   b: 2,</span><br><span class="line"><span class="addition">+  c: 3,         # 只加了这一行，diff 更干净</span></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-哪些地方可以用尾逗号"><a href="#2-3-哪些地方可以用尾逗号" class="headerlink" title="2.3 哪些地方可以用尾逗号"></a>2.3 哪些地方可以用尾逗号</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ✅ 对象字面量</span></span><br><span class="line"><span class="keyword">const</span> obj = &#123; <span class="attr">a</span>: <span class="number">1</span>, <span class="attr">b</span>: <span class="number">2</span>, &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 数组</span></span><br><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>,]</span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 函数参数（ES2017）</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">a, b,</span>) </span>&#123;&#125;</span><br><span class="line"><span class="keyword">const</span> bar = <span class="function">(<span class="params">a, b,</span>) =&gt;</span> &#123;&#125;</span><br><span class="line">foo(<span class="number">1</span>, <span class="number">2</span>,)</span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 解构</span></span><br><span class="line"><span class="keyword">const</span> [a, b,] = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="keyword">const</span> &#123; x, y, &#125; = &#123; <span class="attr">x</span>: <span class="number">1</span>, <span class="attr">y</span>: <span class="number">2</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ import/export</span></span><br><span class="line"><span class="keyword">import</span> &#123; a, b, &#125; <span class="keyword">from</span> <span class="string">&#x27;./module&#x27;</span></span><br><span class="line"><span class="keyword">export</span> &#123; a, b, &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ❌ JSON（不允许）</span></span><br><span class="line"><span class="built_in">JSON</span>.parse(<span class="string">&#x27;&#123;&quot;a&quot;:1,&quot;b&quot;:2,&#125;&#x27;</span>)  <span class="comment">// SyntaxError</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="三、SharedArrayBuffer-与-Atomics（ES2017）"><a href="#三、SharedArrayBuffer-与-Atomics（ES2017）" class="headerlink" title="三、SharedArrayBuffer 与 Atomics（ES2017）"></a>三、SharedArrayBuffer 与 Atomics（ES2017）</h2><p>用于<strong>多线程共享内存</strong>（配合 Web Worker）。这个特性比较进阶，日常前端开发很少用到。</p>
+<h3 id="3-1-SharedArrayBuffer"><a href="#3-1-SharedArrayBuffer" class="headerlink" title="3.1 SharedArrayBuffer"></a>3.1 SharedArrayBuffer</h3><p>普通 <code>ArrayBuffer</code> 在不同 Worker 间传递时会复制。<code>SharedArrayBuffer</code> 是<strong>共享</strong>的——多个 Worker 读写同一块内存：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 主线程</span></span><br><span class="line"><span class="keyword">const</span> sharedBuffer = <span class="keyword">new</span> SharedArrayBuffer(<span class="number">4</span>)  <span class="comment">// 4 字节共享内存</span></span><br><span class="line"><span class="keyword">const</span> sharedArray = <span class="keyword">new</span> <span class="built_in">Int32Array</span>(sharedBuffer)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 启动 Worker</span></span><br><span class="line"><span class="keyword">const</span> worker = <span class="keyword">new</span> Worker(<span class="string">&#x27;worker.js&#x27;</span>)</span><br><span class="line">worker.postMessage(sharedBuffer)  <span class="comment">// 传递的是共享引用，不是复制</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 主线程修改</span></span><br><span class="line">sharedArray[<span class="number">0</span>] = <span class="number">42</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Worker 也能看到修改</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// worker.js</span></span><br><span class="line">self.onmessage = <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> sharedArray = <span class="keyword">new</span> <span class="built_in">Int32Array</span>(event.data)</span><br><span class="line">  <span class="built_in">console</span>.log(sharedArray[<span class="number">0</span>])  <span class="comment">// 42（主线程写的值）</span></span><br><span class="line">  sharedArray[<span class="number">1</span>] = <span class="number">100</span>  <span class="comment">// 主线程也能看到</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-Atomics-——-安全读写共享内存"><a href="#3-2-Atomics-——-安全读写共享内存" class="headerlink" title="3.2 Atomics —— 安全读写共享内存"></a>3.2 Atomics —— 安全读写共享内存</h3><p>共享内存的问题：两个线程同时读写同一个位置，会出现<strong>竞态条件</strong>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 没有同步的并发访问（可能出问题）</span></span><br><span class="line">sharedArray[<span class="number">0</span>]++  <span class="comment">// 读取 → 加 1 → 写入（三步操作不是原子性的）</span></span><br><span class="line"><span class="comment">// 如果两个 Worker 同时执行这行，结果可能不是预期的 +2</span></span><br></pre></td></tr></table></figure>
+
+<p><code>Atomics</code> 提供<strong>原子操作</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Atomics.add —— 原子加</span></span><br><span class="line">Atomics.add(sharedArray, <span class="number">0</span>, <span class="number">1</span>)  <span class="comment">// 线程安全地 +1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Atomics.load —— 原子读</span></span><br><span class="line">Atomics.load(sharedArray, <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Atomics.store —— 原子写</span></span><br><span class="line">Atomics.store(sharedArray, <span class="number">0</span>, <span class="number">42</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Atomics.exchange —— 原子交换</span></span><br><span class="line"><span class="keyword">const</span> oldValue = Atomics.exchange(sharedArray, <span class="number">0</span>, <span class="number">100</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Atomics.compareExchange —— 条件交换</span></span><br><span class="line">Atomics.compareExchange(sharedArray, <span class="number">0</span>, <span class="number">42</span>, <span class="number">100</span>)</span><br><span class="line"><span class="comment">// 只有当前值 === 42 时，才写入 100</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-Atomics-的等待-通知机制"><a href="#3-3-Atomics-的等待-通知机制" class="headerlink" title="3.3 Atomics 的等待/通知机制"></a>3.3 Atomics 的等待/通知机制</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Worker A —— 等待条件</span></span><br><span class="line">Atomics.wait(sharedArray, <span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line"><span class="comment">// 阻塞直到 sharedArray[0] 不再是 0</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Worker B —— 通知等待者</span></span><br><span class="line">Atomics.store(sharedArray, <span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line">Atomics.notify(sharedArray, <span class="number">0</span>, <span class="number">1</span>)  <span class="comment">// 唤醒 Worker A</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-4-安全要求"><a href="#3-4-安全要求" class="headerlink" title="3.4 安全要求"></a>3.4 安全要求</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用 SharedArrayBuffer 需要在 HTTP 响应头中设置</span></span><br><span class="line"><span class="comment">// Cross-Origin-Opener-Policy: same-origin</span></span><br><span class="line"><span class="comment">// Cross-Origin-Embedder-Policy: require-corp</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 否则会报错：</span></span><br><span class="line"><span class="comment">// &quot;SharedArrayBuffer is not defined&quot;</span></span><br><span class="line"><span class="comment">// 或</span></span><br><span class="line"><span class="comment">// &quot;The SharedArrayBuffer object can only be shared with same-origin contexts&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-5-实际应用场景"><a href="#3-5-实际应用场景" class="headerlink" title="3.5 实际应用场景"></a>3.5 实际应用场景</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 音视频处理 —— 多个 Worker 并行处理帧</span></span><br><span class="line"><span class="comment">// 2. 大数组并行计算 —— 分割数据到多个 Worker</span></span><br><span class="line"><span class="comment">// 3. 游戏引擎 —— Entity 状态共享</span></span><br><span class="line"><span class="comment">// 4. Canvas 像素操作</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 简单示例：并行求和</span></span><br><span class="line"><span class="comment">// 主线程</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">parallelSum</span>(<span class="params">array</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> numWorkers = navigator.hardwareConcurrency || <span class="number">4</span></span><br><span class="line">  <span class="keyword">const</span> chunkSize = <span class="built_in">Math</span>.ceil(array.length / numWorkers)</span><br><span class="line">  <span class="keyword">const</span> sharedBuffer = <span class="keyword">new</span> SharedArrayBuffer(<span class="built_in">Int32Array</span>.BYTES_PER_ELEMENT)</span><br><span class="line">  <span class="keyword">const</span> result = <span class="keyword">new</span> <span class="built_in">Int32Array</span>(sharedBuffer)</span><br><span class="line">  result[<span class="number">0</span>] = <span class="number">0</span></span><br><span class="line">  <span class="keyword">let</span> completed = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; numWorkers; i++) &#123;</span><br><span class="line">      <span class="keyword">const</span> worker = <span class="keyword">new</span> Worker(<span class="string">&#x27;sum-worker.js&#x27;</span>)</span><br><span class="line">      <span class="keyword">const</span> start = i * chunkSize</span><br><span class="line">      <span class="keyword">const</span> chunk = array.slice(start, start + chunkSize)</span><br><span class="line">      worker.postMessage(&#123; chunk, sharedBuffer &#125;)</span><br><span class="line">      worker.onmessage = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">        completed++</span><br><span class="line">        <span class="keyword">if</span> (completed === numWorkers) resolve(result[<span class="number">0</span>])</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="四、ES7-ES8-特性一览"><a href="#四、ES7-ES8-特性一览" class="headerlink" title="四、ES7 / ES8 特性一览"></a>四、ES7 / ES8 特性一览</h2><table>
+<thead>
+<tr>
+<th>版本</th>
+<th>特性</th>
+<th>状态</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ES2016</strong></td>
+<td><code>Array.prototype.includes</code></td>
+<td>✅ 已覆盖</td>
+</tr>
+<tr>
+<td><strong>(ES7)</strong></td>
+<td><strong>指数运算符 <code>**</code></strong></td>
+<td><strong>✅ 本篇</strong></td>
+</tr>
+<tr>
+<td><strong>ES2017</strong></td>
+<td><code>async/await</code></td>
+<td>✅ YDKJS 17</td>
+</tr>
+<tr>
+<td><strong>(ES8)</strong></td>
+<td><code>Object.values / entries</code></td>
+<td>✅ 对象增强篇</td>
+</tr>
+<tr>
+<td></td>
+<td><code>Object.getOwnPropertyDescriptors</code></td>
+<td>✅ 对象增强篇</td>
+</tr>
+<tr>
+<td></td>
+<td><code>String.padStart / padEnd</code></td>
+<td>✅ 字符串篇</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>函数参数尾逗号</strong></td>
+<td><strong>✅ 本篇</strong></td>
+</tr>
+<tr>
+<td></td>
+<td><strong>SharedArrayBuffer / Atomics</strong></td>
+<td><strong>✅ 本篇</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ES7（2016）—— 两个特性</span></span><br><span class="line">arr.includes(<span class="literal">NaN</span>)     <span class="comment">// 数组包含判断</span></span><br><span class="line"><span class="number">2</span> ** <span class="number">10</span>               <span class="comment">// 指数运算符（比 Math.pow 更简洁）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ES8（2017）—— 六个特性</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">getData</span>(<span class="params"></span>) </span>&#123; <span class="keyword">return</span> <span class="keyword">await</span> fetch(url) &#125;</span><br><span class="line"><span class="built_in">Object</span>.values(obj)</span><br><span class="line"><span class="built_in">Object</span>.entries(obj)</span><br><span class="line">str.padStart(<span class="number">5</span>, <span class="string">&#x27;0&#x27;</span>)</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">a, b,</span>) </span>&#123;&#125;  <span class="comment">// 尾逗号</span></span><br><span class="line"><span class="keyword">new</span> SharedArrayBuffer(<span class="number">4</span>) <span class="comment">// 共享内存（进阶）</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>日常开发中指数运算符 <code>**</code> 和尾逗号属于高频使用的小特性。SharedArrayBuffer 属于进阶内容，遇到并行计算场景时再深入了解即可。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/web-blog/2026/06/25/es7-es8-features/">ES7 与 ES8 补全：指数运算符、尾逗号、SharedArrayBuffer 与 Atomics</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a></p>
+  <p><span>发布时间:</span>2026年06月25日 - 00:06</p>
+  <p><span>最后更新:</span>2026年06月25日 - 16:06</p>
+  <p><span>原始链接:</span><a href="/web-blog/2026/06/25/es7-es8-features/" title="ES7 与 ES8 补全：指数运算符、尾逗号、SharedArrayBuffer 与 Atomics">https://lc19990308.github.io/web-blog/2026/06/25/es7-es8-features/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://lc19990308.github.io/web-blog/2026/06/25/es7-es8-features/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+    });
+    });  
+</script>
+
+      
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>LC
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://lc19990308.github.io/web-blog/2026/06/25/es7-es8-features/" title="ES7 与 ES8 补全：指数运算符、尾逗号、SharedArrayBuffer 与 Atomics">https://lc19990308.github.io/web-blog/2026/06/25/es7-es8-features/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/web-blog/tags/JavaScript/" ****><i class="fa fa-tag"></i> JavaScript</a>
+              <a href="/web-blog/tags/ES6/" ****><i class="fa fa-tag"></i> ES6</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/06/16/Pinia%E4%BD%BF%E7%94%A8%E8%BE%B9%E7%95%8C/" rel="prev" title="Pinia 使用边界：什么该放 Store，什么不该放">
+      <i class="fa fa-chevron-left"></i> Pinia 使用边界：什么该放 Store，什么不该放
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/06/25/es6-object-enhancements/" rel="next" title="ES6 对象字面量增强与 Object 新方法">
+      ES6 对象字面量增强与 Object 新方法 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%8C%87%E6%95%B0%E8%BF%90%E7%AE%97%E7%AC%A6-%EF%BC%88ES2016%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">一、指数运算符 **（ES2016）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E5%9F%BA%E7%A1%80"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 基础</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E6%8C%87%E6%95%B0%E8%B5%8B%E5%80%BC"><span class="nav-number">2.2.</span> <span class="nav-text">1.2 指数赋值 **&#x3D;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E4%BC%98%E5%85%88%E7%BA%A7"><span class="nav-number">2.3.</span> <span class="nav-text">1.3 优先级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-%E4%B8%8E-Math-pow-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">2.4.</span> <span class="nav-text">1.4 与 Math.pow 的区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%B0%BE%E9%80%97%E5%8F%B7%EF%BC%88Trailing-Commas%EF%BC%8CES2017%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">二、尾逗号（Trailing Commas，ES2017）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 函数参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%9C%89%E5%B0%BE%E9%80%97%E5%8F%B7%EF%BC%9F"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 为什么要有尾逗号？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E5%93%AA%E4%BA%9B%E5%9C%B0%E6%96%B9%E5%8F%AF%E4%BB%A5%E7%94%A8%E5%B0%BE%E9%80%97%E5%8F%B7"><span class="nav-number">3.3.</span> <span class="nav-text">2.3 哪些地方可以用尾逗号</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81SharedArrayBuffer-%E4%B8%8E-Atomics%EF%BC%88ES2017%EF%BC%89"><span class="nav-number">4.</span> <span class="nav-text">三、SharedArrayBuffer 与 Atomics（ES2017）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-SharedArrayBuffer"><span class="nav-number">4.1.</span> <span class="nav-text">3.1 SharedArrayBuffer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-Atomics-%E2%80%94%E2%80%94-%E5%AE%89%E5%85%A8%E8%AF%BB%E5%86%99%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98"><span class="nav-number">4.2.</span> <span class="nav-text">3.2 Atomics —— 安全读写共享内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-Atomics-%E7%9A%84%E7%AD%89%E5%BE%85-%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%88%B6"><span class="nav-number">4.3.</span> <span class="nav-text">3.3 Atomics 的等待&#x2F;通知机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-%E5%AE%89%E5%85%A8%E8%A6%81%E6%B1%82"><span class="nav-number">4.4.</span> <span class="nav-text">3.4 安全要求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">4.5.</span> <span class="nav-text">3.5 实际应用场景</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81ES7-ES8-%E7%89%B9%E6%80%A7%E4%B8%80%E8%A7%88"><span class="nav-number">5.</span> <span class="nav-text">四、ES7 &#x2F; ES8 特性一览</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="LC"
+      src="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+  <p class="site-author-name" itemprop="name">LC</p>
+  <div class="site-description" itemprop="description">专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/web-blog/archives/">
+        
+          <span class="site-state-item-count">116</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/web-blog/categories/">
+          
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/web-blog/tags/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button motion-element"><i class="fa fa-comment"></i>
+    Chat
+  </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lc19990308/web-blog" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lc19990308&#x2F;web-blog" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:jarridaddison4@gmail.com" title="E-Mail → mailto:jarridaddison4@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/web-blog/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=441491828&auto=1&height=66"></iframe>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LC</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>-->
+<div class="powered-by">
+  <i class="fa fa-user-md"></i>
+  <span id="busuanzi_container_site_pv">
+    本站访问量:<span id="busuanzi_value_site_pv"></span>次
+  </span>
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv">
+    本站总访客量：<span id="busuanzi_value_site_uv"></span>人
+  </span>
+</div>
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共175.8k字</span>
+</div>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/web-blog/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/web-blog/js/utils.js"></script>
+
+<script src="/web-blog/js/motion.js"></script>
+
+
+<script src="/web-blog/js/schemes/pisces.js"></script>
+
+
+<script src="/web-blog/js/next-boot.js"></script>
+
+<script src="/web-blog/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/web-blog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+</body>
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</html>
