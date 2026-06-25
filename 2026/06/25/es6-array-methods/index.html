@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/web-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/web-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/web-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/web-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/web-blog/css/main.css">
+
+
+<link rel="stylesheet" href="/web-blog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/web-blog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/web-blog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lc19990308.github.io","root":"/web-blog/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="全面梳理 ES6 以来新增的数组方法与特性：Array.from、Array.of、find&#x2F;findIndex、includes、flat&#x2F;flatMap、fill&#x2F;copyWithin，以及类型化数组 TypedArray">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ES6+ 新增数组方法：find、flat、flatMap、from、of 与 Typed Arrays">
+<meta property="og:url" content="https://lc19990308.github.io/web-blog/2026/06/25/es6-array-methods/index.html">
+<meta property="og:site_name" content="前端技术笔记">
+<meta property="og:description" content="全面梳理 ES6 以来新增的数组方法与特性：Array.from、Array.of、find&#x2F;findIndex、includes、flat&#x2F;flatMap、fill&#x2F;copyWithin，以及类型化数组 TypedArray">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-25T08:01:10.089Z">
+<meta property="article:author" content="LC">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="ES6">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://lc19990308.github.io/web-blog/2026/06/25/es6-array-methods/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>ES6+ 新增数组方法：find、flat、flatMap、from、of 与 Typed Arrays | 前端技术笔记</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/web-blog/atom.xml" title="前端技术笔记" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband">
+    <a target="_blank" rel="noopener" href="https://gitee.com/yaru722" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    </div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/web-blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">前端技术笔记</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录前端路上的思考与实践</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/web-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/web-blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/web-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/web-blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/web-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/lc19990308" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/25/es6-array-methods/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+      <meta itemprop="name" content="LC">
+      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端技术笔记">
+    </span>
+      <header class="post-header">
+      
+        <h1 class="post-title" itemprop="name headline">
+          ES6+ 新增数组方法：find、flat、flatMap、from、of 与 Typed Arrays
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-06-25 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-25T00:00:00+08:00">2026-06-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/web-blog/categories/ES6/" itemprop="url" rel="index"><span itemprop="name">ES6</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">全面梳理 ES6 以来新增的数组方法与特性：Array.from、Array.of、find/findIndex、includes、flat/flatMap、fill/copyWithin，以及类型化数组 TypedArray</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>ES6+ 给数组添加了大量实用方法，很多以前需要手写循环或第三方库（lodash）的操作，现在都有原生实现。</p>
+<table>
+<thead>
+<tr>
+<th>ES5</th>
+<th>ES6+</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>for</code> 循环</td>
+<td><code>find</code>、<code>findIndex</code></td>
+</tr>
+<tr>
+<td><code>indexOf</code>（NaN 不匹配）</td>
+<td><code>includes</code></td>
+</tr>
+<tr>
+<td>手写展平</td>
+<td><code>flat</code>、<code>flatMap</code></td>
+</tr>
+<tr>
+<td><code>[].slice.call()</code> 转数组</td>
+<td><code>Array.from</code></td>
+</tr>
+<tr>
+<td>手动创建指定参数数组</td>
+<td><code>Array.of</code></td>
+</tr>
+<tr>
+<td>循环初始化</td>
+<td><code>fill</code></td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="一、Array-from"><a href="#一、Array-from" class="headerlink" title="一、Array.from"></a>一、Array.from</h2><p>将<strong>类数组</strong>或<strong>可迭代对象</strong>转为真正的数组：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 类数组 → 数组</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getArgs</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Array</span>.from(<span class="built_in">arguments</span>)</span><br><span class="line">&#125;</span><br><span class="line">getArgs(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>) <span class="comment">// [1, 2, 3]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. NodeList → 数组</span></span><br><span class="line"><span class="keyword">const</span> divs = <span class="built_in">document</span>.querySelectorAll(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> divArray = <span class="built_in">Array</span>.from(divs)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. Set/Map → 数组</span></span><br><span class="line"><span class="keyword">const</span> set = <span class="keyword">new</span> <span class="built_in">Set</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])</span><br><span class="line"><span class="built_in">Array</span>.from(set) <span class="comment">// [1, 2, 3]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 4. 字符串 → 数组（支持 Unicode）</span></span><br><span class="line"><span class="built_in">Array</span>.from(<span class="string">&#x27;hello&#x27;</span>)    <span class="comment">// [&#x27;h&#x27;, &#x27;e&#x27;, &#x27;l&#x27;, &#x27;l&#x27;, &#x27;o&#x27;]</span></span><br><span class="line"><span class="built_in">Array</span>.from(<span class="string">&#x27;😀👍&#x27;</span>)     <span class="comment">// [&#x27;😀&#x27;, &#x27;👍&#x27;]（正确，不会拆开）</span></span><br><span class="line"><span class="string">&#x27;😀👍&#x27;</span>.split(<span class="string">&#x27;&#x27;</span>)       <span class="comment">// [&#x27;\uD83D&#x27;, &#x27;\uDE00&#x27;, &#x27;\uD83D&#x27;, &#x27;\uDC4D&#x27;]（错误）</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Array-from-的-map-回调"><a href="#Array-from-的-map-回调" class="headerlink" title="Array.from 的 map 回调"></a>Array.from 的 map 回调</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 第二个参数类似 map</span></span><br><span class="line"><span class="built_in">Array</span>.from([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], <span class="function"><span class="params">x</span> =&gt;</span> x * <span class="number">2</span>) <span class="comment">// [2, 4, 6]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 生成数字序列</span></span><br><span class="line"><span class="built_in">Array</span>.from(&#123; <span class="attr">length</span>: <span class="number">5</span> &#125;, <span class="function">(<span class="params">_, i</span>) =&gt;</span> i + <span class="number">1</span>) <span class="comment">// [1, 2, 3, 4, 5]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 生成 0 填充的数组</span></span><br><span class="line"><span class="built_in">Array</span>.from(&#123; <span class="attr">length</span>: <span class="number">3</span> &#125;, <span class="function">() =&gt;</span> <span class="number">0</span>) <span class="comment">// [0, 0, 0]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 生成随机颜色</span></span><br><span class="line"><span class="keyword">const</span> colors = <span class="built_in">Array</span>.from(&#123; <span class="attr">length</span>: <span class="number">5</span> &#125;, <span class="function">() =&gt;</span></span><br><span class="line">  <span class="string">`#<span class="subst">$&#123;<span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * <span class="number">0xFFFFFF</span>).toString(<span class="number">16</span>).padStart(<span class="number">6</span>, <span class="string">&#x27;0&#x27;</span>)&#125;</span>`</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="二、Array-of"><a href="#二、Array-of" class="headerlink" title="二、Array.of"></a>二、Array.of</h2><p><code>Array.of</code> 修复了 <code>new Array()</code> 的单参数问题：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// new Array 的单参数行为诡异</span></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Array</span>(<span class="number">3</span>)     <span class="comment">// [empty × 3]（长度 3 的空数组）</span></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Array</span>(<span class="number">3</span>, <span class="number">4</span>)  <span class="comment">// [3, 4]（正常当作元素）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Array.of 始终将参数作为元素</span></span><br><span class="line"><span class="built_in">Array</span>.of(<span class="number">3</span>)      <span class="comment">// [3] ✅</span></span><br><span class="line"><span class="built_in">Array</span>.of(<span class="number">3</span>, <span class="number">4</span>)   <span class="comment">// [3, 4] ✅</span></span><br><span class="line"><span class="built_in">Array</span>.of()       <span class="comment">// []</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="三、find-findIndex"><a href="#三、find-findIndex" class="headerlink" title="三、find / findIndex"></a>三、find / findIndex</h2><p>在数组中查找符合条件的元素，比 <code>for</code> 循环更简洁：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> users = [</span><br><span class="line">  &#123; <span class="attr">id</span>: <span class="number">1</span>, <span class="attr">name</span>: <span class="string">&#x27;LC&#x27;</span>, <span class="attr">age</span>: <span class="number">25</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">id</span>: <span class="number">2</span>, <span class="attr">name</span>: <span class="string">&#x27;AtomCode&#x27;</span>, <span class="attr">age</span>: <span class="number">1</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">id</span>: <span class="number">3</span>, <span class="attr">name</span>: <span class="string">&#x27;Admin&#x27;</span>, <span class="attr">age</span>: <span class="number">30</span> &#125;,</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="comment">// find —— 返回第一个符合条件的元素</span></span><br><span class="line"><span class="keyword">const</span> found = users.find(<span class="function"><span class="params">user</span> =&gt;</span> user.id === <span class="number">2</span>)</span><br><span class="line"><span class="built_in">console</span>.log(found) <span class="comment">// &#123; id: 2, name: &#x27;AtomCode&#x27;, age: 1 &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// findIndex —— 返回索引</span></span><br><span class="line"><span class="keyword">const</span> index = users.findIndex(<span class="function"><span class="params">user</span> =&gt;</span> user.name === <span class="string">&#x27;Admin&#x27;</span>)</span><br><span class="line"><span class="built_in">console</span>.log(index) <span class="comment">// 2</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 没找到</span></span><br><span class="line"><span class="keyword">const</span> notFound = users.find(<span class="function"><span class="params">user</span> =&gt;</span> user.id === <span class="number">99</span>)</span><br><span class="line"><span class="built_in">console</span>.log(notFound) <span class="comment">// undefined</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> notFoundIndex = users.findIndex(<span class="function"><span class="params">user</span> =&gt;</span> user.id === <span class="number">99</span>)</span><br><span class="line"><span class="built_in">console</span>.log(notFoundIndex) <span class="comment">// -1</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="find-vs-filter-vs-some"><a href="#find-vs-filter-vs-some" class="headerlink" title="find vs filter vs some"></a>find vs filter vs some</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// find：返回第一个匹配的元素（或 undefined）</span></span><br><span class="line"><span class="comment">// filter：返回所有匹配的数组</span></span><br><span class="line"><span class="comment">// some：返回 Boolean</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> data = [<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// 我想找到第一个大于 5 的值</span></span><br><span class="line"><span class="keyword">const</span> r1 = data.find(<span class="function"><span class="params">x</span> =&gt;</span> x &gt; <span class="number">5</span>)  <span class="comment">// 7</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 我想找到所有大于 5 的值</span></span><br><span class="line"><span class="keyword">const</span> r2 = data.filter(<span class="function"><span class="params">x</span> =&gt;</span> x &gt; <span class="number">5</span>) <span class="comment">// [7, 9]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 我想知道是否存在大于 5 的值</span></span><br><span class="line"><span class="keyword">const</span> r3 = data.some(<span class="function"><span class="params">x</span> =&gt;</span> x &gt; <span class="number">5</span>)  <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="findLast-findLastIndex（ES2023）"><a href="#findLast-findLastIndex（ES2023）" class="headerlink" title="findLast / findLastIndex（ES2023）"></a>findLast / findLastIndex（ES2023）</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 从后往前查找</span></span><br><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]</span><br><span class="line"></span><br><span class="line">arr.find(<span class="function"><span class="params">x</span> =&gt;</span> x &gt; <span class="number">3</span>)       <span class="comment">// 4（第一个）</span></span><br><span class="line">arr.findLast(<span class="function"><span class="params">x</span> =&gt;</span> x &gt; <span class="number">3</span>)   <span class="comment">// 5（最后一个）</span></span><br><span class="line"></span><br><span class="line">arr.findIndex(<span class="function"><span class="params">x</span> =&gt;</span> x &gt; <span class="number">3</span>)      <span class="comment">// 3（正数第 3 个）</span></span><br><span class="line">arr.findLastIndex(<span class="function"><span class="params">x</span> =&gt;</span> x &gt; <span class="number">3</span>)  <span class="comment">// 4（倒数第 1 个）</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="四、includes"><a href="#四、includes" class="headerlink" title="四、includes"></a>四、includes</h2><p>判断数组是否包含某个值：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="literal">NaN</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// ES5 indexOf —— 不能查找 NaN</span></span><br><span class="line">arr.indexOf(<span class="number">1</span>)      <span class="comment">// 0</span></span><br><span class="line">arr.indexOf(<span class="number">4</span>)      <span class="comment">// -1</span></span><br><span class="line">arr.indexOf(<span class="literal">NaN</span>)    <span class="comment">// -1 ❌（NaN !== NaN）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ES2016 includes —— 可以查找 NaN</span></span><br><span class="line">arr.includes(<span class="number">1</span>)     <span class="comment">// true</span></span><br><span class="line">arr.includes(<span class="number">4</span>)     <span class="comment">// false</span></span><br><span class="line">arr.includes(<span class="literal">NaN</span>)   <span class="comment">// true ✅</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>实用场景</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> roles = [<span class="string">&#x27;admin&#x27;</span>, <span class="string">&#x27;user&#x27;</span>, <span class="string">&#x27;guest&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// 以前</span></span><br><span class="line"><span class="keyword">if</span> (roles.indexOf(<span class="string">&#x27;admin&#x27;</span>) !== -<span class="number">1</span>) &#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 现在</span></span><br><span class="line"><span class="keyword">if</span> (roles.includes(<span class="string">&#x27;admin&#x27;</span>)) &#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 多个条件判断</span></span><br><span class="line"><span class="keyword">const</span> hasPermission = [<span class="string">&#x27;admin&#x27;</span>, <span class="string">&#x27;superadmin&#x27;</span>].includes(user.role)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="五、flat-flatMap"><a href="#五、flat-flatMap" class="headerlink" title="五、flat / flatMap"></a>五、flat / flatMap</h2><h3 id="5-1-flat-—-数组展平"><a href="#5-1-flat-—-数组展平" class="headerlink" title="5.1 flat — 数组展平"></a>5.1 flat — 数组展平</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> nested = [<span class="number">1</span>, [<span class="number">2</span>, [<span class="number">3</span>, [<span class="number">4</span>]]]]</span><br><span class="line"></span><br><span class="line"><span class="comment">// 默认展平一层</span></span><br><span class="line">nested.flat()     <span class="comment">// [1, 2, [3, [4]]]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 指定层数</span></span><br><span class="line">nested.flat(<span class="number">2</span>)   <span class="comment">// [1, 2, 3, [4]]</span></span><br><span class="line">nested.flat(<span class="number">3</span>)   <span class="comment">// [1, 2, 3, 4]</span></span><br><span class="line">nested.flat(<span class="literal">Infinity</span>) <span class="comment">// [1, 2, 3, 4]（全部展平）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 去掉数组中的空位</span></span><br><span class="line">[<span class="number">1</span>, , <span class="number">2</span>, , <span class="number">3</span>].flat() <span class="comment">// [1, 2, 3]</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2-flatMap-—-先-map-再-flat-1"><a href="#5-2-flatMap-—-先-map-再-flat-1" class="headerlink" title="5.2 flatMap — 先 map 再 flat(1)"></a>5.2 flatMap — 先 map 再 flat(1)</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> sentences = [<span class="string">&#x27;hello world&#x27;</span>, <span class="string">&#x27;foo bar&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// map 后再 flat</span></span><br><span class="line">sentences.map(<span class="function"><span class="params">s</span> =&gt;</span> s.split(<span class="string">&#x27; &#x27;</span>)).flat()</span><br><span class="line"><span class="comment">// [&#x27;hello&#x27;, &#x27;world&#x27;, &#x27;foo&#x27;, &#x27;bar&#x27;]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// flatMap 一步完成</span></span><br><span class="line">sentences.flatMap(<span class="function"><span class="params">s</span> =&gt;</span> s.split(<span class="string">&#x27; &#x27;</span>))</span><br><span class="line"><span class="comment">// [&#x27;hello&#x27;, &#x27;world&#x27;, &#x27;foo&#x27;, &#x27;bar&#x27;]</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>实用场景</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 展开嵌套数组</span></span><br><span class="line"><span class="keyword">const</span> orders = [</span><br><span class="line">  &#123; <span class="attr">id</span>: <span class="number">1</span>, <span class="attr">items</span>: [<span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;B&#x27;</span>] &#125;,</span><br><span class="line">  &#123; <span class="attr">id</span>: <span class="number">2</span>, <span class="attr">items</span>: [<span class="string">&#x27;C&#x27;</span>] &#125;,</span><br><span class="line">]</span><br><span class="line"><span class="keyword">const</span> allItems = orders.flatMap(<span class="function"><span class="params">order</span> =&gt;</span> order.items)</span><br><span class="line"><span class="comment">// [&#x27;A&#x27;, &#x27;B&#x27;, &#x27;C&#x27;]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 过滤 + 转换</span></span><br><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, -<span class="number">2</span>, <span class="number">3</span>, -<span class="number">4</span>, <span class="number">5</span>]</span><br><span class="line"><span class="keyword">const</span> positives = arr.flatMap(<span class="function"><span class="params">x</span> =&gt;</span> x &gt; <span class="number">0</span> ? [x * <span class="number">2</span>] : [])</span><br><span class="line"><span class="comment">// [2, 6, 10]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 生成多个值</span></span><br><span class="line"><span class="keyword">const</span> words = [<span class="string">&#x27;hello&#x27;</span>, <span class="string">&#x27;world&#x27;</span>]</span><br><span class="line"><span class="keyword">const</span> pairs = words.flatMap(<span class="function">(<span class="params">w, i</span>) =&gt;</span> [w, w.length])</span><br><span class="line"><span class="comment">// [&#x27;hello&#x27;, 5, &#x27;world&#x27;, 5]</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="六、fill"><a href="#六、fill" class="headerlink" title="六、fill"></a>六、fill</h2><p>用指定值填充数组：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 全量填充</span></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Array</span>(<span class="number">3</span>).fill(<span class="number">0</span>)   <span class="comment">// [0, 0, 0]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 指定起止位置</span></span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>].fill(<span class="number">0</span>, <span class="number">2</span>, <span class="number">4</span>) <span class="comment">// [1, 2, 0, 0, 5]（索引 2-4 填 0）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 注意：fill 对象时是共享引用</span></span><br><span class="line"><span class="keyword">const</span> matrix = <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="number">3</span>).fill([])</span><br><span class="line">matrix[<span class="number">0</span>].push(<span class="number">1</span>)</span><br><span class="line"><span class="built_in">console</span>.log(matrix) <span class="comment">// [[1], [1], [1]] ❌ 全部被改</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 正确做法：Array.from</span></span><br><span class="line"><span class="keyword">const</span> matrix2 = <span class="built_in">Array</span>.from(&#123; <span class="attr">length</span>: <span class="number">3</span> &#125;, <span class="function">() =&gt;</span> [])</span><br><span class="line">matrix2[<span class="number">0</span>].push(<span class="number">1</span>)</span><br><span class="line"><span class="built_in">console</span>.log(matrix2) <span class="comment">// [[1], [], []] ✅</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="七、copyWithin"><a href="#七、copyWithin" class="headerlink" title="七、copyWithin"></a>七、copyWithin</h2><p>在数组内部复制元素（不改变数组长度）：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// copyWithin(target, start, end)</span></span><br><span class="line">arr.copyWithin(<span class="number">0</span>, <span class="number">3</span>, <span class="number">5</span>) <span class="comment">// [4, 5, 3, 4, 5]</span></span><br><span class="line"><span class="comment">// 把索引 3-5 的元素（4, 5）复制到索引 0 开始的位置</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="八、类型化数组（TypedArrays）"><a href="#八、类型化数组（TypedArrays）" class="headerlink" title="八、类型化数组（TypedArrays）"></a>八、类型化数组（TypedArrays）</h2><p>处理二进制数据（Canvas、WebGL、文件操作）：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建 8 字节的缓冲区</span></span><br><span class="line"><span class="keyword">const</span> buffer = <span class="keyword">new</span> <span class="built_in">ArrayBuffer</span>(<span class="number">8</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 以不同&quot;视图&quot;读写</span></span><br><span class="line"><span class="keyword">const</span> int32View = <span class="keyword">new</span> <span class="built_in">Int32Array</span>(buffer)</span><br><span class="line">int32View[<span class="number">0</span>] = <span class="number">42</span></span><br><span class="line"><span class="built_in">console</span>.log(int32View[<span class="number">0</span>]) <span class="comment">// 42</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 单元化数组类型</span></span><br><span class="line"><span class="keyword">const</span> types = [</span><br><span class="line">  <span class="built_in">Int8Array</span>,    <span class="comment">// 8 位有符号整数</span></span><br><span class="line">  <span class="built_in">Uint8Array</span>,   <span class="comment">// 8 位无符号整数</span></span><br><span class="line">  <span class="built_in">Uint8ClampedArray</span>, <span class="comment">// 8 位无符号（Canvas 用）</span></span><br><span class="line">  <span class="built_in">Int16Array</span>,   <span class="comment">// 16 位有符号</span></span><br><span class="line">  <span class="built_in">Uint16Array</span>,  <span class="comment">// 16 位无符号</span></span><br><span class="line">  <span class="built_in">Int32Array</span>,   <span class="comment">// 32 位有符号</span></span><br><span class="line">  <span class="built_in">Uint32Array</span>,  <span class="comment">// 32 位无符号</span></span><br><span class="line">  <span class="built_in">Float32Array</span>, <span class="comment">// 32 位浮点</span></span><br><span class="line">  <span class="built_in">Float64Array</span>, <span class="comment">// 64 位浮点</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="九、数组方法速查表"><a href="#九、数组方法速查表" class="headerlink" title="九、数组方法速查表"></a>九、数组方法速查表</h2><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>版本</th>
+<th>作用</th>
+<th>是否修改原数组</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Array.from</code></td>
+<td>ES6</td>
+<td>类数组/可迭代转数组</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>Array.of</code></td>
+<td>ES6</td>
+<td>参数转数组</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>find</code></td>
+<td>ES6</td>
+<td>查找第一个匹配元素</td>
+<td>❌ 不修改</td>
+</tr>
+<tr>
+<td><code>findIndex</code></td>
+<td>ES6</td>
+<td>查找第一个匹配索引</td>
+<td>❌ 不修改</td>
+</tr>
+<tr>
+<td><code>fill</code></td>
+<td>ES6</td>
+<td>填充数组</td>
+<td>✅ 修改</td>
+</tr>
+<tr>
+<td><code>copyWithin</code></td>
+<td>ES6</td>
+<td>内部复制</td>
+<td>✅ 修改</td>
+</tr>
+<tr>
+<td><code>includes</code></td>
+<td>ES2016</td>
+<td>是否包含某值</td>
+<td>❌ 不修改</td>
+</tr>
+<tr>
+<td><code>flat</code></td>
+<td>ES2019</td>
+<td>展平数组</td>
+<td>❌ 不修改</td>
+</tr>
+<tr>
+<td><code>flatMap</code></td>
+<td>ES2019</td>
+<td>map + flat</td>
+<td>❌ 不修改</td>
+</tr>
+<tr>
+<td><code>findLast</code></td>
+<td>ES2023</td>
+<td>从后查找第一个</td>
+<td>❌ 不修改</td>
+</tr>
+<tr>
+<td><code>findLastIndex</code></td>
+<td>ES2023</td>
+<td>从后查找索引</td>
+<td>❌ 不修改</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>核心原则：<strong>能用原生方法就不要手写循环</strong>。原生方法经过引擎高度优化（如 V8 的内置函数），比自己写 for 循环更快，代码也更简洁。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/web-blog/2026/06/25/es6-array-methods/">ES6+ 新增数组方法：find、flat、flatMap、from、of 与 Typed Arrays</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a></p>
+  <p><span>发布时间:</span>2026年06月25日 - 00:06</p>
+  <p><span>最后更新:</span>2026年06月25日 - 16:06</p>
+  <p><span>原始链接:</span><a href="/web-blog/2026/06/25/es6-array-methods/" title="ES6+ 新增数组方法：find、flat、flatMap、from、of 与 Typed Arrays">https://lc19990308.github.io/web-blog/2026/06/25/es6-array-methods/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://lc19990308.github.io/web-blog/2026/06/25/es6-array-methods/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+    });
+    });  
+</script>
+
+      
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>LC
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://lc19990308.github.io/web-blog/2026/06/25/es6-array-methods/" title="ES6+ 新增数组方法：find、flat、flatMap、from、of 与 Typed Arrays">https://lc19990308.github.io/web-blog/2026/06/25/es6-array-methods/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/web-blog/tags/JavaScript/" ****><i class="fa fa-tag"></i> JavaScript</a>
+              <a href="/web-blog/tags/ES6/" ****><i class="fa fa-tag"></i> ES6</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/06/25/es6-new-features-2020-2022/" rel="prev" title="ES2020-ES2022 新特性：可选链、空值合并、逻辑赋值、globalThis">
+      <i class="fa fa-chevron-left"></i> ES2020-ES2022 新特性：可选链、空值合并、逻辑赋值、globalThis
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/06/25/posts/ydkjs-01-compilation-and-scope/" rel="next" title="你不知道的JavaScript（一）：JavaScript 编译原理与作用域">
+      你不知道的JavaScript（一）：JavaScript 编译原理与作用域 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81Array-from"><span class="nav-number">2.</span> <span class="nav-text">一、Array.from</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Array-from-%E7%9A%84-map-%E5%9B%9E%E8%B0%83"><span class="nav-number">2.1.</span> <span class="nav-text">Array.from 的 map 回调</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81Array-of"><span class="nav-number">3.</span> <span class="nav-text">二、Array.of</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81find-findIndex"><span class="nav-number">4.</span> <span class="nav-text">三、find &#x2F; findIndex</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#find-vs-filter-vs-some"><span class="nav-number">4.1.</span> <span class="nav-text">find vs filter vs some</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#findLast-findLastIndex%EF%BC%88ES2023%EF%BC%89"><span class="nav-number">4.2.</span> <span class="nav-text">findLast &#x2F; findLastIndex（ES2023）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81includes"><span class="nav-number">5.</span> <span class="nav-text">四、includes</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81flat-flatMap"><span class="nav-number">6.</span> <span class="nav-text">五、flat &#x2F; flatMap</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-flat-%E2%80%94-%E6%95%B0%E7%BB%84%E5%B1%95%E5%B9%B3"><span class="nav-number">6.1.</span> <span class="nav-text">5.1 flat — 数组展平</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-flatMap-%E2%80%94-%E5%85%88-map-%E5%86%8D-flat-1"><span class="nav-number">6.2.</span> <span class="nav-text">5.2 flatMap — 先 map 再 flat(1)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81fill"><span class="nav-number">7.</span> <span class="nav-text">六、fill</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81copyWithin"><span class="nav-number">8.</span> <span class="nav-text">七、copyWithin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E7%B1%BB%E5%9E%8B%E5%8C%96%E6%95%B0%E7%BB%84%EF%BC%88TypedArrays%EF%BC%89"><span class="nav-number">9.</span> <span class="nav-text">八、类型化数组（TypedArrays）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E3%80%81%E6%95%B0%E7%BB%84%E6%96%B9%E6%B3%95%E9%80%9F%E6%9F%A5%E8%A1%A8"><span class="nav-number">10.</span> <span class="nav-text">九、数组方法速查表</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="LC"
+      src="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+  <p class="site-author-name" itemprop="name">LC</p>
+  <div class="site-description" itemprop="description">专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/web-blog/archives/">
+        
+          <span class="site-state-item-count">115</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/web-blog/categories/">
+          
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/web-blog/tags/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button motion-element"><i class="fa fa-comment"></i>
+    Chat
+  </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lc19990308/web-blog" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lc19990308&#x2F;web-blog" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:jarridaddison4@gmail.com" title="E-Mail → mailto:jarridaddison4@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/web-blog/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=441491828&auto=1&height=66"></iframe>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LC</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>-->
+<div class="powered-by">
+  <i class="fa fa-user-md"></i>
+  <span id="busuanzi_container_site_pv">
+    本站访问量:<span id="busuanzi_value_site_pv"></span>次
+  </span>
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv">
+    本站总访客量：<span id="busuanzi_value_site_uv"></span>人
+  </span>
+</div>
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共174.3k字</span>
+</div>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/web-blog/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/web-blog/js/utils.js"></script>
+
+<script src="/web-blog/js/motion.js"></script>
+
+
+<script src="/web-blog/js/schemes/pisces.js"></script>
+
+
+<script src="/web-blog/js/next-boot.js"></script>
+
+<script src="/web-blog/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/web-blog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+</body>
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</html>
