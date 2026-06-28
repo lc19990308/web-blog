@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/web-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/web-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/web-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/web-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/web-blog/css/main.css">
+
+
+<link rel="stylesheet" href="/web-blog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/web-blog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/web-blog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lc19990308.github.io","root":"/web-blog/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="正则表达式不是魔法——它是确定有限自动机（DFA）和回溯算法的实现。理解引擎原理才能写出高效无 Bug 的正则">
+<meta property="og:type" content="article">
+<meta property="og:title" content="你不知道的JavaScript（二十五）：正则表达式的深度解析——从匹配引擎到回溯陷阱">
+<meta property="og:url" content="https://lc19990308.github.io/web-blog/2026/06/27/posts/ydkjs-25-regex-deep-dive/index.html">
+<meta property="og:site_name" content="前端技术笔记">
+<meta property="og:description" content="正则表达式不是魔法——它是确定有限自动机（DFA）和回溯算法的实现。理解引擎原理才能写出高效无 Bug 的正则">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-26T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-28T07:08:44.297Z">
+<meta property="article:author" content="LC">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="你不知道的javascript">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://lc19990308.github.io/web-blog/2026/06/27/posts/ydkjs-25-regex-deep-dive/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>你不知道的JavaScript（二十五）：正则表达式的深度解析——从匹配引擎到回溯陷阱 | 前端技术笔记</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/web-blog/atom.xml" title="前端技术笔记" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband">
+    <a target="_blank" rel="noopener" href="https://gitee.com/yaru722" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    </div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/web-blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">前端技术笔记</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录前端路上的思考与实践</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/web-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/web-blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/web-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/web-blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/web-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/lc19990308" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/27/posts/ydkjs-25-regex-deep-dive/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+      <meta itemprop="name" content="LC">
+      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端技术笔记">
+    </span>
+      <header class="post-header">
+      
+        <h1 class="post-title" itemprop="name headline">
+          你不知道的JavaScript（二十五）：正则表达式的深度解析——从匹配引擎到回溯陷阱
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-06-27 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-27T00:00:00+08:00">2026-06-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/web-blog/categories/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/" itemprop="url" rel="index"><span itemprop="name">你不知道的javascript</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">正则表达式不是魔法——它是确定有限自动机（DFA）和回溯算法的实现。理解引擎原理才能写出高效无 Bug 的正则</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>正则表达式是每个前端开发者都”会用”但很少”真正懂”的技术。你写过 <code>/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).&#123;8,&#125;$/</code> 来校验密码强度，但可能不知道：</p>
+<blockquote>
+<p>为什么某些正则会卡死页面？”回溯”是什么？<code>贪婪</code> 和 <code>懒惰</code> 匹配有什么区别？</p>
+</blockquote>
+<p>本文从<strong>正则引擎原理</strong>出发，带你彻底理解正则表达式。</p>
+<hr>
+<h2 id="一、正则引擎的两种模式"><a href="#一、正则引擎的两种模式" class="headerlink" title="一、正则引擎的两种模式"></a>一、正则引擎的两种模式</h2><h3 id="1-1-DFA（确定有限自动机）"><a href="#1-1-DFA（确定有限自动机）" class="headerlink" title="1.1 DFA（确定有限自动机）"></a>1.1 DFA（确定有限自动机）</h3><ul>
+<li>  文本驱动：遍历字符串的每个字符</li>
+<li>  <strong>线性时间</strong>，性能稳定</li>
+<li>  不支持反向引用、环视（lookahead/lookbehind）</li>
+<li>  代表语言：awk、lex</li>
+</ul>
+<h3 id="1-2-NFA（非确定有限自动机）"><a href="#1-2-NFA（非确定有限自动机）" class="headerlink" title="1.2 NFA（非确定有限自动机）"></a>1.2 NFA（非确定有限自动机）</h3><ul>
+<li>  正则驱动：按正则表达式模式尝试匹配</li>
+<li>  使用<strong>回溯</strong>（backtracking），最坏情况指数级时间</li>
+<li>  支持反向引用、环视、贪婪/懒惰</li>
+<li>  代表语言：<strong>JavaScript</strong>、Perl、Python、Java</li>
+</ul>
+<blockquote>
+<p><strong>JavaScript 使用的是 NFA 引擎。</strong> 理解 NFA 的回溯机制，是写出高性能正则的关键。</p>
+</blockquote>
+<hr>
+<h2 id="二、NFA-的回溯机制"><a href="#二、NFA-的回溯机制" class="headerlink" title="二、NFA 的回溯机制"></a>二、NFA 的回溯机制</h2><h3 id="2-1-贪婪匹配的回溯"><a href="#2-1-贪婪匹配的回溯" class="headerlink" title="2.1 贪婪匹配的回溯"></a>2.1 贪婪匹配的回溯</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> regex = <span class="regexp">/&quot;.*&quot;/</span></span><br><span class="line"><span class="keyword">const</span> str = <span class="string">&#x27;The &quot;quick&quot; brown &quot;fox&quot;&#x27;</span></span><br><span class="line"><span class="comment">// 匹配过程：</span></span><br><span class="line"><span class="comment">// &quot; → 匹配第一个引号</span></span><br><span class="line"><span class="comment">// .* → 一直匹配到字符串末尾（因为 * 是贪婪的）</span></span><br><span class="line"><span class="comment">// &quot; → 没有字符了 → 回溯！往回退一个字符</span></span><br><span class="line"><span class="comment">// &quot; → 匹配到最后一个引号</span></span><br><span class="line"><span class="comment">// 结果：匹配到 &quot;quick&quot; brown &quot;fox&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>这就是回溯：</strong> 引擎尝试了最长的路径，发现走不通，逐步回退。</p>
+<h3 id="2-2-懒惰匹配的回溯"><a href="#2-2-懒惰匹配的回溯" class="headerlink" title="2.2 懒惰匹配的回溯"></a>2.2 懒惰匹配的回溯</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> regex = <span class="regexp">/&quot;.*?&quot;/</span></span><br><span class="line"><span class="comment">// .*? → 尽可能少地匹配</span></span><br><span class="line"><span class="comment">// 匹配过程：</span></span><br><span class="line"><span class="comment">// &quot; → 匹配第一个引号</span></span><br><span class="line"><span class="comment">// .*? → 尽可能少，尝试匹配 0 次</span></span><br><span class="line"><span class="comment">// &quot; → 检查下一个字符是不是 &quot; → 不是，扩展一次</span></span><br><span class="line"><span class="comment">// ...重复直到遇到 &quot;</span></span><br><span class="line"><span class="comment">// 结果：匹配到 &quot;quick&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>懒惰匹配减少了回溯的次数，但多次尝试</strong>也需要开销。</p>
+<h3 id="2-3-灾难性回溯"><a href="#2-3-灾难性回溯" class="headerlink" title="2.3 灾难性回溯"></a>2.3 灾难性回溯</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 匹配一组 a 和可能存在的 b</span></span><br><span class="line"><span class="keyword">const</span> regex = <span class="regexp">/^(a*)b$/</span>    <span class="comment">// ✅ 没问题</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 嵌套量词导致指数级回溯！</span></span><br><span class="line"><span class="keyword">const</span> regex2 = <span class="regexp">/^(a*)*b$/</span>  <span class="comment">// ❌ 灾难！</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试字符串：</span></span><br><span class="line"><span class="comment">// &quot;aaaaaaaaaac&quot;（10 个 a 后跟 c）</span></span><br><span class="line"><span class="comment">// 引擎会尝试所有可能的分组方式：</span></span><br><span class="line"><span class="comment">// a* 匹配 0 个 a 后，再匹配 0 个 a → 不行</span></span><br><span class="line"><span class="comment">// a* 匹配 1 个 a 后... 等等</span></span><br><span class="line"><span class="comment">// 最终组合数 = 2^10 = 1024 种</span></span><br><span class="line"><span class="comment">// 如果是 20 个 a → 2^20 ≈ 100 万种！</span></span><br><span class="line"><span class="comment">// 30 个 a → 10 亿种！浏览器会卡死</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>常见灾难性回溯模式：</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/(a+)+b/          <span class="comment">// 嵌套加号</span></span><br><span class="line"><span class="regexp">/([a-zA-Z]+)*\d/</span>  <span class="comment">// 嵌套量词</span></span><br><span class="line"><span class="regexp">/(a|aa)+b/</span>        <span class="comment">// 分支重叠</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="三、环视（Lookaround）的底层原理"><a href="#三、环视（Lookaround）的底层原理" class="headerlink" title="三、环视（Lookaround）的底层原理"></a>三、环视（Lookaround）的底层原理</h2><p>环视<strong>不消耗字符</strong>——它只是”向前/向后看一眼”。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 前瞻（Lookahead）：(?=pattern)</span></span><br><span class="line"><span class="comment">// 检查当前位置之后是否匹配，但不移动位置</span></span><br><span class="line"><span class="keyword">const</span> hasDigit = <span class="regexp">/(?=.*\d)/</span>  <span class="comment">// 检查是否包含数字</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 负向前瞻（Negative Lookahead）：(?!pattern)</span></span><br><span class="line"><span class="keyword">const</span> noNumber = <span class="regexp">/(?!^\d+$)/</span>  <span class="comment">// 不全是数字</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 后顾（Lookbehind）：(?&lt;=pattern)</span></span><br><span class="line"><span class="keyword">const</span> afterDollar = <span class="regexp">/(?&lt;=\$)\d+/</span>  <span class="comment">// 匹配 $ 后面的数字</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 负向后顾（Negative Lookbehind）：(?&lt;!pattern)</span></span><br><span class="line"><span class="keyword">const</span> noBefore = <span class="regexp">/(?&lt;!%)x/</span>  <span class="comment">// 匹配前面不是 % 的 x</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>引擎实现：</strong> 遇到环视时，NFA 保存当前位置，尝试匹配环视内的模式，匹配完成后恢复位置。</p>
+<hr>
+<h2 id="四、正则的性能陷阱与优化"><a href="#四、正则的性能陷阱与优化" class="headerlink" title="四、正则的性能陷阱与优化"></a>四、正则的性能陷阱与优化</h2><h3 id="4-1-优化一：避免嵌套量词"><a href="#4-1-优化一：避免嵌套量词" class="headerlink" title="4.1 优化一：避免嵌套量词"></a>4.1 优化一：避免嵌套量词</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ❌ 坏的</span></span><br><span class="line"><span class="keyword">const</span> bad = <span class="regexp">/(a*)*b/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 好的</span></span><br><span class="line"><span class="keyword">const</span> good = <span class="regexp">/a*b/</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2-优化二：使用原子组（Atomic-Group）"><a href="#4-2-优化二：使用原子组（Atomic-Group）" class="headerlink" title="4.2 优化二：使用原子组（Atomic Group）"></a>4.2 优化二：使用原子组（Atomic Group）</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// JavaScript 不支持原生原子组，但可以用前瞻模拟</span></span><br><span class="line"><span class="comment">// (?&gt;pattern) 不是 JS 语法</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 模拟：用前瞻匹配后 + 反向引用消耗</span></span><br><span class="line"><span class="keyword">const</span> simulate = <span class="regexp">/(?=(a+))\1b/</span>  <span class="comment">// 类似于原子组</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3-优化三：具体化字符类"><a href="#4-3-优化三：具体化字符类" class="headerlink" title="4.3 优化三：具体化字符类"></a>4.3 优化三：具体化字符类</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ❌ 多用 .*</span></span><br><span class="line"><span class="keyword">const</span> bad = <span class="regexp">/&lt;div&gt;.*&lt;\/div&gt;/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 使用更具体的字符类</span></span><br><span class="line"><span class="keyword">const</span> good = <span class="regexp">/&lt;div&gt;[^&lt;]*&lt;\/div&gt;/</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-4-优化四：使用起始锚点"><a href="#4-4-优化四：使用起始锚点" class="headerlink" title="4.4 优化四：使用起始锚点"></a>4.4 优化四：使用起始锚点</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ❌ 没有锚点，引擎会在每个位置尝试</span></span><br><span class="line"><span class="keyword">const</span> bad = <span class="regexp">/\d+/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 有锚点，只在开头尝试</span></span><br><span class="line"><span class="keyword">const</span> good = <span class="regexp">/^\d+/</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-5-优化五：减少分支"><a href="#4-5-优化五：减少分支" class="headerlink" title="4.5 优化五：减少分支"></a>4.5 优化五：减少分支</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ❌ 分支顺序影响性能</span></span><br><span class="line"><span class="keyword">const</span> bad = <span class="regexp">/(javascript|javascripts)/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 把更长的分支放前面</span></span><br><span class="line"><span class="keyword">const</span> good = <span class="regexp">/(javascripts|javascript)/</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="五、JavaScript-正则引擎的特殊性"><a href="#五、JavaScript-正则引擎的特殊性" class="headerlink" title="五、JavaScript 正则引擎的特殊性"></a>五、JavaScript 正则引擎的特殊性</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. lastIndex —— sticky 模式的起点</span></span><br><span class="line"><span class="keyword">const</span> regex = <span class="regexp">/foo/y</span>  <span class="comment">// sticky 模式</span></span><br><span class="line">regex.lastIndex = <span class="number">4</span></span><br><span class="line">regex.test(<span class="string">&#x27;foo foo&#x27;</span>) <span class="comment">// false，从 index 4 开始匹配</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. dotAll 模式（s 标志）</span></span><br><span class="line">/hello.world/s  <span class="comment">// . 能匹配换行符</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. Unicode 属性转义</span></span><br><span class="line">/\p&#123;Emoji&#125;/u           <span class="comment">// 匹配 emoji</span></span><br><span class="line">/\p&#123;Script=Han&#125;/u      <span class="comment">// 匹配中文字符</span></span><br><span class="line">/\p&#123;Alphabetic&#125;/u      <span class="comment">// 匹配字母</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 4. 具名捕获组</span></span><br><span class="line"><span class="keyword">const</span> &#123; <span class="attr">groups</span>: &#123; year, month, day &#125; &#125; =</span><br><span class="line">  <span class="regexp">/(?&lt;year&gt;\d&#123;4&#125;)-(?&lt;month&gt;\d&#123;2&#125;)-(?&lt;day&gt;\d&#123;2&#125;)/u</span>.exec(<span class="string">&#x27;2026-06-28&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="六、调试正则回溯"><a href="#六、调试正则回溯" class="headerlink" title="六、调试正则回溯"></a>六、调试正则回溯</h2><p>Chrome DevTools 可以 profiling 正则性能：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在代码中 Benchmark</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">benchmark</span>(<span class="params">regex, str, iterations = <span class="number">1000</span></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> start = performance.now()</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; iterations; i++) &#123;</span><br><span class="line">    regex.test(str)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> performance.now() - start</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> badRegex = <span class="regexp">/^(a*)*b$/</span></span><br><span class="line"><span class="keyword">const</span> goodRegex = <span class="regexp">/^a*b$/</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;Bad:&#x27;</span>, benchmark(badRegex, <span class="string">&#x27;aaaaaaaaac&#x27;</span>, <span class="number">100</span>))  <span class="comment">// 可能数秒</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;Good:&#x27;</span>, benchmark(goodRegex, <span class="string">&#x27;aaaaaaaaac&#x27;</span>, <span class="number">100</span>)) <span class="comment">// 不到 1ms</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="七、正则引擎执行概览"><a href="#七、正则引擎执行概览" class="headerlink" title="七、正则引擎执行概览"></a>七、正则引擎执行概览</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">字符串: &quot;cab&quot;</span><br><span class="line">正则: /a/</span><br><span class="line"></span><br><span class="line">1. 引擎从位置 0 开始 → &#x27;c&#x27; 不匹配 &#x27;a&#x27;</span><br><span class="line">2. 引擎前进到位置 1 → &#x27;a&#x27; 匹配 &#x27;a&#x27; ✅</span><br><span class="line">3. 返回匹配结果</span><br><span class="line"></span><br><span class="line">字符串: &quot;aaaaac&quot;</span><br><span class="line">正则: /a*b/</span><br><span class="line"></span><br><span class="line">1. a* 贪婪匹配 5 个 a → 位置 5: &#x27;c&#x27; 不匹配 b → 回溯</span><br><span class="line">2. a* 匹配 4 个 a → 位置 4: &#x27;a&#x27; 不匹配 b → 回溯</span><br><span class="line">3. ... 继续回溯直到 a* 匹配 0 个 a</span><br><span class="line">4. 位置 0: &#x27;a&#x27; 不匹配 b → 整体匹配失败</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="八、总结"><a href="#八、总结" class="headerlink" title="八、总结"></a>八、总结</h2><table>
+<thead>
+<tr>
+<th>概念</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>NFA</td>
+<td>JavaScript 用的正则引擎类型，基于回溯</td>
+</tr>
+<tr>
+<td>回溯</td>
+<td>走不通时回退到上一个决策点重试</td>
+</tr>
+<tr>
+<td>灾难性回溯</td>
+<td>嵌套量词导致指数级尝试</td>
+</tr>
+<tr>
+<td>贪婪</td>
+<td><code>*</code>, <code>+</code> —— 尽可能多匹配</td>
+</tr>
+<tr>
+<td>懒惰</td>
+<td><code>*?</code>, <code>+?</code> —— 尽可能少匹配</td>
+</tr>
+<tr>
+<td>环视</td>
+<td><code>(?=...)</code>, <code>(?!...)</code> —— 不消耗字符的检查</td>
+</tr>
+</tbody></table>
+<p><strong>核心建议：</strong> 写正则时，始终问自己——“如果匹配失败，引擎要回溯多少次？”</p>
+
+    </div>
+
+    
+    
+    
+<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/web-blog/2026/06/27/posts/ydkjs-25-regex-deep-dive/">你不知道的JavaScript（二十五）：正则表达式的深度解析——从匹配引擎到回溯陷阱</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a></p>
+  <p><span>发布时间:</span>2026年06月27日 - 00:06</p>
+  <p><span>最后更新:</span>2026年06月28日 - 15:06</p>
+  <p><span>原始链接:</span><a href="/web-blog/2026/06/27/posts/ydkjs-25-regex-deep-dive/" title="你不知道的JavaScript（二十五）：正则表达式的深度解析——从匹配引擎到回溯陷阱">https://lc19990308.github.io/web-blog/2026/06/27/posts/ydkjs-25-regex-deep-dive/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://lc19990308.github.io/web-blog/2026/06/27/posts/ydkjs-25-regex-deep-dive/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+    });
+    });  
+</script>
+
+      
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>LC
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://lc19990308.github.io/web-blog/2026/06/27/posts/ydkjs-25-regex-deep-dive/" title="你不知道的JavaScript（二十五）：正则表达式的深度解析——从匹配引擎到回溯陷阱">https://lc19990308.github.io/web-blog/2026/06/27/posts/ydkjs-25-regex-deep-dive/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/web-blog/tags/JavaScript/" ****><i class="fa fa-tag"></i> JavaScript</a>
+              <a href="/web-blog/tags/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/" ****><i class="fa fa-tag"></i> 你不知道的javascript</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/06/26/posts/ydkjs-02-lexical-scope/" rel="prev" title="你不知道的JavaScript（二）：词法作用域——JavaScript 的静态作用域规则">
+      <i class="fa fa-chevron-left"></i> 你不知道的JavaScript（二）：词法作用域——JavaScript 的静态作用域规则
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/06/27/posts/ydkjs-24-async-iterator/" rel="next" title="你不知道的JavaScript（二十四）：异步迭代器与流式数据处理">
+      你不知道的JavaScript（二十四）：异步迭代器与流式数据处理 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%AD%A3%E5%88%99%E5%BC%95%E6%93%8E%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">一、正则引擎的两种模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-DFA%EF%BC%88%E7%A1%AE%E5%AE%9A%E6%9C%89%E9%99%90%E8%87%AA%E5%8A%A8%E6%9C%BA%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 DFA（确定有限自动机）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-NFA%EF%BC%88%E9%9D%9E%E7%A1%AE%E5%AE%9A%E6%9C%89%E9%99%90%E8%87%AA%E5%8A%A8%E6%9C%BA%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">1.2 NFA（非确定有限自动机）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81NFA-%E7%9A%84%E5%9B%9E%E6%BA%AF%E6%9C%BA%E5%88%B6"><span class="nav-number">3.</span> <span class="nav-text">二、NFA 的回溯机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E8%B4%AA%E5%A9%AA%E5%8C%B9%E9%85%8D%E7%9A%84%E5%9B%9E%E6%BA%AF"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 贪婪匹配的回溯</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E6%87%92%E6%83%B0%E5%8C%B9%E9%85%8D%E7%9A%84%E5%9B%9E%E6%BA%AF"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 懒惰匹配的回溯</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E7%81%BE%E9%9A%BE%E6%80%A7%E5%9B%9E%E6%BA%AF"><span class="nav-number">3.3.</span> <span class="nav-text">2.3 灾难性回溯</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E7%8E%AF%E8%A7%86%EF%BC%88Lookaround%EF%BC%89%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86"><span class="nav-number">4.</span> <span class="nav-text">三、环视（Lookaround）的底层原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E6%AD%A3%E5%88%99%E7%9A%84%E6%80%A7%E8%83%BD%E9%99%B7%E9%98%B1%E4%B8%8E%E4%BC%98%E5%8C%96"><span class="nav-number">5.</span> <span class="nav-text">四、正则的性能陷阱与优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E4%BC%98%E5%8C%96%E4%B8%80%EF%BC%9A%E9%81%BF%E5%85%8D%E5%B5%8C%E5%A5%97%E9%87%8F%E8%AF%8D"><span class="nav-number">5.1.</span> <span class="nav-text">4.1 优化一：避免嵌套量词</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E4%BC%98%E5%8C%96%E4%BA%8C%EF%BC%9A%E4%BD%BF%E7%94%A8%E5%8E%9F%E5%AD%90%E7%BB%84%EF%BC%88Atomic-Group%EF%BC%89"><span class="nav-number">5.2.</span> <span class="nav-text">4.2 优化二：使用原子组（Atomic Group）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-%E4%BC%98%E5%8C%96%E4%B8%89%EF%BC%9A%E5%85%B7%E4%BD%93%E5%8C%96%E5%AD%97%E7%AC%A6%E7%B1%BB"><span class="nav-number">5.3.</span> <span class="nav-text">4.3 优化三：具体化字符类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-%E4%BC%98%E5%8C%96%E5%9B%9B%EF%BC%9A%E4%BD%BF%E7%94%A8%E8%B5%B7%E5%A7%8B%E9%94%9A%E7%82%B9"><span class="nav-number">5.4.</span> <span class="nav-text">4.4 优化四：使用起始锚点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-5-%E4%BC%98%E5%8C%96%E4%BA%94%EF%BC%9A%E5%87%8F%E5%B0%91%E5%88%86%E6%94%AF"><span class="nav-number">5.5.</span> <span class="nav-text">4.5 优化五：减少分支</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81JavaScript-%E6%AD%A3%E5%88%99%E5%BC%95%E6%93%8E%E7%9A%84%E7%89%B9%E6%AE%8A%E6%80%A7"><span class="nav-number">6.</span> <span class="nav-text">五、JavaScript 正则引擎的特殊性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E8%B0%83%E8%AF%95%E6%AD%A3%E5%88%99%E5%9B%9E%E6%BA%AF"><span class="nav-number">7.</span> <span class="nav-text">六、调试正则回溯</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E6%AD%A3%E5%88%99%E5%BC%95%E6%93%8E%E6%89%A7%E8%A1%8C%E6%A6%82%E8%A7%88"><span class="nav-number">8.</span> <span class="nav-text">七、正则引擎执行概览</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E6%80%BB%E7%BB%93"><span class="nav-number">9.</span> <span class="nav-text">八、总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="LC"
+      src="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+  <p class="site-author-name" itemprop="name">LC</p>
+  <div class="site-description" itemprop="description">专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/web-blog/archives/">
+        
+          <span class="site-state-item-count">145</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/web-blog/categories/">
+          
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/web-blog/tags/">
+          
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button motion-element"><i class="fa fa-comment"></i>
+    Chat
+  </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lc19990308/web-blog" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lc19990308&#x2F;web-blog" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:jarridaddison4@gmail.com" title="E-Mail → mailto:jarridaddison4@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/web-blog/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=441491828&auto=1&height=66"></iframe>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LC</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>-->
+<div class="powered-by">
+  <i class="fa fa-user-md"></i>
+  <span id="busuanzi_container_site_pv">
+    本站访问量:<span id="busuanzi_value_site_pv"></span>次
+  </span>
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv">
+    本站总访客量：<span id="busuanzi_value_site_uv"></span>人
+  </span>
+</div>
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共207.6k字</span>
+</div>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/web-blog/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/web-blog/js/utils.js"></script>
+
+<script src="/web-blog/js/motion.js"></script>
+
+
+<script src="/web-blog/js/schemes/pisces.js"></script>
+
+
+<script src="/web-blog/js/next-boot.js"></script>
+
+<script src="/web-blog/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/web-blog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+</body>
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</html>

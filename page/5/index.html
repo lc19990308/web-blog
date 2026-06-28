@@ -198,6 +198,708 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/26/posts/ydkjs-08-prototype-chain/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+      <meta itemprop="name" content="LC">
+      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端技术笔记">
+    </span>
+      <header class="post-header">
+      
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/web-blog/2026/06/26/posts/ydkjs-08-prototype-chain/" class="post-title-link" itemprop="url">你不知道的JavaScript（八）：原型与原型链——JavaScript 继承的底层实现</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-06-26 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-26T00:00:00+08:00">2026-06-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/web-blog/categories/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/" itemprop="url" rel="index"><span itemprop="name">你不知道的javascript</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>深入 JavaScript 原型链机制，理解 [[Prototype]]、prototype 属性、原型链查找规则，以及基于原型的继承模式</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/web-blog/2026/06/26/posts/ydkjs-08-prototype-chain/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+<div>
+      
+</div>
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/26/posts/ydkjs-11-values-array-string-number/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+      <meta itemprop="name" content="LC">
+      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端技术笔记">
+    </span>
+      <header class="post-header">
+      
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/web-blog/2026/06/26/posts/ydkjs-11-values-array-string-number/" class="post-title-link" itemprop="url">你不知道的JavaScript（十一）：值的底层机制——数组、字符串、数字的特殊行为</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-06-26 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-26T00:00:00+08:00">2026-06-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/web-blog/categories/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/" itemprop="url" rel="index"><span itemprop="name">你不知道的javascript</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>深入 JavaScript 中数组、字符串、数字三大值类型的底层行为：稀疏数组、类数组、数字的整数范围、字符串的码点与码元</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/web-blog/2026/06/26/posts/ydkjs-11-values-array-string-number/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+<div>
+      
+</div>
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/26/posts/ydkjs-10-type-system/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+      <meta itemprop="name" content="LC">
+      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端技术笔记">
+    </span>
+      <header class="post-header">
+      
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/web-blog/2026/06/26/posts/ydkjs-10-type-system/" class="post-title-link" itemprop="url">你不知道的JavaScript（十）：JavaScript 的类型系统——七大内置类型深度解析</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-06-26 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-26T00:00:00+08:00">2026-06-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/web-blog/categories/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/" itemprop="url" rel="index"><span itemprop="name">你不知道的javascript</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>JavaScript 有七种内置类型：null、undefined、boolean、number、string、object、symbol。深入解析每种类型的本质、边界情况和常见误区</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/web-blog/2026/06/26/posts/ydkjs-10-type-system/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+<div>
+      
+</div>
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/26/posts/ydkjs-12-native-functions/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+      <meta itemprop="name" content="LC">
+      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端技术笔记">
+    </span>
+      <header class="post-header">
+      
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/web-blog/2026/06/26/posts/ydkjs-12-native-functions/" class="post-title-link" itemprop="url">你不知道的JavaScript（十二）：原生函数——String、Number、Boolean、Array、Object 的内幕</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-06-26 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-26T00:00:00+08:00">2026-06-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/web-blog/categories/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/" itemprop="url" rel="index"><span itemprop="name">你不知道的javascript</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>JavaScript 的内建原生函数（String、Number、Boolean 等）不仅仅是构造函数，它们的行为与原始类型有本质区别。深入解析包装对象、内部槽位、[[Class]] 标签</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/web-blog/2026/06/26/posts/ydkjs-12-native-functions/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+<div>
+      
+</div>
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/26/posts/ydkjs-14-equality-comparison/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+      <meta itemprop="name" content="LC">
+      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端技术笔记">
+    </span>
+      <header class="post-header">
+      
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/web-blog/2026/06/26/posts/ydkjs-14-equality-comparison/" class="post-title-link" itemprop="url">你不知道的JavaScript（十四）：相等比较——== 与 === 的完全指南</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-06-26 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-26T00:00:00+08:00">2026-06-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/web-blog/categories/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/" itemprop="url" rel="index"><span itemprop="name">你不知道的javascript</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>深度解析 == 与 === 的底层区别、宽松相等（==）的完整转换规则表、Object.is 的三路相等，以及各种边界情况的比较结果</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/web-blog/2026/06/26/posts/ydkjs-14-equality-comparison/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+<div>
+      
+</div>
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/26/posts/ydkjs-15-event-loop-and-callbacks/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+      <meta itemprop="name" content="LC">
+      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端技术笔记">
+    </span>
+      <header class="post-header">
+      
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/web-blog/2026/06/26/posts/ydkjs-15-event-loop-and-callbacks/" class="post-title-link" itemprop="url">你不知道的JavaScript（十五）：事件循环与回调——JavaScript 异步编程基础</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-06-26 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-26T00:00:00+08:00">2026-06-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/web-blog/categories/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/" itemprop="url" rel="index"><span itemprop="name">你不知道的javascript</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>深入 JavaScript 的事件循环机制：调用栈、任务队列、微任务、宏任务，以及回调函数在异步编程中的角色与问题</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/web-blog/2026/06/26/posts/ydkjs-15-event-loop-and-callbacks/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+<div>
+      
+</div>
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/26/posts/ydkjs-18-grammar-and-statements/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+      <meta itemprop="name" content="LC">
+      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端技术笔记">
+    </span>
+      <header class="post-header">
+      
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/web-blog/2026/06/26/posts/ydkjs-18-grammar-and-statements/" class="post-title-link" itemprop="url">你不知道的JavaScript（十八）：JavaScript 语法详解——表达式、语句、ASI 与分号</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-06-26 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-26T00:00:00+08:00">2026-06-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/web-blog/categories/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/" itemprop="url" rel="index"><span itemprop="name">你不知道的javascript</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>深入 JavaScript 的语法细节：表达式（Expression）与语句（Statement）的区别、自动分号插入（ASI）、分号规则、以及各种边界语法行为</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/web-blog/2026/06/26/posts/ydkjs-18-grammar-and-statements/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+<div>
+      
+</div>
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/26/posts/ydkjs-16-promise/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+      <meta itemprop="name" content="LC">
+      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端技术笔记">
+    </span>
+      <header class="post-header">
+      
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/web-blog/2026/06/26/posts/ydkjs-16-promise/" class="post-title-link" itemprop="url">你不知道的JavaScript（十六）：Promise 深入理解——解决回调问题的终极方案</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-06-26 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-26T00:00:00+08:00">2026-06-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/web-blog/categories/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/" itemprop="url" rel="index"><span itemprop="name">你不知道的javascript</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>深入 Promise 的底层实现原理，从状态机、链式调用、错误传播到微任务调度，手写实现一个完整的 Promise</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/web-blog/2026/06/26/posts/ydkjs-16-promise/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+<div>
+      
+</div>
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/26/posts/ydkjs-19-performance-and-benchmark/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+      <meta itemprop="name" content="LC">
+      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端技术笔记">
+    </span>
+      <header class="post-header">
+      
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/web-blog/2026/06/26/posts/ydkjs-19-performance-and-benchmark/" class="post-title-link" itemprop="url">你不知道的JavaScript（十九）：JavaScript 性能测试与优化——基准分析与 JIT 陷阱</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-06-26 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-26T00:00:00+08:00">2026-06-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/web-blog/categories/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/" itemprop="url" rel="index"><span itemprop="name">你不知道的javascript</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>深入了解 JavaScript 引擎的 JIT 编译优化机制、基准测试的正确方法、性能测量工具（Benchmark.js、Performance API），以及常见的优化陷阱</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/web-blog/2026/06/26/posts/ydkjs-19-performance-and-benchmark/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+<div>
+      
+</div>
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/26/posts/ydkjs-20-metaprogramming/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -272,712 +974,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/26/posts/ydkjs-17-generator-and-async/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
-      <meta itemprop="name" content="LC">
-      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="前端技术笔记">
-    </span>
-      <header class="post-header">
-      
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/web-blog/2026/06/26/posts/ydkjs-17-generator-and-async/" class="post-title-link" itemprop="url">你不知道的JavaScript（十七）：Generator + Promise——async/await 的底层实现</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2026-06-26 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-26T00:00:00+08:00">2026-06-26</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/web-blog/categories/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/" itemprop="url" rel="index"><span itemprop="name">你不知道的javascript</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>深入 Generator 的迭代器机制、两路通信原理，以及它如何与 Promise 结合实现异步流程控制——这正是 async/await 的底层实现</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/web-blog/2026/06/26/posts/ydkjs-17-generator-and-async/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-<div>
-      
-</div>
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/26/posts/ydkjs-09-behavior-delegation/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
-      <meta itemprop="name" content="LC">
-      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="前端技术笔记">
-    </span>
-      <header class="post-header">
-      
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/web-blog/2026/06/26/posts/ydkjs-09-behavior-delegation/" class="post-title-link" itemprop="url">你不知道的JavaScript（九）：行为委托——比"类继承"更 JavaScript 的方式</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2026-06-26 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-26T00:00:00+08:00">2026-06-26</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/web-blog/categories/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/" itemprop="url" rel="index"><span itemprop="name">你不知道的javascript</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>JavaScript 没有真正的"类"，只有对象。行为委托（Behavior Delegation）是一种比"模拟类"更自然、更简洁的代码组织方式</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/web-blog/2026/06/26/posts/ydkjs-09-behavior-delegation/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-<div>
-      
-</div>
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/26/posts/ydkjs-13-coercion/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
-      <meta itemprop="name" content="LC">
-      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="前端技术笔记">
-    </span>
-      <header class="post-header">
-      
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/web-blog/2026/06/26/posts/ydkjs-13-coercion/" class="post-title-link" itemprop="url">你不知道的JavaScript（十三）：强制类型转换（Coercion）——隐式与显式的完整解析</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2026-06-26 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-26T00:00:00+08:00">2026-06-26</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/web-blog/categories/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/" itemprop="url" rel="index"><span itemprop="name">你不知道的javascript</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>JavaScript 的强制类型转换不是"bug"，而是一套可预测的规则。深入 ToPrimitive、ToString、ToNumber、ToBoolean 的抽象操作</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/web-blog/2026/06/26/posts/ydkjs-13-coercion/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-<div>
-      
-</div>
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/25/ai-assisted-frontend-workflow/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
-      <meta itemprop="name" content="LC">
-      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="前端技术笔记">
-    </span>
-      <header class="post-header">
-      
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/web-blog/2026/06/25/ai-assisted-frontend-workflow/" class="post-title-link" itemprop="url">AI 辅助前端开发工作流：Copilot、AtomCode 与 Prompt 工程</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2026-06-25 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-25T00:00:00+08:00">2026-06-25</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/web-blog/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>系统梳理 AI 编程工具在前端开发中的实战用法，从 Copilot 的代码补全、AtomCode 的自主编码到 Prompt 工程技巧，打造高效的 AI 辅助工作流</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/web-blog/2026/06/25/ai-assisted-frontend-workflow/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-<div>
-      
-</div>
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/25/browser-caching-guide/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
-      <meta itemprop="name" content="LC">
-      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="前端技术笔记">
-    </span>
-      <header class="post-header">
-      
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/web-blog/2026/06/25/browser-caching-guide/" class="post-title-link" itemprop="url">浏览器缓存策略完全指南：强缓存、协商缓存与 CDN 实战</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2026-06-25 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-25T00:00:00+08:00">2026-06-25</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/web-blog/categories/%E6%B5%8F%E8%A7%88%E5%99%A8/" itemprop="url" rel="index"><span itemprop="name">浏览器</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>深入浏览器缓存机制，详解强缓存（Expires/Cache-Control）与协商缓存（Last-Modified/ETag）的原理、配置策略、CDN 缓存联动及常见问题排查</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/web-blog/2026/06/25/browser-caching-guide/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-<div>
-      
-</div>
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/25/cors-cross-origin-guide/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
-      <meta itemprop="name" content="LC">
-      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="前端技术笔记">
-    </span>
-      <header class="post-header">
-      
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/web-blog/2026/06/25/cors-cross-origin-guide/" class="post-title-link" itemprop="url">跨域与 CORS 完全解析：从同源策略到代理配置</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2026-06-25 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-25T00:00:00+08:00">2026-06-25</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/web-blog/categories/%E6%B5%8F%E8%A7%88%E5%99%A8/" itemprop="url" rel="index"><span itemprop="name">浏览器</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>深入浏览器同源策略与跨域资源共享（CORS）机制，涵盖简单请求/预检请求、各种跨域解决方案、常见错误排查与代理配置</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/web-blog/2026/06/25/cors-cross-origin-guide/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-<div>
-      
-</div>
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/25/build-tools-comparison/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
-      <meta itemprop="name" content="LC">
-      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="前端技术笔记">
-    </span>
-      <header class="post-header">
-      
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/web-blog/2026/06/25/build-tools-comparison/" class="post-title-link" itemprop="url">前端构建工具对比：Vite vs Webpack vs Turbopack vs Rspack</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2026-06-25 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-25T00:00:00+08:00">2026-06-25</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/web-blog/categories/%E5%B7%A5%E7%A8%8B%E5%8C%96/" itemprop="url" rel="index"><span itemprop="name">工程化</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>深度对比四大主流构建工具：Vite、Webpack、Turbopack、Rspack，从冷启动、热更新、构建速度、配置复杂度、生态兼容性等 10 个维度全面分析</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/web-blog/2026/06/25/build-tools-comparison/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-<div>
-      
-</div>
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/25/component-testing-strategy/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
-      <meta itemprop="name" content="LC">
-      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="前端技术笔记">
-    </span>
-      <header class="post-header">
-      
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/web-blog/2026/06/25/component-testing-strategy/" class="post-title-link" itemprop="url">前端组件测试策略：从渲染测试到交互测试（Vitest + Testing Library）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2026-06-25 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-25T00:00:00+08:00">2026-06-25</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/web-blog/categories/%E6%B5%8B%E8%AF%95/" itemprop="url" rel="index"><span itemprop="name">测试</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>完整讲解前端组件测试的方法论与实践，涵盖渲染测试、事件交互、异步等待、Mock 组件依赖，以及 Vue Testing Library 的使用技巧</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/web-blog/2026/06/25/component-testing-strategy/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-<div>
-      
-</div>
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/25/css-2025-new-features/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
-      <meta itemprop="name" content="LC">
-      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="前端技术笔记">
-    </span>
-      <header class="post-header">
-      
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/web-blog/2026/06/25/css-2025-new-features/" class="post-title-link" itemprop="url">CSS 2025 新特性全景：has()、View Transitions、CSS Layers、Scroll-Driven Animations</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2026-06-25 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-25T00:00:00+08:00">2026-06-25</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/web-blog/categories/css/" itemprop="url" rel="index"><span itemprop="name">css</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>四大 CSS 重磅新特性的原理与实战，涵盖 :has() 选择器、View Transitions API、@layer 层级管理、以及滚动驱动动画</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/web-blog/2026/06/25/css-2025-new-features/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-<div>
-      
-</div>
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/web-blog/page/4/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/web-blog/">1</a><span class="space">&hellip;</span><a class="page-number" href="/web-blog/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/web-blog/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/web-blog/page/14/">14</a><a class="extend next" rel="next" href="/web-blog/page/6/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/web-blog/page/4/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/web-blog/">1</a><span class="space">&hellip;</span><a class="page-number" href="/web-blog/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/web-blog/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/web-blog/page/15/">15</a><a class="extend next" rel="next" href="/web-blog/page/6/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1045,7 +1045,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/web-blog/archives/">
         
-          <span class="site-state-item-count">136</span>
+          <span class="site-state-item-count">145</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1127,7 +1127,7 @@
 </div>
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共196.2k字</span>
+  <span class="post-count">博客全站共207.6k字</span>
 </div>
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
