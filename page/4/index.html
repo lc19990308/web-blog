@@ -510,6 +510,84 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/27/posts/ydkjs-22-memory-management-and-gc/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+      <meta itemprop="name" content="LC">
+      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端技术笔记">
+    </span>
+      <header class="post-header">
+      
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/web-blog/2026/06/27/posts/ydkjs-22-memory-management-and-gc/" class="post-title-link" itemprop="url">你不知道的JavaScript（二十二）：内存管理与 V8 垃圾回收机制</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-06-27 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-27T00:00:00+08:00">2026-06-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/web-blog/categories/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/" itemprop="url" rel="index"><span itemprop="name">你不知道的javascript</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>JS 开发者眼中的「自动内存管理」并非魔法——V8 的分代垃圾回收、标记-清除、增量标记、内存泄漏模式与 WeakRef 的正确用法</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/web-blog/2026/06/27/posts/ydkjs-22-memory-management-and-gc/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+<div>
+      
+</div>
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/26/posts/ydkjs-02-lexical-scope/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -896,84 +974,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/26/posts/ydkjs-07-new-operator/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
-      <meta itemprop="name" content="LC">
-      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="前端技术笔记">
-    </span>
-      <header class="post-header">
-      
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/web-blog/2026/06/26/posts/ydkjs-07-new-operator/" class="post-title-link" itemprop="url">你不知道的JavaScript（七）：new 操作符——构造函数与实例的底层机制</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2026-06-26 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-26T00:00:00+08:00">2026-06-26</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/web-blog/categories/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/" itemprop="url" rel="index"><span itemprop="name">你不知道的javascript</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>深入 new 操作符的底层实现机制，理解构造函数、实例创建、原型连接的全过程，手写实现一个完整的 new 函数</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/web-blog/2026/06/26/posts/ydkjs-07-new-operator/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-<div>
-      
-</div>
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1045,7 +1045,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/web-blog/archives/">
         
-          <span class="site-state-item-count">145</span>
+          <span class="site-state-item-count">146</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1127,7 +1127,7 @@
 </div>
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共207.6k字</span>
+  <span class="post-count">博客全站共209k字</span>
 </div>
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
