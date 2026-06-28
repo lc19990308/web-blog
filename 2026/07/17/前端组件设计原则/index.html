@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/web-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/web-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/web-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/web-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/web-blog/css/main.css">
+
+
+<link rel="stylesheet" href="/web-blog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/web-blog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/web-blog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lc19990308.github.io","root":"/web-blog/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="好的组件设计是可维护前端架构的基石。本文从原子设计理论出发，结合 SOLID 原则与实际案例，系统讲解前端组件设计方法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端组件设计原则：从原子到页面">
+<meta property="og:url" content="https://lc19990308.github.io/web-blog/2026/07/17/%E5%89%8D%E7%AB%AF%E7%BB%84%E4%BB%B6%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/index.html">
+<meta property="og:site_name" content="前端技术笔记">
+<meta property="og:description" content="好的组件设计是可维护前端架构的基石。本文从原子设计理论出发，结合 SOLID 原则与实际案例，系统讲解前端组件设计方法">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-07-16T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-28T06:36:02.174Z">
+<meta property="article:author" content="LC">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="架构">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://lc19990308.github.io/web-blog/2026/07/17/%E5%89%8D%E7%AB%AF%E7%BB%84%E4%BB%B6%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>前端组件设计原则：从原子到页面 | 前端技术笔记</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/web-blog/atom.xml" title="前端技术笔记" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband">
+    <a target="_blank" rel="noopener" href="https://gitee.com/yaru722" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    </div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/web-blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">前端技术笔记</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录前端路上的思考与实践</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/web-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/web-blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/web-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/web-blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/web-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/lc19990308" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/07/17/%E5%89%8D%E7%AB%AF%E7%BB%84%E4%BB%B6%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+      <meta itemprop="name" content="LC">
+      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端技术笔记">
+    </span>
+      <header class="post-header">
+      
+        <h1 class="post-title" itemprop="name headline">
+          前端组件设计原则：从原子到页面
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-07-17 00:00:00" itemprop="dateCreated datePublished" datetime="2026-07-17T00:00:00+08:00">2026-07-17</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/web-blog/categories/%E6%9E%B6%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">架构</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">好的组件设计是可维护前端架构的基石。本文从原子设计理论出发，结合 SOLID 原则与实际案例，系统讲解前端组件设计方法</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>“组件”是现代前端开发的原子单位。但一个常见的困惑是：</p>
+<blockquote>
+<p>“这个 Modal 是应该独立成一个组件，还是和页面写在一起？”</p>
+</blockquote>
+<p>好的组件设计没有标准答案，但有<strong>可遵循的原则</strong>。本文将系统讲解组件设计的核心原则。</p>
+<hr>
+<h2 id="一、原子设计理论"><a href="#一、原子设计理论" class="headerlink" title="一、原子设计理论"></a>一、原子设计理论</h2><p>Brad Frost 提出的原子设计（Atomic Design）是组件分层的最佳参考：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">原子（Atoms）     →  按钮、输入框、图标</span><br><span class="line">分子（Molecules） →  搜索栏（输入框 + 按钮）</span><br><span class="line">有机体（Organisms）→ 导航栏（Logo + 搜索栏 + 菜单）</span><br><span class="line">模板（Templates） →  页面骨架</span><br><span class="line">页面（Pages）     →  填充了真实内容的模板</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">// 原子 — 基础 UI 元素</span><br><span class="line">function Button(&#123; children, variant &#125;: &#123; children: ReactNode; variant: &#x27;primary&#x27; | &#x27;secondary&#x27; &#125;) &#123; &#125;</span><br><span class="line"></span><br><span class="line">// 分子 — 组合原子</span><br><span class="line">function SearchBar(&#123; onSearch &#125;: &#123; onSearch: (q: string) =&gt; void &#125;) &#123;</span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;Input placeholder=&quot;搜索...&quot; /&gt;</span><br><span class="line">      &lt;Button variant=&quot;primary&quot;&gt;搜索&lt;/Button&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 有机体 — 组合分子</span><br><span class="line">function Header() &#123;</span><br><span class="line">  return (</span><br><span class="line">    &lt;header&gt;</span><br><span class="line">      &lt;Logo /&gt;</span><br><span class="line">      &lt;SearchBar /&gt;</span><br><span class="line">      &lt;UserMenu /&gt;</span><br><span class="line">    &lt;/header&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="二、SOLID-原则在前端的应用"><a href="#二、SOLID-原则在前端的应用" class="headerlink" title="二、SOLID 原则在前端的应用"></a>二、SOLID 原则在前端的应用</h2><h3 id="S-——-单一职责"><a href="#S-——-单一职责" class="headerlink" title="S —— 单一职责"></a>S —— 单一职责</h3><p>一个组件只做一件事：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// ❌ 职责过多：既展示用户信息，又处理编辑逻辑，还处理权限判断</span><br><span class="line">function UserPanel(&#123; userId &#125;) &#123; /* ... */ &#125;</span><br><span class="line"></span><br><span class="line">// ✅ 拆分</span><br><span class="line">function UserInfo(&#123; user &#125;: &#123; user: User &#125;) &#123; /* 只展示 */ &#125;</span><br><span class="line">function EditUserForm(&#123; user, onSave &#125;: &#123; user: User; onSave: (data: User) =&gt; void &#125;) &#123; /* 只编辑 */ &#125;</span><br><span class="line">function withPermission(Component) &#123; /* 只处理权限 */ &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="O-——-开闭原则"><a href="#O-——-开闭原则" class="headerlink" title="O —— 开闭原则"></a>O —— 开闭原则</h3><p>对扩展开放，对修改关闭：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">// ❌ 通过内部判断扩展</span><br><span class="line">function Icon(&#123; name &#125;) &#123;</span><br><span class="line">  switch (name) &#123;</span><br><span class="line">    case &#x27;home&#x27;: return &lt;HomeIcon /&gt;</span><br><span class="line">    case &#x27;user&#x27;: return &lt;UserIcon /&gt;</span><br><span class="line">    // 每加一个图标都要改这里</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// ✅ 通过组合扩展</span><br><span class="line">function Icon(&#123; children &#125;) &#123; return &lt;span className=&quot;icon&quot;&gt;&#123;children&#125;&lt;/span&gt; &#125;</span><br><span class="line">// 使用：&lt;Icon&gt;&lt;HomeIcon /&gt;&lt;/Icon&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="L-——-里氏替换"><a href="#L-——-里氏替换" class="headerlink" title="L —— 里氏替换"></a>L —— 里氏替换</h3><p>子组件应该能替换父组件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">// 如果 AcceptTermsCheckbox 可以作为 Checkbox 的替换</span><br><span class="line">interface CheckboxProps &#123;</span><br><span class="line">  checked: boolean</span><br><span class="line">  onChange: (v: boolean) =&gt; void</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function AcceptTermsCheckbox(props: CheckboxProps) &#123;</span><br><span class="line">  return (</span><br><span class="line">    &lt;label&gt;</span><br><span class="line">      &lt;Checkbox &#123;...props&#125; /&gt;</span><br><span class="line">      我已阅读并同意 &lt;Link to=&quot;/terms&quot;&gt;服务条款&lt;/Link&gt;</span><br><span class="line">    &lt;/label&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="I-——-接口隔离"><a href="#I-——-接口隔离" class="headerlink" title="I —— 接口隔离"></a>I —— 接口隔离</h3><p>不要在 props 中传递不需要的数据：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// ❌ 传递整个对象，组件只用了两个字段</span><br><span class="line">&lt;UserCard user=&#123;user&#125; /&gt; // user 可能包含 password、token 等敏感字段</span><br><span class="line"></span><br><span class="line">// ✅ 只传递需要的 props</span><br><span class="line">&lt;UserCard name=&#123;user.name&#125; avatar=&#123;user.avatar&#125; /&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="D-——-依赖倒置"><a href="#D-——-依赖倒置" class="headerlink" title="D —— 依赖倒置"></a>D —— 依赖倒置</h3><p>高层组件不依赖低层组件的具体实现：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">// ❌ 直接依赖 API</span><br><span class="line">function UserProfile() &#123;</span><br><span class="line">  const [user, setUser] = useState()</span><br><span class="line">  useEffect(() =&gt; &#123; fetch(&#x27;/api/user&#x27;).then(setUser) &#125;, [])</span><br><span class="line">  return &lt;div&gt;&#123;user?.name&#125;&lt;/div&gt;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// ✅ 通过 props 注入（数据源可替换）</span><br><span class="line">function UserProfile(&#123; user &#125;: &#123; user: User &#125;) &#123;</span><br><span class="line">  return &lt;div&gt;&#123;user.name&#125;&lt;/div&gt;</span><br><span class="line">&#125;</span><br><span class="line">// 测试时可以传入 mock 数据，而不需要启动服务器</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="三、组件组合模式"><a href="#三、组件组合模式" class="headerlink" title="三、组件组合模式"></a>三、组件组合模式</h2><h3 id="3-1-复合组件（Compound-Component）"><a href="#3-1-复合组件（Compound-Component）" class="headerlink" title="3.1 复合组件（Compound Component）"></a>3.1 复合组件（Compound Component）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">function Select(&#123; children &#125;: &#123; children: ReactNode &#125;) &#123;</span><br><span class="line">  const [value, setValue] = useState()</span><br><span class="line">  return (</span><br><span class="line">    &lt;SelectContext.Provider value=&#123;&#123; value, setValue &#125;&#125;&gt;</span><br><span class="line">      &#123;children&#125;</span><br><span class="line">    &lt;/SelectContext.Provider&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Select.Option = Option</span><br><span class="line"></span><br><span class="line">// 使用</span><br><span class="line">&lt;Select&gt;</span><br><span class="line">  &lt;Select.Option value=&quot;1&quot;&gt;选项一&lt;/Select.Option&gt;</span><br><span class="line">  &lt;Select.Option value=&quot;2&quot;&gt;选项二&lt;/Select.Option&gt;</span><br><span class="line">&lt;/Select&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-Render-Props"><a href="#3-2-Render-Props" class="headerlink" title="3.2 Render Props"></a>3.2 Render Props</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">function DataFetcher(&#123; url, children &#125;: &#123; url: string; children: (data: any) =&gt; ReactNode &#125;) &#123;</span><br><span class="line">  const [data, setData] = useState(null)</span><br><span class="line">  useEffect(() =&gt; &#123; fetch(url).then(r =&gt; r.json()).then(setData) &#125;, [url])</span><br><span class="line">  return data ? children(data) : &lt;Loading /&gt;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 使用</span><br><span class="line">&lt;DataFetcher url=&quot;/api/posts&quot;&gt;</span><br><span class="line">  &#123;posts =&gt; &lt;PostList posts=&#123;posts&#125; /&gt;&#125;</span><br><span class="line">&lt;/DataFetcher&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-高阶组件（HOC）"><a href="#3-3-高阶组件（HOC）" class="headerlink" title="3.3 高阶组件（HOC）"></a>3.3 高阶组件（HOC）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">function withAuth&lt;P&gt;(Component: React.ComponentType&lt;P&gt;) &#123;</span><br><span class="line">  return function AuthenticatedComponent(props: P) &#123;</span><br><span class="line">    const &#123; user &#125; = useAuth()</span><br><span class="line">    if (!user) return &lt;Navigate to=&quot;/login&quot; /&gt;</span><br><span class="line">    return &lt;Component &#123;...props&#125; user=&#123;user&#125; /&gt;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const AdminPanel = withAuth(AdminPanelContent)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="四、Props-设计原则"><a href="#四、Props-设计原则" class="headerlink" title="四、Props 设计原则"></a>四、Props 设计原则</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">// 好的 Props 命名</span><br><span class="line">interface BadgeProps &#123;</span><br><span class="line">  count: number</span><br><span class="line">  variant: &#x27;success&#x27; | &#x27;warning&#x27; | &#x27;error&#x27;</span><br><span class="line">  size: &#x27;sm&#x27; | &#x27;md&#x27; | &#x27;lg&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 坏的 Props 设计</span><br><span class="line">interface ButtonProps &#123;</span><br><span class="line">  primary?: boolean   // ❌ 布尔命名不好——到底是 primary 还是 primary style？</span><br><span class="line">  show?: boolean      // ❌ 太模糊——show 什么？</span><br><span class="line">  width?: string      // ❌ 不应该让外部控制内部布局</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>5 条 Props 黄金法则：</strong></p>
+<ol>
+<li><strong>避免过多的布尔 props</strong> —— 考虑用 <code>variant</code> 枚举代替</li>
+<li><strong>不要传递 className 和 style</strong> —— 除非组件确实需要自定义样式</li>
+<li><strong>Props 应该是扁平化的</strong> —— 不要传深层嵌套的对象</li>
+<li><strong>提供合理的默认值</strong> —— 让组件可以不传任何 props 也能工作</li>
+<li><strong>用 TypeScript 严格类型化</strong> —— 约束 props 的合法性</li>
+</ol>
+<hr>
+<h2 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h2><p>组件设计是”权衡的艺术”。没有放之四海而皆准的规则，但以下原则可以帮助你做决策：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">是否可复用？     → 是 → 独立组件</span><br><span class="line">                 → 否 → 和父组件写在一起</span><br><span class="line"></span><br><span class="line">是否改变 UI？    → 是 → 可以拆</span><br><span class="line">                 → 否 → 可能是逻辑 hook</span><br><span class="line"></span><br><span class="line">props 是否过多？ → 是 → 考虑拆分</span><br><span class="line">                 → 否 → 保持</span><br><span class="line"></span><br><span class="line">是否依赖外部数据？→ 是 → 考虑将数据获取与展示分离</span><br></pre></td></tr></table></figure>
+
+<p><strong>最终目标是：</strong> 组件高度内聚、低耦合、可测试、可复用。</p>
+
+    </div>
+
+    
+    
+    
+<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/web-blog/2026/07/17/%E5%89%8D%E7%AB%AF%E7%BB%84%E4%BB%B6%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/">前端组件设计原则：从原子到页面</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a></p>
+  <p><span>发布时间:</span>2026年07月17日 - 00:07</p>
+  <p><span>最后更新:</span>2026年06月28日 - 14:06</p>
+  <p><span>原始链接:</span><a href="/web-blog/2026/07/17/%E5%89%8D%E7%AB%AF%E7%BB%84%E4%BB%B6%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" title="前端组件设计原则：从原子到页面">https://lc19990308.github.io/web-blog/2026/07/17/%E5%89%8D%E7%AB%AF%E7%BB%84%E4%BB%B6%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://lc19990308.github.io/web-blog/2026/07/17/%E5%89%8D%E7%AB%AF%E7%BB%84%E4%BB%B6%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+    });
+    });  
+</script>
+
+      
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>LC
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://lc19990308.github.io/web-blog/2026/07/17/%E5%89%8D%E7%AB%AF%E7%BB%84%E4%BB%B6%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" title="前端组件设计原则：从原子到页面">https://lc19990308.github.io/web-blog/2026/07/17/前端组件设计原则/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/web-blog/tags/JavaScript/" ****><i class="fa fa-tag"></i> JavaScript</a>
+              <a href="/web-blog/tags/%E6%9E%B6%E6%9E%84/" ****><i class="fa fa-tag"></i> 架构</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/07/16/Signal-vs-RxJS-vs-Zustand%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86%E5%AF%B9%E6%AF%94/" rel="prev" title="Signal vs RxJS vs Zustand：前端状态管理三兄弟对比">
+      <i class="fa fa-chevron-left"></i> Signal vs RxJS vs Zustand：前端状态管理三兄弟对比
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/07/18/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Next.jsAppRouter/" rel="next" title="深入理解 Next.js App Router：服务端组件、流式渲染与缓存策略">
+      深入理解 Next.js App Router：服务端组件、流式渲染与缓存策略 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%8E%9F%E5%AD%90%E8%AE%BE%E8%AE%A1%E7%90%86%E8%AE%BA"><span class="nav-number">2.</span> <span class="nav-text">一、原子设计理论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81SOLID-%E5%8E%9F%E5%88%99%E5%9C%A8%E5%89%8D%E7%AB%AF%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">二、SOLID 原则在前端的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#S-%E2%80%94%E2%80%94-%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3"><span class="nav-number">3.1.</span> <span class="nav-text">S —— 单一职责</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#O-%E2%80%94%E2%80%94-%E5%BC%80%E9%97%AD%E5%8E%9F%E5%88%99"><span class="nav-number">3.2.</span> <span class="nav-text">O —— 开闭原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#L-%E2%80%94%E2%80%94-%E9%87%8C%E6%B0%8F%E6%9B%BF%E6%8D%A2"><span class="nav-number">3.3.</span> <span class="nav-text">L —— 里氏替换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#I-%E2%80%94%E2%80%94-%E6%8E%A5%E5%8F%A3%E9%9A%94%E7%A6%BB"><span class="nav-number">3.4.</span> <span class="nav-text">I —— 接口隔离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#D-%E2%80%94%E2%80%94-%E4%BE%9D%E8%B5%96%E5%80%92%E7%BD%AE"><span class="nav-number">3.5.</span> <span class="nav-text">D —— 依赖倒置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E7%BB%84%E4%BB%B6%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F"><span class="nav-number">4.</span> <span class="nav-text">三、组件组合模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E5%A4%8D%E5%90%88%E7%BB%84%E4%BB%B6%EF%BC%88Compound-Component%EF%BC%89"><span class="nav-number">4.1.</span> <span class="nav-text">3.1 复合组件（Compound Component）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-Render-Props"><span class="nav-number">4.2.</span> <span class="nav-text">3.2 Render Props</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E9%AB%98%E9%98%B6%E7%BB%84%E4%BB%B6%EF%BC%88HOC%EF%BC%89"><span class="nav-number">4.3.</span> <span class="nav-text">3.3 高阶组件（HOC）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81Props-%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99"><span class="nav-number">5.</span> <span class="nav-text">四、Props 设计原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E6%80%BB%E7%BB%93"><span class="nav-number">6.</span> <span class="nav-text">五、总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="LC"
+      src="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+  <p class="site-author-name" itemprop="name">LC</p>
+  <div class="site-description" itemprop="description">专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/web-blog/archives/">
+        
+          <span class="site-state-item-count">136</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/web-blog/categories/">
+          
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/web-blog/tags/">
+          
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button motion-element"><i class="fa fa-comment"></i>
+    Chat
+  </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lc19990308/web-blog" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lc19990308&#x2F;web-blog" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:jarridaddison4@gmail.com" title="E-Mail → mailto:jarridaddison4@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/web-blog/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=441491828&auto=1&height=66"></iframe>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LC</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>-->
+<div class="powered-by">
+  <i class="fa fa-user-md"></i>
+  <span id="busuanzi_container_site_pv">
+    本站访问量:<span id="busuanzi_value_site_pv"></span>次
+  </span>
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv">
+    本站总访客量：<span id="busuanzi_value_site_uv"></span>人
+  </span>
+</div>
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共196.2k字</span>
+</div>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/web-blog/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/web-blog/js/utils.js"></script>
+
+<script src="/web-blog/js/motion.js"></script>
+
+
+<script src="/web-blog/js/schemes/pisces.js"></script>
+
+
+<script src="/web-blog/js/next-boot.js"></script>
+
+<script src="/web-blog/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/web-blog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+</body>
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</html>
