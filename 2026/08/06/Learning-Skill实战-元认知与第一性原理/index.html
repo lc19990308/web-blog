@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/web-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/web-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/web-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/web-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/web-blog/css/main.css">
+
+
+<link rel="stylesheet" href="/web-blog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/web-blog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/web-blog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lc19990308.github.io","root":"/web-blog/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="从 0 到 1 打造一个学习导航器 AI Skill：需求设计、两轮审查迭代（6&#x2F;10 到 MVP）、方法选择矩阵、掌握证据体系、错因分类，以及前端转产品和 Playwright 两个实战案例">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Learning Skill实战：把元认知和第一性原理变成可执行能力">
+<meta property="og:url" content="https://lc19990308.github.io/web-blog/2026/08/06/Learning-Skill%E5%AE%9E%E6%88%98-%E5%85%83%E8%AE%A4%E7%9F%A5%E4%B8%8E%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86/index.html">
+<meta property="og:site_name" content="前端技术笔记">
+<meta property="og:description" content="从 0 到 1 打造一个学习导航器 AI Skill：需求设计、两轮审查迭代（6&#x2F;10 到 MVP）、方法选择矩阵、掌握证据体系、错因分类，以及前端转产品和 Playwright 两个实战案例">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-08-05T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-08-06T12:43:13.385Z">
+<meta property="article:author" content="LC">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Agent">
+<meta property="article:tag" content="Skill">
+<meta property="article:tag" content="学习">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://lc19990308.github.io/web-blog/2026/08/06/Learning-Skill%E5%AE%9E%E6%88%98-%E5%85%83%E8%AE%A4%E7%9F%A5%E4%B8%8E%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Learning Skill实战：把元认知和第一性原理变成可执行能力 | 前端技术笔记</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/web-blog/atom.xml" title="前端技术笔记" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband">
+    <a target="_blank" rel="noopener" href="https://gitee.com/yaru722" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    </div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/web-blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">前端技术笔记</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录前端路上的思考与实践</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/web-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/web-blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/web-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/web-blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/web-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/lc19990308" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/08/06/Learning-Skill%E5%AE%9E%E6%88%98-%E5%85%83%E8%AE%A4%E7%9F%A5%E4%B8%8E%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+      <meta itemprop="name" content="LC">
+      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端技术笔记">
+    </span>
+      <header class="post-header">
+      
+        <h1 class="post-title" itemprop="name headline">
+          Learning Skill实战：把元认知和第一性原理变成可执行能力
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-08-06 00:00:00" itemprop="dateCreated datePublished" datetime="2026-08-06T00:00:00+08:00">2026-08-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/web-blog/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">从 0 到 1 打造一个学习导航器 AI Skill：需求设计、两轮审查迭代（6/10 到 MVP）、方法选择矩阵、掌握证据体系、错因分类，以及前端转产品和 Playwright 两个实战案例</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>你有没有这样的经历：想学一个新领域，打开收藏夹里几十个教程链接，收藏=学会；或者让 AI 帮你制定学习计划，得到的是一份”从入门到精通”的百天大纲，然后第一天就放弃了。</p>
+<p>问题不在”没有计划”，而在<strong>计划不是为你的目标、基础、时间和风险定制的</strong>，也没有任何验证机制告诉你学没学会。</p>
+<p>这篇文章记录我从 0 到 1 打造一个 <code>learning-navigator</code>（学习导航器）AI Skill 的全过程：它如何把”元认知”和”第一性原理”从口号变成可执行的机制，中间经历的两轮严格审查（第一次被打 6/10），以及两个真实领域的实战结果。</p>
+<blockquote>
+<p>核心定位：<strong>它不是替用户堆学习方法，而是先诊断目标和约束，再选择方法，并用真实产出来校准路径。</strong></p>
+</blockquote>
+<hr>
+<h2 id="一、需求：我想要什么样的-Learning-Skill"><a href="#一、需求：我想要什么样的-Learning-Skill" class="headerlink" title="一、需求：我想要什么样的 Learning Skill"></a>一、需求：我想要什么样的 Learning Skill</h2><p>最初的需求是这样的：</p>
+<blockquote>
+<p>我想制造一个 Learning Skill，能快速让我学习一门陌生的技能和陌生的领域。它具备提取元认知、抓核心的能力，掌握很多优秀的学习法，会根据情况分析来决定规划学习方法，具备第一性原理。</p>
+</blockquote>
+<p>拆解一下，四个关键词：</p>
+<ol>
+<li><strong>元认知</strong>：能意识到”我卡在哪、为什么卡、该怎么改”</li>
+<li><strong>抓核心</strong>：不淹没在细节里，直取领域的核心机制</li>
+<li><strong>方法库</strong>：掌握多种学习法，按情况选择</li>
+<li><strong>第一性原理</strong>：从基本原理推导，而不是堆砌表面知识</li>
+</ol>
+<p>听起来很美好，但”元认知”和”第一性原理”恰恰是最容易被做虚的两个词——因为它们需要<strong>机制</strong>，而不是形容词。</p>
+<hr>
+<h2 id="二、第一版计划：学习闭环的骨架"><a href="#二、第一版计划：学习闭环的骨架" class="headerlink" title="二、第一版计划：学习闭环的骨架"></a>二、第一版计划：学习闭环的骨架</h2><p>第一版设计了一个学习闭环：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">目标任务 → 基线诊断 → 第一性拆解 → 方法选择 → 小步练习 → 证据评估 → 复盘与调整</span><br></pre></td></tr></table></figure>
+
+<p>核心设计思想：</p>
+<ol>
+<li><strong>先定义”最终能完成什么”，而非”要看多少课”</strong></li>
+<li><strong>区分知识类型</strong>：概念理解、工具操作、问题求解、项目交付、表达沟通、动作技能</li>
+<li><strong>第一性原理落地</strong>：强制输出领域最小模型——核心对象、关键关系、因果机制、边界条件、常见误解</li>
+<li><strong>按条件选方法</strong>：<ul>
+<li>概念与长期记忆 → 主动回忆、间隔复习、交错练习</li>
+<li>新手复杂技能 → 示例拆解、模仿后变式练习</li>
+<li>工程与工具 → 最小可运行任务、错误日志、真实交付物</li>
+<li>推理类领域 → 费曼解释、反例、从约束推导</li>
+<li>高表现技能 → 刻意练习、即时反馈、针对薄弱点重复</li>
+</ul>
+</li>
+<li><strong>每个学习周期生成中文任务卡</strong>：时间预算、输入材料、练习动作、交付物、过线标准、失败降级、复习节点</li>
+<li><strong>学习完成以作品、解题、演示、录音或真实操作为证据，而不是”看完了”</strong></li>
+<li><strong>验证而非自我宣称</strong>：完成后用三类陌生任务前测</li>
+</ol>
+<p>看起来挺完整？我当时也觉得可以了。但让 AI 审查后，被打了个 6/10。</p>
+<hr>
+<h2 id="三、第一次审查：6-10，七个漏洞"><a href="#三、第一次审查：6-10，七个漏洞" class="headerlink" title="三、第一次审查：6/10，七个漏洞"></a>三、第一次审查：6/10，七个漏洞</h2><p>审查结论很直接：<strong>方向对，但缺少能让它稳定决策、避免误导、验证真实效果的关键机制</strong>。七个漏洞按严重程度分级：</p>
+<h3 id="P1（必须修复）"><a href="#P1（必须修复）" class="headerlink" title="P1（必须修复）"></a>P1（必须修复）</h3><p><strong>1. 方法选择不可执行</strong><br>计划说”按情况选方法”，但没定义输入字段和决策规则。没有目标类型、时限、起点、反馈可得性、风险等级、可投入时间的权重，最后很可能退化成每次都罗列”主动回忆、费曼学习法”的通用建议。</p>
+<p><strong>2. “陌生领域”边界过宽</strong><br>编程、外语、摄影、医学、投资、网络安全的学习风险和验证方式完全不同。需要风险分层：高风险领域只做基础概念、权威来源导读和模拟练习，不提供可直接执行的专业决策或操作指令。</p>
+<p><strong>3. 把”产出”误当成”掌握”</strong><br>做出一个作品，可能是模仿、AI 辅助或只适用于原题。需要至少三层证据：独立完成、换情境迁移、延迟复现；每层都要定义速度、正确率、质量标准或评价量表。</p>
+<p><strong>4. “第一性原理”有滥用风险</strong><br>语言、工具配置、行业规范、安全流程中，大量内容本质上是约定、经验或标准，不能从基本原理推出。应把内容区分为：可推导机制、必须记住的事实、应遵循的规范、待验证的经验——<strong>而不是强行从第一性原理重建一切</strong>。</p>
+<h3 id="P2（重要但可后置）"><a href="#P2（重要但可后置）" class="headerlink" title="P2（重要但可后置）"></a>P2（重要但可后置）</h3><p><strong>5. 缺少学习输入的质量控制</strong>：规划了”怎么学”，没规定”学什么材料”。需要来源分级、版本/发布日期、原始资料与二手解释的区分。</p>
+<p><strong>6. 缺少持续状态模型</strong>：需要一个唯一的当前学习状态（已掌握、易错点、待复习、卡点假设、下次行动），否则每轮对话都从头规划。</p>
+<p><strong>7. 验证方案不足</strong>：三个陌生任务只能证明它会”生成看似合理的计划”，不能证明学习有效。应预设对照指标。</p>
+<p>审查给的实现目标很精确：</p>
+<blockquote>
+<p>根据目标、基础、约束和风险，为一个学习周期生成可验证的学习行动，并根据证据更新下一周期。</p>
+</blockquote>
+<hr>
+<h2 id="四、优化：从”方法清单”到”决策与校准系统”"><a href="#四、优化：从”方法清单”到”决策与校准系统”" class="headerlink" title="四、优化：从”方法清单”到”决策与校准系统”"></a>四、优化：从”方法清单”到”决策与校准系统”</h2><p>基于审查意见，定位彻底改了——不再是”学习方法清单”，而是：</p>
+<blockquote>
+<p><strong><code>learning-navigator</code> 是一个学习决策与校准系统，负责把陌生领域转成可验证的学习周期。</strong></p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">flowchart LR</span><br><span class="line">  A[&quot;目标与约束&quot;] --&gt; B[&quot;风险分级&quot;]</span><br><span class="line">  B --&gt; C[&quot;基线诊断&quot;]</span><br><span class="line">  C --&gt; D[&quot;领域最小模型&quot;]</span><br><span class="line">  D --&gt; E[&quot;方法选择&quot;]</span><br><span class="line">  E --&gt; F[&quot;3-5 天学习冲刺&quot;]</span><br><span class="line">  F --&gt; G[&quot;独立证据与迁移测试&quot;]</span><br><span class="line">  G --&gt; H[&quot;诊断卡点并更新计划&quot;]</span><br><span class="line">  H --&gt; F</span><br></pre></td></tr></table></figure>
+
+<h3 id="第一版范围（明确收缩）"><a href="#第一版范围（明确收缩）" class="headerlink" title="第一版范围（明确收缩）"></a>第一版范围（明确收缩）</h3><p>只解决一个问题：**在有限时间内，让用户从陌生状态走到”能独立完成一个定义清楚的任务”**。不承诺培养长期专家，不在医疗、法律、金融交易、安全攻防等高风险领域给出可执行专业决策。</p>
+<h3 id="启动诊断：最多五项"><a href="#启动诊断：最多五项" class="headerlink" title="启动诊断：最多五项"></a>启动诊断：最多五项</h3><ol>
+<li>最终要独立完成的任务，以及谁/什么标准验收</li>
+<li>截止时间和实际可投入时间</li>
+<li>当前基础——用一个小任务或口头解释证明，<strong>而非自评”会/不会”</strong></li>
+<li>可用环境、材料、工具和是否能获得反馈</li>
+<li>风险边界</li>
+</ol>
+<p><strong>信息不足时，不输出长计划</strong>，先安排一次 30 分钟基线任务，再只生成一个暂定的 3 天冲刺。</p>
+<h3 id="掌握证据：四层递进"><a href="#掌握证据：四层递进" class="headerlink" title="掌握证据：四层递进"></a>掌握证据：四层递进</h3><p>不以”看完、做过、感觉懂了”判定进步：</p>
+<ol>
+<li>有材料或示例时完成（支架下）</li>
+<li>移除提示后独立完成（独立）</li>
+<li>换一个情境完成迁移任务（迁移）</li>
+<li>延迟复现，检查保留情况（保持）</li>
+</ol>
+<hr>
+<h2 id="五、第二次审查：三个-P1-缺口"><a href="#五、第二次审查：三个-P1-缺口" class="headerlink" title="五、第二次审查：三个 P1 缺口"></a>五、第二次审查：三个 P1 缺口</h2><p>优化版被评价为”已经从’学习方法清单’进化成了可运行的系统”，但仍有三个必须先修的问题：</p>
+<p><strong>P1-1：元认知仍未真正落地。</strong> 计划提到诊断、复盘和调整，但没有要求学习者预测表现、记录实际表现、识别错因、比较策略是否有效——所以它仍是”教学计划生成器”，不是元认知教练。修复：加入固定闭环 <code>学习前预测 → 执行 → 独立测试 → 实际结果 → 错因分类 → 保留/替换策略</code>，每轮至少记录预期得分、实际得分、置信度、主要错因和下一轮策略变化。</p>
+<p><strong>P1-2：掌握证据没有可执行的评分定义。</strong> “独立完成、迁移、延迟复现”是对的，但不同领域如何判定通过没有定义。修复：练习开始前明确评价者是谁、评分量表是什么、通过线是多少、允许哪些辅助。</p>
+<p><strong>P1-3：高风险边界太粗。</strong> 需要三档：可直接学习的基础知识 / 只能在模拟监督下练习的内容 / 必须转交权威教材或专业人士的内容，每档规定允许的输出。</p>
+<p>还有一批 P2 增强：基线诊断改为 5/15/30 三档；方法矩阵增加”反馈可得性、材料可靠性”两个变量；复习间隔不写死 72 小时；来源冲突处理；状态账本先会话内维护。</p>
+<hr>
+<h2 id="六、最终实现：learning-navigator-的五个模块"><a href="#六、最终实现：learning-navigator-的五个模块" class="headerlink" title="六、最终实现：learning-navigator 的五个模块"></a>六、最终实现：learning-navigator 的五个模块</h2><p>经过两轮迭代，最终实现的 Skill 结构：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">~/.codex/skills/learning-navigator/</span><br><span class="line">├── SKILL.md                        # 决策流程和边界</span><br><span class="line">├── sources.md                      # 学习科学资料来源、版本、许可</span><br><span class="line">└── references/</span><br><span class="line">    ├── method-selection.md         # 方法选择矩阵</span><br><span class="line">    └── evidence-and-adjustment.md  # 证据、复盘与调整</span><br></pre></td></tr></table></figure>
+
+<h3 id="模块-1：建立学习契约"><a href="#模块-1：建立学习契约" class="headerlink" title="模块 1：建立学习契约"></a>模块 1：建立学习契约</h3><p>从用户已有信息提取五项（只补问缺失且会改变当前决定的信息，最多五项）：</p>
+<ol>
+<li><strong>可观察目标</strong>：最终要独立完成什么任务？谁或什么标准验收？</li>
+<li><strong>约束</strong>：截止日期、单次和总可投入时间、可用工具</li>
+<li><strong>起点</strong>：用一次解释、小题或最小操作证明当前能力——<strong>不接受”会/不会”自评</strong></li>
+<li><strong>材料与反馈</strong>：有哪些材料？是否有自动测试、同伴、老师或专家反馈？</li>
+<li><strong>风险</strong>：是否涉及健康、法律、资金、真实生产系统、危险设备或他人安全？</li>
+</ol>
+<p><strong>基线档位</strong>：截止很近或目标很小用 5 分钟；常规起步 15 分钟；需要区分多个薄弱点 30 分钟。总时间不超过 30 分钟时，基线最多占 5 分钟，<strong>剩余时间必须用于一个可观察的主动练习</strong>。</p>
+<p><strong>风险门</strong>（最终版三档）：</p>
+<table>
+<thead>
+<tr>
+<th>等级</th>
+<th>处理方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>低风险</td>
+<td>可设计真实练习和独立任务</td>
+</tr>
+<tr>
+<td>受控风险</td>
+<td>只在沙箱、模拟环境、监督或可回滚条件下练习；先写停止条件</td>
+</tr>
+<tr>
+<td>高风险</td>
+<td>只提供基础概念、权威材料定位、案例讨论和模拟评估；要求合格监督或专业人士确认</td>
+</tr>
+</tbody></table>
+<p>法律、医疗、投资决策、生产变更默认至少为受控风险。</p>
+<h3 id="模块-2：建立领域最小模型"><a href="#模块-2：建立领域最小模型" class="headerlink" title="模块 2：建立领域最小模型"></a>模块 2：建立领域最小模型</h3><p>每类内容明确标记证据等级：</p>
+<ul>
+<li><strong>机制</strong>：对象、关系、因果或工作原理——可用第一性推理检验</li>
+<li><strong>事实</strong>：必须记住但不能从原理推出的术语、数据、接口或规则</li>
+<li><strong>规范</strong>：行业约定、工具惯例、法律/安全要求——不要假装能从原理推导</li>
+<li><strong>边界</strong>：反例、失败模式、前置条件与禁止事项</li>
+</ul>
+<p>每条结论标记为 <code>来源证据</code> / <code>合理推断</code> / <code>待验证</code>。</p>
+<h3 id="模块-3：方法选择矩阵"><a href="#模块-3：方法选择矩阵" class="headerlink" title="模块 3：方法选择矩阵"></a>模块 3：方法选择矩阵</h3><p>一次冲刺选 <strong>1 个主方法 + 至多 1 个辅助方法</strong>，并写明选择依据：</p>
+<table>
+<thead>
+<tr>
+<th>主要障碍或目标</th>
+<th>主方法</th>
+<th>可选辅助</th>
+<th>直接证据</th>
+<th>不要这样用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>不理解概念</td>
+<td>对比示例与受限解释</td>
+<td>主动回忆</td>
+<td>不看资料解释因果并判断反例</td>
+<td>只画思维导图或重复阅读</td>
+</tr>
+<tr>
+<td>知道步骤但不会做</td>
+<td>完整示例→半完成→独立变式</td>
+<td>最小项目</td>
+<td>无提示完成相邻变式</td>
+<td>直接投入大项目</td>
+</tr>
+<tr>
+<td>要记住事实/术语</td>
+<td>主动检索</td>
+<td>间隔复现</td>
+<td>延迟后正确取回并说明差异</td>
+<td>把高亮、重读当检索练习</td>
+</tr>
+<tr>
+<td>易混淆相近情形</td>
+<td>对比练习与交错练习</td>
+<td>错误卡</td>
+<td>新案例中说明选择理由</td>
+<td>陌生时随机混合大量主题</td>
+</tr>
+<tr>
+<td>需要诊断/推理</td>
+<td>约束推导与反例</td>
+<td>口头讲解</td>
+<td>解释取舍并处理反例</td>
+<td>把第一性原理当作忽略规范</td>
+</tr>
+<tr>
+<td>操作技能</td>
+<td>小而有反馈的刻意练习</td>
+<td>录制/回看</td>
+<td>错误率、时间或质量达阈值</td>
+<td>无反馈高风险下盲目重复</td>
+</tr>
+<tr>
+<td>时间少必须交付</td>
+<td>最小可交付任务</td>
+<td>针对性检索</td>
+<td>交付物达到最低验收线</td>
+<td>假装已建立长期理解</td>
+</tr>
+</tbody></table>
+<h3 id="模块-4：生成短学习冲刺"><a href="#模块-4：生成短学习冲刺" class="headerlink" title="模块 4：生成短学习冲刺"></a>模块 4：生成短学习冲刺</h3><p>默认 1-3 天或 3-5 个学习区块，而不是一次性安排数周。每个区块包含：</p>
+<ul>
+<li>目标任务与时长</li>
+<li>输入与边界（材料来源、版本、风险限制）</li>
+<li><strong>主动练习</strong>（解释、检索、操作、变式任务或模拟——不能只阅读）</li>
+<li>反馈（自动检查、量表、同伴/专家反馈，或明确说明缺失）</li>
+<li>交付物（答案、演示、运行结果、笔记等可检查证据）</li>
+<li><strong>通过线</strong>（开始前定义评价者、维度、阈值、允许辅助）</li>
+<li>失败降级（过难时改用哪个更小的变式；连续失败停止加新材料）</li>
+<li>复现日期（由截止期和本次表现确定，不机械固定）</li>
+</ul>
+<h3 id="模块-5：执行元认知闭环"><a href="#模块-5：执行元认知闭环" class="headerlink" title="模块 5：执行元认知闭环"></a>模块 5：执行元认知闭环</h3><p>每个区块结束时依次执行——这是整个 Skill 的灵魂：</p>
+<ol>
+<li><strong>预测</strong>：学习者先预测完成度、耗时或得分，并给出置信度</li>
+<li><strong>独立尝试</strong>：移除不必要提示完成任务</li>
+<li><strong>比较</strong>：对照预定义量表记录实际结果</li>
+<li><strong>分类</strong>：标注主要错因</li>
+<li><strong>调整</strong>：只依据已记录的错因、证据和约束改变下一轮；说明改了什么、为什么改</li>
+</ol>
+<hr>
+<h2 id="七、掌握证据体系：你怎么知道学会了"><a href="#七、掌握证据体系：你怎么知道学会了" class="headerlink" title="七、掌握证据体系：你怎么知道学会了"></a>七、掌握证据体系：你怎么知道学会了</h2><h3 id="状态等级（禁止越级宣称）"><a href="#状态等级（禁止越级宣称）" class="headerlink" title="状态等级（禁止越级宣称）"></a>状态等级（禁止越级宣称）</h3><table>
+<thead>
+<tr>
+<th>状态</th>
+<th>最低证据</th>
+<th>不应声称</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>未尝试</td>
+<td>尚无独立动作</td>
+<td>已学习</td>
+</tr>
+<tr>
+<td>支架下完成</td>
+<td>使用示例、提示或协作完成</td>
+<td>已独立掌握</td>
+</tr>
+<tr>
+<td>独立完成</td>
+<td>在原情境中无关键提示完成</td>
+<td>可迁移或长期记住</td>
+</tr>
+<tr>
+<td>迁移通过</td>
+<td>改变素材、参数或情境后仍完成</td>
+<td>长期保持</td>
+</tr>
+<tr>
+<td>延迟保持</td>
+<td>间隔后独立复现且达到通过线</td>
+<td>永久掌握</td>
+</tr>
+</tbody></table>
+<h3 id="错因分类（M-P-R-F-L-B）"><a href="#错因分类（M-P-R-F-L-B）" class="headerlink" title="错因分类（M/P/R/F/L/B）"></a>错因分类（M/P/R/F/L/B）</h3><table>
+<thead>
+<tr>
+<th>代码</th>
+<th>诊断信号</th>
+<th>下一步</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>M</code> 模型缺失</td>
+<td>无法解释为什么、混淆因果</td>
+<td>用对比示例补最小模型</td>
+</tr>
+<tr>
+<td><code>P</code> 步骤不熟</td>
+<td>知道原理但漏步、顺序错</td>
+<td>缩小到一个步骤做变式</td>
+</tr>
+<tr>
+<td><code>R</code> 检索不足</td>
+<td>看见答案会、独立时想不起</td>
+<td>主动检索、对比卡、间隔复现</td>
+</tr>
+<tr>
+<td><code>F</code> 反馈/材料问题</td>
+<td>标准冲突、版本不明</td>
+<td>核验权威来源</td>
+</tr>
+<tr>
+<td><code>L</code> 负荷问题</td>
+<td>超时、连续卡住、投入感低</td>
+<td>缩短区块、减少新内容</td>
+</tr>
+<tr>
+<td><code>B</code> 边界/风险问题</td>
+<td>操作不安全、超权限</td>
+<td>停止真实操作，改模拟</td>
+</tr>
+</tbody></table>
+<p>关键规则：<strong>只记录最能解释本次失败的一至两个代码，不要把”努力不够”当默认诊断。</strong></p>
+<hr>
+<h2 id="八、实战案例-1：前端转产品经理（3-天冲刺）"><a href="#八、实战案例-1：前端转产品经理（3-天冲刺）" class="headerlink" title="八、实战案例 1：前端转产品经理（3 天冲刺）"></a>八、实战案例 1：前端转产品经理（3 天冲刺）</h2><p>一位有交付能力的前端开发者想转产品方向，Skill 诊断出的真实缺口不是”不会写 PRD”，而是”为什么做、为谁做、如何判断做对”。</p>
+<p><strong>领域最小模型：</strong></p>
+<ul>
+<li><code>机制</code>：用户在场景中完成任务受阻 → 形成可验证的问题假设 → 选择最小方案 → 观察行为和业务结果 → 决定继续、调整或停止</li>
+<li><code>规范</code>：PRD 不是产品经理工作的核心；没有证据就应标为假设，不能用”我觉得用户需要”代替调研</li>
+<li><code>边界</code>：前端能力能帮助判断可行性和快速原型，但不能替代用户理解与商业判断</li>
+</ul>
+<p><strong>主方法</strong>：用一个真实功能完成最小产品发现项目。辅助：主动复述与反例。<strong>不建议先刷课程或背模板</strong>——因为已有交付能力，缺的是判断框架。</p>
+<p><strong>3 天冲刺：</strong></p>
+<table>
+<thead>
+<tr>
+<th>天数</th>
+<th>任务与交付物</th>
+<th>通过线</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>第 1 天</td>
+<td>选熟悉的功能（用户列表/表单/搜索），15 分钟写：目标用户、场景、任务、阻碍、证据、假设、暂不做的方案 → 一页问题简报</td>
+<td>能把”用户问题”与”想加的功能”分开；每条标为证据或假设</td>
+</tr>
+<tr>
+<td>第 2 天</td>
+<td>写发现计划：6 个不诱导用户的问题、三类行为证据、一个核心行为指标和一个风险指标</td>
+<td>指标衡量用户行为，不只衡量页面是否上线</td>
+</tr>
+<tr>
+<td>第 3 天</td>
+<td>写一页 MVP 决策卡：问题、证据、待验证假设、最小范围、不做什么、成功指标、三个验收标准；换一个功能 20 分钟拆解</td>
+<td>MVP 只服务一个明确行为；存在可观测成功指标</td>
+</tr>
+</tbody></table>
+<p><strong>卡点预判</strong>：把页面优化写成需求清单（<code>M</code>）；没有证据来源（<code>F</code>）；范围越写越大（<code>P</code>）；连续两次写不下去（<code>L</code>）——每个卡点都有对应的降级动作。</p>
+<hr>
+<h2 id="九、实战案例-2：Playwright-E2E-测试（3-天-×-90-分钟）"><a href="#九、实战案例-2：Playwright-E2E-测试（3-天-×-90-分钟）" class="headerlink" title="九、实战案例 2：Playwright E2E 测试（3 天 × 90 分钟）"></a>九、实战案例 2：Playwright E2E 测试（3 天 × 90 分钟）</h2><p>目标：从零写出 3 个稳定的本地 E2E 测试。Skill 给出的不是”去看 Playwright 文档”这种废话，而是精确到分钟的任务卡：</p>
+<p><strong>第 1 天（90 分钟）：</strong></p>
+<ol>
+<li><code>0-5 分钟</code>：定下页面和三条行为</li>
+<li><code>5-20 分钟</code>：预测”多久能跑通第一个测试”+ 置信度，然后安装</li>
+<li><code>20-55 分钟</code>：按文档创建第一个测试</li>
+<li><code>55-75 分钟</code>：只修复第一个阻塞点，记录卡点类型</li>
+<li><code>75-90 分钟</code>：关掉文档，独立补第二个断言</li>
+</ol>
+<p>通过线：至少一个测试可运行；能解释 <code>goto → locator → expect</code> 各做什么。</p>
+<p><strong>第 2 天：</strong> 不看文档重写测试骨架并预测耗时 → 只查当前需要的 locator → 写出第二个测试 → 连续跑三次修不稳定 → 记录置信度偏差和错因。</p>
+<p><strong>第 3 天：</strong> 独立起草第三个测试（覆盖不同路径）→ <strong>迁移检验</strong>（换掉一个非核心变量确认思路成立）→ 干净终端跑三次 → 不看代码用自己的话解释三个测试。</p>
+<p>最终通过线：三个测试对应三条不同用户行为、连续三次 <code>3 passed</code>、第三个测试首次独立起草、能说明 locator 为什么比 CSS 层级选择器稳定。</p>
+<p><strong>每天只更新一张状态卡（六项）：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">目标：3 个稳定的本地 E2E 测试</span><br><span class="line">当前状态：未尝试 / 支架下完成 / 独立完成 / 迁移通过</span><br><span class="line">已通过：测试名称与运行结果</span><br><span class="line">重复错误：M / P / R / F / L 中的一项</span><br><span class="line">下一步：明天唯一要完成的动作</span><br><span class="line">预测与实际：预计耗时、实际耗时、置信度</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十、核心设计哲学：为什么”克制”是它的灵魂"><a href="#十、核心设计哲学：为什么”克制”是它的灵魂" class="headerlink" title="十、核心设计哲学：为什么”克制”是它的灵魂"></a>十、核心设计哲学：为什么”克制”是它的灵魂</h2><p>回头看，这个 Skill 从 6/10 到可用的关键，不是加了更多功能，而是<strong>明确画了三条线</strong>：</p>
+<h3 id="1-不越界"><a href="#1-不越界" class="headerlink" title="1. 不越界"></a>1. 不越界</h3><p>高风险领域只给概念和模拟，不给可执行专业决策；信息不足时不编长计划，先给基线任务。</p>
+<h3 id="2-不假精确"><a href="#2-不假精确" class="headerlink" title="2. 不假精确"></a>2. 不假精确</h3><p>“产出”不等于”掌握”——通过线必须在开始前定义，证据分五级状态，不能越级宣称；复习间隔由截止期和表现决定，不写死 72 小时。</p>
+<h3 id="3-不自嗨"><a href="#3-不自嗨" class="headerlink" title="3. 不自嗨"></a>3. 不自嗨</h3><p>元认知闭环强制”预测→执行→比较→分类→调整”，让每轮调整都由证据触发，而不是始终输出同一份模板。</p>
+<blockquote>
+<p>一个学习 Skill 最大的失败，不是方法不够多，而是让用户以为”看完计划”就是”学会”。</p>
+</blockquote>
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>从”我想要一个会元认知、会第一性原理的 Skill”到真正可用的 <code>learning-navigator</code>，我学到的东西：</p>
+<ol>
+<li><strong>元认知是机制不是形容词</strong>：预测-执行-比较-分类-调整的闭环，比任何”教你反思”的提示词都有效</li>
+<li><strong>第一性原理要分层</strong>：可推导的机制才用原理推导，事实、规范、经验要区分对待，不能强行重建一切</li>
+<li>**审查要请”敌人”**：6/10 的第一次审查救了整个项目——P1 漏洞（方法选择不可执行、产出≠掌握、风险边界）每一个都会让 Skill 沦为花架子</li>
+<li><strong>通过线必须在开始前定义</strong>：评价者、量表、阈值、允许辅助，缺一不可</li>
+<li>**错因分类代替”努力不够”**：M/P/R/F/L/B 六类诊断，让调整有依据，复盘不空转</li>
+<li><strong>收缩范围是设计</strong>：第一版只解决”从陌生到独立完成一个任务”，不做万能课程生成器</li>
+</ol>
+<p>最后送你一句话，也是这个 Skill 的第一原则：</p>
+<blockquote>
+<p>学习的终点不是”看完了”，而是<strong>能在没有提示的情况下，独立完成一个可验证的任务</strong>。</p>
+</blockquote>
+<hr>
+<p><strong>推荐资源：</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://learn.chatgpt.com/docs/customization/overview#skills">Codex Skills 文档</a> — 自定义技能规范</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/18F/methods">18F Methods</a> — 产品发现方法（案例 1 参考）</li>
+<li><a target="_blank" rel="noopener" href="https://playwright.dev/">Playwright</a> — E2E 测试（案例 2 参考）</li>
+<li><a target="_blank" rel="noopener" href="https://chatgpt.com/codex">Codex</a> — 支持 Skills 的编码代理</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/web-blog/2026/08/06/Learning-Skill%E5%AE%9E%E6%88%98-%E5%85%83%E8%AE%A4%E7%9F%A5%E4%B8%8E%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86/">Learning Skill实战：把元认知和第一性原理变成可执行能力</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a></p>
+  <p><span>发布时间:</span>2026年08月06日 - 00:08</p>
+  <p><span>最后更新:</span>2026年08月06日 - 20:08</p>
+  <p><span>原始链接:</span><a href="/web-blog/2026/08/06/Learning-Skill%E5%AE%9E%E6%88%98-%E5%85%83%E8%AE%A4%E7%9F%A5%E4%B8%8E%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86/" title="Learning Skill实战：把元认知和第一性原理变成可执行能力">https://lc19990308.github.io/web-blog/2026/08/06/Learning-Skill%E5%AE%9E%E6%88%98-%E5%85%83%E8%AE%A4%E7%9F%A5%E4%B8%8E%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://lc19990308.github.io/web-blog/2026/08/06/Learning-Skill%E5%AE%9E%E6%88%98-%E5%85%83%E8%AE%A4%E7%9F%A5%E4%B8%8E%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+    });
+    });  
+</script>
+
+      
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>LC
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://lc19990308.github.io/web-blog/2026/08/06/Learning-Skill%E5%AE%9E%E6%88%98-%E5%85%83%E8%AE%A4%E7%9F%A5%E4%B8%8E%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86/" title="Learning Skill实战：把元认知和第一性原理变成可执行能力">https://lc19990308.github.io/web-blog/2026/08/06/Learning-Skill实战-元认知与第一性原理/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/web-blog/tags/AI/" ****><i class="fa fa-tag"></i> AI</a>
+              <a href="/web-blog/tags/Agent/" ****><i class="fa fa-tag"></i> Agent</a>
+              <a href="/web-blog/tags/Skill/" ****><i class="fa fa-tag"></i> Skill</a>
+              <a href="/web-blog/tags/%E5%AD%A6%E4%B9%A0/" ****><i class="fa fa-tag"></i> 学习</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/08/05/%E6%90%AD%E5%BB%BA%E9%87%91%E8%9E%8D%E6%99%BA%E8%83%BD%E4%BD%93-Hermes-Agent%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97/" rel="prev" title="搭建金融智能体：Hermes Agent 实战指南">
+      <i class="fa fa-chevron-left"></i> 搭建金融智能体：Hermes Agent 实战指南
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/08/06/%E4%B9%A6%E7%B1%8D%E8%92%B8%E9%A6%8FSkill%E5%AE%9E%E6%88%98-book-to-skill%E4%B8%8E%E5%A5%B3%E5%A8%B2%E5%AF%B9%E6%AF%94/" rel="next" title="书籍蒸馏Skill实战：book-to-skill 与女娲人物Skill的对比">
+      书籍蒸馏Skill实战：book-to-skill 与女娲人物Skill的对比 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E9%9C%80%E6%B1%82%EF%BC%9A%E6%88%91%E6%83%B3%E8%A6%81%E4%BB%80%E4%B9%88%E6%A0%B7%E7%9A%84-Learning-Skill"><span class="nav-number">2.</span> <span class="nav-text">一、需求：我想要什么样的 Learning Skill</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E7%AC%AC%E4%B8%80%E7%89%88%E8%AE%A1%E5%88%92%EF%BC%9A%E5%AD%A6%E4%B9%A0%E9%97%AD%E7%8E%AF%E7%9A%84%E9%AA%A8%E6%9E%B6"><span class="nav-number">3.</span> <span class="nav-text">二、第一版计划：学习闭环的骨架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%AE%A1%E6%9F%A5%EF%BC%9A6-10%EF%BC%8C%E4%B8%83%E4%B8%AA%E6%BC%8F%E6%B4%9E"><span class="nav-number">4.</span> <span class="nav-text">三、第一次审查：6&#x2F;10，七个漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#P1%EF%BC%88%E5%BF%85%E9%A1%BB%E4%BF%AE%E5%A4%8D%EF%BC%89"><span class="nav-number">4.1.</span> <span class="nav-text">P1（必须修复）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#P2%EF%BC%88%E9%87%8D%E8%A6%81%E4%BD%86%E5%8F%AF%E5%90%8E%E7%BD%AE%EF%BC%89"><span class="nav-number">4.2.</span> <span class="nav-text">P2（重要但可后置）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E4%BC%98%E5%8C%96%EF%BC%9A%E4%BB%8E%E2%80%9D%E6%96%B9%E6%B3%95%E6%B8%85%E5%8D%95%E2%80%9D%E5%88%B0%E2%80%9D%E5%86%B3%E7%AD%96%E4%B8%8E%E6%A0%A1%E5%87%86%E7%B3%BB%E7%BB%9F%E2%80%9D"><span class="nav-number">5.</span> <span class="nav-text">四、优化：从”方法清单”到”决策与校准系统”</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E7%89%88%E8%8C%83%E5%9B%B4%EF%BC%88%E6%98%8E%E7%A1%AE%E6%94%B6%E7%BC%A9%EF%BC%89"><span class="nav-number">5.1.</span> <span class="nav-text">第一版范围（明确收缩）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E8%AF%8A%E6%96%AD%EF%BC%9A%E6%9C%80%E5%A4%9A%E4%BA%94%E9%A1%B9"><span class="nav-number">5.2.</span> <span class="nav-text">启动诊断：最多五项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%8C%E6%8F%A1%E8%AF%81%E6%8D%AE%EF%BC%9A%E5%9B%9B%E5%B1%82%E9%80%92%E8%BF%9B"><span class="nav-number">5.3.</span> <span class="nav-text">掌握证据：四层递进</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E7%AC%AC%E4%BA%8C%E6%AC%A1%E5%AE%A1%E6%9F%A5%EF%BC%9A%E4%B8%89%E4%B8%AA-P1-%E7%BC%BA%E5%8F%A3"><span class="nav-number">6.</span> <span class="nav-text">五、第二次审查：三个 P1 缺口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E6%9C%80%E7%BB%88%E5%AE%9E%E7%8E%B0%EF%BC%9Alearning-navigator-%E7%9A%84%E4%BA%94%E4%B8%AA%E6%A8%A1%E5%9D%97"><span class="nav-number">7.</span> <span class="nav-text">六、最终实现：learning-navigator 的五个模块</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97-1%EF%BC%9A%E5%BB%BA%E7%AB%8B%E5%AD%A6%E4%B9%A0%E5%A5%91%E7%BA%A6"><span class="nav-number">7.1.</span> <span class="nav-text">模块 1：建立学习契约</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97-2%EF%BC%9A%E5%BB%BA%E7%AB%8B%E9%A2%86%E5%9F%9F%E6%9C%80%E5%B0%8F%E6%A8%A1%E5%9E%8B"><span class="nav-number">7.2.</span> <span class="nav-text">模块 2：建立领域最小模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97-3%EF%BC%9A%E6%96%B9%E6%B3%95%E9%80%89%E6%8B%A9%E7%9F%A9%E9%98%B5"><span class="nav-number">7.3.</span> <span class="nav-text">模块 3：方法选择矩阵</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97-4%EF%BC%9A%E7%94%9F%E6%88%90%E7%9F%AD%E5%AD%A6%E4%B9%A0%E5%86%B2%E5%88%BA"><span class="nav-number">7.4.</span> <span class="nav-text">模块 4：生成短学习冲刺</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97-5%EF%BC%9A%E6%89%A7%E8%A1%8C%E5%85%83%E8%AE%A4%E7%9F%A5%E9%97%AD%E7%8E%AF"><span class="nav-number">7.5.</span> <span class="nav-text">模块 5：执行元认知闭环</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E6%8E%8C%E6%8F%A1%E8%AF%81%E6%8D%AE%E4%BD%93%E7%B3%BB%EF%BC%9A%E4%BD%A0%E6%80%8E%E4%B9%88%E7%9F%A5%E9%81%93%E5%AD%A6%E4%BC%9A%E4%BA%86"><span class="nav-number">8.</span> <span class="nav-text">七、掌握证据体系：你怎么知道学会了</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E7%AD%89%E7%BA%A7%EF%BC%88%E7%A6%81%E6%AD%A2%E8%B6%8A%E7%BA%A7%E5%AE%A3%E7%A7%B0%EF%BC%89"><span class="nav-number">8.1.</span> <span class="nav-text">状态等级（禁止越级宣称）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%99%E5%9B%A0%E5%88%86%E7%B1%BB%EF%BC%88M-P-R-F-L-B%EF%BC%89"><span class="nav-number">8.2.</span> <span class="nav-text">错因分类（M&#x2F;P&#x2F;R&#x2F;F&#x2F;L&#x2F;B）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E5%AE%9E%E6%88%98%E6%A1%88%E4%BE%8B-1%EF%BC%9A%E5%89%8D%E7%AB%AF%E8%BD%AC%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86%EF%BC%883-%E5%A4%A9%E5%86%B2%E5%88%BA%EF%BC%89"><span class="nav-number">9.</span> <span class="nav-text">八、实战案例 1：前端转产品经理（3 天冲刺）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E3%80%81%E5%AE%9E%E6%88%98%E6%A1%88%E4%BE%8B-2%EF%BC%9APlaywright-E2E-%E6%B5%8B%E8%AF%95%EF%BC%883-%E5%A4%A9-%C3%97-90-%E5%88%86%E9%92%9F%EF%BC%89"><span class="nav-number">10.</span> <span class="nav-text">九、实战案例 2：Playwright E2E 测试（3 天 × 90 分钟）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E3%80%81%E6%A0%B8%E5%BF%83%E8%AE%BE%E8%AE%A1%E5%93%B2%E5%AD%A6%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E2%80%9D%E5%85%8B%E5%88%B6%E2%80%9D%E6%98%AF%E5%AE%83%E7%9A%84%E7%81%B5%E9%AD%82"><span class="nav-number">11.</span> <span class="nav-text">十、核心设计哲学：为什么”克制”是它的灵魂</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%B8%8D%E8%B6%8A%E7%95%8C"><span class="nav-number">11.1.</span> <span class="nav-text">1. 不越界</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%B8%8D%E5%81%87%E7%B2%BE%E7%A1%AE"><span class="nav-number">11.2.</span> <span class="nav-text">2. 不假精确</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%B8%8D%E8%87%AA%E5%97%A8"><span class="nav-number">11.3.</span> <span class="nav-text">3. 不自嗨</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">12.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="LC"
+      src="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+  <p class="site-author-name" itemprop="name">LC</p>
+  <div class="site-description" itemprop="description">专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/web-blog/archives/">
+        
+          <span class="site-state-item-count">150</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/web-blog/categories/">
+          
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/web-blog/tags/">
+          
+        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button motion-element"><i class="fa fa-comment"></i>
+    Chat
+  </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lc19990308/web-blog" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lc19990308&#x2F;web-blog" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:jarridaddison4@gmail.com" title="E-Mail → mailto:jarridaddison4@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/web-blog/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=441491828&auto=1&height=66"></iframe>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LC</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>-->
+<div class="powered-by">
+  <i class="fa fa-user-md"></i>
+  <span id="busuanzi_container_site_pv">
+    本站访问量:<span id="busuanzi_value_site_pv"></span>次
+  </span>
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv">
+    本站总访客量：<span id="busuanzi_value_site_uv"></span>人
+  </span>
+</div>
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共229.5k字</span>
+</div>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/web-blog/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/web-blog/js/utils.js"></script>
+
+<script src="/web-blog/js/motion.js"></script>
+
+
+<script src="/web-blog/js/schemes/pisces.js"></script>
+
+
+<script src="/web-blog/js/next-boot.js"></script>
+
+<script src="/web-blog/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/web-blog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+</body>
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</html>

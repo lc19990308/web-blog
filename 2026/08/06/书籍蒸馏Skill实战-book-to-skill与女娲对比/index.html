@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/web-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/web-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/web-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/web-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/web-blog/css/main.css">
+
+
+<link rel="stylesheet" href="/web-blog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/web-blog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/web-blog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lc19990308.github.io","root":"/web-blog/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="把一本书蒸馏成 Agent Skill 的完整实战：book-to-skill 安装、蒸馏《重构》中文版的踩坑过程、与女娲（人物蒸馏）和仓颉的对比、RAGFlow 知识库的三层分工，以及版权与来源核验的教训">
+<meta property="og:type" content="article">
+<meta property="og:title" content="书籍蒸馏Skill实战：book-to-skill 与女娲人物Skill的对比">
+<meta property="og:url" content="https://lc19990308.github.io/web-blog/2026/08/06/%E4%B9%A6%E7%B1%8D%E8%92%B8%E9%A6%8FSkill%E5%AE%9E%E6%88%98-book-to-skill%E4%B8%8E%E5%A5%B3%E5%A8%B2%E5%AF%B9%E6%AF%94/index.html">
+<meta property="og:site_name" content="前端技术笔记">
+<meta property="og:description" content="把一本书蒸馏成 Agent Skill 的完整实战：book-to-skill 安装、蒸馏《重构》中文版的踩坑过程、与女娲（人物蒸馏）和仓颉的对比、RAGFlow 知识库的三层分工，以及版权与来源核验的教训">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-08-05T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-08-06T12:31:17.972Z">
+<meta property="article:author" content="LC">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Agent">
+<meta property="article:tag" content="Skill">
+<meta property="article:tag" content="Claude Code">
+<meta property="article:tag" content="Codex">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://lc19990308.github.io/web-blog/2026/08/06/%E4%B9%A6%E7%B1%8D%E8%92%B8%E9%A6%8FSkill%E5%AE%9E%E6%88%98-book-to-skill%E4%B8%8E%E5%A5%B3%E5%A8%B2%E5%AF%B9%E6%AF%94/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>书籍蒸馏Skill实战：book-to-skill 与女娲人物Skill的对比 | 前端技术笔记</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/web-blog/atom.xml" title="前端技术笔记" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband">
+    <a target="_blank" rel="noopener" href="https://gitee.com/yaru722" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    </div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/web-blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">前端技术笔记</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录前端路上的思考与实践</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/web-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/web-blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/web-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/web-blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/web-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/lc19990308" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/08/06/%E4%B9%A6%E7%B1%8D%E8%92%B8%E9%A6%8FSkill%E5%AE%9E%E6%88%98-book-to-skill%E4%B8%8E%E5%A5%B3%E5%A8%B2%E5%AF%B9%E6%AF%94/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+      <meta itemprop="name" content="LC">
+      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端技术笔记">
+    </span>
+      <header class="post-header">
+      
+        <h1 class="post-title" itemprop="name headline">
+          书籍蒸馏Skill实战：book-to-skill 与女娲人物Skill的对比
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-08-06 00:00:00" itemprop="dateCreated datePublished" datetime="2026-08-06T00:00:00+08:00">2026-08-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/web-blog/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">把一本书蒸馏成 Agent Skill 的完整实战：book-to-skill 安装、蒸馏《重构》中文版的踩坑过程、与女娲（人物蒸馏）和仓颉的对比、RAGFlow 知识库的三层分工，以及版权与来源核验的教训</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>你有没有过这样的经历：买一本好书、读一遍、三个月后连第 7 章讲什么都忘了；想靠 AI 回忆，它要么幻觉要么说没读过；想翻 PDF，翻到的是一堆页码而不是答案。</p>
+<p>GitHub 上有一个方案专门解决这个问题——<strong>book-to-skill</strong>：把整本书蒸馏成一个 Agent Skill，让你的智能体按需加载。这篇文章记录我从找仓库、装工具、蒸馏《重构（第 2 版）》中文版，到对比”女娲”人物 Skill、理顺 RAGFlow 知识库三层分工的全过程，包括一路踩的坑。</p>
+<blockquote>
+<p>核心结论先放在这：<strong>书籍 Skill 是”知识工具书”，人物 Skill 是”决策风格模拟器”，两者不互斥，而是分工</strong>。</p>
+</blockquote>
+<hr>
+<h2 id="一、找到仓库：book-to-skill-是什么"><a href="#一、找到仓库：book-to-skill-是什么" class="headerlink" title="一、找到仓库：book-to-skill 是什么"></a>一、找到仓库：book-to-skill 是什么</h2><h3 id="仓库信息"><a href="#仓库信息" class="headerlink" title="仓库信息"></a>仓库信息</h3><table>
+<thead>
+<tr>
+<th align="left">项</th>
+<th align="left">值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">仓库</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://github.com/virgiliojr94/book-to-skill">virgiliojr94/book-to-skill</a></td>
+</tr>
+<tr>
+<td align="left">许可证</td>
+<td align="left">MIT</td>
+</tr>
+<tr>
+<td align="left">规模</td>
+<td align="left">约 1.57 万 Stars</td>
+</tr>
+<tr>
+<td align="left">适用</td>
+<td align="left">GitHub Copilot CLI、Amp、Claude Code</td>
+</tr>
+</tbody></table>
+<p>它把技术书籍 PDF（以及 EPUB/DOCX/Markdown/HTML/RTF/MOBI）提炼为统一的 Agent Skill。README 里最吸引我的一句话：</p>
+<blockquote>
+<p><strong>24×–51× fewer tokens than dumping the book into context</strong> to answer one question<br>（回答问题时的 token 消耗，比把整本书塞进上下文少 24~51 倍）</p>
+</blockquote>
+<h3 id="三步工作流"><a href="#三步工作流" class="headerlink" title="三步工作流"></a>三步工作流</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1. 指向：/book-to-skill ./my-book.pdf</span><br><span class="line">2. 蒸馏：把书变成 Skill —— 框架、决策规则、反模式、分章文件（是结构，不是摘要）</span><br><span class="line">3. 按需加载：问 /my-book replication，它读取对应章节，从真实内容回答</span><br></pre></td></tr></table></figure>
+
+<h3 id="为什么需要它"><a href="#为什么需要它" class="headerlink" title="为什么需要它"></a>为什么需要它</h3><p>书读完就忘的问题，常规解法都不完美：</p>
+<table>
+<thead>
+<tr>
+<th align="left">解法</th>
+<th align="left">问题</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">搜索 PDF</td>
+<td align="left">得到的是页码列表，不是答案</td>
+</tr>
+<tr>
+<td align="left">让 AI 讲这本书</td>
+<td align="left">要么幻觉，要么说没读过</td>
+</tr>
+<tr>
+<td align="left">手动做笔记</td>
+<td align="left">得到 200 行笔记，之后再也没打开过</td>
+</tr>
+</tbody></table>
+<p><strong>book-to-skill 把书变成结构化 Skill，让智能体按需加载</strong>，这是第四个解法。</p>
+<hr>
+<h2 id="二、Codex-能不能装？"><a href="#二、Codex-能不能装？" class="headerlink" title="二、Codex 能不能装？"></a>二、Codex 能不能装？</h2><p>第一反应是”这仓库面向 Claude Code，Codex 能用吗”？结论是<strong>可以，但要看产物结构</strong>：</p>
+<ul>
+<li>它产出的核心是标准的 <code>SKILL.md</code> 技能目录</li>
+<li>Codex 也支持这种结构：全局 <code>~/.codex/skills/&lt;skill-name&gt;/</code> 或项目内 <code>.codex/skills/&lt;skill-name&gt;/</code></li>
+<li>若生成内容含 <code>claude</code> 命令、Claude 专用工具名或配置字段，需改为 Codex 对应方式；<strong>纯知识型的 SKILL.md 通常可直接用</strong></li>
+</ul>
+<hr>
+<h2 id="三、关键对比：book-to-skill-vs-女娲（人物蒸馏）"><a href="#三、关键对比：book-to-skill-vs-女娲（人物蒸馏）" class="headerlink" title="三、关键对比：book-to-skill vs 女娲（人物蒸馏）"></a>三、关键对比：book-to-skill vs 女娲（人物蒸馏）</h2><h3 id="女娲是什么"><a href="#女娲是什么" class="headerlink" title="女娲是什么"></a>女娲是什么</h3><p><a target="_blank" rel="noopener" href="https://github.com/alchaincyf/nuwa-skill">alchaincyf/nuwa-skill</a>（女娲.skill）是<strong>人物蒸馏</strong>工具：把芒格、巴菲特这类人蒸馏成 Skill。核心逻辑是”六路并行调研”，只有满足三个条件才收录为人物模型：</p>
+<ol>
+<li>一个观点<strong>跨领域出现</strong></li>
+<li>能对新问题产生<strong>可检验推断</strong></li>
+<li>具有<strong>人物区分度</strong></li>
+</ol>
+<p>仓库里已有现成的 <code>munger-perspective</code>（芒格视角）。</p>
+<h3 id="核心差别：知识工具书-vs-决策风格模拟器"><a href="#核心差别：知识工具书-vs-决策风格模拟器" class="headerlink" title="核心差别：知识工具书 vs 决策风格模拟器"></a>核心差别：知识工具书 vs 决策风格模拟器</h3><table>
+<thead>
+<tr>
+<th align="left">维度</th>
+<th align="left">书籍蒸馏 Skill</th>
+<th align="left">人物蒸馏 Skill</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">来源</td>
+<td align="left">一本或多本指定书籍</td>
+<td align="left">书、致股东信、演讲、访谈、历史决策与公开档案</td>
+</tr>
+<tr>
+<td align="left">目标</td>
+<td align="left">快速检索和应用书中方法</td>
+<td align="left">在明确证据范围内，按该人物的思考框架分析问题</td>
+</tr>
+<tr>
+<td align="left">输出</td>
+<td align="left">概念、清单、公式、章节结论、引用</td>
+<td align="left">原则排序、提问方式、决策流程、反例与”不做什么”</td>
+</tr>
+<tr>
+<td align="left">边界</td>
+<td align="left">只代表作者在书中的表达</td>
+<td align="left">不能宣称是本人或预测其真实决定，缺证据时必须说明</td>
+</tr>
+<tr>
+<td align="left">回答方式</td>
+<td align="left">“这份资料具体说了什么？”</td>
+<td align="left">“这个人可能怎样拆解和判断这个问题？”</td>
+</tr>
+<tr>
+<td align="left">核心风险</td>
+<td align="left">漏掉章节或抽取失真</td>
+<td align="left">把公开形象、他人解读或旧观点误当成本人稳定信念</td>
+</tr>
+</tbody></table>
+<h3 id="一个直观的例子"><a href="#一个直观的例子" class="headerlink" title="一个直观的例子"></a>一个直观的例子</h3><ul>
+<li>“把《穷查理宝典》蒸馏成 Skill” → 得到多元思维模型、反向思考、能力圈等<strong>可查可用的知识库</strong></li>
+<li>“把芒格蒸馏成 Skill” → 还要整合他跨几十年的公开表达、投资案例和否决逻辑，形成”芒格式决策框架”：先找激励错配、避免愚蠢、优先长期复利</li>
+<li>“把巴菲特蒸馏成 Skill” → 重点变成企业质量、护城河、资本配置、管理层与估值纪律，而不只是复述某本书的段落</li>
+</ul>
+<h3 id="对巴菲特-芒格的最佳组合"><a href="#对巴菲特-芒格的最佳组合" class="headerlink" title="对巴菲特/芒格的最佳组合"></a>对巴菲特/芒格的最佳组合</h3><p>不是二选一，而是两层叠加：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">原始书籍、股东信、访谈、年会问答</span><br><span class="line">              ↓</span><br><span class="line">  book-to-skill：证据与可检索知识库</span><br><span class="line">              ↓</span><br><span class="line">   女娲：巴菲特 / 芒格式的决策框架 Skill</span><br><span class="line">              ↓</span><br><span class="line">回答时区分：原文事实 / 归纳原则 / 不确定推断</span><br></pre></td></tr></table></figure>
+
+<p>“蒸馏他们的书”得到的是可追溯的观点资料库；”蒸馏他们的人”得到的是有约束的分析角色——面对一家公司先看护城河、管理层、资本配置与估值；芒格则更强调激励机制、多元模型和反向排除。<strong>后者不能说”巴菲特一定会买/卖”，更不能包装成投资预测。</strong></p>
+<hr>
+<h2 id="四、顺带对比：cangjie-skill（仓颉）"><a href="#四、顺带对比：cangjie-skill（仓颉）" class="headerlink" title="四、顺带对比：cangjie-skill（仓颉）"></a>四、顺带对比：cangjie-skill（仓颉）</h2><p>后来我还发现了一个同类的 <a target="_blank" rel="noopener" href="https://github.com/Yeadon8888/cangjie-skill">Yeadon8888/cangjie-skill</a>，它和女娲一样是”人物思维蒸馏器”，不是”书籍转 Skill 的工具”：</p>
+<table>
+<thead>
+<tr>
+<th align="left">维度</th>
+<th align="left"><code>book-to-skill</code></th>
+<th align="left"><code>cangjie-skill</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">蒸馏对象</td>
+<td align="left">一本书、文档夹、论文集合</td>
+<td align="left">一个人的公开认知上下文</td>
+</tr>
+<tr>
+<td align="left">输入重点</td>
+<td align="left">原书的章节、概念、方法、代码与表格</td>
+<td align="left">著作、访谈、决策、失败、时间线、矛盾</td>
+</tr>
+<tr>
+<td align="left">产物</td>
+<td align="left">可检索的知识与操作参考 Skill</td>
+<td align="left">“某人视角”的思维 Skill</td>
+</tr>
+<tr>
+<td align="left">典型提问</td>
+<td align="left">“这段代码适合哪种重构手法？”</td>
+<td align="left">“芒格会先质疑这项决策的什么前提？”</td>
+</tr>
+<tr>
+<td align="left">主要风险</td>
+<td align="left">压缩后遗漏、误解书中细节</td>
+<td align="left">把有限公开材料推断成真实人格或确定结论</td>
+</tr>
+</tbody></table>
+<p>同样读《重构》：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">book-to-skill</span><br><span class="line">→ 《重构》知识 Skill</span><br><span class="line">→ &quot;这里的重复代码，是否满足 Extract Function 的前提？&quot;</span><br><span class="line"></span><br><span class="line">cangjie-skill</span><br><span class="line">→ Martin Fowler 视角 Skill</span><br><span class="line">→ &quot;Fowler 的经历与方法论会怎样看待这次技术债治理？&quot;</span><br></pre></td></tr></table></figure>
+
+<p>共同限制也要看清：<strong>两者都不能自动证明提炼内容正确。</strong> <code>book-to-skill</code> 的测试主要证明文本抽取和安全扫描能工作；仓颉的 <code>quality_check.py</code> 主要检查输出是否有”失败/边界/思维习惯”等结构，不验证这些故事是否真实、推断是否成立。README 的盲评分数应当视为作者自己的评测，不是独立事实。</p>
+<hr>
+<h2 id="五、三层分工：RAGFlow-知识库-vs-书籍-Skill-vs-人物-Skill"><a href="#五、三层分工：RAGFlow-知识库-vs-书籍-Skill-vs-人物-Skill" class="headerlink" title="五、三层分工：RAGFlow 知识库 vs 书籍 Skill vs 人物 Skill"></a>五、三层分工：RAGFlow 知识库 vs 书籍 Skill vs 人物 Skill</h2><p>那它们和 RAGFlow 知识库又是什么关系？答案是<strong>可以互补，默认不互斥</strong>——它们处理同一套资料的不同层次：</p>
+<table>
+<thead>
+<tr>
+<th align="left">层</th>
+<th align="left">适合承担的职责</th>
+<th align="left">最适合的问题</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">RAGFlow 知识库</td>
+<td align="left">保存原始资料，按需检索、引用和持续更新</td>
+<td align="left">“1987 年巴菲特信里对某问题的原话和上下文是什么？”</td>
+</tr>
+<tr>
+<td align="left">书籍 Skill</td>
+<td align="left">将一本反复使用的书编译成结构化操作知识</td>
+<td align="left">“按《证券分析》的框架，核对这家公司缺哪些信息？”</td>
+</tr>
+<tr>
+<td align="left">女娲人物 Skill</td>
+<td align="left">提供有边界的认知框架与决策顺序</td>
+<td align="left">“用芒格的逆向思考，先排除这项投资的哪些风险？”</td>
+</tr>
+</tbody></table>
+<h3 id="三种机制的本质区别"><a href="#三种机制的本质区别" class="headerlink" title="三种机制的本质区别"></a>三种机制的本质区别</h3><ul>
+<li>**RAGFlow 的核心是”检索”**：原书切块、建索引，提问时临时找相关段落，再由模型组织答案。适合资料量大、经常更新、需要回到原文核验的场景。</li>
+<li><strong>书籍 Skill 的核心是”编译”<strong>：预先把章节、概念、模式、速查规则组织好，使用时按主题加载少量已提炼内容。适合稳定、常用、需落实到行动的问题。</strong>代价是压缩原著</strong>——新版本或遗漏内容需要重新蒸馏。</li>
+<li>**人物 Skill 是”推理约束”**：不负责保存完整事实，而是规定优先看什么、如何判断、哪些事不做、何时承认不确定性。</li>
+</ul>
+<h3 id="什么时候会”打架”"><a href="#什么时候会”打架”" class="headerlink" title="什么时候会”打架”"></a>什么时候会”打架”</h3><p>真正冲突有三种情况：</p>
+<ol>
+<li>人物口吻<strong>压过原文证据</strong></li>
+<li>书籍 Skill 版本过旧却仍当作事实</li>
+<li>RAG 检索片段被误当作完整观点</li>
+</ol>
+<p>解决办法是规定优先级：<strong>原始资料/RAG 证据优先，书籍 Skill 次之，人物 Skill 只能解释和提出检查项。</strong></p>
+<hr>
+<h2 id="六、实战：蒸馏《重构（第-2-版）》中文版"><a href="#六、实战：蒸馏《重构（第-2-版）》中文版" class="headerlink" title="六、实战：蒸馏《重构（第 2 版）》中文版"></a>六、实战：蒸馏《重构（第 2 版）》中文版</h2><h3 id="选源：为什么用-GitHub-中文仓库"><a href="#选源：为什么用-GitHub-中文仓库" class="headerlink" title="选源：为什么用 GitHub 中文仓库"></a>选源：为什么用 GitHub 中文仓库</h3><p>我没有直接丢 PDF，而是选了 <a target="_blank" rel="noopener" href="https://github.com/gausszhou/refactoring2-zh">gausszhou/refactoring2-zh</a>——《重构（第 2 版）》的中文 Markdown 版，12 个章节、声明 MIT 许可。优点：Markdown 源抽取质量远高于扫描 PDF，且许可证清晰。</p>
+<h3 id="安装踩坑-1：Python-证书链拦截"><a href="#安装踩坑-1：Python-证书链拦截" class="headerlink" title="安装踩坑 1：Python 证书链拦截"></a>安装踩坑 1：Python 证书链拦截</h3><p>安装器默认走 ZIP 下载，被本机 Python 的证书链拦住了。<strong>Git 方式在本机可正常校验证书</strong>，改用安装器提供的 Git 回退路径继续安装。</p>
+<h3 id="安装踩坑-2：嵌套目录导致脚本路径缺失"><a href="#安装踩坑-2：嵌套目录导致脚本路径缺失" class="headerlink" title="安装踩坑 2：嵌套目录导致脚本路径缺失"></a>安装踩坑 2：嵌套目录导致脚本路径缺失</h3><p>安装完成后发现：安装器从仓库根目录安装时<strong>默认只取了顶层文件</strong>，<code>scripts/</code>、<code>book_to_skill/</code>、<code>tools/</code> 这些可执行目录没进来，导致提取脚本路径不存在。修复：从同一固定提交把必需的三个目录补进本地安装，不改变其余内容。</p>
+<h3 id="抽取与生成"><a href="#抽取与生成" class="headerlink" title="抽取与生成"></a>抽取与生成</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">抽取：12 个章节、约 3.9 万 token 的源文本，章节结构完整</span><br><span class="line">生成：Codex 原生的 refactoring2-zh Skill</span><br><span class="line">  ├── SKILL.md（主文件：执行流程与选择规则）</span><br><span class="line">  └── references/（8 份按需加载的参考文件）</span><br><span class="line">       ├── 01-principles-and-smells.md    原则与坏味道</span><br><span class="line">       ├── 02-composing-functions.md      函数组合</span><br><span class="line">       ├── 03-encapsulation.md            封装</span><br><span class="line">       ├── 04-moving-features.md          特性搬移</span><br><span class="line">       ├── 05-data-organization.md        数据组织</span><br><span class="line">       ├── 06-simplifying-conditionals.md 条件逻辑</span><br><span class="line">       ├── 07-api-refactoring.md          API 重构</span><br><span class="line">       └── 08-inheritance.md              继承关系</span><br></pre></td></tr></table></figure>
+
+<p>设计原则：<strong>主文件只放执行流程与选择规则，详细重构手法按章节拆到按需加载的参考文件，保留章节级来源定位</strong>——这样不会把整本书塞进上下文。</p>
+<h3 id="独立前测：不只看结构，还看输出质量"><a href="#独立前测：不只看结构，还看输出质量" class="headerlink" title="独立前测：不只看结构，还看输出质量"></a>独立前测：不只看结构，还看输出质量</h3><p>装完不是直接宣布成功，而是用一段隔离的遗留代码做前测。结果符合预期：</p>
+<ul>
+<li>识别出<strong>重复计算与嵌套条件</strong>两个坏味道</li>
+<li><strong>没有过度建议多态化</strong>（对简单分支坚持最小改动）</li>
+<li>明确指出<strong>测试和调用点证据缺失</strong>——很克制，不瞎指挥</li>
+</ul>
+<p>这个”克制”太重要了：一个重构 Skill 如果动不动就建议引入设计模式，反而会毁掉代码库。</p>
+<h3 id="实际用法"><a href="#实际用法" class="headerlink" title="实际用法"></a>实际用法</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">使用 $refactoring2-zh 审查当前改动。</span><br><span class="line">先读取相关代码、调用点和测试；</span><br><span class="line">只列出证据充分的坏味道；</span><br><span class="line">为每项给出行为保持的小步重构计划与验证方式。</span><br></pre></td></tr></table></figure>
+
+<p>或：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">使用 $refactoring2-zh。</span><br><span class="line">这段代码该用卫语句、多态还是特例？</span><br><span class="line">先比较各自前提与代价，不要直接修改。</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="七、跨平台同步：让-Claude-Code-也能用"><a href="#七、跨平台同步：让-Claude-Code-也能用" class="headerlink" title="七、跨平台同步：让 Claude Code 也能用"></a>七、跨平台同步：让 Claude Code 也能用</h2><p>Codex 装好了，还想让 Claude Code 也能用。这中间也有坑：</p>
+<h3 id="坑：符号链接被安全扫描拒绝"><a href="#坑：符号链接被安全扫描拒绝" class="headerlink" title="坑：符号链接被安全扫描拒绝"></a>坑：符号链接被安全扫描拒绝</h3><p>最初想用符号链接让两处指向同一份，但<strong>安全扫描会拒绝符号链接目录</strong>，无法证明 Claude Code 会安全发现它。方案改为<strong>实体副本</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">~/.codex/skills/refactoring2-zh/   ← Codex 版本（单一源）</span><br><span class="line">~/.claude/skills/refactoring2-zh/  ← Claude Code 实体副本（逐文件一致）</span><br></pre></td></tr></table></figure>
+
+<p>Claude Code CLI 确认支持 <code>/skill-name</code> 解析。新开会话后直接：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/refactoring2-zh</span><br></pre></td></tr></table></figure>
+
+<p>注意：<strong>实体副本不会自动同步</strong>，后续修改 Codex 版本时需要一并更新 Claude 的副本。</p>
+<p><code>book-to-skill</code> 工具本身也同步了一份到 <code>~/.claude/skills/book-to-skill</code>，在 Claude Code 里用：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/book-to-skill ~/Books/my-book.pdf my-book</span><br></pre></td></tr></table></figure>
+
+<h3 id="格式支持预检结果"><a href="#格式支持预检结果" class="headerlink" title="格式支持预检结果"></a>格式支持预检结果</h3><table>
+<thead>
+<tr>
+<th align="left">格式</th>
+<th align="left">状态</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">文本型 PDF / DOCX / HTML</td>
+<td align="left">可直接处理</td>
+</tr>
+<tr>
+<td align="left">技术型 PDF</td>
+<td align="left">缺 <code>docling</code> 时降级提取，表格和代码块保真度较低</td>
+</tr>
+<tr>
+<td align="left">EPUB</td>
+<td align="left">内置降级方案可用</td>
+</tr>
+<tr>
+<td align="left">MOBI / AZW</td>
+<td align="left">需要 Calibre</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="八、什么时候该蒸馏书"><a href="#八、什么时候该蒸馏书" class="headerlink" title="八、什么时候该蒸馏书"></a>八、什么时候该蒸馏书</h2><h3 id="天然适合的场景"><a href="#天然适合的场景" class="headerlink" title="天然适合的场景"></a>天然适合的场景</h3><p>一句话：<strong>你会反复把这本书当作”做事方法”，而不只是偶尔查一句原文。</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">场景</th>
+<th align="left">书籍 Skill 的作用</th>
+<th align="left">例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">架构与技术决策</td>
+<td align="left">固化设计原则和取舍清单</td>
+<td align="left">DDIA、领域驱动设计、微服务设计</td>
+</tr>
+<tr>
+<td align="left">代码质量治理</td>
+<td align="left">改代码前后做一致性审查</td>
+<td align="left">重构、遗留代码、TDD</td>
+</tr>
+<tr>
+<td align="left">固定工作流程</td>
+<td align="left">把方法变成步骤、输入输出和验收线</td>
+<td align="left">需求分析、技术写作、代码评审</td>
+</tr>
+<tr>
+<td align="left">学习与复盘</td>
+<td align="left">按章节追问、做练习、连接当前项目</td>
+<td align="left">算法、系统设计、设计模式</td>
+</tr>
+<tr>
+<td align="left">专业领域辅助</td>
+<td align="left">将稳定行业方法转化为检查框架</td>
+<td align="left">产品、销售、法律合规、投资研究</td>
+</tr>
+<tr>
+<td align="left">团队共识</td>
+<td align="left">让多人按同一框架讨论和评审</td>
+<td align="left">团队工程手册、架构原则、品牌规范</td>
+</tr>
+</tbody></table>
+<h3 id="不适合的场景"><a href="#不适合的场景" class="headerlink" title="不适合的场景"></a>不适合的场景</h3><ul>
+<li>只读一次的书</li>
+<li>主要靠文采、叙事或情绪体验的文学作品</li>
+<li>需要精确原文、页码或完整上下文的资料</li>
+<li>版本变化很快的 API 文档</li>
+<li>内容太宽泛，无法转化为具体判断或行动</li>
+</ul>
+<h3 id="最值得蒸馏的开发书"><a href="#最值得蒸馏的开发书" class="headerlink" title="最值得蒸馏的开发书"></a>最值得蒸馏的开发书</h3><table>
+<thead>
+<tr>
+<th align="left">目标</th>
+<th align="left">推荐书</th>
+<th align="left">变 Skill 后用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">系统架构</td>
+<td align="left"><em>Designing Data-Intensive Applications</em></td>
+<td align="left">一致性、缓存、消息队列、数据建模、扩展性取舍</td>
+</tr>
+<tr>
+<td align="left">重构与代码质量</td>
+<td align="left"><em>Refactoring</em>（第 2 版）</td>
+<td align="left">识别坏味道，先补测试，再小步重构</td>
+</tr>
+<tr>
+<td align="left">线上稳定性</td>
+<td align="left"><em>Release It!</em></td>
+<td align="left">限流、熔断、超时、重试、降级与故障演练</td>
+</tr>
+<tr>
+<td align="left">测试设计</td>
+<td align="left"><em>GOOS</em> 或 <em>TDD by Example</em></td>
+<td align="left">把需求拆成可验证行为，生成测试策略</td>
+</tr>
+<tr>
+<td align="left">复杂业务建模</td>
+<td align="left"><em>Domain-Driven Design</em></td>
+<td align="left">限界上下文、实体、值对象、领域事件</td>
+</tr>
+<tr>
+<td align="left">API 设计</td>
+<td align="left"><em>API Design Patterns</em></td>
+<td align="left">资源、错误、分页、幂等、版本与兼容性</td>
+</tr>
+<tr>
+<td align="left">前端体验</td>
+<td align="left"><em>Refactoring UI</em></td>
+<td align="left">信息层级、表单、列表、状态与组件一致性</td>
+</tr>
+<tr>
+<td align="left">AI 应用工程</td>
+<td align="left"><em>AI Engineering</em></td>
+<td align="left">AI 应用的工程化实践</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="九、开发中要不要”先蒸馏书再写代码”？"><a href="#九、开发中要不要”先蒸馏书再写代码”？" class="headerlink" title="九、开发中要不要”先蒸馏书再写代码”？"></a>九、开发中要不要”先蒸馏书再写代码”？</h2><p>不建议把”写代码”默认变成”先蒸馏一本书”。<strong>书籍 Skill 更适合做架构顾问、评审清单和工作方法，而不是代码生成器。</strong></p>
+<p>适合用书 Skill 的开发场景：</p>
+<ul>
+<li>反复遇到同类决策（分布式、数据库设计、重构、测试策略、领域建模）</li>
+<li>书中知识相对稳定（DDIA、Refactoring、Working Effectively with Legacy Code）</li>
+<li>希望每次开发都按一套明确原则审查，而不是模型临场发挥</li>
+<li>团队要复用同一套规范</li>
+</ul>
+<p>不适合：</p>
+<ul>
+<li>只写一次小功能——直接看现有代码、测试和官方文档更快</li>
+<li>框架/API 更新快——官方文档比书籍 Skill 更可靠</li>
+<li>需要遵守本项目惯例——优先读 <code>AGENTS.md</code>、现有模块和测试</li>
+</ul>
+<p>一个好的开发工作流：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">项目代码、测试、接口契约  → 事实和约束</span><br><span class="line">官方文档                  → 当前 API 用法</span><br><span class="line">书籍 Skill                → 设计原则、取舍和审查清单</span><br><span class="line">模型                      → 实现、修改、测试</span><br></pre></td></tr></table></figure>
+
+<p>比如装好 <code>ddia</code> Skill 后，正确的问法不是”用它帮我写登录代码”，而是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">先阅读当前项目的消息队列实现和测试。</span><br><span class="line">再用 ddia 作为设计评审框架，分析&quot;订单创建后异步扣库存&quot;的方案：</span><br><span class="line">列出一致性、重试、幂等、失败恢复和可观测性风险；</span><br><span class="line">每条建议标注对应章节；最后再给出最小改动的实现方案。</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十、版权教训：找十本书蒸馏全踩空"><a href="#十、版权教训：找十本书蒸馏全踩空" class="headerlink" title="十、版权教训：找十本书蒸馏全踩空"></a>十、版权教训：找十本书蒸馏全踩空</h2><h3 id="需求：十本书做一个-core-Skill"><a href="#需求：十本书做一个-core-Skill" class="headerlink" title="需求：十本书做一个 /core Skill"></a>需求：十本书做一个 <code>/core</code> Skill</h3><p>想做一个集大成的 <code>/core</code>：第一性原理、系统思维、概率决策、认知偏差、人际影响、沟通、商业、学习系统、风险管理、长期主义（含《系统之美》《随机漫步的傻瓜》《思考，快与慢》《影响力》《非暴力沟通》《精益创业》《刻意练习》《反脆弱》《有限与无限的游戏》）。</p>
+<h3 id="踩坑：GitHub-上”有仓库”-≠-“有可合法蒸馏的原书”"><a href="#踩坑：GitHub-上”有仓库”-≠-“有可合法蒸馏的原书”" class="headerlink" title="踩坑：GitHub 上”有仓库” ≠ “有可合法蒸馏的原书”"></a>踩坑：GitHub 上”有仓库” ≠ “有可合法蒸馏的原书”</h3><p>逐本核验后发现关键事实：**GitHub 上确实有基于这些书的笔记/Skill 仓库，但几乎没有一本是”完整原书 + 授权可再利用”**。找到的往往是：</p>
+<ul>
+<li>二次蒸馏成果（<code>getagentseal/founder-playbook</code>、<code>wondelai/skills</code>），不能回溯成原书全文</li>
+<li>无许可证的课程转录、书单、笔记</li>
+<li>部分 MIT 二次 Skill（可复用但非原书）：<code>cc-thinking-skills</code>（第一性原理/系统思维/概率思考）、<code>book2skills</code>（芒格心智模型）、<code>wondelai/skills</code>（《影响力》《精益创业》）、<code>ayi-nonviolent-communication</code>（NVC）、<code>model-thinking</code></li>
+</ul>
+<p><code>《刻意练习》《有限与无限的游戏》</code>甚至找不到任何可用的开源版本。</p>
+<h3 id="核心认知"><a href="#核心认知" class="headerlink" title="核心认知"></a>核心认知</h3><blockquote>
+<p>仓库写 MIT，只能授权仓库作者自己的 Skill/代码，<strong>不能自动授权其中引用的出版社书籍</strong>。</p>
+</blockquote>
+<p>最终选择：不生成”十本原书完整蒸馏版” <code>/core</code>，核验记录写进 [core-source-audit.md]，并明确区分”开源框架整合版”（用 MIT 二次 Skill）与”严格原书版”（需要你提供已购电子书或出版社授权来源）。<strong>宁可核验十次，不可误标一次。</strong></p>
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>从找仓库到蒸馏《重构》中文版，再对比女娲与仓颉，这个项目的核心收获：</p>
+<ol>
+<li><strong>书籍 Skill = 知识编译器，人物 Skill = 人物认知提取器</strong>，前者给方法，后者给视角，不互斥</li>
+<li><strong>三层分工</strong>：RAGFlow 管检索与原文，书籍 Skill 管编译与操作清单，人物 Skill 管推理顺序与反模式</li>
+<li><strong>克制比聪明更重要</strong>：好的 Skill 会明确”证据不足就不建议”，不会为了展示能力而过度设计</li>
+<li><strong>安装踩坑都是环境问题</strong>：证书链拦截、嵌套目录、符号链接被安全扫描拒绝——每个都有明确解法，不要硬绕</li>
+<li><strong>版权是底线</strong>：GitHub 有仓库 ≠ 有可合法蒸馏的原书，二次 Skill 不能冒充原书蒸馏</li>
+<li><strong>验证要独立</strong>：结构校验之外，必须用真实任务前测输出质量，别把”生成了”当”生成了好的”</li>
+</ol>
+<blockquote>
+<p>一个稳定的 Skill，不在于装了多少，而在于<strong>每次调用都能给出可核对、可执行、知道边界的答案</strong>。</p>
+</blockquote>
+<hr>
+<p><strong>推荐资源：</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/virgiliojr94/book-to-skill">book-to-skill</a> — 书籍蒸馏 Skill（MIT，1.57 万 Stars）</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/alchaincyf/nuwa-skill">女娲 nuwa-skill</a> — 人物蒸馏 Skill</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/Yeadon8888/cangjie-skill">cangjie-skill</a> — 人物思维蒸馏 Skill</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/gausszhou/refactoring2-zh">refactoring2-zh</a> — 《重构（第 2 版）》中文 Markdown</li>
+<li><a target="_blank" rel="noopener" href="https://learn.chatgpt.com/docs/customization/overview#skills">Codex Skills 文档</a> — Codex 自定义技能</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/web-blog/2026/08/06/%E4%B9%A6%E7%B1%8D%E8%92%B8%E9%A6%8FSkill%E5%AE%9E%E6%88%98-book-to-skill%E4%B8%8E%E5%A5%B3%E5%A8%B2%E5%AF%B9%E6%AF%94/">书籍蒸馏Skill实战：book-to-skill 与女娲人物Skill的对比</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a></p>
+  <p><span>发布时间:</span>2026年08月06日 - 00:08</p>
+  <p><span>最后更新:</span>2026年08月06日 - 20:08</p>
+  <p><span>原始链接:</span><a href="/web-blog/2026/08/06/%E4%B9%A6%E7%B1%8D%E8%92%B8%E9%A6%8FSkill%E5%AE%9E%E6%88%98-book-to-skill%E4%B8%8E%E5%A5%B3%E5%A8%B2%E5%AF%B9%E6%AF%94/" title="书籍蒸馏Skill实战：book-to-skill 与女娲人物Skill的对比">https://lc19990308.github.io/web-blog/2026/08/06/%E4%B9%A6%E7%B1%8D%E8%92%B8%E9%A6%8FSkill%E5%AE%9E%E6%88%98-book-to-skill%E4%B8%8E%E5%A5%B3%E5%A8%B2%E5%AF%B9%E6%AF%94/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://lc19990308.github.io/web-blog/2026/08/06/%E4%B9%A6%E7%B1%8D%E8%92%B8%E9%A6%8FSkill%E5%AE%9E%E6%88%98-book-to-skill%E4%B8%8E%E5%A5%B3%E5%A8%B2%E5%AF%B9%E6%AF%94/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+    });
+    });  
+</script>
+
+      
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>LC
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://lc19990308.github.io/web-blog/2026/08/06/%E4%B9%A6%E7%B1%8D%E8%92%B8%E9%A6%8FSkill%E5%AE%9E%E6%88%98-book-to-skill%E4%B8%8E%E5%A5%B3%E5%A8%B2%E5%AF%B9%E6%AF%94/" title="书籍蒸馏Skill实战：book-to-skill 与女娲人物Skill的对比">https://lc19990308.github.io/web-blog/2026/08/06/书籍蒸馏Skill实战-book-to-skill与女娲对比/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/web-blog/tags/AI/" ****><i class="fa fa-tag"></i> AI</a>
+              <a href="/web-blog/tags/Agent/" ****><i class="fa fa-tag"></i> Agent</a>
+              <a href="/web-blog/tags/Skill/" ****><i class="fa fa-tag"></i> Skill</a>
+              <a href="/web-blog/tags/Claude-Code/" ****><i class="fa fa-tag"></i> Claude Code</a>
+              <a href="/web-blog/tags/Codex/" ****><i class="fa fa-tag"></i> Codex</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/08/06/Learning-Skill%E5%AE%9E%E6%88%98-%E5%85%83%E8%AE%A4%E7%9F%A5%E4%B8%8E%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86/" rel="prev" title="Learning Skill实战：把元认知和第一性原理变成可执行能力">
+      <i class="fa fa-chevron-left"></i> Learning Skill实战：把元认知和第一性原理变成可执行能力
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/web-blog/2026/08/06/%E4%BB%8ERSS%E6%BA%90%E5%BA%93%E5%88%B0%E4%BA%91%E7%AB%AF%E4%B8%93%E5%B1%9E%E7%9F%A5%E8%AF%86%E5%BA%93-Atlas%E6%90%AD%E5%BB%BA%E5%AE%9E%E5%BD%95/" rel="next" title="从RSS源库到云端专属知识库：Atlas 搭建实录">
+      从RSS源库到云端专属知识库：Atlas 搭建实录 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%89%BE%E5%88%B0%E4%BB%93%E5%BA%93%EF%BC%9Abook-to-skill-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">2.</span> <span class="nav-text">一、找到仓库：book-to-skill 是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%93%E5%BA%93%E4%BF%A1%E6%81%AF"><span class="nav-number">2.1.</span> <span class="nav-text">仓库信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E6%AD%A5%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="nav-number">2.2.</span> <span class="nav-text">三步工作流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%AE%83"><span class="nav-number">2.3.</span> <span class="nav-text">为什么需要它</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81Codex-%E8%83%BD%E4%B8%8D%E8%83%BD%E8%A3%85%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">二、Codex 能不能装？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%85%B3%E9%94%AE%E5%AF%B9%E6%AF%94%EF%BC%9Abook-to-skill-vs-%E5%A5%B3%E5%A8%B2%EF%BC%88%E4%BA%BA%E7%89%A9%E8%92%B8%E9%A6%8F%EF%BC%89"><span class="nav-number">4.</span> <span class="nav-text">三、关键对比：book-to-skill vs 女娲（人物蒸馏）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A5%B3%E5%A8%B2%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">4.1.</span> <span class="nav-text">女娲是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%B7%AE%E5%88%AB%EF%BC%9A%E7%9F%A5%E8%AF%86%E5%B7%A5%E5%85%B7%E4%B9%A6-vs-%E5%86%B3%E7%AD%96%E9%A3%8E%E6%A0%BC%E6%A8%A1%E6%8B%9F%E5%99%A8"><span class="nav-number">4.2.</span> <span class="nav-text">核心差别：知识工具书 vs 决策风格模拟器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E7%9B%B4%E8%A7%82%E7%9A%84%E4%BE%8B%E5%AD%90"><span class="nav-number">4.3.</span> <span class="nav-text">一个直观的例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E5%B7%B4%E8%8F%B2%E7%89%B9-%E8%8A%92%E6%A0%BC%E7%9A%84%E6%9C%80%E4%BD%B3%E7%BB%84%E5%90%88"><span class="nav-number">4.4.</span> <span class="nav-text">对巴菲特&#x2F;芒格的最佳组合</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E9%A1%BA%E5%B8%A6%E5%AF%B9%E6%AF%94%EF%BC%9Acangjie-skill%EF%BC%88%E4%BB%93%E9%A2%89%EF%BC%89"><span class="nav-number">5.</span> <span class="nav-text">四、顺带对比：cangjie-skill（仓颉）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E4%B8%89%E5%B1%82%E5%88%86%E5%B7%A5%EF%BC%9ARAGFlow-%E7%9F%A5%E8%AF%86%E5%BA%93-vs-%E4%B9%A6%E7%B1%8D-Skill-vs-%E4%BA%BA%E7%89%A9-Skill"><span class="nav-number">6.</span> <span class="nav-text">五、三层分工：RAGFlow 知识库 vs 书籍 Skill vs 人物 Skill</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E7%A7%8D%E6%9C%BA%E5%88%B6%E7%9A%84%E6%9C%AC%E8%B4%A8%E5%8C%BA%E5%88%AB"><span class="nav-number">6.1.</span> <span class="nav-text">三种机制的本质区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E4%BC%9A%E2%80%9D%E6%89%93%E6%9E%B6%E2%80%9D"><span class="nav-number">6.2.</span> <span class="nav-text">什么时候会”打架”</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E5%AE%9E%E6%88%98%EF%BC%9A%E8%92%B8%E9%A6%8F%E3%80%8A%E9%87%8D%E6%9E%84%EF%BC%88%E7%AC%AC-2-%E7%89%88%EF%BC%89%E3%80%8B%E4%B8%AD%E6%96%87%E7%89%88"><span class="nav-number">7.</span> <span class="nav-text">六、实战：蒸馏《重构（第 2 版）》中文版</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%89%E6%BA%90%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E7%94%A8-GitHub-%E4%B8%AD%E6%96%87%E4%BB%93%E5%BA%93"><span class="nav-number">7.1.</span> <span class="nav-text">选源：为什么用 GitHub 中文仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E8%B8%A9%E5%9D%91-1%EF%BC%9APython-%E8%AF%81%E4%B9%A6%E9%93%BE%E6%8B%A6%E6%88%AA"><span class="nav-number">7.2.</span> <span class="nav-text">安装踩坑 1：Python 证书链拦截</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E8%B8%A9%E5%9D%91-2%EF%BC%9A%E5%B5%8C%E5%A5%97%E7%9B%AE%E5%BD%95%E5%AF%BC%E8%87%B4%E8%84%9A%E6%9C%AC%E8%B7%AF%E5%BE%84%E7%BC%BA%E5%A4%B1"><span class="nav-number">7.3.</span> <span class="nav-text">安装踩坑 2：嵌套目录导致脚本路径缺失</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%BD%E5%8F%96%E4%B8%8E%E7%94%9F%E6%88%90"><span class="nav-number">7.4.</span> <span class="nav-text">抽取与生成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8B%AC%E7%AB%8B%E5%89%8D%E6%B5%8B%EF%BC%9A%E4%B8%8D%E5%8F%AA%E7%9C%8B%E7%BB%93%E6%9E%84%EF%BC%8C%E8%BF%98%E7%9C%8B%E8%BE%93%E5%87%BA%E8%B4%A8%E9%87%8F"><span class="nav-number">7.5.</span> <span class="nav-text">独立前测：不只看结构，还看输出质量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%99%85%E7%94%A8%E6%B3%95"><span class="nav-number">7.6.</span> <span class="nav-text">实际用法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E8%B7%A8%E5%B9%B3%E5%8F%B0%E5%90%8C%E6%AD%A5%EF%BC%9A%E8%AE%A9-Claude-Code-%E4%B9%9F%E8%83%BD%E7%94%A8"><span class="nav-number">8.</span> <span class="nav-text">七、跨平台同步：让 Claude Code 也能用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9D%91%EF%BC%9A%E7%AC%A6%E5%8F%B7%E9%93%BE%E6%8E%A5%E8%A2%AB%E5%AE%89%E5%85%A8%E6%89%AB%E6%8F%8F%E6%8B%92%E7%BB%9D"><span class="nav-number">8.1.</span> <span class="nav-text">坑：符号链接被安全扫描拒绝</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%BC%E5%BC%8F%E6%94%AF%E6%8C%81%E9%A2%84%E6%A3%80%E7%BB%93%E6%9E%9C"><span class="nav-number">8.2.</span> <span class="nav-text">格式支持预检结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E8%AF%A5%E8%92%B8%E9%A6%8F%E4%B9%A6"><span class="nav-number">9.</span> <span class="nav-text">八、什么时候该蒸馏书</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%A9%E7%84%B6%E9%80%82%E5%90%88%E7%9A%84%E5%9C%BA%E6%99%AF"><span class="nav-number">9.1.</span> <span class="nav-text">天然适合的场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E9%80%82%E5%90%88%E7%9A%84%E5%9C%BA%E6%99%AF"><span class="nav-number">9.2.</span> <span class="nav-text">不适合的场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E5%80%BC%E5%BE%97%E8%92%B8%E9%A6%8F%E7%9A%84%E5%BC%80%E5%8F%91%E4%B9%A6"><span class="nav-number">9.3.</span> <span class="nav-text">最值得蒸馏的开发书</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E3%80%81%E5%BC%80%E5%8F%91%E4%B8%AD%E8%A6%81%E4%B8%8D%E8%A6%81%E2%80%9D%E5%85%88%E8%92%B8%E9%A6%8F%E4%B9%A6%E5%86%8D%E5%86%99%E4%BB%A3%E7%A0%81%E2%80%9D%EF%BC%9F"><span class="nav-number">10.</span> <span class="nav-text">九、开发中要不要”先蒸馏书再写代码”？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E3%80%81%E7%89%88%E6%9D%83%E6%95%99%E8%AE%AD%EF%BC%9A%E6%89%BE%E5%8D%81%E6%9C%AC%E4%B9%A6%E8%92%B8%E9%A6%8F%E5%85%A8%E8%B8%A9%E7%A9%BA"><span class="nav-number">11.</span> <span class="nav-text">十、版权教训：找十本书蒸馏全踩空</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9C%80%E6%B1%82%EF%BC%9A%E5%8D%81%E6%9C%AC%E4%B9%A6%E5%81%9A%E4%B8%80%E4%B8%AA-core-Skill"><span class="nav-number">11.1.</span> <span class="nav-text">需求：十本书做一个 &#x2F;core Skill</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B8%A9%E5%9D%91%EF%BC%9AGitHub-%E4%B8%8A%E2%80%9D%E6%9C%89%E4%BB%93%E5%BA%93%E2%80%9D-%E2%89%A0-%E2%80%9C%E6%9C%89%E5%8F%AF%E5%90%88%E6%B3%95%E8%92%B8%E9%A6%8F%E7%9A%84%E5%8E%9F%E4%B9%A6%E2%80%9D"><span class="nav-number">11.2.</span> <span class="nav-text">踩坑：GitHub 上”有仓库” ≠ “有可合法蒸馏的原书”</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E8%AE%A4%E7%9F%A5"><span class="nav-number">11.3.</span> <span class="nav-text">核心认知</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">12.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="LC"
+      src="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
+  <p class="site-author-name" itemprop="name">LC</p>
+  <div class="site-description" itemprop="description">专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/web-blog/archives/">
+        
+          <span class="site-state-item-count">150</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/web-blog/categories/">
+          
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/web-blog/tags/">
+          
+        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button motion-element"><i class="fa fa-comment"></i>
+    Chat
+  </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lc19990308/web-blog" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lc19990308&#x2F;web-blog" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:jarridaddison4@gmail.com" title="E-Mail → mailto:jarridaddison4@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/web-blog/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=441491828&auto=1&height=66"></iframe>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LC</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>-->
+<div class="powered-by">
+  <i class="fa fa-user-md"></i>
+  <span id="busuanzi_container_site_pv">
+    本站访问量:<span id="busuanzi_value_site_pv"></span>次
+  </span>
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv">
+    本站总访客量：<span id="busuanzi_value_site_uv"></span>人
+  </span>
+</div>
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共229.5k字</span>
+</div>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/web-blog/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.min.js"></script>
+  <script src="/web-blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/web-blog/js/utils.js"></script>
+
+<script src="/web-blog/js/motion.js"></script>
+
+
+<script src="/web-blog/js/schemes/pisces.js"></script>
+
+
+<script src="/web-blog/js/next-boot.js"></script>
+
+<script src="/web-blog/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/web-blog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+</body>
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</html>
