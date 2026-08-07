@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="从 vue-bits 的组件注册表安装 AnimatedContent，了解它写入项目的方式、GSAP 依赖、Nuxt/SSR 与减少动态效果设置，并避开全局 ScrollTrigger 的使用边界。" />
+    <title>Vue Bits 使用指南：按需引入动效组件 | 前端技术笔记</title>
+    <link rel="alternate" href="/web-blog/atom.xml" title="前端技术笔记" type="application/atom+xml" />
+    <link rel="stylesheet" href="/web-blog/css/main.css" />
+  <meta name="generator" content="Hexo 5.4.0"></head>
+  <body>
+    <header class="site-header shell">
+      <a class="wordmark" href="/web-blog/" aria-label="前端技术笔记 首页">LC <span>/</span> NOTES</a>
+      <nav class="main-nav" id="main-nav" aria-label="主导航">
+        <a href="/web-blog/">笔记</a>
+        <a href="/web-blog/categories/">专题</a>
+        <a href="/web-blog/about/">关于</a>
+        <a href="/web-blog/archives/">归档</a>
+      </nav>
+      <div class="header-actions">
+        <button class="menu-button" aria-controls="main-nav" aria-expanded="false" aria-label="打开菜单" type="button">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+        </button>
+        <button class="search-button" aria-controls="search-dialog" aria-label="搜索文章" type="button">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.5 4.5"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    
+<main class="shell post-shell">
+  <aside class="post-toc" aria-label="文章目录">
+    <p class="section-label">ON THIS PAGE</p>
+    <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%85%88%E9%80%89%E4%B8%80%E4%B8%AA%E4%BC%9A%E6%94%B9%E5%96%84%E9%98%85%E8%AF%BB%E7%9A%84%E6%95%88%E6%9E%9C"><span class="toc-list-text">先选一个会改善阅读的效果</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%AE%89%E8%A3%85%E4%B8%80%E4%B8%AA%E7%BB%84%E4%BB%B6%EF%BC%8C%E8%80%8C%E4%B8%8D%E6%98%AF%E6%95%B4%E5%BA%93"><span class="toc-list-text">安装一个组件，而不是整库</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9C%A8%E4%B8%80%E4%B8%AA%E4%B8%9A%E5%8A%A1%E9%A1%B5%E9%9D%A2%E9%87%8C%E4%BD%BF%E7%94%A8"><span class="toc-list-text">在一个业务页面里使用</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9C%A8-Nuxt%E3%80%81%E7%A7%BB%E5%8A%A8%E7%AB%AF%E5%92%8C%E6%97%A0%E5%8A%A8%E7%94%BB%E5%81%8F%E5%A5%BD%E4%B8%8B%E6%94%B6%E4%BD%8F%E6%95%88%E6%9E%9C"><span class="toc-list-text">在 Nuxt、移动端和无动画偏好下收住效果</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%80%E4%B8%AA%E9%9C%80%E8%A6%81%E6%8F%90%E5%89%8D%E7%9F%A5%E9%81%93%E7%9A%84-GSAP-%E8%BE%B9%E7%95%8C"><span class="toc-list-text">一个需要提前知道的 GSAP 边界</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%8A%E7%BA%BF%E5%89%8D%E7%9A%84%E5%9B%9B%E4%B8%AA%E6%A3%80%E6%9F%A5"><span class="toc-list-text">上线前的四个检查</span></a></li></ol>
+  </aside>
+  <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+    <header class="post-header">
+      <p class="section-label">Vue</p>
+      <h1 itemprop="headline">Vue Bits 使用指南：按需引入动效组件</h1>
+      <div class="metadata"><span>2026-08-07</span><span>4 分钟阅读</span><span>更新于 2026-08-07</span></div>
+      <p class="post-lede">从 vue-bits 的组件注册表安装 AnimatedContent，了解它写入项目的方式、GSAP 依赖、Nuxt/SSR 与减少动态效果设置，并避开全局 ScrollTrigger 的使用边界。</p>
+    </header>
+    <div class="prose" itemprop="articleBody"><p><a target="_blank" rel="noopener" href="https://github.com/DavidHDev/vue-bits">vue-bits</a> 很容易让人误以为又是一个“装上就能全局使用”的 Vue UI 库。它不是。它更像一个可挑选的动效组件仓库：在需要某个效果时，把那一个组件和它的依赖拉进自己的项目，之后源码归项目自己维护。</p>
+<p>这个区别很实际。你不会为了一个滚动入场动画引入一整套设计系统；代价是组件更新不会随着 <code>npm update</code> 自动到来，安装后要把它当作自己代码的一部分审查、测试和升级。</p>
+<p>仓库 README 目前列出 90+ 个文本动画、交互组件和背景效果，并说明它是 <a target="_blank" rel="noopener" href="https://reactbits.dev/">React Bits</a> 的官方 Vue 移植版。本文不追求把页面做得“特效很多”，只用 <code>AnimatedContent</code> 做一个可控的入场动画，讲清楚完整使用路径。</p>
+<h2 id="先选一个会改善阅读的效果"><a href="#先选一个会改善阅读的效果" class="headerlink" title="先选一个会改善阅读的效果"></a>先选一个会改善阅读的效果</h2><p><code>AnimatedContent</code> 是一个包裹组件。它在元素进入视口时，用 GSAP 把子内容从指定方向移动到原位，并可同时从低透明度过渡到可见。</p>
+<p>它适合放在首页首屏之后的标题、案例列表、长文中的小节开头。不要给每个段落都包一层：读者滑动时会等动画，信息反而慢下来。</p>
+<p>下面这类结构就足够了：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">静态页面结构</span><br><span class="line">      ↓</span><br><span class="line">AnimatedContent 只包住一个内容块</span><br><span class="line">      ↓</span><br><span class="line">元素进入视口后播放一次</span><br><span class="line">      ↓</span><br><span class="line">动画结束，内容保持普通的静态布局</span><br></pre></td></tr></table></figure>
+
+<h2 id="安装一个组件，而不是整库"><a href="#安装一个组件，而不是整库" class="headerlink" title="安装一个组件，而不是整库"></a>安装一个组件，而不是整库</h2><p>vue-bits 的文档页为每个组件提供 <code>shadcn</code> 和 <code>jsrepo</code> 两种安装方式。以 <code>AnimatedContent</code> 为例，公开注册表中的条目地址是：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npx shadcn@latest add \</span><br><span class="line">  https://vue-bits.dev/r/AnimatedContent.json</span><br></pre></td></tr></table></figure>
+
+<p>也可以使用 <code>jsrepo</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npx jsrepo add \</span><br><span class="line">  https://vue-bits.dev/r/AnimatedContent.json</span><br></pre></td></tr></table></figure>
+
+<p>这两条命令的共同结果不是在 <code>node_modules</code> 里多一个 <code>vue-bits</code> 运行时包，而是从注册表取回组件文件，并按当前项目的配置写入组件目录。安装后先看终端输出和实际落点，再写 import；不同项目的别名和组件目录不必强行统一。</p>
+<p><code>AnimatedContent</code> 的注册表清单声明了 <code>gsap@^3.13.0</code> 依赖。若你采用安装器，检查 <code>package.json</code> 是否已写入 <code>gsap</code>；若是从 GitHub 手动复制 <code>.vue</code> 文件，则自行安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install gsap</span><br></pre></td></tr></table></figure>
+
+<p>组件页、预览和安装选项可在 <a target="_blank" rel="noopener" href="https://vue-bits.dev/animations/animated-content">AnimatedContent 文档</a> 查看。</p>
+<h2 id="在一个业务页面里使用"><a href="#在一个业务页面里使用" class="headerlink" title="在一个业务页面里使用"></a>在一个业务页面里使用</h2><p>假设安装器把文件放到了 <code>src/components/AnimatedContent/AnimatedContent.vue</code>。下面在一个营销页的“案例”区块使用它。路径以你的实际输出为准。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;script setup lang=&quot;ts&quot;&gt;</span><br><span class="line">import AnimatedContent from &#x27;@/components/AnimatedContent/AnimatedContent.vue&#x27;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;section class=&quot;case-section&quot; aria-labelledby=&quot;case-title&quot;&gt;</span><br><span class="line">    &lt;AnimatedContent</span><br><span class="line">      :distance=&quot;28&quot;</span><br><span class="line">      :duration=&quot;0.45&quot;</span><br><span class="line">      :threshold=&quot;0.15&quot;</span><br><span class="line">      :animate-opacity=&quot;true&quot;</span><br><span class="line">    &gt;</span><br><span class="line">      &lt;p class=&quot;section-label&quot;&gt;案例研究&lt;/p&gt;</span><br><span class="line">      &lt;h2 id=&quot;case-title&quot;&gt;先把问题讲清楚&lt;/h2&gt;</span><br><span class="line">      &lt;p&gt;动画只负责引导视线，标题和正文在不播放动画时也要完整成立。&lt;/p&gt;</span><br><span class="line">    &lt;/AnimatedContent&gt;</span><br><span class="line">  &lt;/section&gt;</span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这几个参数已经覆盖大多数页面：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>作用</th>
+<th>我常用的范围</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>distance</code></td>
+<td>入场前的位移距离</td>
+<td>16–40，距离过大会像内容从屏幕外冲进来</td>
+</tr>
+<tr>
+<td><code>duration</code></td>
+<td>动画时长，单位为秒</td>
+<td>0.3–0.6，正文通常比装饰元素更短</td>
+</tr>
+<tr>
+<td><code>threshold</code></td>
+<td>元素在视口中达到的触发比例</td>
+<td>0.1–0.25</td>
+</tr>
+<tr>
+<td><code>direction</code></td>
+<td><code>vertical</code> 或 <code>horizontal</code></td>
+<td>正文优先用默认的垂直方向</td>
+</tr>
+<tr>
+<td><code>reverse</code></td>
+<td>反转进入方向</td>
+<td>用在有明确视觉方向的少数区块</td>
+</tr>
+<tr>
+<td><code>delay</code></td>
+<td>延迟播放，单位为秒</td>
+<td>只在一个区块内需要层级时使用</td>
+</tr>
+</tbody></table>
+<p>组件还会在动画结束时触发 <code>complete</code> 事件。它适合做本地状态更新，例如开始某个非关键的装饰效果；不要把请求数据、路由跳转或提交表单绑在动画完成后。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;AnimatedContent :distance=&quot;24&quot; :duration=&quot;0.4&quot; @complete=&quot;showDecoration = true&quot;&gt;</span><br><span class="line">  &lt;article&gt;这里的内容无需等待接口，也无需等待动画。&lt;/article&gt;</span><br><span class="line">&lt;/AnimatedContent&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="在-Nuxt、移动端和无动画偏好下收住效果"><a href="#在-Nuxt、移动端和无动画偏好下收住效果" class="headerlink" title="在 Nuxt、移动端和无动画偏好下收住效果"></a>在 Nuxt、移动端和无动画偏好下收住效果</h2><p><code>AnimatedContent</code> 在挂载后注册 GSAP 的 <code>ScrollTrigger</code>，因此不要在服务端渲染阶段直接依赖浏览器对象。Vue 生命周期本身会让组件的挂载逻辑在客户端执行；若你的页面还包了其他依赖 <code>window</code> 的组件或第三方脚本，在 Nuxt 中把那一小块放进 <code>&lt;ClientOnly&gt;</code>，而不是把整个页面都改成客户端渲染。</p>
+<p>页面还应尊重用户的“减少动态效果”偏好。最简单的策略是：检测到 <code>prefers-reduced-motion: reduce</code> 后，保留内容，取消入场动画或把位移与时长降到几乎不可感知。对于纯装饰性的鼠标组件，例如 <code>Magnet</code>，触屏设备应直接禁用，不能把鼠标悬停当作所有用户都具备的输入方式。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;AnimatedContent</span><br><span class="line">  :distance=&quot;prefersReducedMotion ? 0 : 28&quot;</span><br><span class="line">  :duration=&quot;prefersReducedMotion ? 0 : 0.45&quot;</span><br><span class="line">  :animate-opacity=&quot;!prefersReducedMotion&quot;</span><br><span class="line">&gt;</span><br><span class="line">  &lt;slot /&gt;</span><br><span class="line">&lt;/AnimatedContent&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这里的 <code>prefersReducedMotion</code> 可以由项目已有的媒体查询封装提供。关键不是变量名，而是保证同一份正文在动画关闭时仍立即可读。</p>
+<h2 id="一个需要提前知道的-GSAP-边界"><a href="#一个需要提前知道的-GSAP-边界" class="headerlink" title="一个需要提前知道的 GSAP 边界"></a>一个需要提前知道的 GSAP 边界</h2><p>截至本文检查的版本，<code>AnimatedContent</code> 在 prop 变化和组件卸载时会调用 <code>ScrollTrigger.getAll()</code>，然后逐个 <code>kill()</code>。这是全局注册表：如果同一个页面还有其他 GSAP 的滚动触发器，动态修改这个组件的参数或卸载它时，可能一并清掉别的触发器。</p>
+<p>因此有两种稳妥用法：</p>
+<ul>
+<li>页面只把它当作一次性入场组件，避免在运行中频繁改动它的动效 props。</li>
+<li>同页已有复杂 GSAP 动画时，先在隔离页面验证卸载与路由切换；必要时把组件改为只保存并销毁自己创建的 tween 和 trigger。</li>
+</ul>
+<p>这是“源码落到项目里”的好处。你不是被一个黑盒组件困住，可以根据页面的动画所有权改它；但这也意味着把组件贴进页面前要读一遍依赖、生命周期和清理逻辑。</p>
+<h2 id="上线前的四个检查"><a href="#上线前的四个检查" class="headerlink" title="上线前的四个检查"></a>上线前的四个检查</h2><ol>
+<li>把系统“减少动态效果”打开一次，确认内容不闪烁、不迟到。</li>
+<li>用键盘完成页面的主要操作。动画容器不能改变焦点顺序，也不该遮住按钮。</li>
+<li>在手机宽度和普通桌面宽度都看一遍。只对鼠标有意义的效果不能成为理解内容的前提。</li>
+<li>在同页有其他 GSAP 动画时切换路由或条件渲染一次，确认其他触发器没有消失。</li>
+</ol>
+<p>vue-bits 的价值在于让你从一个已完成的交互细节开始，而不是从零抄一段动效代码。选择一个能服务内容的组件，限定它的出现范围，再把动效关掉后重新检查页面。这样留下来的效果，通常比满屏背景粒子和逐字标题更耐看。</p>
+<p>最后还有许可证。vue-bits 使用的是 <a target="_blank" rel="noopener" href="https://github.com/DavidHDev/vue-bits/blob/main/LICENSE.md">MIT + Commons Clause</a>：可以把组件用于应用、网站或产品，包括商业用途；但不能把组件本身单独、打包、模板化或移植后出售、再授权或再分发。做客户项目一般没有问题，做“售卖组件库”的产品则不在许可范围内。</p>
+</div>
+    
+      <footer class="post-tags" aria-label="文章标签">
+        <a href="/web-blog/tags/Vue/">Vue</a><a href="/web-blog/tags/%E7%BB%84%E4%BB%B6/">组件</a><a href="/web-blog/tags/%E5%8A%A8%E7%94%BB/">动画</a><a href="/web-blog/tags/UI/">UI</a>
+      </footer>
+    
+    <nav class="post-navigation" aria-label="文章导航">
+      <a href="/web-blog/2026/08/07/AI-Animation-Skills%E5%AE%9E%E6%88%98/"><span>上一篇</span><b>把技术提纲做成可翻页 HTML：AI_Animation 实战</b></a>
+      <a class="next" href="/web-blog/2026/08/07/%E4%BD%BF%E7%94%A8Chinese-Writing%E5%90%8E%E7%9A%84%E5%86%99%E4%BD%9C%E6%84%9F%E6%82%9F/"><span>下一篇</span><b>用了 Chinese Writing 后，我开始先删掉半篇文章</b></a>
+    </nav>
+  </article>
+  <aside class="post-rail" aria-label="文章信息">
+    <p class="section-label">CONNECTIONS</p>
+    <div><strong>专题</strong><a href="/web-blog/categories/Vue/">Vue</a></div>
+    <div><strong>标签</strong><a href="/web-blog/tags/Vue/">Vue</a><a href="/web-blog/tags/%E7%BB%84%E4%BB%B6/">组件</a><a href="/web-blog/tags/%E5%8A%A8%E7%94%BB/">动画</a><a href="/web-blog/tags/UI/">UI</a></div>
+  </aside>
+</main>
+
+
+    <footer class="shell footer">
+      <span>2021 - 2026 &copy; LC</span>
+      <span>真实项目的研究记录</span>
+      <a href="/web-blog/atom.xml">RSS</a>
+    </footer>
+
+    <dialog class="search-dialog" id="search-dialog" data-search-url="/web-blog/search.xml">
+      <div class="search-dialog__bar">
+        <label for="site-search">搜索笔记</label>
+        <button class="dialog-close" aria-label="关闭搜索" type="button">关闭</button>
+      </div>
+      <input id="site-search" type="search" autocomplete="off" placeholder="输入文章标题、主题或关键词" />
+      <div class="search-results" aria-live="polite"></div>
+    </dialog>
+
+    <script src="/web-blog/js/site.js"></script>
+  </body>
+</html>

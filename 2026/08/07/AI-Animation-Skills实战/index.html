@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="用 AI_Animation 的 ppt-animation Skill 把技术提纲做成单文件 HTML 演示：安装、提示词、验证方式，以及它适合和不适合解决的问题。" />
+    <title>把技术提纲做成可翻页 HTML：AI_Animation 实战 | 前端技术笔记</title>
+    <link rel="alternate" href="/web-blog/atom.xml" title="前端技术笔记" type="application/atom+xml" />
+    <link rel="stylesheet" href="/web-blog/css/main.css" />
+  <meta name="generator" content="Hexo 5.4.0"></head>
+  <body>
+    <header class="site-header shell">
+      <a class="wordmark" href="/web-blog/" aria-label="前端技术笔记 首页">LC <span>/</span> NOTES</a>
+      <nav class="main-nav" id="main-nav" aria-label="主导航">
+        <a href="/web-blog/">笔记</a>
+        <a href="/web-blog/categories/">专题</a>
+        <a href="/web-blog/about/">关于</a>
+        <a href="/web-blog/archives/">归档</a>
+      </nav>
+      <div class="header-actions">
+        <button class="menu-button" aria-controls="main-nav" aria-expanded="false" aria-label="打开菜单" type="button">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+        </button>
+        <button class="search-button" aria-controls="search-dialog" aria-label="搜索文章" type="button">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.5 4.5"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    
+<main class="shell post-shell">
+  <aside class="post-toc" aria-label="文章目录">
+    <p class="section-label">ON THIS PAGE</p>
+    <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%AE%83%E5%AE%9E%E9%99%85%E6%8F%90%E4%BE%9B%E4%BA%86%E4%BB%80%E4%B9%88"><span class="toc-list-text">它实际提供了什么</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%AE%89%E8%A3%85%E6%96%B9%E5%BC%8F"><span class="toc-list-text">安装方式</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E7%94%A8-ppt-animation-%E5%81%9A%E4%B8%80%E6%AC%A1%E6%8A%80%E6%9C%AF%E6%BC%94%E7%A4%BA"><span class="toc-list-text">用 ppt-animation 做一次技术演示</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E7%94%9F%E6%88%90%E5%90%8E%EF%BC%8C%E4%B8%8D%E8%A6%81%E5%8F%AA%E7%9C%8B%E6%88%AA%E5%9B%BE"><span class="toc-list-text">生成后，不要只看截图</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%AE%83%E7%9A%84%E8%BE%B9%E7%95%8C%E5%9C%A8%E5%93%AA%E9%87%8C"><span class="toc-list-text">它的边界在哪里</span></a></li></ol>
+  </aside>
+  <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+    <header class="post-header">
+      <p class="section-label">AI</p>
+      <h1 itemprop="headline">把技术提纲做成可翻页 HTML：AI_Animation 实战</h1>
+      <div class="metadata"><span>2026-08-07</span><span>4 分钟阅读</span><span>更新于 2026-08-07</span></div>
+      <p class="post-lede">用 AI_Animation 的 ppt-animation Skill 把技术提纲做成单文件 HTML 演示：安装、提示词、验证方式，以及它适合和不适合解决的问题。</p>
+    </header>
+    <div class="prose" itemprop="articleBody"><p>我原本以为，给一次技术分享准备材料，最自然的起点是新建一个 PPT。后来发现真正花时间的不是写提纲，而是把每一页的层级、图示和翻页节奏整理到能录屏的程度。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Unclecheng-li/AI_Animation">AI_Animation</a> 处理的是这一步。它不是一个要在业务项目里 <code>import</code> 的动画库，而是一组给 AI 编程代理用的 Skill。把主题、受众和演示节奏说清楚后，Agent 生成一个可独立打开的 HTML 文件。页面内的图形、样式和交互都在这个文件里，适合技术讲解、课程录屏和内部分享。</p>
+<p>这篇文章用仓库里的 <code>ppt-animation</code> 作为例子。下面的演示就是按这个方式做出的成品，可以用键盘方向键、鼠标滚轮、点击左右区域翻页。</p>
+<iframe class="article-diagram" src="/web-blog/demos/ai-animation-ppt-workflow.html" title="从技术提纲到 HTML 动画演示的交互示例" loading="lazy"></iframe>
+
+<p class="diagram-caption">图：一个提纲会先被整理为页面结构，再交给对应 Skill 生成带交互的单文件 HTML。<a href="/web-blog/demos/ai-animation-ppt-workflow.html" target="_blank" rel="noopener">在新窗口打开演示</a></p>
+
+<h2 id="它实际提供了什么"><a href="#它实际提供了什么" class="headerlink" title="它实际提供了什么"></a>它实际提供了什么</h2><p>项目目前提供六个 Skill。它们的共同点是：输出是可以交付、可以直接在浏览器里打开的页面，不要求你先搭一套前端工程。</p>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>适合解决的任务</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ppt-animation</code></td>
+<td>分页演示、课程录屏、技术讲解</td>
+</tr>
+<tr>
+<td><code>flowchart</code></td>
+<td>流程、概念、时序和原理说明</td>
+</tr>
+<tr>
+<td><code>network-protocol-viz</code></td>
+<td>TCP/IP、路由、报文等网络协议可视化</td>
+</tr>
+<tr>
+<td><code>dynamic-archify</code></td>
+<td>架构图、数据流、状态机，以及导出图片或视频</td>
+</tr>
+<tr>
+<td><code>scholar-notes</code></td>
+<td>带图示的学习笔记与技术摘要</td>
+</tr>
+<tr>
+<td><code>card-theater</code></td>
+<td>侧边解说配合卡片轮播的分步叙事</td>
+</tr>
+</tbody></table>
+<p>不要把这六个名字当成一组必须全部安装和调用的功能。先看内容的表达形式：需要一页一页讲，就选 <code>ppt-animation</code>；需要读者自己观察数据怎样流动，就选 <code>flowchart</code> 或 <code>dynamic-archify</code>。选错容器，后面再堆 CSS 也很难自然。</p>
+<h2 id="安装方式"><a href="#安装方式" class="headerlink" title="安装方式"></a>安装方式</h2><p>仓库 README 给出的整包安装命令是：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npx skills add https://github.com/Unclecheng-li/AI_Animation</span><br></pre></td></tr></table></figure>
+
+<p>安装后，先重新打开或刷新你的 Agent 会话，让它重新发现 Skill。随后直接描述结果，不必在提示词里要求它“写很炫的动画”。“炫”没有验收标准，页面常常会变成闪烁的标题和几个没有含义的光点。</p>
+<p>仓库的默认分支目前是 <code>master</code>。如果你打算只安装其中一个子目录，应先在项目页面确认安装器支持的路径和分支写法；本文不把 README 中未经本地验证的单 Skill 示例当作通用命令。</p>
+<h2 id="用-ppt-animation-做一次技术演示"><a href="#用-ppt-animation-做一次技术演示" class="headerlink" title="用 ppt-animation 做一次技术演示"></a>用 <code>ppt-animation</code> 做一次技术演示</h2><p>假设要讲“前端页面是怎样从需求变成可发布页面的”。我会把提示词写成下面这样：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">用 ppt-animation 制作一份 6 页的中文技术演示，主题是“从需求到可发布页面”。</span><br><span class="line"></span><br><span class="line">用途：10 分钟内部技术分享并录屏。</span><br><span class="line">视觉：白底、深色文字、珊瑚红和深绿色点缀；不要使用产品商标、人物照片或装饰性光球。</span><br><span class="line">页面：</span><br><span class="line">1. 标题与问题；</span><br><span class="line">2. 需求拆解；</span><br><span class="line">3. 页面、组件和数据的关系；</span><br><span class="line">4. 开发与测试流程；</span><br><span class="line">5. 发布前检查；</span><br><span class="line">6. 总结。</span><br><span class="line"></span><br><span class="line">每页的标题、正文和图示按顺序出现；支持键盘方向键、滚轮和点击翻页。</span><br><span class="line">输出一个不依赖外部框架的单文件 HTML，并保证窄屏也能阅读。</span><br></pre></td></tr></table></figure>
+
+<p>这里真正有用的信息有四类：</p>
+<ol>
+<li><strong>演示用途</strong>决定字号和信息密度。录屏需要大字和少量短句，文档阅读可以放更多细节。</li>
+<li><strong>页数与页面清单</strong>限制内容膨胀。六页不是硬规则，但每页只解决一个问题。</li>
+<li><strong>视觉约束</strong>比“科技感”更可执行。直接写颜色、禁用项和是否使用真实素材。</li>
+<li><strong>交互与交付形式</strong>决定生成结果能否直接使用。这里要求了键盘、滚轮、点击和单文件交付。</li>
+</ol>
+<p><code>ppt-animation</code> 的特点不是自动替你写对内容，而是把“翻到下一页后，标题先出现，图示和文字随后出现”这件重复的前端工作变成固定能力。内容仍然需要你自己判断：架构关系是否正确，术语是否准确，读者能否在一页内理解。</p>
+<h2 id="生成后，不要只看截图"><a href="#生成后，不要只看截图" class="headerlink" title="生成后，不要只看截图"></a>生成后，不要只看截图</h2><p>HTML 能打开不等于它已经能用于演示。我会按下面四项过一遍：</p>
+<ul>
+<li><strong>断网打开</strong>：确认字体、脚本、图片没有把关键内容留在外部 CDN。</li>
+<li><strong>逐页翻看</strong>：每一页都应先出现标题，再出现支撑它的文字或图形；不要让所有元素同时弹出。</li>
+<li><strong>检查三种输入</strong>：方向键、滚轮和点击是否都能翻页，最后一页和第一页是否正确处理边界。</li>
+<li><strong>按目标屏幕录一遍</strong>：在笔记本和投屏分辨率下各看一次，确认正文没有被裁切，页码和进度条不会挡住内容。</li>
+</ul>
+<p>如果页面服务于博客或文档，可以像本文一样嵌入 <code>iframe</code>，同时保留“在新窗口打开”的链接。这样文章的阅读节奏不会被演示本身打断，读者又能在需要时获得完整画布。</p>
+<h2 id="它的边界在哪里"><a href="#它的边界在哪里" class="headerlink" title="它的边界在哪里"></a>它的边界在哪里</h2><p>这类 Skill 很适合把一次性的讲解材料、原理图或架构图迅速变成更易读的页面。它不替代需要长期维护的产品前端：复杂状态、权限、真实数据、无障碍要求和跨页面导航，仍然应该进入正常的工程化项目。</p>
+<p>另一个边界是事实。Agent 可以画一张很顺眼的协议流程图，却不能替你证明时序正确；它也能排出一页漂亮的架构图，却不会自动知道服务之间真正的依赖。把生成结果当成第一版，再按资料或代码核对，才是可靠的使用方式。</p>
+<p>项目采用 <a target="_blank" rel="noopener" href="https://github.com/Unclecheng-li/AI_Animation/blob/master/LICENSE">MIT 许可证</a>。完整说明、预览和各个 Skill 的适用范围可以直接查看 <a target="_blank" rel="noopener" href="https://github.com/Unclecheng-li/AI_Animation">AI_Animation README</a>。</p>
+</div>
+    
+      <footer class="post-tags" aria-label="文章标签">
+        <a href="/web-blog/tags/AI/">AI</a><a href="/web-blog/tags/Skill/">Skill</a><a href="/web-blog/tags/Codex/">Codex</a><a href="/web-blog/tags/HTML-%E5%8A%A8%E7%94%BB/">HTML 动画</a>
+      </footer>
+    
+    <nav class="post-navigation" aria-label="文章导航">
+      <a href="/web-blog/2026/08/18/MCP-Model-Context-Protocol%E5%AE%8C%E5%85%A8%E8%A7%A3%E8%AF%BB/"><span>上一篇</span><b>MCP 到底是什么？一文搞懂 Model Context Protocol</b></a>
+      <a class="next" href="/web-blog/2026/08/07/Vue-Bits%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97-%E6%8C%89%E9%9C%80%E5%BC%95%E5%85%A5%E5%8A%A8%E6%95%88%E7%BB%84%E4%BB%B6/"><span>下一篇</span><b>Vue Bits 使用指南：按需引入动效组件</b></a>
+    </nav>
+  </article>
+  <aside class="post-rail" aria-label="文章信息">
+    <p class="section-label">CONNECTIONS</p>
+    <div><strong>专题</strong><a href="/web-blog/categories/AI/">AI</a></div>
+    <div><strong>标签</strong><a href="/web-blog/tags/AI/">AI</a><a href="/web-blog/tags/Skill/">Skill</a><a href="/web-blog/tags/Codex/">Codex</a><a href="/web-blog/tags/HTML-%E5%8A%A8%E7%94%BB/">HTML 动画</a></div>
+  </aside>
+</main>
+
+
+    <footer class="shell footer">
+      <span>2021 - 2026 &copy; LC</span>
+      <span>真实项目的研究记录</span>
+      <a href="/web-blog/atom.xml">RSS</a>
+    </footer>
+
+    <dialog class="search-dialog" id="search-dialog" data-search-url="/web-blog/search.xml">
+      <div class="search-dialog__bar">
+        <label for="site-search">搜索笔记</label>
+        <button class="dialog-close" aria-label="关闭搜索" type="button">关闭</button>
+      </div>
+      <input id="site-search" type="search" autocomplete="off" placeholder="输入文章标题、主题或关键词" />
+      <div class="search-results" aria-live="polite"></div>
+    </dialog>
+
+    <script src="/web-blog/js/site.js"></script>
+  </body>
+</html>

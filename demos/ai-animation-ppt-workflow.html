@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>从技术提纲到 HTML 动画演示</title>
+  <style>
+    :root {
+      --ink: #18211f;
+      --paper: #f8f7f3;
+      --surface: #ffffff;
+      --muted: #64706c;
+      --line: #d8ddd8;
+      --green: #0b624d;
+      --coral: #dd583e;
+      --gold: #e7bb55;
+      --navy: #243d52;
+      --shadow: 0 1.25rem 3.5rem rgba(24, 33, 31, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body { width: 100%; min-width: 0; min-height: 100%; margin: 0; }
+
+    body {
+      overflow: hidden;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    }
+
+    button { font: inherit; }
+
+    .deck {
+      position: relative;
+      display: grid;
+      grid-template-rows: minmax(0, 1fr);
+      width: 100%;
+      min-height: max(31rem, 100svh);
+      overflow: hidden;
+      background: var(--paper);
+      isolation: isolate;
+    }
+
+    .grid-field {
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      background-image: linear-gradient(rgba(24, 33, 31, 0.055) 1px, transparent 1px), linear-gradient(90deg, rgba(24, 33, 31, 0.055) 1px, transparent 1px);
+      background-size: 2.75rem 2.75rem;
+      mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.82), transparent 94%);
+    }
+
+    .corner { position: absolute; z-index: -1; width: 20rem; height: 20rem; border: 1px solid var(--line); transform: rotate(45deg); }
+    .corner--top { top: -13rem; right: -7rem; }
+    .corner--bottom { bottom: -15rem; left: -10rem; }
+
+    .topline {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 4;
+      width: 100%;
+      height: 0.32rem;
+      background: var(--line);
+    }
+
+    .progress { display: block; width: 16.6667%; height: 100%; background: var(--coral); transition: width 360ms cubic-bezier(.2,.8,.2,1); }
+
+    .deck-kicker {
+      position: absolute;
+      top: clamp(1.25rem, 3.2vw, 2.4rem);
+      left: clamp(1.35rem, 5.6vw, 5.5rem);
+      z-index: 4;
+      margin: 0;
+      color: var(--muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: clamp(0.64rem, 1vw, 0.8rem);
+      font-weight: 750;
+      letter-spacing: 0.1em;
+    }
+
+    .slides { position: relative; min-height: 0; }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      width: 100%;
+      min-height: 0;
+      padding: clamp(4.5rem, 9vw, 7.75rem) clamp(1.35rem, 5.6vw, 5.5rem) clamp(4.75rem, 9vw, 7rem);
+      pointer-events: none;
+      opacity: 0;
+      transform: translateX(2.2rem);
+      transition: opacity 260ms ease, transform 360ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .slide.is-active { z-index: 1; pointer-events: auto; opacity: 1; transform: translateX(0); }
+    .slide.is-leaving { transform: translateX(-2.2rem); }
+
+    .slide__inner { display: grid; width: min(100%, 76rem); min-height: 0; margin: auto; }
+
+    .reveal { opacity: 0; transform: translateY(1.2rem); }
+    .is-active .reveal { animation: appear 560ms cubic-bezier(.2,.78,.24,1) forwards; animation-delay: var(--delay, 0ms); }
+
+    @keyframes appear { to { opacity: 1; transform: translateY(0); } }
+
+    .eyebrow { margin: 0 0 1rem; color: var(--coral); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: clamp(0.68rem, 1vw, 0.82rem); font-weight: 800; letter-spacing: 0.12em; }
+
+    h1, h2, h3, p { margin: 0; }
+
+    h1 {
+      max-width: 13ch;
+      font-size: clamp(3rem, 7vw, 7.2rem);
+      font-weight: 800;
+      letter-spacing: 0;
+      line-height: 0.96;
+      text-wrap: balance;
+    }
+
+    h1 strong { color: var(--coral); font-weight: inherit; }
+
+    h2 {
+      max-width: 17ch;
+      font-size: clamp(2.25rem, 5.5vw, 5.25rem);
+      font-weight: 790;
+      letter-spacing: 0;
+      line-height: 1;
+      text-wrap: balance;
+    }
+
+    .lead { max-width: 39rem; margin-top: clamp(1.25rem, 2.4vw, 2rem); color: var(--muted); font-size: clamp(1rem, 1.7vw, 1.45rem); line-height: 1.65; text-wrap: pretty; }
+
+    .statement { max-width: 44rem; margin-top: 2.2rem; color: var(--ink); font-size: clamp(1.25rem, 2.3vw, 2.05rem); font-weight: 650; line-height: 1.42; }
+    .statement b { color: var(--green); }
+
+    .title-layout { align-content: center; grid-template-columns: minmax(0, 1fr) minmax(15rem, 0.55fr); gap: clamp(2rem, 7vw, 8rem); }
+
+    .title-mark {
+      display: grid;
+      width: min(100%, 21rem);
+      aspect-ratio: 1;
+      margin-left: auto;
+      color: var(--surface);
+      background: var(--green);
+      box-shadow: var(--shadow);
+      place-items: center;
+      transform: rotate(4deg);
+    }
+
+    .title-mark__center { display: grid; width: 64%; aspect-ratio: 1; border: 2px solid currentColor; place-items: center; transform: rotate(-4deg); }
+    .title-mark__center::before, .title-mark__center::after { grid-area: 1 / 1; content: ""; }
+    .title-mark__center::before { width: 38%; height: 38%; background: var(--coral); transform: rotate(45deg); }
+    .title-mark__center::after { width: 68%; height: 2px; background: currentColor; transform: rotate(90deg); }
+
+    .skill-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-top: clamp(2rem, 4vw, 3.5rem); }
+    .skill-card { min-height: 10.5rem; padding: 1.15rem; background: var(--surface); border: 1px solid var(--line); box-shadow: 0 0.45rem 1rem rgba(24, 33, 31, 0.055); }
+    .skill-card:nth-child(1) { border-top: 0.3rem solid var(--coral); }
+    .skill-card:nth-child(2) { border-top: 0.3rem solid var(--green); }
+    .skill-card:nth-child(3) { border-top: 0.3rem solid var(--gold); }
+    .skill-card:nth-child(4) { border-top: 0.3rem solid var(--navy); }
+    .skill-card:nth-child(5) { border-top: 0.3rem solid #9a725f; }
+    .skill-card:nth-child(6) { border-top: 0.3rem solid #8c5c52; }
+    .skill-card h3 { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: clamp(0.82rem, 1.2vw, 1rem); line-height: 1.3; }
+    .skill-card p { margin-top: 0.8rem; color: var(--muted); font-size: clamp(0.76rem, 1.1vw, 0.94rem); line-height: 1.55; }
+
+    .workflow-layout { grid-template-columns: minmax(0, 0.9fr) minmax(21rem, 1.1fr); gap: clamp(2rem, 5vw, 5rem); align-items: center; }
+    .workflow { display: grid; gap: 0.65rem; }
+    .workflow-node { position: relative; display: grid; grid-template-columns: 2.6rem 1fr; gap: 0.8rem; align-items: center; min-height: 4.65rem; padding: 0.8rem 1rem; background: var(--surface); border: 1px solid var(--line); }
+    .workflow-node::after { position: absolute; bottom: -0.66rem; left: 1.85rem; width: 1px; height: 0.66rem; background: var(--line); content: ""; }
+    .workflow-node:last-child::after { display: none; }
+    .node-index { display: grid; width: 2rem; height: 2rem; color: var(--surface); background: var(--green); border-radius: 50%; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.75rem; font-weight: 800; place-items: center; }
+    .workflow-node:nth-child(2) .node-index { background: var(--coral); }
+    .workflow-node:nth-child(3) .node-index { background: var(--navy); }
+    .workflow-node:nth-child(4) .node-index { color: var(--ink); background: var(--gold); }
+    .workflow-node h3 { font-size: clamp(0.9rem, 1.45vw, 1.18rem); line-height: 1.25; }
+    .workflow-node p { margin-top: 0.2rem; color: var(--muted); font-size: clamp(0.72rem, 1.05vw, 0.87rem); line-height: 1.45; }
+
+    .prompt-layout { grid-template-columns: minmax(0, 0.78fr) minmax(23rem, 1.22fr); gap: clamp(2rem, 5vw, 5rem); align-items: center; }
+    .prompt-note { padding: clamp(1.25rem, 2.5vw, 2rem); background: var(--surface); border: 1px solid var(--ink); box-shadow: 0.85rem 0.85rem 0 var(--coral); }
+    .prompt-note header { display: flex; justify-content: space-between; gap: 1rem; padding-bottom: 0.8rem; border-bottom: 1px solid var(--line); color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.71rem; font-weight: 800; letter-spacing: 0.08em; }
+    .prompt-note ul { display: grid; gap: 0.9rem; margin: 1.15rem 0 0; padding: 0; list-style: none; }
+    .prompt-note li { display: grid; grid-template-columns: 6.25rem 1fr; gap: 0.75rem; align-items: baseline; color: var(--muted); font-size: clamp(0.82rem, 1.2vw, 1rem); line-height: 1.45; }
+    .prompt-note b { color: var(--green); font-size: 0.77em; letter-spacing: 0.04em; }
+
+    .check-layout { grid-template-columns: minmax(0, 0.8fr) minmax(22rem, 1.2fr); gap: clamp(2rem, 5vw, 5.4rem); align-items: center; }
+    .check-list { display: grid; gap: 0.72rem; margin-top: 1.75rem; }
+    .check-item { display: grid; grid-template-columns: 2.2rem 1fr; gap: 0.85rem; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--line); }
+    .check-item span { display: grid; width: 1.35rem; height: 1.35rem; color: var(--surface); background: var(--green); border-radius: 50%; font-size: 0.78rem; font-weight: 900; place-items: center; }
+    .check-item p { font-size: clamp(0.85rem, 1.25vw, 1.04rem); font-weight: 670; line-height: 1.35; }
+    .check-item small { display: block; margin-top: 0.22rem; color: var(--muted); font-size: 0.82em; font-weight: 450; }
+
+    .screen { position: relative; min-height: 20rem; padding: 1rem; background: var(--navy); box-shadow: var(--shadow); }
+    .screen::before { position: absolute; top: 0; left: 0; width: 38%; height: 0.25rem; background: var(--gold); content: ""; }
+    .screen__bar { display: flex; gap: 0.3rem; padding-bottom: 0.85rem; }
+    .screen__bar span { width: 0.5rem; height: 0.5rem; background: #d6dad8; border-radius: 50%; opacity: 0.75; }
+    .screen__content { display: grid; height: calc(100% - 1.35rem); min-height: 17.5rem; padding: 1.75rem; color: var(--surface); border: 1px solid rgba(255,255,255,0.25); }
+    .screen__content b { align-self: end; max-width: 12ch; font-size: clamp(1.5rem, 3vw, 3.2rem); line-height: 1; }
+    .screen__content span { align-self: start; color: #c8d7d0; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.7rem; letter-spacing: 0.08em; }
+
+    .end-layout { align-content: center; grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.62fr); gap: clamp(2rem, 7vw, 8rem); }
+    .end-stamp { display: grid; width: min(100%, 22rem); aspect-ratio: 1; margin-left: auto; color: var(--surface); background: var(--coral); box-shadow: var(--shadow); place-items: center; }
+    .end-stamp__box { display: grid; width: 68%; aspect-ratio: 1; border: 2px solid currentColor; text-align: center; place-items: center; }
+    .end-stamp strong { display: block; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: clamp(2rem, 4.2vw, 4.2rem); letter-spacing: 0.04em; line-height: 1; }
+    .end-stamp span { display: block; margin-top: 0.5rem; font-size: 0.74rem; font-weight: 700; letter-spacing: 0.1em; }
+
+    .navigation { position: absolute; right: clamp(1.35rem, 5.6vw, 5.5rem); bottom: clamp(1.15rem, 3.5vw, 2.4rem); z-index: 4; display: flex; align-items: center; gap: 0.65rem; }
+    .slide-count { min-width: 3.25rem; color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.73rem; font-weight: 750; letter-spacing: 0.06em; text-align: center; }
+    .nav-button { display: grid; width: 2.7rem; height: 2.7rem; padding: 0; color: var(--ink); background: var(--surface); border: 1px solid var(--ink); border-radius: 0; font-size: 1.35rem; line-height: 1; place-items: center; transition: color 150ms ease, background 150ms ease, transform 150ms ease; }
+    .nav-button:hover:not(:disabled) { color: var(--surface); background: var(--green); transform: translateY(-0.16rem); }
+    .nav-button:focus-visible { outline: 3px solid var(--coral); outline-offset: 3px; }
+    .nav-button:disabled { cursor: not-allowed; opacity: 0.32; }
+
+    .tap-zone { position: absolute; top: 0; bottom: 0; z-index: 3; width: 16%; padding: 0; background: transparent; border: 0; }
+    .tap-zone--prev { left: 0; cursor: w-resize; }
+    .tap-zone--next { right: 0; cursor: e-resize; }
+    .tap-zone:focus-visible { outline: 3px solid var(--coral); outline-offset: -0.6rem; }
+
+    @media (max-width: 50rem) {
+      .deck { min-height: max(34rem, 100svh); }
+      .title-layout, .end-layout, .workflow-layout, .prompt-layout, .check-layout { grid-template-columns: 1fr; }
+      .title-mark, .end-stamp { display: none; }
+      .skill-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.65rem; margin-top: 1.5rem; }
+      .skill-card { min-height: 7.75rem; padding: 0.85rem; }
+      .skill-card p { margin-top: 0.55rem; }
+      .workflow { gap: 0.5rem; }
+      .workflow-node { min-height: 3.85rem; padding: 0.62rem 0.8rem; }
+      .workflow-node::after { bottom: -0.51rem; height: 0.51rem; }
+      .prompt-note { box-shadow: 0.55rem 0.55rem 0 var(--coral); }
+      .prompt-note li { grid-template-columns: 4.6rem 1fr; gap: 0.5rem; }
+      .screen { display: none; }
+      .slide__inner { align-content: center; }
+      .tap-zone { width: 10%; }
+    }
+
+    @media (max-width: 28rem) {
+      .deck { min-height: max(36rem, 100svh); }
+      .skill-grid { grid-template-columns: 1fr 1fr; }
+      .skill-card { min-height: 7.1rem; }
+      .skill-card p { font-size: 0.7rem; }
+      .workflow-node { grid-template-columns: 2rem 1fr; gap: 0.55rem; }
+      .node-index { width: 1.7rem; height: 1.7rem; }
+      .workflow-node::after { left: 1.55rem; }
+      .navigation { gap: 0.35rem; }
+      .nav-button { width: 2.35rem; height: 2.35rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" aria-label="从技术提纲到 HTML 动画演示">
+    <div class="grid-field" aria-hidden="true"></div>
+    <div class="corner corner--top" aria-hidden="true"></div>
+    <div class="corner corner--bottom" aria-hidden="true"></div>
+    <div class="topline" aria-hidden="true"><span class="progress" id="progress"></span></div>
+    <p class="deck-kicker">AI_ANIMATION / PPT_ANIMATION</p>
+
+    <button class="tap-zone tap-zone--prev" id="tapPrev" type="button" aria-hidden="true" tabindex="-1"></button>
+    <button class="tap-zone tap-zone--next" id="tapNext" type="button" aria-hidden="true" tabindex="-1"></button>
+
+    <div class="slides">
+      <section class="slide is-active" aria-roledescription="幻灯片" aria-label="第 1 页，共 6 页">
+        <div class="slide__inner title-layout">
+          <div>
+            <p class="eyebrow reveal" style="--delay: 80ms">01 / 起点</p>
+            <h1 class="reveal" style="--delay: 180ms">把技术提纲<br>做成<strong>可翻页</strong><br>HTML</h1>
+            <p class="lead reveal" style="--delay: 340ms">AI_Animation 把页面结构、图示和翻页交互组织为可独立打开的演示文件。</p>
+            <p class="statement reveal" style="--delay: 500ms">一场分享的难点，通常不是少一页 PPT，而是<b>缺少能承接内容的表达形式</b>。</p>
+          </div>
+          <div class="title-mark reveal" style="--delay: 430ms" aria-hidden="true"><div class="title-mark__center"></div></div>
+        </div>
+      </section>
+
+      <section class="slide" aria-roledescription="幻灯片" aria-label="第 2 页，共 6 页">
+        <div class="slide__inner">
+          <p class="eyebrow reveal" style="--delay: 80ms">02 / 选择容器</p>
+          <h2 class="reveal" style="--delay: 160ms">先看内容该怎样被看见</h2>
+          <div class="skill-grid">
+            <article class="skill-card reveal" style="--delay: 270ms"><h3>ppt-animation</h3><p>课程录屏、技术演示、分页讲解。</p></article>
+            <article class="skill-card reveal" style="--delay: 360ms"><h3>flowchart</h3><p>流程、概念、对比和原理说明。</p></article>
+            <article class="skill-card reveal" style="--delay: 450ms"><h3>network-protocol-viz</h3><p>协议报文、路由和交互过程。</p></article>
+            <article class="skill-card reveal" style="--delay: 540ms"><h3>dynamic-archify</h3><p>架构、数据流、状态机与导出。</p></article>
+            <article class="skill-card reveal" style="--delay: 630ms"><h3>scholar-notes</h3><p>带图示的学习笔记和技术摘要。</p></article>
+            <article class="skill-card reveal" style="--delay: 720ms"><h3>card-theater</h3><p>侧边解说配合卡片轮播叙事。</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" aria-roledescription="幻灯片" aria-label="第 3 页，共 6 页">
+        <div class="slide__inner workflow-layout">
+          <div>
+            <p class="eyebrow reveal" style="--delay: 80ms">03 / 生成路径</p>
+            <h2 class="reveal" style="--delay: 160ms">从一句需求到一个可交付文件</h2>
+            <p class="lead reveal" style="--delay: 270ms">Skill 的工作不是替代事实判断，而是把重复的布局、动效和交互收敛成稳定步骤。</p>
+          </div>
+          <div class="workflow">
+            <article class="workflow-node reveal" style="--delay: 300ms"><span class="node-index">01</span><div><h3>写出提纲</h3><p>每页只解决一个问题。</p></div></article>
+            <article class="workflow-node reveal" style="--delay: 420ms"><span class="node-index">02</span><div><h3>选定 Skill</h3><p>按内容形态选择演示、流程或架构。</p></div></article>
+            <article class="workflow-node reveal" style="--delay: 540ms"><span class="node-index">03</span><div><h3>给出约束</h3><p>主题、页数、用途和操作方式。</p></div></article>
+            <article class="workflow-node reveal" style="--delay: 660ms"><span class="node-index">04</span><div><h3>打开并校验</h3><p>检查互动、版面和技术事实。</p></div></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" aria-roledescription="幻灯片" aria-label="第 4 页，共 6 页">
+        <div class="slide__inner prompt-layout">
+          <div>
+            <p class="eyebrow reveal" style="--delay: 80ms">04 / 提示词</p>
+            <h2 class="reveal" style="--delay: 160ms">把抽象偏好改成可检查的约束</h2>
+            <p class="lead reveal" style="--delay: 280ms">“做得炫酷”无法验收。说清颜色、页数、读者和输入方式，输出才有方向。</p>
+          </div>
+          <article class="prompt-note reveal" style="--delay: 390ms">
+            <header><span>PROMPT BRIEF</span><span>6 SLIDES</span></header>
+            <ul>
+              <li><b>用途</b><span>10 分钟内部技术分享并录屏</span></li>
+              <li><b>主题</b><span>白底、深色字、绿和珊瑚红点缀</span></li>
+              <li><b>内容</b><span>需求、架构、开发、测试、发布</span></li>
+              <li><b>交付</b><span>单文件 HTML，支持键盘、滚轮与点击</span></li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="slide" aria-roledescription="幻灯片" aria-label="第 5 页，共 6 页">
+        <div class="slide__inner check-layout">
+          <div>
+            <p class="eyebrow reveal" style="--delay: 80ms">05 / 验收</p>
+            <h2 class="reveal" style="--delay: 160ms">别只看一张好看的截图</h2>
+            <div class="check-list">
+              <div class="check-item reveal" style="--delay: 290ms"><span>✓</span><p>断网打开<small>确认关键字体、脚本和图形不依赖外部资源。</small></p></div>
+              <div class="check-item reveal" style="--delay: 390ms"><span>✓</span><p>逐页翻看<small>标题、正文、图形依次出现，而不是同时跳出。</small></p></div>
+              <div class="check-item reveal" style="--delay: 490ms"><span>✓</span><p>测试输入<small>方向键、滚轮、点击和边界页都能正常处理。</small></p></div>
+              <div class="check-item reveal" style="--delay: 590ms"><span>✓</span><p>按目标屏幕录制<small>投屏或窄屏下不裁切正文，不让控件挡住内容。</small></p></div>
+            </div>
+          </div>
+          <div class="screen reveal" style="--delay: 400ms" aria-hidden="true"><div class="screen__bar"><span></span><span></span><span></span></div><div class="screen__content"><span>PREVIEW / READY</span><b>交互<br>是一部分内容</b></div></div>
+        </div>
+      </section>
+
+      <section class="slide" aria-roledescription="幻灯片" aria-label="第 6 页，共 6 页">
+        <div class="slide__inner end-layout">
+          <div>
+            <p class="eyebrow reveal" style="--delay: 80ms">06 / 结论</p>
+            <h2 class="reveal" style="--delay: 170ms">从一个明确的讲解任务开始</h2>
+            <p class="lead reveal" style="--delay: 310ms">先选对表达形式，再让 AI 处理布局与动效。复杂产品功能仍应回到正常的前端工程里。</p>
+            <p class="statement reveal" style="--delay: 470ms">AI_Animation 适合做<strong>第一版可演示成果</strong>，不该替你证明技术内容正确。</p>
+          </div>
+          <div class="end-stamp reveal" style="--delay: 400ms" aria-hidden="true"><div class="end-stamp__box"><div><strong>START</strong><span>MAKE THE NEXT PAGE</span></div></div></div>
+        </div>
+      </section>
+    </div>
+
+    <nav class="navigation" aria-label="演示翻页控制">
+      <button class="nav-button" id="prev" type="button" aria-label="上一页">←</button>
+      <span class="slide-count" id="count" aria-live="polite">01 / 06</span>
+      <button class="nav-button" id="next" type="button" aria-label="下一页">→</button>
+    </nav>
+  </main>
+  <script>
+    (function () {
+      var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+      var total = slides.length;
+      var index = 0;
+      var previous = document.getElementById('prev');
+      var next = document.getElementById('next');
+      var tapPrevious = document.getElementById('tapPrev');
+      var tapNext = document.getElementById('tapNext');
+      var count = document.getElementById('count');
+      var progress = document.getElementById('progress');
+      var locked = false;
+
+      function update(nextIndex) {
+        if (nextIndex < 0 || nextIndex >= total || nextIndex === index || locked) return;
+        locked = true;
+        var outgoing = slides[index];
+        outgoing.classList.remove('is-active');
+        outgoing.classList.add('is-leaving');
+        index = nextIndex;
+        var incoming = slides[index];
+        incoming.classList.remove('is-leaving');
+        void incoming.offsetWidth;
+        incoming.classList.add('is-active');
+        previous.disabled = index === 0;
+        next.disabled = index === total - 1;
+        count.textContent = String(index + 1).padStart(2, '0') + ' / ' + String(total).padStart(2, '0');
+        progress.style.width = ((index + 1) / total * 100) + '%';
+        window.setTimeout(function () { outgoing.classList.remove('is-leaving'); locked = false; }, 380);
+      }
+
+      function goPrevious() { update(index - 1); }
+      function goNext() { update(index + 1); }
+
+      previous.addEventListener('click', goPrevious);
+      next.addEventListener('click', goNext);
+      tapPrevious.addEventListener('click', goPrevious);
+      tapNext.addEventListener('click', goNext);
+      previous.disabled = true;
+
+      window.addEventListener('keydown', function (event) {
+        if (event.key === 'ArrowLeft' || event.key === 'PageUp') { event.preventDefault(); goPrevious(); }
+        if (event.key === 'ArrowRight' || event.key === 'PageDown' || event.key === ' ') { event.preventDefault(); goNext(); }
+      });
+
+      window.addEventListener('wheel', function (event) {
+        if (Math.abs(event.deltaY) < 14 || locked) return;
+        event.preventDefault();
+        if (event.deltaY > 0) goNext(); else goPrevious();
+      }, { passive: false });
+    }());
+  </script>
+</body>
+</html>

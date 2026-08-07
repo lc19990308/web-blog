@@ -1,1233 +1,169 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.4.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/web-blog/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/web-blog/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/web-blog/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/web-blog/images/logo.svg" color="#222">
-
-<link rel="stylesheet" href="/web-blog/css/main.css">
-
-
-<link rel="stylesheet" href="/web-blog/lib/font-awesome/css/all.min.css">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
-  <link rel="stylesheet" href="/web-blog/lib/pace/pace-theme-minimal.min.css">
-  <script src="/web-blog/lib/pace/pace.min.js"></script>
-
-<script id="hexo-configurations">
-    var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"lc19990308.github.io","root":"/web-blog/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
-  </script>
-
-  <meta name="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
-<meta property="og:type" content="website">
-<meta property="og:title" content="前端技术笔记">
-<meta property="og:url" content="https://lc19990308.github.io/web-blog/page/8/index.html">
-<meta property="og:site_name" content="前端技术笔记">
-<meta property="og:description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
-<meta property="og:locale" content="zh_CN">
-<meta property="article:author" content="LC">
-<meta property="article:tag" content="前端, JavaScript, Vue, CSS, Hexo, 技术博客">
-<meta name="twitter:card" content="summary">
-
-<link rel="canonical" href="https://lc19990308.github.io/web-blog/page/8/">
-
-
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome : true,
-    isPost : false,
-    lang   : 'zh-CN'
-  };
-</script>
-
-  <title>前端技术笔记</title>
-  
-
-
-
-
-
-
-  <noscript>
-  <style>
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
-
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
-
-<link rel="alternate" href="/web-blog/atom.xml" title="前端技术笔记" type="application/atom+xml">
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
-    <div class="headband">
-    <a target="_blank" rel="noopener" href="https://gitee.com/yaru722" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
-    </div>
-
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="切换导航栏">
-      <span class="toggle-line toggle-line-first"></span>
-      <span class="toggle-line toggle-line-middle"></span>
-      <span class="toggle-line toggle-line-last"></span>
-    </div>
-  </div>
-
-  <div class="site-meta">
-
-    <a href="/web-blog/" class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
-      <h1 class="site-title">前端技术笔记</h1>
-      <span class="logo-line-after"><i></i></span>
-    </a>
-      <p class="site-subtitle" itemprop="description">记录前端路上的思考与实践</p>
-  </div>
-
-  <div class="site-nav-right">
-    <div class="toggle popup-trigger">
-        <i class="fa fa-search fa-fw fa-lg"></i>
-    </div>
-  </div>
-</div>
-
-
-
-
-<nav class="site-nav">
-  <ul id="menu" class="main-menu menu">
-        <li class="menu-item menu-item-home">
-
-    <a href="/web-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
-
-  </li>
-        <li class="menu-item menu-item-about">
-
-    <a href="/web-blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
-
-  </li>
-        <li class="menu-item menu-item-tags">
-
-    <a href="/web-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
-
-  </li>
-        <li class="menu-item menu-item-categories">
-
-    <a href="/web-blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
-
-  </li>
-        <li class="menu-item menu-item-archives">
-
-    <a href="/web-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
-
-  </li>
-      <li class="menu-item menu-item-search">
-        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
-        </a>
-      </li>
-  </ul>
-</nav>
-
-
-
-  <div class="search-pop-overlay">
-    <div class="popup search-popup">
-        <div class="search-header">
-  <span class="search-icon">
-    <i class="fa fa-search"></i>
-  </span>
-  <div class="search-input-container">
-    <input autocomplete="off" autocapitalize="off"
-           placeholder="搜索..." spellcheck="false"
-           type="search" class="search-input">
-  </div>
-  <span class="popup-btn-close">
-    <i class="fa fa-times-circle"></i>
-  </span>
-</div>
-<div id="search-result">
-  <div id="no-result">
-    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
-  </div>
-</div>
-
-    </div>
-  </div>
-
-</div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践" />
+    <title>前端技术笔记</title>
+    <link rel="alternate" href="/web-blog/atom.xml" title="前端技术笔记" type="application/atom+xml" />
+    <link rel="stylesheet" href="/web-blog/css/main.css" />
+  <meta name="generator" content="Hexo 5.4.0"></head>
+  <body>
+    <header class="site-header shell">
+      <a class="wordmark" href="/web-blog/" aria-label="前端技术笔记 首页">LC <span>/</span> NOTES</a>
+      <nav class="main-nav" id="main-nav" aria-label="主导航">
+        <a href="/web-blog/" aria-current="page">笔记</a>
+        <a href="/web-blog/categories/">专题</a>
+        <a href="/web-blog/about/">关于</a>
+        <a href="/web-blog/archives/">归档</a>
+      </nav>
+      <div class="header-actions">
+        <button class="menu-button" aria-controls="main-nav" aria-expanded="false" aria-label="打开菜单" type="button">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+        </button>
+        <button class="search-button" aria-controls="search-dialog" aria-label="搜索文章" type="button">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.5 4.5"></path></svg>
+        </button>
+      </div>
     </header>
 
     
-  <div class="reading-progress-bar"></div>
-  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
-
-  <a href="https://github.com/lc19990308" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
-
-
-    <main class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
-
-          <div class="content index posts-expand">
-            
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/25/eslint-prettier-setup-guide/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
-      <meta itemprop="name" content="LC">
-      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="前端技术笔记">
-    </span>
-      <header class="post-header">
-      
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/web-blog/2026/06/25/eslint-prettier-setup-guide/" class="post-title-link" itemprop="url">ESLint + Prettier 工程化配置：从入门到团队规范</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2026-06-25 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-25T00:00:00+08:00">2026-06-25</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/web-blog/categories/%E5%B7%A5%E7%A8%8B%E5%8C%96/" itemprop="url" rel="index"><span itemprop="name">工程化</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>系统讲解 ESLint 和 Prettier 的配置与集成，从基础规则、Vue/TypeScript 适配到 Husky 自动检查，搭建完整的代码质量守护体系</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/web-blog/2026/06/25/eslint-prettier-setup-guide/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
+<main id="top">
+  <section class="shell hero" aria-labelledby="site-title">
+    <div class="hero-copy">
+      <div class="annotation" aria-hidden="true"></div>
+      <h1 id="site-title">前端技术<em>笔记</em></h1>
+      <p>把前端工程、AI Agent 与真实项目里的判断写成可复用的研究记录。</p>
     </div>
-
-    
-    
-    
-<div>
-      
-</div>
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/25/es6-new-features-2020-2022/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
-      <meta itemprop="name" content="LC">
-      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="前端技术笔记">
-    </span>
-      <header class="post-header">
-      
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/web-blog/2026/06/25/es6-new-features-2020-2022/" class="post-title-link" itemprop="url">ES2020-ES2022 新特性：可选链、空值合并、逻辑赋值、globalThis</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2026-06-25 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-25T00:00:00+08:00">2026-06-25</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/web-blog/categories/ES6/" itemprop="url" rel="index"><span itemprop="name">ES6</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>全面梳理 ES2020～ES2022 的实用新特性：可选链（?.）、空值合并（??）、逻辑赋值（&&=/??=）、Promise 新方法、数字分隔符、globalThis、Top-level await</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/web-blog/2026/06/25/es6-new-features-2020-2022/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-<div>
-      
-</div>
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/25/git-workflow-practice/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
-      <meta itemprop="name" content="LC">
-      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="前端技术笔记">
-    </span>
-      <header class="post-header">
-      
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/web-blog/2026/06/25/git-workflow-practice/" class="post-title-link" itemprop="url">Git 工作流实战：从团队规范到自动化流水线</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2026-06-25 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-25T00:00:00+08:00">2026-06-25</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/web-blog/categories/git/" itemprop="url" rel="index"><span itemprop="name">git</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>系统讲解 Git 团队协作的最佳实践，涵盖分支策略、Commit 规范、Git Hooks 自动化、Code Review 流程和 Changesets 版本发布</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/web-blog/2026/06/25/git-workflow-practice/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-<div>
-      
-</div>
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/25/rust-go-build-tools-esbuild-swc-bun/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
-      <meta itemprop="name" content="LC">
-      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="前端技术笔记">
-    </span>
-      <header class="post-header">
-      
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/web-blog/2026/06/25/rust-go-build-tools-esbuild-swc-bun/" class="post-title-link" itemprop="url">ESBuild、SWC 与 Bun：Rust/Go 时代的前端构建工具链</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2026-06-25 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-25T00:00:00+08:00">2026-06-25</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/web-blog/categories/%E5%B7%A5%E7%A8%8B%E5%8C%96/" itemprop="url" rel="index"><span itemprop="name">工程化</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>深入解析新一代基于 Rust/Go 的构建工具：ESBuild、SWC、Bun、Rolldown、Lightning CSS。对比它们在编译、打包、转译等场景的性能与适用边界</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/web-blog/2026/06/25/rust-go-build-tools-esbuild-swc-bun/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-<div>
-      
-</div>
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/25/state-management-guide/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
-      <meta itemprop="name" content="LC">
-      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="前端技术笔记">
-    </span>
-      <header class="post-header">
-      
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/web-blog/2026/06/25/state-management-guide/" class="post-title-link" itemprop="url">前端状态管理选型指南：Zustand vs Jotai vs Pinia vs Redux Toolkit</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2026-06-25 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-25T00:00:00+08:00">2026-06-25</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/web-blog/categories/%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86/" itemprop="url" rel="index"><span itemprop="name">状态管理</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>深入对比四种主流前端状态管理方案：Zustand、Jotai、Pinia、Redux Toolkit，从架构理念、API 设计、性能、生态到适用场景全面分析</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/web-blog/2026/06/25/state-management-guide/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-<div>
-      
-</div>
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/25/service-worker-pwa-guide/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
-      <meta itemprop="name" content="LC">
-      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="前端技术笔记">
-    </span>
-      <header class="post-header">
-      
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/web-blog/2026/06/25/service-worker-pwa-guide/" class="post-title-link" itemprop="url">Service Worker 与 PWA 完整实战：从离线缓存到推送通知</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2026-06-25 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-25T00:00:00+08:00">2026-06-25</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/web-blog/categories/%E6%B5%8F%E8%A7%88%E5%99%A8/" itemprop="url" rel="index"><span itemprop="name">浏览器</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>从零实现一个完整的 PWA 应用，涵盖 Service Worker 生命周期、缓存策略、离线体验、消息推送、更新管理与性能优化</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/web-blog/2026/06/25/service-worker-pwa-guide/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-<div>
-      
-</div>
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/25/typescript-advanced-generics-utility-types/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
-      <meta itemprop="name" content="LC">
-      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="前端技术笔记">
-    </span>
-      <header class="post-header">
-      
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/web-blog/2026/06/25/typescript-advanced-generics-utility-types/" class="post-title-link" itemprop="url">TypeScript 进阶：泛型、工具类型与实用模式</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2026-06-25 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-25T00:00:00+08:00">2026-06-25</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/web-blog/categories/TypeScript/" itemprop="url" rel="index"><span itemprop="name">TypeScript</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>深入 TypeScript 类型系统核心，涵盖泛型约束、内置工具类型（Partial/Pick/Omit/Record）、类型推导与实战模式</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/web-blog/2026/06/25/typescript-advanced-generics-utility-types/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-<div>
-      
-</div>
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/25/typescript-engineering-guide/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
-      <meta itemprop="name" content="LC">
-      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="前端技术笔记">
-    </span>
-      <header class="post-header">
-      
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/web-blog/2026/06/25/typescript-engineering-guide/" class="post-title-link" itemprop="url">TypeScript 工程化：tsconfig 配置、声明文件与项目实战</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2026-06-25 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-25T00:00:00+08:00">2026-06-25</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/web-blog/categories/TypeScript/" itemprop="url" rel="index"><span itemprop="name">TypeScript</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>TypeScript 项目从配置到部署的完整工程化实践，涵盖 tsconfig 各字段详解、声明文件（.d.ts）编写、Monorepo 集成与构建部署</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/web-blog/2026/06/25/typescript-engineering-guide/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-<div>
-      
-</div>
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/25/typescript-type-challenges/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
-      <meta itemprop="name" content="LC">
-      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="前端技术笔记">
-    </span>
-      <header class="post-header">
-      
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/web-blog/2026/06/25/typescript-type-challenges/" class="post-title-link" itemprop="url">TypeScript 类型体操：条件类型、映射类型、infer 与递归</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2026-06-25 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-25T00:00:00+08:00">2026-06-25</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/web-blog/categories/TypeScript/" itemprop="url" rel="index"><span itemprop="name">TypeScript</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>深入 TypeScript 类型体操核心技巧：条件类型、映射类型、infer 推导、模板字面量类型与递归类型，手写实现 10+ 个常用工具类型</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/web-blog/2026/06/25/typescript-type-challenges/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-<div>
-      
-</div>
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://lc19990308.github.io/web-blog/2026/06/25/unit-testing-best-practices/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
-      <meta itemprop="name" content="LC">
-      <meta itemprop="description" content="专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="前端技术笔记">
-    </span>
-      <header class="post-header">
-      
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/web-blog/2026/06/25/unit-testing-best-practices/" class="post-title-link" itemprop="url">单元测试最佳实践：AAA 模式、Mock 策略与边界覆盖</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2026-06-25 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-25T00:00:00+08:00">2026-06-25</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/web-blog/categories/%E6%B5%8B%E8%AF%95/" itemprop="url" rel="index"><span itemprop="name">测试</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>深入单元测试的实用方法论，涵盖 AAA（Arrange-Act-Assert）模式、Mock 与 Stub 策略、边界值测试，以及实测覆盖率提升技巧</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/web-blog/2026/06/25/unit-testing-best-practices/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-<div>
-      
-</div>
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/web-blog/page/7/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/web-blog/">1</a><span class="space">&hellip;</span><a class="page-number" href="/web-blog/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/web-blog/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/web-blog/page/15/">15</a><a class="extend next" rel="next" href="/web-blog/page/9/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
-  </nav>
-
-
-
-          </div>
-          
-
-<script>
-  window.addEventListener('tabs:register', () => {
-    let { activeClass } = CONFIG.comments;
-    if (CONFIG.comments.storage) {
-      activeClass = localStorage.getItem('comments_active') || activeClass;
-    }
-    if (activeClass) {
-      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
-      if (activeTab) {
-        activeTab.click();
-      }
-    }
-  });
-  if (CONFIG.comments.storage) {
-    window.addEventListener('tabs:click', event => {
-      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
-      let commentClass = event.target.classList[1];
-      localStorage.setItem('comments_active', commentClass);
-    });
-  }
-</script>
-
-        </div>
-          
-  
-  <div class="toggle sidebar-toggle">
-    <span class="toggle-line toggle-line-first"></span>
-    <span class="toggle-line toggle-line-middle"></span>
-    <span class="toggle-line toggle-line-last"></span>
-  </div>
-
-  <aside class="sidebar">
-    <div class="sidebar-inner">
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc">
-          文章目录
-        </li>
-        <li class="sidebar-nav-overview">
-          站点概览
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
+    <aside class="hero-rail" aria-label="研究方向">
+      <p>RESEARCH INDEX<br />持续更新 / 2026</p>
+      <div class="topic-list">
+        <a href="/web-blog/categories/#topic-language">语言与类型 <b>01</b></a>
+        <a href="/web-blog/categories/#topic-interface">界面与框架 <b>02</b></a>
+        <a href="/web-blog/categories/#topic-engineering">工程与架构 <b>03</b></a>
+        <a href="/web-blog/categories/#topic-platform">浏览器与性能 <b>04</b></a>
+        <a href="/web-blog/categories/#topic-exploration">AI 与创作实验 <b>05</b></a>
       </div>
-      <!--/noindex-->
+    </aside>
+  </section>
 
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="LC"
-      src="https://z3.ax1x.com/2021/06/05/2tXGKH.jpg">
-  <p class="site-author-name" itemprop="name">LC</p>
-  <div class="site-description" itemprop="description">专注前端技术分享，涵盖 JavaScript、Vue、CSS 等领域的深度解析与最佳实践</div>
+  
+    <article class="shell feature" aria-labelledby="feature-title">
+      <div>
+        <p class="section-label">LATEST FIELD NOTE</p>
+        <h2 id="feature-title"><a href="/web-blog/2026/06/25/es6-object-enhancements/">ES6 对象字面量增强与 Object 新方法</a></h2>
+        <div class="metadata"><span>2026-06-25</span><span>ES6</span><span>4 分钟阅读</span></div>
+        <p class="feature-copy">ES6 对对象字面量做了大量增强：属性简写、计算属性名、方法简写，以及新增的 Object 静态方法：entries、values、fromEntries、assign 等</p>
+        <a class="text-link" href="/web-blog/2026/06/25/es6-object-enhancements/">阅读研究笔记</a>
+      </div>
+      <div class="research-map" aria-label="研究主题关系图">
+  <p>RESEARCH MAP / CURRENT INTERESTS</p>
+  <svg viewBox="0 0 560 270" role="img" aria-label="AI 系统、前端工程、性能和工作流的研究关系">
+    <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto"><path d="M0,0 L0,7 L7,3.5 z" fill="#e04f36" /></marker></defs>
+    <rect x="24" y="96" width="140" height="74" fill="none" stroke="#f5f5f5" stroke-width="1.5" />
+    <text x="94" y="124" text-anchor="middle" fill="#ffffff" font-family="system-ui, sans-serif" font-size="17" font-weight="700">前端工程</text>
+    <text x="94" y="149" text-anchor="middle" fill="#b8bec7" font-family="monospace" font-size="11">BUILD / SHIP</text>
+    <line x1="164" y1="133" x2="246" y2="133" stroke="#e04f36" stroke-width="2" marker-end="url(#arrow)" />
+    <rect x="250" y="76" width="150" height="114" fill="#e04f36" />
+    <text x="325" y="120" text-anchor="middle" fill="#ffffff" font-family="system-ui, sans-serif" font-size="18" font-weight="800">研究笔记</text>
+    <text x="325" y="148" text-anchor="middle" fill="#ffffff" font-family="monospace" font-size="11">REAL PROJECTS</text>
+    <line x1="400" y1="104" x2="457" y2="64" stroke="#f5f5f5" stroke-width="1.5" marker-end="url(#arrow)" />
+    <line x1="400" y1="133" x2="457" y2="133" stroke="#f5f5f5" stroke-width="1.5" marker-end="url(#arrow)" />
+    <line x1="400" y1="162" x2="457" y2="203" stroke="#f5f5f5" stroke-width="1.5" marker-end="url(#arrow)" />
+    <text x="472" y="68" fill="#ffffff" font-family="monospace" font-size="12">AI SYSTEMS</text>
+    <text x="472" y="137" fill="#ffffff" font-family="monospace" font-size="12">PERFORMANCE</text>
+    <text x="472" y="207" fill="#ffffff" font-family="monospace" font-size="12">WORKFLOWS</text>
+  </svg>
 </div>
-<div class="site-state-wrap motion-element">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-          <a href="/web-blog/archives/">
-        
-          <span class="site-state-item-count">148</span>
-          <span class="site-state-item-name">日志</span>
+
+    </article>
+  
+
+  <section class="shell latest" id="latest" aria-labelledby="latest-title">
+    <div class="latest-heading">
+      <p class="section-label">ALL NOTES</p>
+      <h2 id="latest-title">按问题，而不是按热度写。</h2>
+      <p>每一篇都从一个真实工程选择、失败记录或可验证的技术问题开始。</p>
+    </div>
+    <div class="entry-list">
+      
+        <a class="entry" href="/web-blog/2026/06/25/es6-arrow-functions-and-function-enhancements/">
+          <time datetime="2026-06-25">2026-06-25</time>
+          <h3>ES6 箭头函数与函数增强：默认参数、剩余参数、箭头函数完全指南</h3>
+          <span class="entry-category">ES6</span>
         </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-            <a href="/web-blog/categories/">
-          
-        <span class="site-state-item-count">27</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-            <a href="/web-blog/tags/">
-          
-        <span class="site-state-item-count">41</span>
-        <span class="site-state-item-name">标签</span></a>
-      </div>
-  </nav>
-</div>
-  <div class="sidebar-button motion-element"><i class="fa fa-comment"></i>
-    Chat
-  </a>
-  </div>
-  <div class="links-of-author motion-element">
-      <span class="links-of-author-item">
-        <a href="https://github.com/lc19990308/web-blog" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lc19990308&#x2F;web-blog" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="mailto:jarridaddison4@gmail.com" title="E-Mail → mailto:jarridaddison4@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
-      </span>
-  </div>
-  <div class="cc-license motion-element" itemprop="license">
-    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/web-blog/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
-  </div>
-
-
-
-      </div>
-        <div class="back-to-top motion-element">
-          <i class="fa fa-arrow-up"></i>
-          <span>0%</span>
-        </div>
-
+      
+        <a class="entry" href="/web-blog/2026/06/25/es6-template-literals-and-string-methods/">
+          <time datetime="2026-06-25">2026-06-25</time>
+          <h3>ES6 模板字符串与字符串增强：模板字面量、标签模板、新增字符串方法</h3>
+          <span class="entry-category">ES6</span>
+        </a>
+      
+        <a class="entry" href="/web-blog/2026/06/25/eslint-prettier-setup-guide/">
+          <time datetime="2026-06-25">2026-06-25</time>
+          <h3>ESLint + Prettier 工程化配置：从入门到团队规范</h3>
+          <span class="entry-category">工程化</span>
+        </a>
+      
+        <a class="entry" href="/web-blog/2026/06/25/es6-new-features-2020-2022/">
+          <time datetime="2026-06-25">2026-06-25</time>
+          <h3>ES2020-ES2022 新特性：可选链、空值合并、逻辑赋值、globalThis</h3>
+          <span class="entry-category">ES6</span>
+        </a>
+      
+        <a class="entry" href="/web-blog/2026/06/25/git-workflow-practice/">
+          <time datetime="2026-06-25">2026-06-25</time>
+          <h3>Git 工作流实战：从团队规范到自动化流水线</h3>
+          <span class="entry-category">git</span>
+        </a>
+      
+        <a class="entry" href="/web-blog/2026/06/25/rust-go-build-tools-esbuild-swc-bun/">
+          <time datetime="2026-06-25">2026-06-25</time>
+          <h3>ESBuild、SWC 与 Bun：Rust/Go 时代的前端构建工具链</h3>
+          <span class="entry-category">工程化</span>
+        </a>
+      
+        <a class="entry" href="/web-blog/2026/06/25/state-management-guide/">
+          <time datetime="2026-06-25">2026-06-25</time>
+          <h3>前端状态管理选型指南：Zustand vs Jotai vs Pinia vs Redux Toolkit</h3>
+          <span class="entry-category">状态管理</span>
+        </a>
+      
+        <a class="entry" href="/web-blog/2026/06/25/service-worker-pwa-guide/">
+          <time datetime="2026-06-25">2026-06-25</time>
+          <h3>Service Worker 与 PWA 完整实战：从离线缓存到推送通知</h3>
+          <span class="entry-category">浏览器</span>
+        </a>
+      
+        <a class="entry" href="/web-blog/2026/06/25/typescript-advanced-generics-utility-types/">
+          <time datetime="2026-06-25">2026-06-25</time>
+          <h3>TypeScript 进阶：泛型、工具类型与实用模式</h3>
+          <span class="entry-category">TypeScript</span>
+        </a>
+      
+      
+        <nav class="pagination" aria-label="分页"><a class="extend prev" rel="prev" href="/web-blog/page/7/">上一页</a><a class="page-number" href="/web-blog/">1</a><span class="space">&hellip;</span><a class="page-number" href="/web-blog/page/6/">6</a><a class="page-number" href="/web-blog/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/web-blog/page/9/">9</a><a class="page-number" href="/web-blog/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/web-blog/page/16/">16</a><a class="extend next" rel="next" href="/web-blog/page/9/">下一页</a></nav>
+      
     </div>
-      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=441491828&auto=1&height=66"></iframe>
-  </aside>
-  <div id="sidebar-dimmer"></div>
+  </section>
+</main>
 
 
-      </div>
-    </main>
-
-    <footer class="footer">
-      <div class="footer-inner">
-        
-
-        
-
-<div class="copyright">
-  
-  &copy; 2021 – 
-  <span itemprop="copyrightYear">2026</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">LC</span>
-</div>
-
-<!--
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
-  </div>-->
-<div class="powered-by">
-  <i class="fa fa-user-md"></i>
-  <span id="busuanzi_container_site_pv">
-    本站访问量:<span id="busuanzi_value_site_pv"></span>次
-  </span>
-  <span class="post-meta-divider">|</span>
-  <span id="busuanzi_container_site_uv">
-    本站总访客量：<span id="busuanzi_value_site_uv"></span>人
-  </span>
-</div>
-<div class="theme-info">
-  <div class="powered-by"></div>
-  <span class="post-count">博客全站共225.3k字</span>
-</div>
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-        
-<div class="busuanzi-count">
-  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
-      <span class="post-meta-item-icon">
-        <i class="fa fa-user"></i>
-      </span>
-      <span class="site-uv" title="总访客量">
-        <span id="busuanzi_value_site_uv"></span>
-      </span>
-    </span>
-    <span class="post-meta-divider">|</span>
-    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
-      <span class="post-meta-item-icon">
-        <i class="fa fa-eye"></i>
-      </span>
-      <span class="site-pv" title="总访问量">
-        <span id="busuanzi_value_site_pv"></span>
-      </span>
-    </span>
-</div>
-
-
-
-
-
-
-
-
-      </div>
+    <footer class="shell footer">
+      <span>2021 - 2026 &copy; LC</span>
+      <span>真实项目的研究记录</span>
+      <a href="/web-blog/atom.xml">RSS</a>
     </footer>
-  </div>
 
-  
-  <script src="/web-blog/lib/anime.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
-  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
-  <script src="/web-blog/lib/velocity/velocity.min.js"></script>
-  <script src="/web-blog/lib/velocity/velocity.ui.min.js"></script>
+    <dialog class="search-dialog" id="search-dialog" data-search-url="/web-blog/search.xml">
+      <div class="search-dialog__bar">
+        <label for="site-search">搜索笔记</label>
+        <button class="dialog-close" aria-label="关闭搜索" type="button">关闭</button>
+      </div>
+      <input id="site-search" type="search" autocomplete="off" placeholder="输入文章标题、主题或关键词" />
+      <div class="search-results" aria-live="polite"></div>
+    </dialog>
 
-<script src="/web-blog/js/utils.js"></script>
-
-<script src="/web-blog/js/motion.js"></script>
-
-
-<script src="/web-blog/js/schemes/pisces.js"></script>
-
-
-<script src="/web-blog/js/next-boot.js"></script>
-
-<script src="/web-blog/js/bookmark.js"></script>
-
-
-
-
-  
-
-
-
-
-  
-<script src="/web-blog/js/local-search.js"></script>
-
-
-
-
-
-
-
-
-
-
-
-<script>
-if (document.querySelectorAll('pre.mermaid').length) {
-  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
-    mermaid.initialize({
-      theme    : 'forest',
-      logLevel : 3,
-      flowchart: { curve     : 'linear' },
-      gantt    : { axisFormat: '%m/%d/%Y' },
-      sequence : { actorMargin: 50 }
-    });
-  }, window.mermaid);
-}
-</script>
-
-
-  
-
-  
-
-</body>
-<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
-<script type="text/javascript" src="/js/src/clicklove.js"></script>
-
+    <script src="/web-blog/js/site.js"></script>
+  </body>
 </html>
