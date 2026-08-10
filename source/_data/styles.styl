@@ -1,0 +1,159 @@
+/* 文章排版优化 */
+.post-body {
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.post-body p {
+  margin: 1.2em 0;
+}
+
+/* 标题样式 */
+.post-body h2 {
+  font-size: 1.5em;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 8px;
+  margin-top: 2em;
+  margin-bottom: 0.8em;
+}
+
+.post-body h3 {
+  font-size: 1.25em;
+  margin-top: 1.5em;
+  margin-bottom: 0.6em;
+  color: #555;
+}
+
+/* 代码块美化 */
+.highlight {
+  border-radius: 8px !important;
+  margin: 1.5em 0 !important;
+}
+
+.highlight pre {
+  padding: 16px 20px !important;
+  font-size: 13.5px !important;
+  line-height: 1.6 !important;
+}
+
+/* 行内代码 */
+code:not(.highlight code) {
+  color: #d63384;
+  background: #f8f9fa;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+/* 引用块美化 */
+blockquote {
+  border-left: 4px solid #1890ff !important;
+  background: #f8f9ff;
+  padding: 12px 20px !important;
+  border-radius: 0 8px 8px 0;
+}
+
+/* 表格美化 */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.5em 0;
+  font-size: 14px;
+}
+
+table th, table td {
+  border: 1px solid #e8e8e8;
+  padding: 10px 14px;
+  text-align: left;
+}
+
+table th {
+  background: #f5f7fa;
+  font-weight: 600;
+}
+
+/* 链接样式 */
+.post-body a {
+  color: #1890ff;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.post-body a:hover {
+  border-bottom-color: #1890ff;
+}
+
+/* 列表优化 */
+.post-body ul, .post-body ol {
+  padding-left: 1.8em;
+  line-height: 1.8;
+}
+
+.post-body li {
+  margin: 0.4em 0;
+}
+
+/* 阅读更多按钮 */
+.read-more-btn {
+  border-radius: 20px !important;
+  font-size: 13px !important;
+  padding: 6px 20px !important;
+  transition: all 0.3s !important;
+}
+
+.read-more-btn:hover {
+  background: #1890ff !important;
+  border-color: #1890ff !important;
+  color: #fff !important;
+}
+
+/* 文章底部标签样式 */
+.post-tags a {
+  border-radius: 12px;
+  padding: 2px 10px;
+  font-size: 12px;
+  background: #f0f2f5;
+  color: #666;
+  transition: all 0.2s;
+}
+
+.post-tags a:hover {
+  background: #1890ff;
+  color: #fff;
+  text-decoration: none;
+}
+
+/* 头像旋转动画 */
+.site-avatar:hover img {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* 代码块复制按钮位置 */
+.copy-btn {
+  top: 8px !important;
+  right: 8px !important;
+  border-radius: 4px !important;
+  padding: 2px 8px !important;
+  font-size: 12px !important;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.highlight:hover .copy-btn {
+  opacity: 1;
+}
+
+/* 首页文章间距 */
+.posts-expand .post-body {
+  margin-top: 12px;
+}
+
+.post-meta {
+  color: #999;
+  font-size: 13px;
+}

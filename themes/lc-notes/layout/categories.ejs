@@ -1,0 +1,98 @@
+<%
+  const allPosts = site.posts ? site.posts.toArray() : [];
+  const configuredTopics = Array.isArray(theme.topics) ? theme.topics : [];
+  const categoriesFor = (post) => post.categories && post.categories.length ? post.categories.toArray() : [];
+  const allCategories = [];
+
+  allPosts.forEach((post) => {
+    categoriesFor(post).forEach((category) => {
+      if (!allCategories.some((item) => item.name === category.name)) allCategories.push(category);
+    });
+  });
+
+  const topics = configuredTopics.map((topic) => {
+    const categoryNames = Array.isArray(topic.categories) ? topic.categories : [];
+    const posts = allPosts.filter((post) => categoriesFor(post).some((category) => categoryNames.includes(category.name)));
+    const categories = categoryNames.map((name) => allCategories.find((category) => category.name === name)).filter(Boolean);
+    return { ...topic, posts, categories };
+  });
+%>
+<main class="topics-page">
+  <section class="shell topics-hero" aria-labelledby="topics-title">
+    <p class="section-label">TOPICS / RESEARCH INDEX</p>
+    <h1 id="topics-title">从问题出发，<em>再进入分类。</em></h1>
+    <p>原始分类保留技术边界，专题负责把相近的问题放到一起。这里的每一条入口都来自已有文章，而不是新造的目录。</p>
+    <div class="topics-stats" aria-label="专题统计">
+      <span><strong><%= topics.length %></strong> 个专题</span>
+      <span><strong><%= allCategories.length %></strong> 个原始分类</span>
+      <span><strong><%= allPosts.length %></strong> 篇文章</span>
+    </div>
+  </section>
+
+  <section class="shell topics-overview" aria-labelledby="overview-title">
+    <div class="topics-overview__heading">
+      <p class="section-label">START HERE</p>
+      <h2 id="overview-title">先确定你要解决哪一类问题。</h2>
+    </div>
+    <nav class="topics-overview__list" aria-label="专题索引">
+      <% topics.forEach((topic) => { %>
+        <a href="#topic-<%= topic.id %>">
+          <span class="topics-overview__number"><%= topic.number %></span>
+          <span><strong><%= topic.title %></strong><small><%= topic.posts.length %> 篇文章 / <%= topic.categories.length %> 个分类</small></span>
+          <span aria-hidden="true">↓</span>
+        </a>
+      <% }) %>
+    </nav>
+  </section>
+
+  <section class="shell knowledge-architecture" aria-labelledby="architecture-title">
+    <div class="knowledge-architecture__intro">
+      <p class="section-label">CONTENT ARCHITECTURE</p>
+      <h2 id="architecture-title">文章、分类和专题如何一起工作。</h2>
+      <p>Markdown 文章仍是唯一内容源。专题只读取现有分类做聚合，因此搜索、订阅和旧链接都沿用同一份内容。</p>
+    </div>
+    <iframe class="architecture-frame" title="博客知识架构图" src="<%= url_for('lab/blog-knowledge-architecture.html') %>" loading="lazy"></iframe>
+    <a class="text-link" href="<%= url_for('lab/blog-knowledge-architecture.html') %>" target="_blank" rel="noopener">在单独页面中查看并导出架构图</a>
+  </section>
+
+  <section class="shell reading-flow" aria-labelledby="reading-flow-title">
+    <div class="reading-flow__heading">
+      <p class="section-label">READING FLOW</p>
+      <h2 id="reading-flow-title">一次阅读，应该有下一步。</h2>
+      <p>用专题建立方向，用原始分类缩小范围，最后回到具体文章和延伸阅读。</p>
+    </div>
+    <ol class="reading-flow__steps">
+      <li><span>01</span><strong>带着问题来</strong><small>例如：状态该放在哪里？</small></li>
+      <li><span>02</span><strong>进入上层专题</strong><small>先找到语言、框架、工程或平台方向。</small></li>
+      <li><span>03</span><strong>查看细分类</strong><small>用原始技术分类锁定合适的文章集合。</small></li>
+      <li><span>04</span><strong>回到具体实践</strong><small>读文章、查关联分类，再决定下一步。</small></li>
+    </ol>
+  </section>
+
+  <section class="shell topic-sections" aria-label="专题文章">
+    <% topics.forEach((topic) => { %>
+      <article class="topic-detail" id="topic-<%= topic.id %>">
+        <header class="topic-detail__header">
+          <p class="section-label"><%= topic.eyebrow %></p>
+          <span class="topic-detail__number"><%= topic.number %></span>
+          <h2><%= topic.title %></h2>
+          <p><%= topic.description %></p>
+          <div class="topic-categories" aria-label="<%= topic.title %> 的原始分类">
+            <% topic.categories.forEach((category) => { %>
+              <a href="<%= url_for(category.path) %>"><%= category.name %> <small><%= category.length %></small></a>
+            <% }) %>
+          </div>
+        </header>
+        <div class="topic-detail__posts">
+          <% topic.posts.slice(0, 5).forEach((post) => { %>
+            <a class="topic-post" href="<%= url_for(post.path) %>">
+              <time datetime="<%= date(post.date, 'YYYY-MM-DD') %>"><%= date(post.date, 'YYYY-MM-DD') %></time>
+              <strong><%= post.title %></strong>
+              <span><%= categoriesFor(post)[0] ? categoriesFor(post)[0].name : '笔记' %></span>
+            </a>
+          <% }) %>
+        </div>
+      </article>
+    <% }) %>
+  </section>
+</main>

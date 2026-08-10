@@ -1,0 +1,25 @@
+<%
+  const posts = page.posts ? page.posts.toArray() : [];
+  const categoryName = (post) => {
+    const categories = post.categories && post.categories.length ? post.categories.toArray() : [];
+    return categories[0] ? categories[0].name : '笔记';
+  };
+%>
+<main class="shell listing-page">
+  <header class="listing-heading">
+    <p class="section-label"><%= label %></p>
+    <h1><%= title %></h1>
+  </header>
+  <div class="entry-list">
+    <% posts.forEach((post) => { %>
+      <a class="entry" href="<%= url_for(post.path) %>">
+        <time datetime="<%= date(post.date, 'YYYY-MM-DD') %>"><%= date(post.date, 'YYYY-MM-DD') %></time>
+        <h2><%= post.title %></h2>
+        <span class="entry-category"><%= categoryName(post) %></span>
+      </a>
+    <% }) %>
+    <% if (page.total > 1) { %>
+      <nav class="pagination" aria-label="分页"><%- paginator({ prev_text: '上一页', next_text: '下一页' }) %></nav>
+    <% } %>
+  </div>
+</main>

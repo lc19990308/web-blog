@@ -1,0 +1,11 @@
+.DS_Store
+Thumbs.db
+db.json
+*.log
+node_modules/
+public/
+.deploy*/
+.backups/
+.codex-backups/
+# Legacy theme checkout; lc-notes is the active theme in _config.yml.
+themes/hexo-theme-next/

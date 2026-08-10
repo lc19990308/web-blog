@@ -1,0 +1,33 @@
+<%
+  const isAboutPage = page.type === 'about';
+  const aboutPosts = isAboutPage && site.posts ? site.posts.toArray() : [];
+  const aboutCategories = [];
+
+  aboutPosts.forEach((post) => {
+    const categories = post.categories && post.categories.length ? post.categories.toArray() : [];
+    categories.forEach((category) => {
+      if (!aboutCategories.some((item) => item.name === category.name)) aboutCategories.push(category);
+    });
+  });
+
+  const aboutYears = aboutPosts.map((post) => date(post.date, 'YYYY')).filter(Boolean).sort();
+  const aboutYearRange = aboutYears.length ? `${aboutYears[0]} - ${aboutYears[aboutYears.length - 1]}` : '--';
+  const aboutTopicCount = Array.isArray(theme.topics) ? theme.topics.length : 0;
+%>
+<main class="shell page-shell">
+  <article class="page-content" itemscope itemtype="https://schema.org/WebPage">
+    <header class="page-header">
+      <p class="section-label">PAGE</p>
+      <h1 itemprop="name"><%= page.title %></h1>
+    </header>
+    <% if (isAboutPage) { %>
+      <dl class="about-metrics" aria-label="博客统计">
+        <div><dt>文章</dt><dd><%= aboutPosts.length %></dd></div>
+        <div><dt>分类</dt><dd><%= aboutCategories.length %></dd></div>
+        <div><dt>专题</dt><dd><%= aboutTopicCount %></dd></div>
+        <div><dt>记录</dt><dd><%= aboutYearRange %></dd></div>
+      </dl>
+    <% } %>
+    <div class="prose" itemprop="mainContentOfPage"><%- page.content %></div>
+  </article>
+</main>

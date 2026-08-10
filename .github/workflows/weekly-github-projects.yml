@@ -1,0 +1,70 @@
+name: Update Weekly GitHub Index
+
+on:
+  schedule:
+    # Monday 07:30 in Asia/Shanghai (Sunday 23:30 UTC).
+    - cron: '30 23 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: weekly-github-projects
+  cancel-in-progress: false
+
+jobs:
+  generate-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out blog source
+        uses: actions/checkout@v4
+        with:
+          ref: source
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Refresh weekly GitHub data
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node automation/generate-weekly-github.mjs
+
+      - name: Commit the source data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add source/_data/github-weekly.json
+          if git diff --cached --quiet; then
+            echo "No GitHub data changes to commit."
+          else
+            git commit -m "data: 更新 GitHub 热榜"
+            git push origin HEAD:source
+          fi
+
+      - name: Build Hexo site
+        run: npm run build
+
+      - name: Publish static site to master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PAGES_DIR="$RUNNER_TEMP/web-blog-pages"
+          git clone --depth 1 --branch master "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "$PAGES_DIR"
+          rsync -a --delete --exclude '.git' public/ "$PAGES_DIR/"
+          git -C "$PAGES_DIR" config user.name "github-actions[bot]"
+          git -C "$PAGES_DIR" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git -C "$PAGES_DIR" add --all
+          if git -C "$PAGES_DIR" diff --cached --quiet; then
+            echo "No static site changes to publish."
+          else
+            git -C "$PAGES_DIR" commit -m "build: 发布 GitHub 热榜"
+            git -C "$PAGES_DIR" push origin master
+          fi

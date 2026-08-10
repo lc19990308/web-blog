@@ -1,0 +1,41 @@
+menu:
+  notes: /
+  topics: /categories/
+  about: /about/
+  archives: /archives/
+
+footer:
+  since: 2021
+  statement: 真实项目的研究记录
+
+topics:
+  - id: language
+    number: '01'
+    eyebrow: LANGUAGE / TYPES
+    title: 语言与类型系统
+    description: 作用域、异步、模块、ES6 和 TypeScript，包含《你不知道的 JavaScript》系列。
+    categories: [JavaScript, ES6, 你不知道的javascript, TypeScript]
+  - id: interface
+    number: '02'
+    eyebrow: UI / FRAMEWORKS
+    title: 界面与框架
+    description: CSS、组件、Vue、React 与状态管理，关注界面如何被组织和维护。
+    categories: [CSS, css, Vue, Vue3, vue3, React, 状态管理, Web Components]
+  - id: engineering
+    number: '03'
+    eyebrow: BUILD / ARCHITECTURE
+    title: 工程与架构
+    description: 构建、测试、发布、监控、Node 与架构决策，服务于稳定的交付过程。
+    categories: [工程化, 架构, Node.js, 测试, Git, git, 调试, 监控]
+  - id: platform
+    number: '04'
+    eyebrow: BROWSER / PERFORMANCE
+    title: 浏览器与性能
+    description: 从渲染、缓存和网络协议，到安全边界与用户可感知的性能指标。
+    categories: [浏览器, 网络协议, 性能优化, 安全]
+  - id: exploration
+    number: '05'
+    eyebrow: AI / CREATIVE COMPUTING
+    title: AI 与创作实验
+    description: AI 编程、智能体、数据可视化与图形计算的真实实践记录。
+    categories: [AI, 图形学, 数据可视化]

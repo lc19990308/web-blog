@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "week": "2026-W33",
+  "generatedAt": "2026-08-10T06:29:25.976Z",
+  "period": {
+    "start": "2026-08-03",
+    "end": "2026-08-10"
+  },
+  "sourceUrl": "https://github.com/search?q=created%3A%3E%3D2026-08-03+fork%3Afalse+archived%3Afalse&type=repositories&s=stars&o=desc",
+  "repositories": [
+    {
+      "rank": 1,
+      "fullName": "firecrawl/anydoc",
+      "url": "https://github.com/firecrawl/anydoc",
+      "stars": 12899,
+      "language": "Rust",
+      "description": "Convert Word, PowerPoint, Excel, OpenDocument, RTF, EPUB, CSV, and PDF to clean Markdown. Built in Rust, with Node.js and Python bindings.",
+      "createdAt": "2026-08-03",
+      "license": "MIT"
+    },
+    {
+      "rank": 2,
+      "fullName": "KKKKhazix/human-writing",
+      "url": "https://github.com/KKKKhazix/human-writing",
+      "stars": 2151,
+      "language": "Python",
+      "description": "让 AI 写的中文读起来像一个具体的人在说话。通用创作与改稿 Skill，开箱即用。",
+      "createdAt": "2026-08-05",
+      "license": "MIT"
+    },
+    {
+      "rank": 3,
+      "fullName": "ZzzLc0405/photo-abstract-editorial",
+      "url": "https://github.com/ZzzLc0405/photo-abstract-editorial",
+      "stars": 2037,
+      "language": "未标注",
+      "description": "仓库未提供简介。",
+      "createdAt": "2026-08-04",
+      "license": "NOASSERTION"
+    },
+    {
+      "rank": 4,
+      "fullName": "ShawnPana/phone-harness",
+      "url": "https://github.com/ShawnPana/phone-harness",
+      "stars": 1009,
+      "language": "Python",
+      "description": "let your agent control your phone",
+      "createdAt": "2026-08-07",
+      "license": "MIT"
+    },
+    {
+      "rank": 5,
+      "fullName": "mikiarlo3/awesome-growth-hacking-skills",
+      "url": "https://github.com/mikiarlo3/awesome-growth-hacking-skills",
+      "stars": 801,
+      "language": "Shell",
+      "description": "Find agentic growth hacking skills for Claude, ChatGPT, Manus | by enso.bot",
+      "createdAt": "2026-08-04",
+      "license": null
+    },
+    {
+      "rank": 6,
+      "fullName": "wumingqi60/lingxi",
+      "url": "https://github.com/wumingqi60/lingxi",
+      "stars": 721,
+      "language": "TypeScript",
+      "description": "灵犀跨境-开源共建版",
+      "createdAt": "2026-08-03",
+      "license": "Apache-2.0"
+    },
+    {
+      "rank": 7,
+      "fullName": "google-gemma/gemma-translator",
+      "url": "https://github.com/google-gemma/gemma-translator",
+      "stars": 718,
+      "language": "JavaScript",
+      "description": "仓库未提供简介。",
+      "createdAt": "2026-08-03",
+      "license": "Apache-2.0"
+    },
+    {
+      "rank": 8,
+      "fullName": "0xwilliamortiz/claude-red",
+      "url": "https://github.com/0xwilliamortiz/claude-red",
+      "stars": 714,
+      "language": "JavaScript",
+      "description": "claude-red is a curated library of offensive security skills designed for the Claude skills system. Each skill is a structured SKILL.md file that primes Claude with expert-level me",
+      "createdAt": "2026-08-05",
+      "license": "MIT"
+    },
+    {
+      "rank": 9,
+      "fullName": "xoreaxeaxeax/asm-hall-of-shame",
+      "url": "https://github.com/xoreaxeaxeax/asm-hall-of-shame",
+      "stars": 676,
+      "language": "C",
+      "description": "Racing to the bottom of CPU performance",
+      "createdAt": "2026-08-06",
+      "license": "MIT"
+    },
+    {
+      "rank": 10,
+      "fullName": "yuhuangerdi/InduSecAgent",
+      "url": "https://github.com/yuhuangerdi/InduSecAgent",
+      "stars": 663,
+      "language": "Vue",
+      "description": "仓库未提供简介。",
+      "createdAt": "2026-08-03",
+      "license": null
+    }
+  ]
+}

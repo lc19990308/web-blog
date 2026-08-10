@@ -1,0 +1,34 @@
+<%
+  const tags = page.tags && page.tags.length ? page.tags.toArray() : [];
+  const categories = page.categories && page.categories.length ? page.categories.toArray() : [];
+  const pageToc = toc(page.content, { class: 'toc-list', list_number: false });
+%>
+<main class="shell post-shell">
+  <aside class="post-toc" aria-label="文章目录">
+    <p class="section-label">ON THIS PAGE</p>
+    <%- pageToc || '<p class="toc-empty">本文没有章节目录。</p>' %>
+  </aside>
+  <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+    <header class="post-header">
+      <p class="section-label"><%= categories[0] ? categories[0].name : 'NOTE' %></p>
+      <h1 itemprop="headline"><%= page.title %></h1>
+      <div class="metadata"><span><%= date(page.date, 'YYYY-MM-DD') %></span><span><%= Math.max(4, Math.ceil((page.length || 1200) / 450)) %> 分钟阅读</span><% if (page.updated && page.updated.valueOf() !== page.date.valueOf()) { %><span>更新于 <%= date(page.updated, 'YYYY-MM-DD') %></span><% } %></div>
+      <% if (page.description) { %><p class="post-lede"><%= page.description %></p><% } %>
+    </header>
+    <div class="prose" itemprop="articleBody"><%- page.content %></div>
+    <% if (tags.length) { %>
+      <footer class="post-tags" aria-label="文章标签">
+        <% tags.forEach((tag) => { %><a href="<%= url_for(tag.path) %>"><%= tag.name %></a><% }) %>
+      </footer>
+    <% } %>
+    <nav class="post-navigation" aria-label="文章导航">
+      <% if (page.prev) { %><a href="<%= url_for(page.prev.path) %>"><span>上一篇</span><b><%= page.prev.title %></b></a><% } %>
+      <% if (page.next) { %><a class="next" href="<%= url_for(page.next.path) %>"><span>下一篇</span><b><%= page.next.title %></b></a><% } %>
+    </nav>
+  </article>
+  <aside class="post-rail" aria-label="文章信息">
+    <p class="section-label">CONNECTIONS</p>
+    <% if (categories.length) { %><div><strong>专题</strong><% categories.forEach((category) => { %><a href="<%= url_for(category.path) %>"><%= category.name %></a><% }) %></div><% } %>
+    <% if (tags.length) { %><div><strong>标签</strong><% tags.forEach((tag) => { %><a href="<%= url_for(tag.path) %>"><%= tag.name %></a><% }) %></div><% } %>
+  </aside>
+</main>
