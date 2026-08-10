@@ -274,6 +274,99 @@ h1, h2, h3, h4, p { margin: 0; }
 
 .research-map svg { width: 100%; height: auto; }
 
+.github-weekly {
+  padding: 4rem 0 4.5rem;
+  border-bottom: 1px solid var(--ink);
+}
+
+.github-weekly__heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.58fr);
+  gap: var(--space-3xl);
+  align-items: end;
+  margin-bottom: var(--space-xl);
+}
+
+.github-weekly h2 {
+  max-width: 34rem;
+  font-size: 2.25rem;
+  font-weight: 760;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+.github-weekly__meta {
+  display: grid;
+  gap: var(--space-xs);
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  line-height: 1.65;
+}
+
+.github-weekly__meta a { color: var(--moss); text-decoration: underline; text-underline-offset: 0.18em; }
+.github-weekly__meta a:hover { color: var(--coral); }
+
+.github-weekly__list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  border-top: 1px solid var(--ink);
+}
+
+.github-weekly__item {
+  display: grid;
+  grid-template-columns: 3.625rem minmax(0, 1fr) minmax(13rem, auto);
+  gap: var(--space-lg);
+  align-items: start;
+  padding: var(--space-md) 0 1.125rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.github-weekly__rank {
+  padding-top: 0.2rem;
+  color: var(--coral);
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+}
+
+.github-weekly__repository h3 {
+  font-size: 1.08rem;
+  font-weight: 730;
+  line-height: 1.4;
+}
+
+.github-weekly__repository a { color: var(--moss); }
+.github-weekly__repository a:hover { color: var(--coral); }
+
+.github-weekly__repository p {
+  max-width: 60ch;
+  margin-top: var(--space-xs);
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+
+.github-weekly__facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(4.75rem, auto));
+  justify-content: end;
+  gap: var(--space-lg);
+  min-width: 0;
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  line-height: 1.45;
+  font-variant-numeric: tabular-nums;
+}
+
+.github-weekly__facts > div { min-width: 0; text-align: right; }
+.github-weekly__facts dt { color: var(--muted); }
+.github-weekly__facts dd { margin: 0.25rem 0 0; color: var(--ink); font-weight: 700; overflow-wrap: anywhere; }
+
 .latest {
   display: grid;
   grid-template-columns: minmax(13.75rem, 0.28fr) minmax(0, 0.72fr);
@@ -675,6 +768,16 @@ h1, h2, h3, h4, p { margin: 0; }
   .feature { padding: 3rem 0 3.5rem; }
   .feature h2 { font-size: 2.25rem; }
   .research-map { min-height: 0; padding: var(--space-lg); }
+  .github-weekly { padding: 3.25rem 0 3.5rem; }
+  .github-weekly__heading { grid-template-columns: 1fr; gap: var(--space-lg); margin-bottom: var(--space-xl); }
+  .github-weekly h2 { font-size: 1.8rem; }
+  .github-weekly__item { grid-template-columns: 2.5rem minmax(0, 1fr); gap: var(--space-xs) var(--space-md); padding: var(--space-md) 0; }
+  .github-weekly__rank { grid-row: 1 / span 2; }
+  .github-weekly__facts { grid-column: 2; grid-row: 1; justify-content: start; gap: var(--space-lg); }
+  .github-weekly__facts > div { text-align: left; }
+  .github-weekly__repository { grid-column: 2; grid-row: 2; }
+  .github-weekly__repository h3 { font-size: 1rem; overflow-wrap: anywhere; }
+  .github-weekly__repository p { margin-top: 0.35rem; font-size: 0.88rem; line-height: 1.6; }
   .latest { padding: 3.4rem 0 4.125rem; }
   .latest-heading > p:last-child { max-width: 28rem; }
   .entry { grid-template-columns: 1fr auto; gap: var(--space-xs) var(--space-lg); }
