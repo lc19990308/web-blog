@@ -1,112 +1,112 @@
 {
   "schemaVersion": 1,
-  "week": "2026-W33",
-  "generatedAt": "2026-08-10T06:45:47.055Z",
+  "week": "2026-W34",
+  "generatedAt": "2026-08-16T23:43:26.217Z",
   "period": {
-    "start": "2026-08-03",
-    "end": "2026-08-10"
+    "start": "2026-08-10",
+    "end": "2026-08-17"
   },
-  "sourceUrl": "https://github.com/search?q=created%3A%3E%3D2026-08-03+fork%3Afalse+archived%3Afalse&type=repositories&s=stars&o=desc",
+  "sourceUrl": "https://github.com/search?q=created%3A%3E%3D2026-08-10+fork%3Afalse+archived%3Afalse&type=repositories&s=stars&o=desc",
   "repositories": [
     {
       "rank": 1,
-      "fullName": "firecrawl/anydoc",
-      "url": "https://github.com/firecrawl/anydoc",
-      "stars": 12908,
-      "language": "Rust",
-      "description": "Convert Word, PowerPoint, Excel, OpenDocument, RTF, EPUB, CSV, and PDF to clean Markdown. Built in Rust, with Node.js and Python bindings.",
-      "createdAt": "2026-08-03",
+      "fullName": "deepseek-ai/deepseek-harness",
+      "url": "https://github.com/deepseek-ai/deepseek-harness",
+      "stars": 131071,
+      "language": "TypeScript",
+      "description": "DeepSeek Harness: Everything is a Plugin.",
+      "createdAt": "2026-08-13",
       "license": "MIT"
     },
     {
       "rank": 2,
-      "fullName": "KKKKhazix/human-writing",
-      "url": "https://github.com/KKKKhazix/human-writing",
-      "stars": 2153,
+      "fullName": "guillaumemeyer/watermarks-remover",
+      "url": "https://github.com/guillaumemeyer/watermarks-remover",
+      "stars": 11354,
       "language": "Python",
-      "description": "让 AI 写的中文读起来像一个具体的人在说话。通用创作与改稿 Skill，开箱即用。",
-      "createdAt": "2026-08-05",
+      "description": "Strip multi-vendor AI provenance marks: Unicode text hygiene, statistical rewrite hooks, and C2PA/metadata from PNG/JPEG/SVG/PDF/DOCX/HTML/MD",
+      "createdAt": "2026-08-11",
       "license": "MIT"
     },
     {
       "rank": 3,
-      "fullName": "ZzzLc0405/photo-abstract-editorial",
-      "url": "https://github.com/ZzzLc0405/photo-abstract-editorial",
-      "stars": 2040,
-      "language": "未标注",
-      "description": "仓库未提供简介。",
-      "createdAt": "2026-08-04",
-      "license": "NOASSERTION"
+      "fullName": "anywhere-labs/deepseek-harness-desktop",
+      "url": "https://github.com/anywhere-labs/deepseek-harness-desktop",
+      "stars": 8861,
+      "language": "TypeScript",
+      "description": "为 DeepSeek Harness (DSH) 插件生态打造的现代化桌面端解决方案",
+      "createdAt": "2026-08-13",
+      "license": "MIT"
     },
     {
       "rank": 4,
-      "fullName": "ShawnPana/phone-harness",
-      "url": "https://github.com/ShawnPana/phone-harness",
-      "stars": 1018,
+      "fullName": "awesome-dsh-plugin/awesome-dsh-plugin",
+      "url": "https://github.com/awesome-dsh-plugin/awesome-dsh-plugin",
+      "stars": 5072,
       "language": "Python",
-      "description": "let your agent control your phone",
-      "createdAt": "2026-08-07",
-      "license": "MIT"
+      "description": "A curated list of plugins for DeepSeek Harness (dsh) · DeepSeek Harness 插件精选列表",
+      "createdAt": "2026-08-13",
+      "license": "CC0-1.0"
     },
     {
       "rank": 5,
-      "fullName": "mikiarlo3/awesome-growth-hacking-skills",
-      "url": "https://github.com/mikiarlo3/awesome-growth-hacking-skills",
-      "stars": 801,
-      "language": "Shell",
-      "description": "Find agentic growth hacking skills for Claude, ChatGPT, Manus | by enso.bot",
-      "createdAt": "2026-08-04",
-      "license": null
+      "fullName": "zhu1090093659/dsh-web-ui",
+      "url": "https://github.com/zhu1090093659/dsh-web-ui",
+      "stars": 3419,
+      "language": "TypeScript",
+      "description": "Plugin and skin collection for DeepSeek Harness (DSH) Web UI - task board, git graph, right-side panel, remote mobile UI, pet, live token stats, and skin center.",
+      "createdAt": "2026-08-12",
+      "license": "Apache-2.0"
     },
     {
       "rank": 6,
-      "fullName": "wumingqi60/lingxi",
-      "url": "https://github.com/wumingqi60/lingxi",
-      "stars": 723,
-      "language": "TypeScript",
-      "description": "灵犀跨境-开源共建版",
-      "createdAt": "2026-08-03",
-      "license": "Apache-2.0"
+      "fullName": "xiaobright/dsh-anchored-standard",
+      "url": "https://github.com/xiaobright/dsh-anchored-standard",
+      "stars": 3014,
+      "language": "JavaScript",
+      "description": "Two-phase DeepSeek Harness preset: Minimal-aligned bootstrap, then full Standard tools (Project2 98/99)",
+      "createdAt": "2026-08-14",
+      "license": "NOASSERTION"
     },
     {
       "rank": 7,
-      "fullName": "google-gemma/gemma-translator",
-      "url": "https://github.com/google-gemma/gemma-translator",
-      "stars": 719,
-      "language": "JavaScript",
-      "description": "仓库未提供简介。",
-      "createdAt": "2026-08-03",
-      "license": "Apache-2.0"
+      "fullName": "yjh051108/dsh-routing-suite",
+      "url": "https://github.com/yjh051108/dsh-routing-suite",
+      "stars": 2804,
+      "language": "PowerShell",
+      "description": "dsh-routing-suite — injector + router-standard kit: install the runtime injector first, then the task-aware reasoning-mode router preset (measured P1-P23).",
+      "createdAt": "2026-08-14",
+      "license": null
     },
     {
       "rank": 8,
-      "fullName": "0xwilliamortiz/claude-red",
-      "url": "https://github.com/0xwilliamortiz/claude-red",
-      "stars": 715,
-      "language": "JavaScript",
-      "description": "claude-red is a curated library of offensive security skills designed for the Claude skills system. Each skill is a structured SKILL.md file that primes Claude with expert-level me",
-      "createdAt": "2026-08-05",
-      "license": "MIT"
+      "fullName": "cordiverse/paper",
+      "url": "https://github.com/cordiverse/paper",
+      "stars": 1868,
+      "language": "未标注",
+      "description": "A Programming Paradigm for Spatiotemporal Composability",
+      "createdAt": "2026-08-13",
+      "license": null
     },
     {
       "rank": 9,
-      "fullName": "xoreaxeaxeax/asm-hall-of-shame",
-      "url": "https://github.com/xoreaxeaxeax/asm-hall-of-shame",
-      "stars": 677,
-      "language": "C",
-      "description": "Racing to the bottom of CPU performance",
-      "createdAt": "2026-08-06",
-      "license": "MIT"
+      "fullName": "SMNETSTUDIO/WeChat-AI",
+      "url": "https://github.com/SMNETSTUDIO/WeChat-AI",
+      "stars": 1766,
+      "language": "TypeScript",
+      "description": "仓库未提供简介。",
+      "createdAt": "2026-08-10",
+      "license": "Apache-2.0"
     },
     {
       "rank": 10,
-      "fullName": "MengTo/kage",
-      "url": "https://github.com/MengTo/kage",
-      "stars": 668,
-      "language": "HTML",
-      "description": "An interactive five-chapter night walk through a Kyoto mountain temple, rendered live in Three.js.",
-      "createdAt": "2026-08-08",
-      "license": null
+      "fullName": "xoreaxeaxeax/skitter-creek-bath-salts",
+      "url": "https://github.com/xoreaxeaxeax/skitter-creek-bath-salts",
+      "stars": 1728,
+      "language": "C",
+      "description": "Unlocking _everything_ on the CPU with DRAM scrambling",
+      "createdAt": "2026-08-13",
+      "license": "MIT"
     }
   ]
 }
