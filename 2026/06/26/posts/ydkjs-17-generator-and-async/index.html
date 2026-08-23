@@ -37,7 +37,7 @@
     <header class="post-header">
       <p class="section-label">你不知道的javascript</p>
       <h1 itemprop="headline">你不知道的JavaScript（十七）：Generator + Promise——async/await 的底层实现</h1>
-      <div class="metadata"><span>2026-06-26</span><span>4 分钟阅读</span><span>更新于 2026-08-16</span></div>
+      <div class="metadata"><span>2026-06-26</span><span>4 分钟阅读</span><span>更新于 2026-08-23</span></div>
       <p class="post-lede">深入 Generator 的迭代器机制、两路通信原理，以及它如何与 Promise 结合实现异步流程控制——这正是 async/await 的底层实现</p>
     </header>
     <div class="prose" itemprop="articleBody"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> user = <span class="keyword">await</span> fetchUser()</span><br><span class="line">  <span class="keyword">const</span> orders = <span class="keyword">await</span> fetchOrders(user.id)</span><br><span class="line">  <span class="keyword">return</span> orders</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -117,7 +117,7 @@
     
     <nav class="post-navigation" aria-label="文章导航">
       <a href="/web-blog/2026/06/26/posts/ydkjs-16-promise/"><span>上一篇</span><b>你不知道的JavaScript（十六）：Promise 深入理解——解决回调问题的终极方案</b></a>
-      <a class="next" href="/web-blog/2026/06/26/posts/ydkjs-18-grammar-and-statements/"><span>下一篇</span><b>你不知道的JavaScript（十八）：JavaScript 语法详解——表达式、语句、ASI 与分号</b></a>
+      <a class="next" href="/web-blog/2026/06/26/posts/ydkjs-19-performance-and-benchmark/"><span>下一篇</span><b>你不知道的JavaScript（十九）：JavaScript 性能测试与优化——基准分析与 JIT 陷阱</b></a>
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
