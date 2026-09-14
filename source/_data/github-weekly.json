@@ -1,112 +1,112 @@
 {
   "schemaVersion": 1,
-  "week": "2026-W37",
-  "generatedAt": "2026-09-07T01:11:27.863Z",
+  "week": "2026-W38",
+  "generatedAt": "2026-09-14T01:20:34.422Z",
   "period": {
-    "start": "2026-08-31",
-    "end": "2026-09-07"
+    "start": "2026-09-07",
+    "end": "2026-09-14"
   },
-  "sourceUrl": "https://github.com/search?q=created%3A%3E%3D2026-08-31+fork%3Afalse+archived%3Afalse&type=repositories&s=stars&o=desc",
+  "sourceUrl": "https://github.com/search?q=created%3A%3E%3D2026-09-07+fork%3Afalse+archived%3Afalse&type=repositories&s=stars&o=desc",
   "repositories": [
     {
       "rank": 1,
-      "fullName": "lnkiai/m3e-canvas",
-      "url": "https://github.com/lnkiai/m3e-canvas",
-      "stars": 4282,
-      "language": "TypeScript",
-      "description": "Sketch Material 3 Expressive screens in the browser and turn them into vibe-coding prompts.",
-      "createdAt": "2026-09-02",
-      "license": "MIT"
+      "fullName": "sdli1995/dlssg_for_sm86",
+      "url": "https://github.com/sdli1995/dlssg_for_sm86",
+      "stars": 2422,
+      "language": "未标注",
+      "description": "Here is a dlssg for RTX30 Series GPU",
+      "createdAt": "2026-09-07",
+      "license": null
     },
     {
       "rank": 2,
-      "fullName": "anthropics/commerce-agents",
-      "url": "https://github.com/anthropics/commerce-agents",
-      "stars": 2213,
-      "language": "Python",
-      "description": "Reference blueprint for building shopping and merchant agents with Claude. Examples in retail, commerce, telecom, and entertainment included.",
-      "createdAt": "2026-09-01",
+      "fullName": "openai/NavierStokesAndEuler",
+      "url": "https://github.com/openai/NavierStokesAndEuler",
+      "stars": 1856,
+      "language": "Lean",
+      "description": "Lean certificates accompanying Navier-Stokes and Euler results",
+      "createdAt": "2026-09-08",
       "license": "Apache-2.0"
     },
     {
       "rank": 3,
-      "fullName": "ashemag/human-atlas",
-      "url": "https://github.com/ashemag/human-atlas",
-      "stars": 1356,
-      "language": "TypeScript",
-      "description": "Open-source 3D anatomy explorer: 2,234 selectable BodyParts3D meshes, system layers, search, and exploded views.",
-      "createdAt": "2026-09-05",
-      "license": "MIT"
+      "fullName": "Edge0-AI/Edge0",
+      "url": "https://github.com/Edge0-AI/Edge0",
+      "stars": 1602,
+      "language": "Python",
+      "description": "仓库未提供简介。",
+      "createdAt": "2026-09-08",
+      "license": "Apache-2.0"
     },
     {
       "rank": 4,
-      "fullName": "shadcn-ui/cn",
-      "url": "https://github.com/shadcn-ui/cn",
-      "stars": 1213,
-      "language": "TypeScript",
-      "description": "cn is a new engine for Tailwind class merging and conflict resolution. It replaces tailwind-merge and clsx. Same APIs. Full parity. And it is 30× faster.",
-      "createdAt": "2026-08-31",
-      "license": "MIT"
+      "fullName": "EverettFish/holo-card-studio",
+      "url": "https://github.com/EverettFish/holo-card-studio",
+      "stars": 1498,
+      "language": "Python",
+      "description": "Turn the user's description or uploaded reference into a finished, editable Blender card and an interactive Three.js page. Preserve the requested subject, style, typography and des",
+      "createdAt": "2026-09-07",
+      "license": "NOASSERTION"
     },
     {
       "rank": 5,
-      "fullName": "GangTailorUpgrade/undress-service",
-      "url": "https://github.com/GangTailorUpgrade/undress-service",
-      "stars": 1135,
-      "language": "Python",
-      "description": "Dress AI Sponsor",
-      "createdAt": "2026-08-31",
-      "license": "MIT"
+      "fullName": "Vincentwei1021/anything2explainer",
+      "url": "https://github.com/Vincentwei1021/anything2explainer",
+      "stars": 1170,
+      "language": "TypeScript",
+      "description": "Topic in, narrated explainer video out. A Claude Code / Codex skill that turns any topic into a black-canvas motion-graphics explainer video with TTS voiceover, subtitles and a cha",
+      "createdAt": "2026-09-08",
+      "license": "NOASSERTION"
     },
     {
       "rank": 6,
-      "fullName": "Rion-Wu-tech/wechat-intelligence-hub",
-      "url": "https://github.com/Rion-Wu-tech/wechat-intelligence-hub",
-      "stars": 1042,
-      "language": "Python",
-      "description": "Local-first WeChat intelligence system with a read-only CLI, Codex skills, searchable chat history, daily briefings, follow-ups and opportunity tracking.",
-      "createdAt": "2026-09-04",
-      "license": "AGPL-3.0"
+      "fullName": "achimala/dream-loop",
+      "url": "https://github.com/achimala/dream-loop",
+      "stars": 967,
+      "language": "JavaScript",
+      "description": "Agent skill for impressive 3D visuals using Blender + image gen + subagent critic",
+      "createdAt": "2026-09-07",
+      "license": "MIT"
     },
     {
       "rank": 7,
-      "fullName": "2akouwu/reverify",
-      "url": "https://github.com/2akouwu/reverify",
-      "stars": 966,
+      "fullName": "crwdla/tokentab",
+      "url": "https://github.com/crwdla/tokentab",
+      "stars": 851,
       "language": "Python",
-      "description": "Stop your AI from making things up — it proposes, deterministic tools decide, every claim checked against ground truth with evidence. Grounded facts and context survive resets. Rev",
-      "createdAt": "2026-08-31",
+      "description": "A CLI that reads Claude Code, Codex, and Gemini CLI session logs and works out how much they cost, by model, project, and day.",
+      "createdAt": "2026-09-07",
       "license": "MIT"
     },
     {
       "rank": 8,
-      "fullName": "sebbbi/NoGraphicsAPI",
-      "url": "https://github.com/sebbbi/NoGraphicsAPI",
-      "stars": 876,
-      "language": "C++",
-      "description": "Minimal graphics API. Built on top of latest Vulkan extensions. As close as possibly to my \"No Graphics API\" blog post and the SIGGRAPH talk.",
-      "createdAt": "2026-08-31",
+      "fullName": "gazijarin/itsgiving",
+      "url": "https://github.com/gazijarin/itsgiving",
+      "stars": 816,
+      "language": "Python",
+      "description": "Express yourself in meetings (with memes, of course).",
+      "createdAt": "2026-09-08",
       "license": "MIT"
     },
     {
       "rank": 9,
-      "fullName": "pierrenade/short-video-generator-AI",
-      "url": "https://github.com/pierrenade/short-video-generator-AI",
-      "stars": 872,
-      "language": "Python",
-      "description": "Free open-source project designed for turning youtube-viedos into viral short videos. Highlight detection, subtitles, translation, voiceover, all in one for your content.",
-      "createdAt": "2026-09-05",
-      "license": "MIT"
+      "fullName": "sumimakito/Mac-Duo",
+      "url": "https://github.com/sumimakito/Mac-Duo",
+      "stars": 794,
+      "language": "Swift",
+      "description": "Wish you could bring the iPhone Duo effect to your MacBook?",
+      "createdAt": "2026-09-10",
+      "license": "Apache-2.0"
     },
     {
       "rank": 10,
-      "fullName": "anthropics/fermats-last-theorem",
-      "url": "https://github.com/anthropics/fermats-last-theorem",
-      "stars": 844,
-      "language": "Lean",
-      "description": "仓库未提供简介。",
-      "createdAt": "2026-09-04",
-      "license": "Apache-2.0"
+      "fullName": "SpaceDudem/text-humanizer",
+      "url": "https://github.com/SpaceDudem/text-humanizer",
+      "stars": 731,
+      "language": "Python",
+      "description": "text-humanizer is an open-source project designed to convert text generated by AI to its \"humanized\" version. Bypasses the most of AI detectors such as Turnitin or GPTZero",
+      "createdAt": "2026-09-08",
+      "license": "MIT"
     }
   ]
 }
