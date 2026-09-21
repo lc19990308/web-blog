@@ -1,112 +1,112 @@
 {
   "schemaVersion": 1,
-  "week": "2026-W38",
-  "generatedAt": "2026-09-14T01:20:34.422Z",
+  "week": "2026-W39",
+  "generatedAt": "2026-09-21T01:20:21.399Z",
   "period": {
-    "start": "2026-09-07",
-    "end": "2026-09-14"
+    "start": "2026-09-14",
+    "end": "2026-09-21"
   },
-  "sourceUrl": "https://github.com/search?q=created%3A%3E%3D2026-09-07+fork%3Afalse+archived%3Afalse&type=repositories&s=stars&o=desc",
+  "sourceUrl": "https://github.com/search?q=created%3A%3E%3D2026-09-14+fork%3Afalse+archived%3Afalse&type=repositories&s=stars&o=desc",
   "repositories": [
     {
       "rank": 1,
-      "fullName": "sdli1995/dlssg_for_sm86",
-      "url": "https://github.com/sdli1995/dlssg_for_sm86",
-      "stars": 2422,
-      "language": "未标注",
-      "description": "Here is a dlssg for RTX30 Series GPU",
-      "createdAt": "2026-09-07",
-      "license": null
+      "fullName": "browser-use/jev-ultrafast",
+      "url": "https://github.com/browser-use/jev-ultrafast",
+      "stars": 11970,
+      "language": "Python",
+      "description": "i. am. speed.",
+      "createdAt": "2026-09-16",
+      "license": "MIT"
     },
     {
       "rank": 2,
-      "fullName": "openai/NavierStokesAndEuler",
-      "url": "https://github.com/openai/NavierStokesAndEuler",
-      "stars": 1856,
-      "language": "Lean",
-      "description": "Lean certificates accompanying Navier-Stokes and Euler results",
-      "createdAt": "2026-09-08",
-      "license": "Apache-2.0"
+      "fullName": "tamaratran/fast-jev-compaction",
+      "url": "https://github.com/tamaratran/fast-jev-compaction",
+      "stars": 5201,
+      "language": "TypeScript",
+      "description": "Claude Code plugin that replaces the compaction summary with Jev decisions: every tool call and result is scored in one fast request, stale ones are dropped or truncated, everythin",
+      "createdAt": "2026-09-17",
+      "license": "MIT"
     },
     {
       "rank": 3,
-      "fullName": "Edge0-AI/Edge0",
-      "url": "https://github.com/Edge0-AI/Edge0",
-      "stars": 1602,
+      "fullName": "NandhaKishorM/laya",
+      "url": "https://github.com/NandhaKishorM/laya",
+      "stars": 4230,
       "language": "Python",
       "description": "仓库未提供简介。",
-      "createdAt": "2026-09-08",
+      "createdAt": "2026-09-18",
       "license": "Apache-2.0"
     },
     {
       "rank": 4,
-      "fullName": "EverettFish/holo-card-studio",
-      "url": "https://github.com/EverettFish/holo-card-studio",
-      "stars": 1498,
-      "language": "Python",
-      "description": "Turn the user's description or uploaded reference into a finished, editable Blender card and an interactive Three.js page. Preserve the requested subject, style, typography and des",
-      "createdAt": "2026-09-07",
-      "license": "NOASSERTION"
+      "fullName": "robbietilton/Compositor",
+      "url": "https://github.com/robbietilton/Compositor",
+      "stars": 3697,
+      "language": "Swift",
+      "description": "The Photoshop alternative for Mac",
+      "createdAt": "2026-09-16",
+      "license": "MIT"
     },
     {
       "rank": 5,
-      "fullName": "Vincentwei1021/anything2explainer",
-      "url": "https://github.com/Vincentwei1021/anything2explainer",
-      "stars": 1170,
-      "language": "TypeScript",
-      "description": "Topic in, narrated explainer video out. A Claude Code / Codex skill that turns any topic into a black-canvas motion-graphics explainer video with TTS voiceover, subtitles and a cha",
-      "createdAt": "2026-09-08",
-      "license": "NOASSERTION"
+      "fullName": "TheoLeeCJ/SemIf",
+      "url": "https://github.com/TheoLeeCJ/SemIf",
+      "stars": 2456,
+      "language": "Python",
+      "description": "Semantic ifs from open models, on a 3090 at home. Independent; not affiliated with Jev or TypeSafe.",
+      "createdAt": "2026-09-16",
+      "license": "MIT"
     },
     {
       "rank": 6,
-      "fullName": "achimala/dream-loop",
-      "url": "https://github.com/achimala/dream-loop",
-      "stars": 967,
-      "language": "JavaScript",
-      "description": "Agent skill for impressive 3D visuals using Blender + image gen + subagent critic",
-      "createdAt": "2026-09-07",
-      "license": "MIT"
+      "fullName": "mcncarl/jianying-headless",
+      "url": "https://github.com/mcncarl/jianying-headless",
+      "stars": 2002,
+      "language": "Python",
+      "description": "Private source preview: native Jianying drafts, isolated editing/export, and standalone Agent Skill.",
+      "createdAt": "2026-09-15",
+      "license": "NOASSERTION"
     },
     {
       "rank": 7,
-      "fullName": "crwdla/tokentab",
-      "url": "https://github.com/crwdla/tokentab",
-      "stars": 851,
+      "fullName": "mizorewww/laya-mlx",
+      "url": "https://github.com/mizorewww/laya-mlx",
+      "stars": 1725,
       "language": "Python",
-      "description": "A CLI that reads Claude Code, Codex, and Gemini CLI session logs and works out how much they cost, by model, project, and day.",
-      "createdAt": "2026-09-07",
-      "license": "MIT"
+      "description": "Native MLX runtime for Laya typed decision models — 7–14 ms short decisions on M3 Max. No text generation, PyTorch, or cloud API.",
+      "createdAt": "2026-09-19",
+      "license": "Apache-2.0"
     },
     {
       "rank": 8,
-      "fullName": "gazijarin/itsgiving",
-      "url": "https://github.com/gazijarin/itsgiving",
-      "stars": 816,
-      "language": "Python",
-      "description": "Express yourself in meetings (with memes, of course).",
-      "createdAt": "2026-09-08",
+      "fullName": "jarrodwatts/jev-trader",
+      "url": "https://github.com/jarrodwatts/jev-trader",
+      "stars": 1536,
+      "language": "TypeScript",
+      "description": "One AI trade decision every Monad block. Jev on Kuru MON-USDC.",
+      "createdAt": "2026-09-16",
       "license": "MIT"
     },
     {
       "rank": 9,
-      "fullName": "sumimakito/Mac-Duo",
-      "url": "https://github.com/sumimakito/Mac-Duo",
-      "stars": 794,
-      "language": "Swift",
-      "description": "Wish you could bring the iPhone Duo effect to your MacBook?",
-      "createdAt": "2026-09-10",
-      "license": "Apache-2.0"
+      "fullName": "TianyuCodings/NanoJev",
+      "url": "https://github.com/TianyuCodings/NanoJev",
+      "stars": 1416,
+      "language": "Python",
+      "description": "A nano replica of Jev: parallel decisions, dynamic candidates, and an end-to-end training pipeline.",
+      "createdAt": "2026-09-17",
+      "license": "MIT"
     },
     {
       "rank": 10,
-      "fullName": "SpaceDudem/text-humanizer",
-      "url": "https://github.com/SpaceDudem/text-humanizer",
-      "stars": 731,
+      "fullName": "bespokelabsai/nimble",
+      "url": "https://github.com/bespokelabsai/nimble",
+      "stars": 1113,
       "language": "Python",
-      "description": "text-humanizer is an open-source project designed to convert text generated by AI to its \"humanized\" version. Bypasses the most of AI detectors such as Turnitin or GPTZero",
-      "createdAt": "2026-09-08",
-      "license": "MIT"
+      "description": "Local typed decisions, contrastive data curation, and model evaluation.",
+      "createdAt": "2026-09-18",
+      "license": null
     }
   ]
 }
