@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="多维标签设计、和 LLM 协同的混合架构、三档置信度路由、换任务复用 LoRA。模型训好了怎么接进业务系统，这篇讲透。" />
+    <title>Jev 决策模型实战（三）：如何使用 | 前端技术笔记</title>
+    <link rel="alternate" href="/web-blog/atom.xml" title="前端技术笔记" type="application/atom+xml" />
+    <link rel="stylesheet" href="/web-blog/css/main.css" />
+  <meta name="generator" content="Hexo 5.4.0"></head>
+  <body>
+    <header class="site-header shell">
+      <a class="wordmark" href="/web-blog/" aria-label="前端技术笔记 首页">LC <span>/</span> NOTES</a>
+      <nav class="main-nav" id="main-nav" aria-label="主导航">
+        <a href="/web-blog/">笔记</a>
+        <a href="/web-blog/categories/">专题</a>
+        <a href="/web-blog/about/">关于</a>
+        <a href="/web-blog/archives/">归档</a>
+      </nav>
+      <div class="header-actions">
+        <button class="menu-button" aria-controls="main-nav" aria-expanded="false" aria-label="打开菜单" type="button">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+        </button>
+        <button class="search-button" aria-controls="search-dialog" aria-label="搜索文章" type="button">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.5 4.5"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    
+<main class="shell post-shell">
+  <aside class="post-toc" aria-label="文章目录">
+    <p class="section-label">ON THIS PAGE</p>
+    <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%A4%9A%E7%BB%B4%E6%A0%87%E7%AD%BE%EF%BC%9A%E4%B8%80%E6%AC%A1%E8%B0%83%E7%94%A8%E5%A4%9A%E8%B7%AF%E5%86%B3%E7%AD%96"><span class="toc-list-text">多维标签：一次调用多路决策</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%B7%B7%E5%90%88%E6%9E%B6%E6%9E%84%EF%BC%9A%E5%90%84%E5%B9%B2%E5%90%84%E7%9A%84%E6%93%85%E9%95%BF%E4%BA%8B"><span class="toc-list-text">混合架构：各干各的擅长事</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%89%E6%A1%A3%E8%B7%AF%E7%94%B1%EF%BC%9A%E6%A6%82%E7%8E%87%E9%A9%B1%E5%8A%A8%E7%9A%84%E5%88%86%E6%B5%81"><span class="toc-list-text">三档路由：概率驱动的分流</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%92%8C-LLM-%E5%8D%8F%E5%90%8C%EF%BC%9A%E5%88%86%E5%B7%A5%E4%B8%8D%E6%98%AF%E6%9B%BF%E4%BB%A3"><span class="toc-list-text">和 LLM 协同：分工不是替代</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#API-%E7%94%A8%E6%B3%95"><span class="toc-list-text">API 用法</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%9A%E5%8A%A1%E6%8E%A5%E5%85%A5%E7%9A%84%E5%AE%9E%E7%94%A8%E5%BB%BA%E8%AE%AE"><span class="toc-list-text">业务接入的实用建议</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%8D%A2%E4%BB%BB%E5%8A%A1%EF%BC%9A%E5%90%8C%E4%B8%80%E5%A5%97%E6%B5%81%E7%A8%8B"><span class="toc-list-text">换任务：同一套流程</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E7%B3%BB%E5%88%97%E6%80%BB%E7%BB%93"><span class="toc-list-text">系列总结</span></a></li></ol>
+  </aside>
+  <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+    <header class="post-header">
+      <p class="section-label">AI</p>
+      <h1 itemprop="headline">Jev 决策模型实战（三）：如何使用</h1>
+      <div class="metadata"><span>2026-09-30</span><span>4 分钟阅读</span><span>更新于 2026-10-05</span></div>
+      <p class="post-lede">多维标签设计、和 LLM 协同的混合架构、三档置信度路由、换任务复用 LoRA。模型训好了怎么接进业务系统，这篇讲透。</p>
+    </header>
+    <div class="prose" itemprop="articleBody"><p>模型训好了（78.2%），部署好了（FastAPI + Ollama），接下来是怎么用。决策模型不是聊天机器人，正确的用法是嵌进业务流程，当一个带概率的 if 语句。</p>
+<h2 id="多维标签：一次调用多路决策"><a href="#多维标签：一次调用多路决策" class="headerlink" title="多维标签：一次调用多路决策"></a>多维标签：一次调用多路决策</h2><p>单个意图标签不够。真实业务需要的是多维画像：用户想要什么，有多急，要不要人工，有没有风险。Jev 的核心能力就是一次调用输出多路决策信号。</p>
+<p>我们的标签体系分主副两类：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>标签</th>
+<th>取值</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>主标签</strong></td>
+<td>意图</td>
+<td>8 选 1（choice）</td>
+<td>用户想要什么</td>
+</tr>
+<tr>
+<td>副标签</td>
+<td>紧急度</td>
+<td>0~1</td>
+<td>处理优先级</td>
+</tr>
+<tr>
+<td>副标签</td>
+<td>需人工</td>
+<td>0~1</td>
+<td>要不要转人工</td>
+</tr>
+<tr>
+<td>副标签</td>
+<td>情绪</td>
+<td>平静/困惑/不满/愤怒</td>
+<td>服务策略</td>
+</tr>
+<tr>
+<td>副标签</td>
+<td>升级风险</td>
+<td>0~1</td>
+<td>投诉可能性</td>
+</tr>
+<tr>
+<td>副标签</td>
+<td>业务线</td>
+<td>售后/支付/物流/技术/账户</td>
+<td>归哪个组</td>
+</tr>
+<tr>
+<td>副标签</td>
+<td>涉及金额</td>
+<td>是/否</td>
+<td>走财务流程吗</td>
+</tr>
+<tr>
+<td>副标签</td>
+<td>沟通风格</td>
+<td>礼貌/急躁/啰嗦/强硬</td>
+<td>话术策略</td>
+</tr>
+<tr>
+<td>副标签</td>
+<td>期望响应</td>
+<td>不急/尽快/立即</td>
+<td>优先级</td>
+</tr>
+</tbody></table>
+<p>一条对话可以同时命中多个副标签。实测一条投诉样本的输出：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;主标签&quot;</span>: &#123;<span class="attr">&quot;意图&quot;</span>: <span class="string">&quot;complaint&quot;</span>, <span class="attr">&quot;置信度&quot;</span>: <span class="number">0.95</span>&#125;,</span><br><span class="line">  <span class="attr">&quot;副标签&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;紧急度&quot;</span>: <span class="number">0.1</span>,</span><br><span class="line">    <span class="attr">&quot;需人工&quot;</span>: <span class="number">0.91</span>,</span><br><span class="line">    <span class="attr">&quot;情绪&quot;</span>: <span class="string">&quot;愤怒&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;升级风险&quot;</span>: <span class="number">1.0</span>,</span><br><span class="line">    <span class="attr">&quot;业务线&quot;</span>: <span class="string">&quot;售后&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;涉及金额&quot;</span>: <span class="string">&quot;否&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;沟通风格&quot;</span>: <span class="string">&quot;强硬&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;期望响应&quot;</span>: <span class="string">&quot;立即&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>愤怒 + 强硬 + 高风险 + 需人工同时为真。这些信号给代码做路由，比只看一个意图有用得多。如果只看 <code>intent=complaint</code>，你不知道该不该加急、该不该转人工、有没有法律风险。</p>
+<h2 id="混合架构：各干各的擅长事"><a href="#混合架构：各干各的擅长事" class="headerlink" title="混合架构：各干各的擅长事"></a>混合架构：各干各的擅长事</h2><p>副标签的实现用的是混合架构。主标签用 LoRA 神经网络，副标签用文本信号规则。这不是偷懒，是实测后的选择。</p>
+<p>试过让 0.6B 模型直接输出多字段：<code>intent=refund, is_urgent=0.35, need_human=0.22, emotion=0.75</code>。三种输出格式都试了（key=value、编号列表、单行 CSV），意图准确率从 78% 崩到 18-26%。模型会抄示例、会循环、会输出格式错乱。</p>
+<p>小模型做分类很好，做多字段回归不行。所以主标签走 LoRA，副标签走规则：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">predict_secondary</span>(<span class="params">dialog, intent, conf</span>):</span></span><br><span class="line">    user_text = <span class="string">&quot; &quot;</span>.join(d[<span class="string">&quot;content&quot;</span>] <span class="keyword">for</span> d <span class="keyword">in</span> dialog <span class="keyword">if</span> d[<span class="string">&quot;role&quot;</span>] == <span class="string">&quot;user&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 紧急度：关键词信号</span></span><br><span class="line">    urgent = <span class="number">0.10</span> + <span class="number">0.18</span> * hits([<span class="string">&quot;尽快&quot;</span>,<span class="string">&quot;快点&quot;</span>,<span class="string">&quot;立刻&quot;</span>,<span class="string">&quot;急&quot;</span>,<span class="string">&quot;催&quot;</span>]) </span><br><span class="line">             + <span class="number">0.20</span> * hits([<span class="string">&quot;马上&quot;</span>,<span class="string">&quot;赶紧&quot;</span>,<span class="string">&quot;立即&quot;</span>])</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 需人工：意图基线 + 关键词</span></span><br><span class="line">    h_base = &#123;<span class="string">&quot;complaint&quot;</span>: <span class="number">0.55</span>, <span class="string">&quot;tech_support&quot;</span>: <span class="number">0.35</span>, ...&#125;[intent]</span><br><span class="line">    human = h_base + <span class="number">0.16</span> * hits([<span class="string">&quot;人工&quot;</span>,<span class="string">&quot;客服&quot;</span>,<span class="string">&quot;领导&quot;</span>,<span class="string">&quot;投诉&quot;</span>])</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 情绪：多信号融合</span></span><br><span class="line">    angry_score = hits(ANGRY_WORDS) + hits(RISK_WORDS) * <span class="number">0.5</span></span><br><span class="line">    emotion = <span class="string">&quot;愤怒&quot;</span> <span class="keyword">if</span> angry_score &gt;= <span class="number">2</span> <span class="keyword">else</span> <span class="string">&quot;不满&quot;</span> <span class="keyword">if</span> angry_score &gt;= <span class="number">1</span> <span class="keyword">else</span> <span class="string">&quot;平静&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 升级风险：投诉/曝光/法律信号</span></span><br><span class="line">    risk = <span class="number">0.05</span> + <span class="number">0.22</span> * hits([<span class="string">&quot;投诉&quot;</span>,<span class="string">&quot;曝光&quot;</span>,<span class="string">&quot;315&quot;</span>,<span class="string">&quot;律师&quot;</span>,<span class="string">&quot;赔偿&quot;</span>])</span><br><span class="line">    </span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+
+<p>规则的好处是可解释、可调、零延迟。坏处是覆盖面有限。如果业务复杂到规则写不下了，可以换一个小分类器（BERT 级别，151M 参数），比让 0.6B 硬啃多字段靠谱。</p>
+<h2 id="三档路由：概率驱动的分流"><a href="#三档路由：概率驱动的分流" class="headerlink" title="三档路由：概率驱动的分流"></a>三档路由：概率驱动的分流</h2><p>这是决策模型最核心的应用模式。模型输出意图和置信度，代码根据置信度走不同路径：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">route</span>(<span class="params">intent, confidence, secondary</span>):</span></span><br><span class="line">    score = (secondary[<span class="string">&quot;需人工&quot;</span>] * <span class="number">0.4</span> </span><br><span class="line">           + secondary[<span class="string">&quot;升级风险&quot;</span>] * <span class="number">0.4</span> </span><br><span class="line">           + secondary[<span class="string">&quot;紧急度&quot;</span>] * <span class="number">0.2</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> secondary[<span class="string">&quot;情绪&quot;</span>] == <span class="string">&quot;愤怒&quot;</span>:</span><br><span class="line">        score = <span class="built_in">min</span>(<span class="number">1.0</span>, score + <span class="number">0.2</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> confidence &gt;= <span class="number">0.85</span> <span class="keyword">and</span> score &lt; <span class="number">0.4</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;auto&quot;</span>, <span class="string">&quot;高置信 + 低风险：自动执行&quot;</span></span><br><span class="line">    <span class="keyword">if</span> confidence &gt;= <span class="number">0.60</span> <span class="keyword">and</span> score &lt; <span class="number">0.7</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;llm&quot;</span>, <span class="string">&quot;中置信/中风险：LLM 复核&quot;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;human&quot;</span>, <span class="string">&quot;低置信/高风险/情绪升级：转人工&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>三档不是只看置信度，还融合了副标签。同样是 confidence=0.8，情绪平静的走 auto，情绪愤怒的走 human。</p>
+<p>阈值用的是温度校准后的概率。没校准之前，模型说 85% 实际只有 66% 对，阈值是不可信的。校准后 85% 就真是 85% 把握。</p>
+<p>实测路由效果：</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>意图</th>
+<th>情绪</th>
+<th>风险</th>
+<th>路由</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>含蓄退款</td>
+<td>refund_request</td>
+<td>平静</td>
+<td>低</td>
+<td><strong>auto</strong></td>
+</tr>
+<tr>
+<td>愤怒投诉</td>
+<td>complaint</td>
+<td>愤怒</td>
+<td>1.0</td>
+<td><strong>human</strong></td>
+</tr>
+<tr>
+<td>技术故障</td>
+<td>tech_support</td>
+<td>困惑</td>
+<td>低</td>
+<td><strong>auto</strong></td>
+</tr>
+<tr>
+<td>账单争议</td>
+<td>billing_dispute</td>
+<td>不满</td>
+<td>中</td>
+<td><strong>llm</strong></td>
+</tr>
+<tr>
+<td>表扬</td>
+<td>praise</td>
+<td>平静</td>
+<td>低</td>
+<td><strong>auto</strong></td>
+</tr>
+</tbody></table>
+<h2 id="和-LLM-协同：分工不是替代"><a href="#和-LLM-协同：分工不是替代" class="headerlink" title="和 LLM 协同：分工不是替代"></a>和 LLM 协同：分工不是替代</h2><p>决策模型和 LLM 是协作关系。Jev 只判断，不生成；LLM 负责写回复、做解释。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">用户消息</span><br><span class="line">   ↓</span><br><span class="line">Jev 决策层（1-2 秒）</span><br><span class="line">   ├─ 意图 + 8 维副标签 + 概率</span><br><span class="line">   ↓</span><br><span class="line">三档路由</span><br><span class="line">   ├─ auto  → 查库/发模板（不调 LLM）</span><br><span class="line">   ├─ llm   → LLM 生成回复（带意图上下文）</span><br><span class="line">   └─ human → 转人工</span><br></pre></td></tr></table></figure>
+
+<p>关键点：<strong>LLM 不用每个请求都调。</strong> 简单查询走模板，复杂的才调 LLM。我们实测约 60% 的请求走 auto，25% 走 llm，15% 走 human。省了 60% 的 LLM 调用成本。</p>
+<p>auto 场景的回复是模板，比如 <code>refund_request</code> + 低风险 → 直接返回退款流程指引。llm 场景会把意图和副标签作为上下文传给 LLM，生成更精准的回复。</p>
+<h2 id="API-用法"><a href="#API-用法" class="headerlink" title="API 用法"></a>API 用法</h2><p>FastAPI 服务提供标准 HTTP 接口：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">resp = requests.post(<span class="string">&quot;http://127.0.0.1:8765/demo/decide&quot;</span>, json=&#123;</span><br><span class="line">    <span class="string">&quot;dialog&quot;</span>: [</span><br><span class="line">        &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;我要退款&quot;</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;agent&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;订单号？&quot;</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;20260928-123，不想要了&quot;</span>&#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">data = resp.json()</span><br><span class="line"><span class="built_in">print</span>(data[<span class="string">&quot;主标签&quot;</span>][<span class="string">&quot;意图&quot;</span>])       <span class="comment"># refund_request</span></span><br><span class="line"><span class="built_in">print</span>(data[<span class="string">&quot;主标签&quot;</span>][<span class="string">&quot;置信度&quot;</span>])     <span class="comment"># 0.99</span></span><br><span class="line"><span class="built_in">print</span>(data[<span class="string">&quot;副标签&quot;</span>][<span class="string">&quot;情绪&quot;</span>])       <span class="comment"># 平静</span></span><br><span class="line"><span class="built_in">print</span>(data[<span class="string">&quot;路由&quot;</span>])                 <span class="comment"># auto</span></span><br></pre></td></tr></table></figure>
+
+<p>批量接口一次处理多条：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">resp = requests.post(<span class="string">&quot;http://127.0.0.1:8765/demo/decide-batch&quot;</span>, json=&#123;</span><br><span class="line">    <span class="string">&quot;items&quot;</span>: [&#123;<span class="string">&quot;dialog&quot;</span>: [...]&#125;, &#123;<span class="string">&quot;dialog&quot;</span>: [...]&#125;]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>监控端点看性能：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">resp = requests.get(<span class="string">&quot;http://127.0.0.1:8765/stats&quot;</span>)</span><br><span class="line"><span class="comment"># &#123;&quot;requests&quot;: 150, &quot;avg_latency_ms&quot;: 1200, &quot;cache_hit_rate&quot;: 0.62&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>Ollama 的用法更简单：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ollama run jev-intent</span><br><span class="line"><span class="comment"># 或 API</span></span><br><span class="line">curl http://127.0.0.1:11434/api/generate \</span><br><span class="line">  -d <span class="string">&#x27;&#123;&quot;model&quot;:&quot;jev-intent&quot;,&quot;prompt&quot;:&quot;...&quot;,&quot;stream&quot;:false&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="业务接入的实用建议"><a href="#业务接入的实用建议" class="headerlink" title="业务接入的实用建议"></a>业务接入的实用建议</h2><p><strong>接缓存。</strong> 相同对话直接返回缓存。我们用 LRU 缓存 1024 条，命中率 62%，命中时 0ms。客服场景重复问题很多，缓存收益大。</p>
+<p><strong>阈值先保守。</strong> auto 的阈值定 0.85，宁可多走 LLM 也不要误自动。线上跑一周，收集 badcase 后再调低。</p>
+<p><strong>记录 badcase。</strong> 模型判错的样本收集起来，下一轮训练加进去。数据飞轮转起来，模型会越用越准。</p>
+<p><strong>副标签叠加规则。</strong> 比如「情绪=愤怒 且 风险&gt;0.7」强制转人工，不用看置信度。业务规则比模型阈值更可控。</p>
+<p><strong>批量处理用 batch 接口。</strong> 比循环调单条快，模型只加载一次。</p>
+<h2 id="换任务：同一套流程"><a href="#换任务：同一套流程" class="headerlink" title="换任务：同一套流程"></a>换任务：同一套流程</h2><p>这套流程不只适用于客服意图。我们用同一个 Qwen3-0.6B 基座训了一个斗地主 AI：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>客服意图</th>
+<th>斗地主</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>输入</td>
+<td>多轮对话</td>
+<td>手牌 + 桌面 + 对手剩牌</td>
+</tr>
+<tr>
+<td>主标签</td>
+<td>意图分类</td>
+<td>出什么牌</td>
+</tr>
+<tr>
+<td>副标签</td>
+<td>情绪/风险/紧急</td>
+<td>胜率/炸弹/策略</td>
+</tr>
+<tr>
+<td>核心策略</td>
+<td>置信度路由</td>
+<td><strong>必输局不炸</strong></td>
+</tr>
+<tr>
+<td>数据量</td>
+<td>1082 条</td>
+<td>2497 条</td>
+</tr>
+<tr>
+<td>训练时间</td>
+<td>73 秒</td>
+<td>8 分钟</td>
+</tr>
+</tbody></table>
+<p>必输局不炸的实现就是在训练数据里标注：当 <code>win_probability &lt; 0.2</code> 时，<code>use_bomb = &quot;否&quot;</code>。模型学会了「快输了就省着点用炸弹」。</p>
+<p>数据生成用规则引擎标注最优出牌，LoRA 训练 8 分钟，官方 converter 转 GGUF 导入 Ollama。基座没变，只换 LoRA adapter（9MB）。</p>
+<p>这就是 LoRA 的威力：<strong>同一个基座，不同的 adapter，不同的任务。</strong> 9MB 就是一个新任务。决策的范式（状态 → 类型化判断 → 概率路由）是通用的，换数据就能换场景。</p>
+<h2 id="系列总结"><a href="#系列总结" class="headerlink" title="系列总结"></a>系列总结</h2><p>三篇走完了从 0 到 1 的全过程：</p>
+<ol>
+<li><strong>部署</strong>：Windows 环境的坑、冒烟测试、FastAPI + Ollama、GGUF 转换的教训</li>
+<li><strong>训练</strong>：数据翻车修复、LoRA 训练、padding 性能坑、温度校准、弱项补强</li>
+<li><strong>使用</strong>：多维标签、混合架构、LLM 协同、三档路由、换任务复用</li>
+</ol>
+<p>核心认知三条。数据质量决定上限，翻车一次才能理解为什么。概率必须校准，否则置信度路由是空中楼阁。决策模型和 LLM 是分工不是替代，各干各的擅长事。</p>
+</div>
+    
+      <footer class="post-tags" aria-label="文章标签">
+        <a href="/web-blog/tags/AI/">AI</a><a href="/web-blog/tags/Jev/">Jev</a><a href="/web-blog/tags/LoRA/">LoRA</a><a href="/web-blog/tags/%E5%A4%9A%E7%BB%B4%E6%A0%87%E7%AD%BE/">多维标签</a><a href="/web-blog/tags/%E8%B7%AF%E7%94%B1/">路由</a><a href="/web-blog/tags/LLM/">LLM</a><a href="/web-blog/tags/%E6%9E%B6%E6%9E%84/">架构</a>
+      </footer>
+    
+    <nav class="post-navigation" aria-label="文章导航">
+      <a href="/web-blog/2026/09/30/Jev%E5%86%B3%E7%AD%96%E6%A8%A1%E5%9E%8B%E5%AE%9E%E6%88%98%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E6%95%B0%E6%8D%AE%E4%B8%8E%E8%AE%AD%E7%BB%83/"><span>上一篇</span><b>Jev 决策模型实战（二）：数据与训练</b></a>
+      <a class="next" href="/web-blog/2026/08/18/MCP-Model-Context-Protocol%E5%AE%8C%E5%85%A8%E8%A7%A3%E8%AF%BB/"><span>下一篇</span><b>MCP 到底是什么？一文搞懂 Model Context Protocol</b></a>
+    </nav>
+  </article>
+  <aside class="post-rail" aria-label="文章信息">
+    <p class="section-label">CONNECTIONS</p>
+    <div><strong>专题</strong><a href="/web-blog/categories/AI/">AI</a></div>
+    <div><strong>标签</strong><a href="/web-blog/tags/AI/">AI</a><a href="/web-blog/tags/Jev/">Jev</a><a href="/web-blog/tags/LoRA/">LoRA</a><a href="/web-blog/tags/%E5%A4%9A%E7%BB%B4%E6%A0%87%E7%AD%BE/">多维标签</a><a href="/web-blog/tags/%E8%B7%AF%E7%94%B1/">路由</a><a href="/web-blog/tags/LLM/">LLM</a><a href="/web-blog/tags/%E6%9E%B6%E6%9E%84/">架构</a></div>
+  </aside>
+</main>
+
+
+    <footer class="shell footer">
+      <span>2021 - 2026 &copy; LC</span>
+      <span>真实项目的研究记录</span>
+      <a href="/web-blog/atom.xml">RSS</a>
+    </footer>
+
+    <dialog class="search-dialog" id="search-dialog" data-search-url="/web-blog/search.xml">
+      <div class="search-dialog__bar">
+        <label for="site-search">搜索笔记</label>
+        <button class="dialog-close" aria-label="关闭搜索" type="button">关闭</button>
+      </div>
+      <input id="site-search" type="search" autocomplete="off" placeholder="输入文章标题、主题或关键词" />
+      <div class="search-results" aria-live="polite"></div>
+    </dialog>
+
+    <script src="/web-blog/js/site.js"></script>
+  </body>
+</html>

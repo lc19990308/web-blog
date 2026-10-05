@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="从环境搭建到 Ollama 部署的完整过程。VC++ DLL 缺失、torch 装成 CPU 版、GGUF 转换崩溃、官方 converter 的正确用法，每个坑都有排查过程和解决方案。" />
+    <title>Jev 决策模型实战（一）：部署篇 | 前端技术笔记</title>
+    <link rel="alternate" href="/web-blog/atom.xml" title="前端技术笔记" type="application/atom+xml" />
+    <link rel="stylesheet" href="/web-blog/css/main.css" />
+  <meta name="generator" content="Hexo 5.4.0"></head>
+  <body>
+    <header class="site-header shell">
+      <a class="wordmark" href="/web-blog/" aria-label="前端技术笔记 首页">LC <span>/</span> NOTES</a>
+      <nav class="main-nav" id="main-nav" aria-label="主导航">
+        <a href="/web-blog/">笔记</a>
+        <a href="/web-blog/categories/">专题</a>
+        <a href="/web-blog/about/">关于</a>
+        <a href="/web-blog/archives/">归档</a>
+      </nav>
+      <div class="header-actions">
+        <button class="menu-button" aria-controls="main-nav" aria-expanded="false" aria-label="打开菜单" type="button">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+        </button>
+        <button class="search-button" aria-controls="search-dialog" aria-label="搜索文章" type="button">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.5 4.5"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    
+<main class="shell post-shell">
+  <aside class="post-toc" aria-label="文章目录">
+    <p class="section-label">ON THIS PAGE</p>
+    <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E7%A1%AC%E4%BB%B6%E6%91%B8%E5%BA%95"><span class="toc-list-text">硬件摸底</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9D%91%E4%B8%80%EF%BC%9AVC-%E8%BF%90%E8%A1%8C%E5%BA%93"><span class="toc-list-text">坑一：VC++ 运行库</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9D%91%E4%BA%8C%EF%BC%9Atorch-%E8%A3%85%E6%88%90-CPU-%E7%89%88"><span class="toc-list-text">坑二：torch 装成 CPU 版</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%86%92%E7%83%9F%E6%B5%8B%E8%AF%95"><span class="toc-list-text">冒烟测试</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9F%BA%E5%BA%A7%E9%80%89%E5%9E%8B%EF%BC%9AQwen3-0-6B"><span class="toc-list-text">基座选型：Qwen3-0.6B</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E9%83%A8%E7%BD%B2%E9%80%9A%E9%81%93"><span class="toc-list-text">部署通道</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#FastAPI-%E7%94%9F%E4%BA%A7%E6%9C%8D%E5%8A%A1"><span class="toc-list-text">FastAPI 生产服务</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#Ollama-%E9%83%A8%E7%BD%B2"><span class="toc-list-text">Ollama 部署</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E9%83%A8%E7%BD%B2%E6%9E%B6%E6%9E%84"><span class="toc-list-text">部署架构</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-list-text">小结</span></a></li></ol>
+  </aside>
+  <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+    <header class="post-header">
+      <p class="section-label">AI</p>
+      <h1 itemprop="headline">Jev 决策模型实战（一）：部署篇</h1>
+      <div class="metadata"><span>2026-09-30</span><span>4 分钟阅读</span><span>更新于 2026-10-05</span></div>
+      <p class="post-lede">从环境搭建到 Ollama 部署的完整过程。VC++ DLL 缺失、torch 装成 CPU 版、GGUF 转换崩溃、官方 converter 的正确用法，每个坑都有排查过程和解决方案。</p>
+    </header>
+    <div class="prose" itemprop="articleBody"><p>TypeSafe 在 2026 年 9 月发布的 Jev 模型在开发者圈子里引起了不小的讨论。它跟 ChatGPT 那类模型不一样，不写文章、不聊天、不生成代码，只做一件事：根据输入状态输出一个带概率的判断。</p>
+<p>这个东西的定位是「System One 模型」，名字来自卡尼曼的系统一思维。官方的说法是把它叫做「嵌进软件里的有限决策组件」。用更直白的话讲，它是一个更聪明的 if 语句。传统代码写条件判断需要精确表达，但用户说「这个东西买回来不太合适，能退吗」的时候，关键词匹配就抓瞎了。Jev 处理的就是这种模糊语义判断。</p>
+<p>跟 LLM 的核心区别在输出形式。LLM 返回自由文本，你不知道它有多确定。Jev 直接告诉你 <code>refund: 0.85, complaint: 0.10</code>，概率是核心输出。延迟 70-500ms，比调大模型快得多。</p>
+<p>GitHub 上的开源生态分三层。专门训练的有 NanoJev（Qwen3-0.6B，有训练代码）、Tev1（Qwen3.5-4B，Together 出品）、Open-Jev（2B/9B/27B，最完整的复现）、Bespoke Nimble（9B，LoRA 加对比数据法）。不训练直接包装的有 AnyJev（Nokia 出品，读 logits 零训练，在 BANKING77 上准确率从 74.7% 提到 80.7%）、Simple Jev、LLM2Jev。部署服务有 local-jev、vllm-jev、Ollaya。</p>
+<p>我们决定自己训一个。数据敏感不能送出去，官方不可微调加不了业务分类，0.6B 小模型在消费级显卡上就能跑。从 AnyJev 零训练验证可行性开始，走完整条路。</p>
+<h2 id="硬件摸底"><a href="#硬件摸底" class="headerlink" title="硬件摸底"></a>硬件摸底</h2><p>配置不算豪华但够用：RTX 5060 8GB、Ryzen 5 5600X、16GB 内存。0.6B 到 2B 做 LoRA 微调没问题，全参微调就别想了。</p>
+<p>RTX 5060 是 Blackwell 架构，compute capability 是 sm_120。这个数字后面很重要。4bit 量化训练需要 CUDA 12.8+ 和对应的 PyTorch，旧 toolkit 不认这块卡。bitsandbytes 的 kernel 也是按 compute capability 编译的，版本不对直接报错。</p>
+<h2 id="坑一：VC-运行库"><a href="#坑一：VC-运行库" class="headerlink" title="坑一：VC++ 运行库"></a>坑一：VC++ 运行库</h2><p>装好 PyTorch 后 <code>import torch</code> 直接崩：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">OSError: [WinError 126] 找不到指定的模块。</span><br><span class="line">Error loading &quot;...torch/lib/c10.dll&quot; or one of its dependencies.</span><br></pre></td></tr></table></figure>
+
+<p>弹窗说 Visual C++ Redistributable 没装。但查注册表 HKLM:\SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64 显示 <code>Installed=1, Major=14, Minor=51</code>，已经装了。</p>
+<p>进一步查 System32 目录，<code>msvcp140.dll</code> 和 <code>vcruntime140.dll</code> 不在。<code>msvcp140_1.dll</code> 和 <code>vcruntime140_1.dll</code> 倒是在。缺了两个最基础的。</p>
+<p>静默安装 <code>vc_redist.x64.exe /install /quiet /norestart</code> 没写入 DLL。提权 <code>-Verb RunAs</code> 也不行。可能是安装器判断已装而跳过了。</p>
+<p>最后的办法：从 <code>C:\Windows\System32\Microsoft-Edge-WebView\</code> 目录找到这两个 DLL，复制到 torch 的 <code>lib\</code> 目录。DLL 就放在模块旁边，Windows 会优先从模块目录搜索依赖。这个坑在 Windows 上不新鲜，DLL 装了但不在标准搜索路径。</p>
+<h2 id="坑二：torch-装成-CPU-版"><a href="#坑二：torch-装成-CPU-版" class="headerlink" title="坑二：torch 装成 CPU 版"></a>坑二：torch 装成 CPU 版</h2><p><code>pip install torch</code> 默认装 CPU 版本。<code>torch.cuda.is_available()</code> 返回 False，<code>torch.cuda.get_device_name()</code> 直接报错。</p>
+<p>CUDA 版要指定源：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install torch --index-url https://download.pytorch.org/whl/cu128</span><br></pre></td></tr></table></figure>
+
+<p>但这个命令会拉 nvidia-cublas、nvidia-cudnn 等一堆 CUDA 库，每个几百 MB，总下载量 2GB+，经常超时。我们试了 3 次都失败在下载环节。</p>
+<p>解决方案：用浏览器下载 wheel 文件到本地。从 <code>https://download.pytorch.org/whl/cu128/</code> 找到对应 Python 版本的 wheel（约 800MB），下到 <code>C:\Users\lc199\Downloads\</code>，然后本地安装：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install C:\Users\lc199\Downloads\torch<span class="literal">-2</span>.<span class="number">11.0</span>+cu128<span class="literal">-cp312</span><span class="literal">-cp312</span><span class="literal">-win_amd64</span>.whl</span><br></pre></td></tr></table></figure>
+
+<p>安装后验证：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="built_in">print</span>(torch.__version__)                    <span class="comment"># 2.11.0+cu128</span></span><br><span class="line"><span class="built_in">print</span>(torch.cuda.is_available())            <span class="comment"># True</span></span><br><span class="line"><span class="built_in">print</span>(torch.cuda.get_device_name(<span class="number">0</span>))        <span class="comment"># NVIDIA GeForce RTX 5060</span></span><br><span class="line"><span class="built_in">print</span>(torch.cuda.get_device_capability(<span class="number">0</span>))  <span class="comment"># (12, 0)  sm_120</span></span><br><span class="line"><span class="built_in">print</span>(torch.cuda.get_device_properties(<span class="number">0</span>).total_memory / <span class="number">1e9</span>)  <span class="comment"># 8.52 GB</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="冒烟测试"><a href="#冒烟测试" class="headerlink" title="冒烟测试"></a>冒烟测试</h2><p>环境好了不能直接开训。先花 5 分钟确认整条链路，省得训到一半才发现问题。</p>
+<p>冒烟测试要验四件事：GPU 有没有认到、4bit 能否加载、LoRA 挂不挂得上、反向传播跑不跑得通。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> AutoModelForCausalLM, BitsAndBytesConfig</span><br><span class="line"><span class="keyword">from</span> peft <span class="keyword">import</span> LoraConfig, get_peft_model</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4bit NF4 量化加载</span></span><br><span class="line">bnb = BitsAndBytesConfig(</span><br><span class="line">    load_in_4bit=<span class="literal">True</span>,</span><br><span class="line">    bnb_4bit_compute_dtype=torch.bfloat16,</span><br><span class="line">    bnb_4bit_quant_type=<span class="string">&quot;nf4&quot;</span></span><br><span class="line">)</span><br><span class="line">model = AutoModelForCausalLM.from_pretrained(</span><br><span class="line">    <span class="string">&quot;Qwen/Qwen3-0.6B&quot;</span>,</span><br><span class="line">    quantization_config=bnb,</span><br><span class="line">    device_map=<span class="string">&quot;auto&quot;</span>,</span><br><span class="line">    trust_remote_code=<span class="literal">True</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 挂 LoRA</span></span><br><span class="line">lora = LoraConfig(</span><br><span class="line">    r=<span class="number">8</span>, lora_alpha=<span class="number">16</span>, lora_dropout=<span class="number">0.05</span>,</span><br><span class="line">    target_modules=[<span class="string">&quot;q_proj&quot;</span>, <span class="string">&quot;k_proj&quot;</span>, <span class="string">&quot;v_proj&quot;</span>, <span class="string">&quot;o_proj&quot;</span>],</span><br><span class="line">    task_type=<span class="string">&quot;CAUSAL_LM&quot;</span></span><br><span class="line">)</span><br><span class="line">model = get_peft_model(model, lora)</span><br><span class="line">model.print_trainable_parameters()</span><br><span class="line"><span class="comment"># trainable params: 2,293,760 || all params: 598,343,680 || trainable%: 0.3834</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 关键：前向 + 反向</span></span><br><span class="line">x = torch.randint(<span class="number">0</span>, <span class="number">1000</span>, (<span class="number">1</span>, <span class="number">32</span>), device=<span class="string">&quot;cuda&quot;</span>)</span><br><span class="line">out = model(input_ids=x, labels=x)</span><br><span class="line">out.loss.backward()  <span class="comment"># ← 这行过了才算能训练</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;SMOKE_OK:&quot;</span>, <span class="built_in">float</span>(out.loss))  <span class="comment"># loss=8.93</span></span><br></pre></td></tr></table></figure>
+
+<p><code>out.loss.backward()</code> 是关键。模型能加载不代表能训练，必须确认梯度能回传。我们的一次通过，loss 8.93，LoRA 只占 0.38% 参数。</p>
+<h2 id="基座选型：Qwen3-0-6B"><a href="#基座选型：Qwen3-0-6B" class="headerlink" title="基座选型：Qwen3-0.6B"></a>基座选型：Qwen3-0.6B</h2><p>三个理由：</p>
+<p><strong>小。</strong> 0.6B 参数，4bit 量化后显存约 2-3GB，8G 卡跑得动还有余量。训练一轮 5 分钟，迭代快。</p>
+<p><strong>中文好。</strong> 意图识别是中文任务。Qwen 系列在中文上的 tokenizer 和语义理解比 Llama 系列强。我们测试过 zero-shot 中文意图识别，Qwen3-0.6B 能到 44%，同级 Llama 只有 30% 出头。</p>
+<p><strong>生态成熟。</strong> LoRA、量化、GGUF 转换工具链完善。社区踩坑资料多，出问题好搜。</p>
+<p>后续准确率不够可以升 Qwen3.5-2B。LoRA 是挂在基座外面的补丁，基座随时换，adapter 重新训就行。</p>
+<p>模型下载走 hf-mirror.com。HuggingFace 官方在国内经常超时，hf-mirror 是国内镜像。把 <code>model.safetensors</code>（1.42GB）和 config/tokenizer 文件下到本地目录，用 <code>local_files_only=True</code> 加载，完全不走网络。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">model = AutoModelForCausalLM.from_pretrained(</span><br><span class="line">    <span class="string">r&quot;C:\Users\lc199\Downloads\Qwen3-0.6B&quot;</span>,</span><br><span class="line">    local_files_only=<span class="literal">True</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h2 id="部署通道"><a href="#部署通道" class="headerlink" title="部署通道"></a>部署通道</h2><p>两个通道，场景不同。</p>
+<h3 id="FastAPI-生产服务"><a href="#FastAPI-生产服务" class="headerlink" title="FastAPI 生产服务"></a>FastAPI 生产服务</h3><p>适合集成到业务系统。我们搭了一个完整的 API，带 LRU 缓存、批量接口、监控端点。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> fastapi <span class="keyword">import</span> FastAPI</span><br><span class="line"><span class="keyword">from</span> contextlib <span class="keyword">import</span> asynccontextmanager</span><br><span class="line"></span><br><span class="line"><span class="meta">@asynccontextmanager</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">lifespan</span>(<span class="params">app: FastAPI</span>):</span></span><br><span class="line">    get_model()  <span class="comment"># 启动时预加载</span></span><br><span class="line">    <span class="keyword">yield</span></span><br><span class="line"></span><br><span class="line">app = FastAPI(title=<span class="string">&quot;Jev 多维决策 API&quot;</span>, lifespan=lifespan)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.post(<span class="params"><span class="string">&quot;/demo/decide&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">decide</span>(<span class="params">req: DecideRequest</span>):</span></span><br><span class="line">    dialog = [&#123;<span class="string">&quot;role&quot;</span>: d.role, <span class="string">&quot;content&quot;</span>: d.content&#125; <span class="keyword">for</span> d <span class="keyword">in</span> req.dialog]</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># LRU 缓存</span></span><br><span class="line">    key = cache_key(dialog)</span><br><span class="line">    <span class="keyword">if</span> cached := cache_get(key):</span><br><span class="line">        <span class="keyword">return</span> cached  <span class="comment"># 0ms</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 主标签：LoRA 模型</span></span><br><span class="line">    choice, conf, probs = predict_intent(dialog)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 副标签：文本信号规则（混合架构）</span></span><br><span class="line">    sec = predict_secondary(dialog, choice, conf)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 三档路由</span></span><br><span class="line">    action, reason = route(choice, conf, sec)</span><br><span class="line">    </span><br><span class="line">    result = &#123;</span><br><span class="line">        <span class="string">&quot;主标签&quot;</span>: &#123;<span class="string">&quot;意图&quot;</span>: choice, <span class="string">&quot;语义&quot;</span>: INTENTS[choice], <span class="string">&quot;置信度&quot;</span>: <span class="built_in">round</span>(conf, <span class="number">3</span>)&#125;,</span><br><span class="line">        <span class="string">&quot;副标签&quot;</span>: sec,</span><br><span class="line">        <span class="string">&quot;路由&quot;</span>: action,</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">    cache_put(key, result)</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.post(<span class="params"><span class="string">&quot;/demo/decide-batch&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">decide_batch</span>(<span class="params">req: BatchRequest</span>):</span></span><br><span class="line">    ...  <span class="comment"># 批量处理</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.get(<span class="params"><span class="string">&quot;/stats&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">stats</span>():</span></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="string">&quot;requests&quot;</span>: _perf_stats[<span class="string">&quot;requests&quot;</span>],</span><br><span class="line">        <span class="string">&quot;avg_latency_ms&quot;</span>: <span class="built_in">round</span>(_perf_stats[<span class="string">&quot;total_ms&quot;</span>] / <span class="built_in">max</span>(_perf_stats[<span class="string">&quot;requests&quot;</span>], <span class="number">1</span>), <span class="number">1</span>),</span><br><span class="line">        <span class="string">&quot;cache_hit_rate&quot;</span>: <span class="built_in">round</span>(hits / <span class="built_in">max</span>(hits + misses, <span class="number">1</span>), <span class="number">3</span>),</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>实测性能：冷启动 2 秒（模型加载），热请求 1.2 秒，缓存命中 0ms。4bit 量化后显存约 3GB。温度校准后 ECE 从 0.223 降到 0.068。</p>
+<h3 id="Ollama-部署"><a href="#Ollama-部署" class="headerlink" title="Ollama 部署"></a>Ollama 部署</h3><p>适合快速体验和独立测试。把模型转 GGUF 导入 Ollama，一条命令就能跑。</p>
+<p>GGUF 转换是整个项目最折腾的环节。我们花了两天时间，试了 10 多种方案才跑通。这段经历值得详细写一写，因为坑太典型了。</p>
+<p><strong>手写 gguf.GGUFWriter 的失败经历。</strong> 用 PyPI 的 gguf 包手写转换器，从 safetensors 读权重、自己构造 GGUF 元数据。转出来的文件 Ollama 说 <code>unable to load model</code>。</p>
+<p>排查发现几个问题：<code>tokenizer.ggml.model</code> 写成了 <code>qwen2</code>（官方是 <code>gpt2</code>）、缺 <code>tokenizer.ggml.merges</code>（15 万条 BPE 合并规则）、缺 <code>chat_template</code>、vocab 大小写成了 151643（官方 151936）。逐个修了还是不行，因为二进制布局就和官方 converter 不同。</p>
+<p><strong>WSL 跑官方 converter 也超时。</strong> 装了 gguf 库和 transformers，但 torch 装不上（873MB wheel 加 CUDA 依赖，网络超时）。改用 torch-free 方案读 safetensors，但 WSL 的 <code>/mnt/c</code> 文件系统 I/O 太慢，15 万条 merges 写入要 10 分钟以上，反复超时。</p>
+<p><strong>最终方案：官方 converter 在 Windows Python 上跑。</strong> Claude Code 帮忙找到了完整的 llama.cpp 转换脚本和 PyTorch 环境。命令是：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python convert_hf_to_gguf.py <span class="string">&quot;C:\...\jev-intent-merged&quot;</span> `</span><br><span class="line">  -<span class="literal">-outfile</span> <span class="string">&quot;jev-intent.gguf&quot;</span> -<span class="literal">-outtype</span> f16</span><br></pre></td></tr></table></figure>
+
+<p>关键教训：<strong>必须用完整的 Hugging Face 目录</strong>（config.json + model.safetensors + tokenizer.json + tokenizer_config.json + chat_template.jinja），不能只拿 safetensors 手写 GGUF。官方 converter 的张量映射、权重类型处理、元数据写入逻辑非常复杂，手写不可能完全复现。</p>
+<p>导入 Ollama：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ollama create jev-intent -f Modelfile</span><br><span class="line">ollama run jev-intent</span><br></pre></td></tr></table></figure>
+
+<p>Modelfile 要有 TEMPLATE 字段，否则推理时格式会乱：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">FROM C:\Users\lc199\Downloads\jev-intent.gguf</span><br><span class="line">TEMPLATE &quot;&quot;&quot;&#123;&#123; .System &#125;&#125;</span><br><span class="line">&#123;&#123; .Prompt &#125;&#125;&quot;&quot;&quot;</span><br><span class="line">PARAMETER temperature 0</span><br><span class="line">PARAMETER num_predict 8</span><br><span class="line">SYSTEM &quot;你是意图识别与决策模型&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="部署架构"><a href="#部署架构" class="headerlink" title="部署架构"></a>部署架构</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">用户请求</span><br><span class="line">   ↓</span><br><span class="line">FastAPI (127.0.0.1:8765)</span><br><span class="line">   ├─ 4bit LoRA 意图模型（Qwen3-0.6B）</span><br><span class="line">   ├─ 8 维中文副标签（文本信号规则）</span><br><span class="line">   ├─ 三档置信度路由</span><br><span class="line">   └─ LRU 缓存（1024 条，命中 0ms）</span><br><span class="line">   ↓</span><br><span class="line">auto → 模板执行</span><br><span class="line">llm  → LLM 生成复核</span><br><span class="line">human → 转人工</span><br><span class="line"></span><br><span class="line">Ollama (11434)</span><br><span class="line">   └─ jev-intent（独立体验）</span><br></pre></td></tr></table></figure>
+
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>部署环节的核心教训是：Windows 上的深度学习环境比 Linux 折腾得多，VC++ 依赖、CUDA 版本、bitsandbytes 兼容性每个都可能卡住。GGUF 转换不要手写，用官方 converter 从完整 HF 目录转。冒烟测试不能省，5 分钟能省 2 小时。</p>
+<p>下一篇讲数据怎么造、模型怎么训，包括那个 68% 重复率的数据翻车故事。</p>
+</div>
+    
+      <footer class="post-tags" aria-label="文章标签">
+        <a href="/web-blog/tags/AI/">AI</a><a href="/web-blog/tags/Jev/">Jev</a><a href="/web-blog/tags/Ollama/">Ollama</a><a href="/web-blog/tags/%E9%83%A8%E7%BD%B2/">部署</a><a href="/web-blog/tags/GGUF/">GGUF</a><a href="/web-blog/tags/RTX-5060/">RTX 5060</a>
+      </footer>
+    
+    <nav class="post-navigation" aria-label="文章导航">
+      
+      <a class="next" href="/web-blog/2026/09/30/Jev%E5%86%B3%E7%AD%96%E6%A8%A1%E5%9E%8B%E5%AE%9E%E6%88%98%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E6%95%B0%E6%8D%AE%E4%B8%8E%E8%AE%AD%E7%BB%83/"><span>下一篇</span><b>Jev 决策模型实战（二）：数据与训练</b></a>
+    </nav>
+  </article>
+  <aside class="post-rail" aria-label="文章信息">
+    <p class="section-label">CONNECTIONS</p>
+    <div><strong>专题</strong><a href="/web-blog/categories/AI/">AI</a></div>
+    <div><strong>标签</strong><a href="/web-blog/tags/AI/">AI</a><a href="/web-blog/tags/Jev/">Jev</a><a href="/web-blog/tags/Ollama/">Ollama</a><a href="/web-blog/tags/%E9%83%A8%E7%BD%B2/">部署</a><a href="/web-blog/tags/GGUF/">GGUF</a><a href="/web-blog/tags/RTX-5060/">RTX 5060</a></div>
+  </aside>
+</main>
+
+
+    <footer class="shell footer">
+      <span>2021 - 2026 &copy; LC</span>
+      <span>真实项目的研究记录</span>
+      <a href="/web-blog/atom.xml">RSS</a>
+    </footer>
+
+    <dialog class="search-dialog" id="search-dialog" data-search-url="/web-blog/search.xml">
+      <div class="search-dialog__bar">
+        <label for="site-search">搜索笔记</label>
+        <button class="dialog-close" aria-label="关闭搜索" type="button">关闭</button>
+      </div>
+      <input id="site-search" type="search" autocomplete="off" placeholder="输入文章标题、主题或关键词" />
+      <div class="search-results" aria-live="polite"></div>
+    </dialog>
+
+    <script src="/web-blog/js/site.js"></script>
+  </body>
+</html>

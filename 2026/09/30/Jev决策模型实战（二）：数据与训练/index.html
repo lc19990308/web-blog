@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="从 600 条翻车数据到 1082 条干净样本，LoRA 训练从 63% 到 78% 的全过程。数据重复率 68%、跨集泄漏 66 组、训练慢 180 倍的性能坑，都是真实踩过的。" />
+    <title>Jev 决策模型实战（二）：数据与训练 | 前端技术笔记</title>
+    <link rel="alternate" href="/web-blog/atom.xml" title="前端技术笔记" type="application/atom+xml" />
+    <link rel="stylesheet" href="/web-blog/css/main.css" />
+  <meta name="generator" content="Hexo 5.4.0"></head>
+  <body>
+    <header class="site-header shell">
+      <a class="wordmark" href="/web-blog/" aria-label="前端技术笔记 首页">LC <span>/</span> NOTES</a>
+      <nav class="main-nav" id="main-nav" aria-label="主导航">
+        <a href="/web-blog/">笔记</a>
+        <a href="/web-blog/categories/">专题</a>
+        <a href="/web-blog/about/">关于</a>
+        <a href="/web-blog/archives/">归档</a>
+      </nav>
+      <div class="header-actions">
+        <button class="menu-button" aria-controls="main-nav" aria-expanded="false" aria-label="打开菜单" type="button">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+        </button>
+        <button class="search-button" aria-controls="search-dialog" aria-label="搜索文章" type="button">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.5 4.5"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    
+<main class="shell post-shell">
+  <aside class="post-toc" aria-label="文章目录">
+    <p class="section-label">ON THIS PAGE</p>
+    <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E7%AC%AC%E4%B8%80%E7%89%88%E6%95%B0%E6%8D%AE%EF%BC%9A%E4%B8%89%E4%B8%AA%E8%87%B4%E5%91%BD%E9%97%AE%E9%A2%98"><span class="toc-list-text">第一版数据：三个致命问题</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%95%B0%E6%8D%AE%E4%BF%AE%E5%A4%8D%EF%BC%9A%E6%A8%A1%E6%9D%BF%E6%89%A9%E5%85%85-%E6%A7%BD%E4%BD%8D%E6%89%B0%E5%8A%A8"><span class="toc-list-text">数据修复：模板扩充 + 槽位扰动</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%A4%9A%E8%BD%AE%E5%AF%B9%E8%AF%9D%E6%9E%84%E9%80%A0"><span class="toc-list-text">多轮对话构造</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E8%AE%AD%E7%BB%83%EF%BC%9ALoRA-%E5%BE%AE%E8%B0%83"><span class="toc-list-text">训练：LoRA 微调</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%80%A7%E8%83%BD%E5%9D%91%EF%BC%9Apadding-%E7%AD%96%E7%95%A5"><span class="toc-list-text">性能坑：padding 策略</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9F%BA%E7%BA%BF%E5%AF%B9%E6%AF%94%EF%BC%9A%E5%80%BC%E4%B8%8D%E5%80%BC%E5%BE%97%E8%AE%AD"><span class="toc-list-text">基线对比：值不值得训</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%B8%A9%E5%BA%A6%E6%A0%A1%E5%87%86%EF%BC%9A%E8%AE%A9%E6%A6%82%E7%8E%87%E5%8F%AF%E4%BF%A1"><span class="toc-list-text">温度校准：让概率可信</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%BC%B1%E9%A1%B9%E8%A1%A5%E5%BC%BA"><span class="toc-list-text">弱项补强</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E8%AE%AD%E7%BB%83%E5%BF%83%E5%BE%97"><span class="toc-list-text">训练心得</span></a></li></ol>
+  </aside>
+  <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+    <header class="post-header">
+      <p class="section-label">AI</p>
+      <h1 itemprop="headline">Jev 决策模型实战（二）：数据与训练</h1>
+      <div class="metadata"><span>2026-09-30</span><span>4 分钟阅读</span><span>更新于 2026-10-05</span></div>
+      <p class="post-lede">从 600 条翻车数据到 1082 条干净样本，LoRA 训练从 63% 到 78% 的全过程。数据重复率 68%、跨集泄漏 66 组、训练慢 180 倍的性能坑，都是真实踩过的。</p>
+    </header>
+    <div class="prose" itemprop="articleBody"><p>整个项目 80% 的时间花在数据上，20% 花在训练。这不是夸张。第一版数据翻车翻得彻底，第二版修复后效果翻倍。数据质量决定模型上限，训练只是逼近它。</p>
+<h2 id="第一版数据：三个致命问题"><a href="#第一版数据：三个致命问题" class="headerlink" title="第一版数据：三个致命问题"></a>第一版数据：三个致命问题</h2><p>用模板生成了 600 条客服对话，8 个意图各 75 条。跑了个质检脚本，结果很难看。</p>
+<p><strong>重复率 68%。</strong> 每个意图只写了 5 个对话模板，要生成 75 条，大部分是复制粘贴加微小扰动。600 条里只有 189 条唯一。质检脚本用 MD5 哈希对话内容做去重，一看重复率就懵了。</p>
+<p><strong>跨集泄漏 66 组。</strong> 同一对话同时出现在 train 和 test 集。原因是先生成 600 条再随机划分，重复的样本被分到不同集合。测试集混进了训练数据，分数是虚高的。</p>
+<p><strong>有效训练样本仅 154 条。</strong> 去重后 train 集只剩 154 条唯一数据。模型看到的其实是 154 条翻来覆去地看，不是 420 条。</p>
+<p>用这份数据训练出来的模型，准确率 63.3%。但这是在污染的测试集上测的，真实表现更差。<code>other</code> 类 F1 直接是 0，模型从不预测它。</p>
+<p>质检脚本长这样，几行代码就能暴露问题：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter, defaultdict</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dialog_key</span>(<span class="params">row</span>):</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;|&quot;</span>.join(d[<span class="string">&quot;content&quot;</span>] <span class="keyword">for</span> d <span class="keyword">in</span> row[<span class="string">&quot;state&quot;</span>][<span class="string">&quot;dialog&quot;</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 唯一性</span></span><br><span class="line">keys = [dialog_key(r) <span class="keyword">for</span> r <span class="keyword">in</span> all_rows]</span><br><span class="line">dup_rate = <span class="number">1</span> - <span class="built_in">len</span>(<span class="built_in">set</span>(keys)) / <span class="built_in">len</span>(keys)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;重复率: <span class="subst">&#123;dup_rate:<span class="number">.0</span>%&#125;</span>&quot;</span>)  <span class="comment"># 68%</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 跨集泄漏</span></span><br><span class="line">split_map = defaultdict(<span class="built_in">set</span>)</span><br><span class="line"><span class="keyword">for</span> r <span class="keyword">in</span> all_rows:</span><br><span class="line">    split_map[dialog_key(r)].add(r[<span class="string">&quot;split&quot;</span>])</span><br><span class="line">leak = <span class="built_in">sum</span>(<span class="number">1</span> <span class="keyword">for</span> k, v <span class="keyword">in</span> split_map.items() <span class="keyword">if</span> <span class="built_in">len</span>(v) &gt; <span class="number">1</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;跨集泄漏: <span class="subst">&#123;leak&#125;</span>&quot;</span>)  <span class="comment"># 66</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="数据修复：模板扩充-槽位扰动"><a href="#数据修复：模板扩充-槽位扰动" class="headerlink" title="数据修复：模板扩充 + 槽位扰动"></a>数据修复：模板扩充 + 槽位扰动</h2><p>根因是模板太少。修复方案分三步。</p>
+<p><strong>第一步：扩模板。</strong> 每意图从 5 个扩到 12 个以上。真实客服场景的对话有各种变体：直接说「我要退款」、拐弯说「买回来不太合适」、带情绪说「这什么破玩意不要了」。</p>
+<p><strong>第二步：槽位填充。</strong> 订单号、商品名、金额用占位符，生成时随机替换：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ORDERS = [<span class="string">&quot;20260920-881&quot;</span>, <span class="string">&quot;20260928-123&quot;</span>, <span class="string">&quot;20260915-456&quot;</span>, ...]</span><br><span class="line">PRODUCTS = [<span class="string">&quot;红色外套&quot;</span>, <span class="string">&quot;蓝牙耳机&quot;</span>, <span class="string">&quot;保温杯&quot;</span>, <span class="string">&quot;机械键盘&quot;</span>, ...]</span><br><span class="line">AMOUNTS = [<span class="string">&quot;99&quot;</span>, <span class="string">&quot;199&quot;</span>, <span class="string">&quot;200&quot;</span>, <span class="string">&quot;350&quot;</span>, <span class="string">&quot;58&quot;</span>, <span class="string">&quot;1280&quot;</span>, ...]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fill_slots</span>(<span class="params">text</span>):</span></span><br><span class="line">    <span class="keyword">return</span> (text.replace(<span class="string">&quot;&#123;ORDER&#125;&quot;</span>, random.choice(ORDERS))</span><br><span class="line">                .replace(<span class="string">&quot;&#123;PRODUCT&#125;&quot;</span>, random.choice(PRODUCTS))</span><br><span class="line">                .replace(<span class="string">&quot;&#123;AMOUNT&#125;&quot;</span>, random.choice(AMOUNTS)))</span><br></pre></td></tr></table></figure>
+
+<p>这样同一模板能生成几十条不同的样本。</p>
+<p><strong>第三步：同义词扰动。</strong> 随机替换成近义词，增加文本多样性：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">SYNONYMS = &#123;</span><br><span class="line">    <span class="string">&quot;谢谢&quot;</span>: [<span class="string">&quot;谢谢&quot;</span>, <span class="string">&quot;感谢&quot;</span>, <span class="string">&quot;多谢&quot;</span>, <span class="string">&quot;谢了&quot;</span>],</span><br><span class="line">    <span class="string">&quot;订单&quot;</span>: [<span class="string">&quot;订单&quot;</span>, <span class="string">&quot;单子&quot;</span>, <span class="string">&quot;单&quot;</span>, <span class="string">&quot;这单&quot;</span>],</span><br><span class="line">    <span class="string">&quot;抱歉&quot;</span>: [<span class="string">&quot;抱歉&quot;</span>, <span class="string">&quot;对不起&quot;</span>, <span class="string">&quot;不好意思&quot;</span>],</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">vary</span>(<span class="params">text</span>):</span></span><br><span class="line">    <span class="keyword">for</span> k, opts <span class="keyword">in</span> SYNONYMS.items():</span><br><span class="line">        <span class="keyword">if</span> k <span class="keyword">in</span> text <span class="keyword">and</span> random.random() &lt; <span class="number">0.3</span>:</span><br><span class="line">            text = text.replace(k, random.choice(opts), <span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> text</span><br></pre></td></tr></table></figure>
+
+<p><strong>去重和划分的顺序很关键。</strong> 必须先去重，再划分三集。反过来划分，重复样本会被分到不同集合造成泄漏。划分还要分层，保证每个意图在三个集合里都有足够样本。</p>
+<h2 id="多轮对话构造"><a href="#多轮对话构造" class="headerlink" title="多轮对话构造"></a>多轮对话构造</h2><p>意图识别不能只用单句。真实对话是多轮的，意图在对话中逐步显露。</p>
+<p>我们的多轮样本长这样：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">user: 在吗？想问个事儿</span><br><span class="line">agent: 您好请讲</span><br><span class="line">user: 我上周在你们这买了个东西</span><br><span class="line">agent: 订单号方便说下吗</span><br><span class="line">user: 是 蓝牙耳机，唉，买回来觉得不太合适</span><br><span class="line">agent: 请问是质量问题还是不喜欢呢</span><br><span class="line">user: 就是不喜欢，能退吗</span><br></pre></td></tr></table></figure>
+
+<p>前几轮不说意图，中间确认，最后一句才点明。这比直接说「我要退款」难得多，但也真实得多。</p>
+<p>还加了三类陷阱样本：</p>
+<ul>
+<li><strong>指代</strong>：「就是上次那个」「就那个单」，要结合上下文理解</li>
+<li><strong>意图切换</strong>：先问订单，突然转投诉</li>
+<li><strong>脏文本</strong>：错别字、语气词（「谢谢！！」「退欵」）</li>
+</ul>
+<p>最终数据对比：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>v1 翻车版</th>
+<th><strong>v5 修复版</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>总量</td>
+<td>600</td>
+<td><strong>1082</strong></td>
+</tr>
+<tr>
+<td>唯一样本</td>
+<td>189</td>
+<td><strong>1082</strong></td>
+</tr>
+<tr>
+<td>重复率</td>
+<td>68%</td>
+<td><strong>0%</strong></td>
+</tr>
+<tr>
+<td>跨集泄漏</td>
+<td>66 组</td>
+<td><strong>0</strong></td>
+</tr>
+<tr>
+<td>平均轮数</td>
+<td>3.2</td>
+<td><strong>8.3</strong></td>
+</tr>
+<tr>
+<td>每意图唯一</td>
+<td>22-26</td>
+<td><strong>72</strong></td>
+</tr>
+<tr>
+<td>test 最小类</td>
+<td>5 条</td>
+<td><strong>12 条</strong></td>
+</tr>
+</tbody></table>
+<p>对比样本（「找不同」）：同一段对话改一个关键事实，答案就翻转。比如「这个能退吗」→ 退款，「你们必须给个说法」→ 投诉。这让模型学边界，不是背关键词。</p>
+<h2 id="训练：LoRA-微调"><a href="#训练：LoRA-微调" class="headerlink" title="训练：LoRA 微调"></a>训练：LoRA 微调</h2><p>训练配置：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> peft <span class="keyword">import</span> LoraConfig, get_peft_model</span><br><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> TrainingArguments, Trainer, BitsAndBytesConfig</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4bit 量化加载基座</span></span><br><span class="line">bnb = BitsAndBytesConfig(</span><br><span class="line">    load_in_4bit=<span class="literal">True</span>,</span><br><span class="line">    bnb_4bit_compute_dtype=torch.bfloat16,</span><br><span class="line">    bnb_4bit_quant_type=<span class="string">&quot;nf4&quot;</span></span><br><span class="line">)</span><br><span class="line">base_model = AutoModelForCausalLM.from_pretrained(</span><br><span class="line">    <span class="string">&quot;Qwen/Qwen3-0.6B&quot;</span>, quantization_config=bnb, device_map=<span class="string">&quot;auto&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># LoRA 配置</span></span><br><span class="line">lora = LoraConfig(</span><br><span class="line">    r=<span class="number">16</span>, lora_alpha=<span class="number">32</span>, lora_dropout=<span class="number">0.05</span>,</span><br><span class="line">    target_modules=[<span class="string">&quot;q_proj&quot;</span>, <span class="string">&quot;k_proj&quot;</span>, <span class="string">&quot;v_proj&quot;</span>, <span class="string">&quot;o_proj&quot;</span>],</span><br><span class="line">    task_type=<span class="string">&quot;CAUSAL_LM&quot;</span></span><br><span class="line">)</span><br><span class="line">model = get_peft_model(base_model, lora)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 训练参数</span></span><br><span class="line">args = TrainingArguments(</span><br><span class="line">    num_train_epochs=<span class="number">4</span>,</span><br><span class="line">    per_device_train_batch_size=<span class="number">4</span>,</span><br><span class="line">    gradient_accumulation_steps=<span class="number">4</span>,   <span class="comment"># 等效 batch=16</span></span><br><span class="line">    learning_rate=<span class="number">3e-5</span>,</span><br><span class="line">    bf16=<span class="literal">True</span>,</span><br><span class="line">    warmup_ratio=<span class="number">0.05</span>,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>训练文本用自然语言问答格式，不是 JSON：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">你是意图识别与决策模型。根据对话状态回答类型化问题，只输出选项 key。</span><br><span class="line"></span><br><span class="line">【对话状态】</span><br><span class="line">user: 我要退款</span><br><span class="line">agent: 请问是哪一单？</span><br><span class="line">user: 就是上周买的那个，不想要了</span><br><span class="line"></span><br><span class="line">【问题】</span><br><span class="line">综合对话，用户当前意图是什么？</span><br><span class="line"></span><br><span class="line">【选项】</span><br><span class="line">- refund_request: 退货退款</span><br><span class="line">- billing_dispute: 账单争议</span><br><span class="line">- order_query: 订单物流</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">【答案】</span><br><span class="line">refund_request</span><br></pre></td></tr></table></figure>
+
+<p>三个训练细节：</p>
+<p><strong>选项顺序 shuffle。</strong> 不 shuffle 模型会记住「第一个选项更可能是答案」。每条样本训练前随机打乱选项顺序：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">shuffle_choices</span>(<span class="params">choices</span>):</span></span><br><span class="line">    keys = <span class="built_in">list</span>(choices.keys())</span><br><span class="line">    random.shuffle(keys)</span><br><span class="line">    <span class="keyword">return</span> &#123;k: choices[k] <span class="keyword">for</span> k <span class="keyword">in</span> keys&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>温度设 0。</strong> 决策任务要确定性。<code>temperature=0, top_k=1</code>。</p>
+<p><strong>输出越短越好。</strong> 只要选项 key，不要解释。省 token、推理快、不容易格式错。</p>
+<h2 id="性能坑：padding-策略"><a href="#性能坑：padding-策略" class="headerlink" title="性能坑：padding 策略"></a>性能坑：padding 策略</h2><p>第一版训练跑了 41 分钟，第二版只跑了 73 秒。差了 180 倍，原因是 padding 策略。</p>
+<p><code>padding=&quot;max_length&quot;</code> 到 768，但样本平均只有 21 字（约 30 token）。96% 的算力花在算 padding 上。改成 <code>padding=&quot;longest&quot;</code> 后，每个 batch 只 pad 到最长样本的长度，快了 180 倍。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 慢</span></span><br><span class="line">tok(batch[<span class="string">&quot;text&quot;</span>], truncation=<span class="literal">True</span>, max_length=<span class="number">768</span>, padding=<span class="string">&quot;max_length&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 快</span></span><br><span class="line">tok(batch[<span class="string">&quot;text&quot;</span>], truncation=<span class="literal">True</span>, max_length=<span class="number">768</span>, padding=<span class="string">&quot;longest&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>这个坑在长序列任务上不明显，但在短序列任务上是致命的。</p>
+<h2 id="基线对比：值不值得训"><a href="#基线对比：值不值得训" class="headerlink" title="基线对比：值不值得训"></a>基线对比：值不值得训</h2><p>训练前必须跑基线。不跑基线，你不知道训练是有效还是白费。</p>
+<table>
+<thead>
+<tr>
+<th>基线</th>
+<th>准确率</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>规则关键词</td>
+<td>57.3%</td>
+<td>简单 if-else 正则匹配</td>
+</tr>
+<tr>
+<td>Qwen3-0.6B 零样本</td>
+<td>44.4%</td>
+<td>不训练直接问</td>
+</tr>
+<tr>
+<td><strong>LoRA 训练后</strong></td>
+<td><strong>78.2%</strong></td>
+<td><strong>比规则高 21 点</strong></td>
+</tr>
+</tbody></table>
+<p>零样本只有 44%，说明小模型不训练做不了意图识别。训练后 78%，比规则高 21 点，说明「值得训」。</p>
+<p>训练后各类 F1：</p>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>F1</th>
+<th></th>
+<th>类别</th>
+<th>F1</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>tech_support</td>
+<td><strong>1.00</strong></td>
+<td></td>
+<td>order_query</td>
+<td>0.92</td>
+</tr>
+<tr>
+<td>praise</td>
+<td><strong>0.97</strong></td>
+<td></td>
+<td>complaint</td>
+<td>0.88</td>
+</tr>
+<tr>
+<td>billing_dispute</td>
+<td>0.81</td>
+<td></td>
+<td>refund_request</td>
+<td>0.77</td>
+</tr>
+</tbody></table>
+<p><code>tech_support</code> 和 <code>praise</code> 几乎完美，<code>refund_request</code> 和 <code>billing_dispute</code> 边界有混淆。</p>
+<h2 id="温度校准：让概率可信"><a href="#温度校准：让概率可信" class="headerlink" title="温度校准：让概率可信"></a>温度校准：让概率可信</h2><p>神经网络天然过度自信。模型说 85% 确定，实际可能只有 66% 对。这对置信度路由是致命的——你不知道 0.85 意味着什么。</p>
+<p>温度校准的做法：用 calib 集（数据的 15%，独立于 train 和 test）拟合一个温度参数 T：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fit_temperature</span>(<span class="params">logits, labels</span>):</span></span><br><span class="line">    <span class="comment"># 优化 softmax(logits/T) 的 NLL</span></span><br><span class="line">    log_T = torch.zeros(<span class="number">1</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">    opt = torch.optim.Adam([log_T], lr=<span class="number">0.01</span>)</span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">200</span>):</span><br><span class="line">        T = torch.exp(log_T)</span><br><span class="line">        nll = F.cross_entropy(logits / T, labels)</span><br><span class="line">        nll.backward()</span><br><span class="line">        opt.step()</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">float</span>(torch.exp(log_T))</span><br><span class="line"><span class="comment"># 结果 T = 2.86</span></span><br></pre></td></tr></table></figure>
+
+<p>校准效果：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>校准前</th>
+<th>校准后</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>平均 confidence</td>
+<td>0.944</td>
+<td>0.816</td>
+</tr>
+<tr>
+<td>实际正确率</td>
+<td>0.759</td>
+<td>0.759</td>
+</tr>
+<tr>
+<td>ECE（校准误差）</td>
+<td>0.223</td>
+<td><strong>0.068</strong></td>
+</tr>
+</tbody></table>
+<p>校准前 confidence 比正确率虚高 18 个点。校准后基本对齐。ECE 从 0.223 降到 0.068，降了 70%。现在「confidence ≥ 0.85 自动处理」这个阈值才有实际意义。</p>
+<h2 id="弱项补强"><a href="#弱项补强" class="headerlink" title="弱项补强"></a>弱项补强</h2><p><code>out_of_scope</code> 类最初 F1=0，模型从不预测它。试了三招。</p>
+<p><strong>补样本。</strong> 补了 150 条带槽位的 out_of_scope 样本，每条都是明显的非业务场景，像查天气、写诗、推荐电影这些。</p>
+<p><strong>改名。</strong> 把 <code>other</code> 改成 <code>out_of_scope</code>。<code>other</code> 是一个非常通用的词，在训练数据中出现频率太高（各种上下文里都有），模型学不到它的独特语义。<code>out_of_scope</code> 更具体，token 更容易和特定场景关联。效果立竿见影，F1 从 0 提到 0.18。</p>
+<p><strong>置信度兜底。</strong> 低置信时归为 out_of_scope。用 calib 集搜索最佳阈值（0.20），配合改名策略，最终 F1 到 0.43。</p>
+<p><code>refund vs complaint</code> 边界也补了 75 组对比样本。同样的场景改一个词，答案就变。边界测试 10/10 全对。</p>
+<h2 id="训练心得"><a href="#训练心得" class="headerlink" title="训练心得"></a>训练心得</h2><p>数据决定上限。600 条翻车数据训出 63%，1082 条干净数据训出 78%。数据质量的差距比算法调参大得多。</p>
+<p>LoRA 很省。只训 0.38% 参数，9MB adapter，基座不动。换任务换 adapter，不重新下载基座。我们用同一个基座还训了一个斗地主 AI，数据换掉就行。</p>
+<p>选项 shuffle 不能省。不 shuffle 的话模型会学到「第一个选项最可能对」，上线后选项顺序一变就崩。</p>
+<p>温度校准不能省。没校准的 confidence 是「感觉」，校准后才是「可依赖的决策依据」。</p>
+<p>下一篇讲怎么用：多维标签设计、和 LLM 协同、三档路由策略。</p>
+</div>
+    
+      <footer class="post-tags" aria-label="文章标签">
+        <a href="/web-blog/tags/AI/">AI</a><a href="/web-blog/tags/Jev/">Jev</a><a href="/web-blog/tags/LoRA/">LoRA</a><a href="/web-blog/tags/%E8%AE%AD%E7%BB%83/">训练</a><a href="/web-blog/tags/%E6%95%B0%E6%8D%AE%E8%B4%A8%E9%87%8F/">数据质量</a><a href="/web-blog/tags/%E6%B8%A9%E5%BA%A6%E6%A0%A1%E5%87%86/">温度校准</a>
+      </footer>
+    
+    <nav class="post-navigation" aria-label="文章导航">
+      <a href="/web-blog/2026/09/30/Jev%E5%86%B3%E7%AD%96%E6%A8%A1%E5%9E%8B%E5%AE%9E%E6%88%98%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E9%83%A8%E7%BD%B2%E7%AF%87/"><span>上一篇</span><b>Jev 决策模型实战（一）：部署篇</b></a>
+      <a class="next" href="/web-blog/2026/09/30/Jev%E5%86%B3%E7%AD%96%E6%A8%A1%E5%9E%8B%E5%AE%9E%E6%88%98%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9A%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8/"><span>下一篇</span><b>Jev 决策模型实战（三）：如何使用</b></a>
+    </nav>
+  </article>
+  <aside class="post-rail" aria-label="文章信息">
+    <p class="section-label">CONNECTIONS</p>
+    <div><strong>专题</strong><a href="/web-blog/categories/AI/">AI</a></div>
+    <div><strong>标签</strong><a href="/web-blog/tags/AI/">AI</a><a href="/web-blog/tags/Jev/">Jev</a><a href="/web-blog/tags/LoRA/">LoRA</a><a href="/web-blog/tags/%E8%AE%AD%E7%BB%83/">训练</a><a href="/web-blog/tags/%E6%95%B0%E6%8D%AE%E8%B4%A8%E9%87%8F/">数据质量</a><a href="/web-blog/tags/%E6%B8%A9%E5%BA%A6%E6%A0%A1%E5%87%86/">温度校准</a></div>
+  </aside>
+</main>
+
+
+    <footer class="shell footer">
+      <span>2021 - 2026 &copy; LC</span>
+      <span>真实项目的研究记录</span>
+      <a href="/web-blog/atom.xml">RSS</a>
+    </footer>
+
+    <dialog class="search-dialog" id="search-dialog" data-search-url="/web-blog/search.xml">
+      <div class="search-dialog__bar">
+        <label for="site-search">搜索笔记</label>
+        <button class="dialog-close" aria-label="关闭搜索" type="button">关闭</button>
+      </div>
+      <input id="site-search" type="search" autocomplete="off" placeholder="输入文章标题、主题或关键词" />
+      <div class="search-results" aria-live="polite"></div>
+    </dialog>
+
+    <script src="/web-blog/js/site.js"></script>
+  </body>
+</html>
