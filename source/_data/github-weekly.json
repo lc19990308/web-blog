@@ -1,112 +1,112 @@
 {
   "schemaVersion": 1,
-  "week": "2026-W44",
-  "generatedAt": "2026-10-26T01:27:35.549Z",
+  "week": "2026-W45",
+  "generatedAt": "2026-11-02T02:39:39.438Z",
   "period": {
-    "start": "2026-10-19",
-    "end": "2026-10-26"
+    "start": "2026-10-26",
+    "end": "2026-11-02"
   },
-  "sourceUrl": "https://github.com/search?q=created%3A%3E%3D2026-10-19+fork%3Afalse+archived%3Afalse&type=repositories&s=stars&o=desc",
+  "sourceUrl": "https://github.com/search?q=created%3A%3E%3D2026-10-26+fork%3Afalse+archived%3Afalse&type=repositories&s=stars&o=desc",
   "repositories": [
     {
       "rank": 1,
-      "fullName": "pengchujin/aerial-tv",
-      "url": "https://github.com/pengchujin/aerial-tv",
-      "stars": 5025,
-      "language": "Kotlin",
-      "description": "给国产电视的一块干净桌面：参照 tvOS 设计的开源 Android TV 桌面，没有广告，开机自动接管。A tvOS-style launcher for Xiaomi, TCL and other China-market TVs.",
-      "createdAt": "2026-10-20",
+      "fullName": "deepseek-ai/dsh-superagent-prototype",
+      "url": "https://github.com/deepseek-ai/dsh-superagent-prototype",
+      "stars": 8316,
+      "language": "TypeScript",
+      "description": "Towards a More Autonomous Agent System",
+      "createdAt": "2026-10-31",
       "license": "MIT"
     },
     {
       "rank": 2,
-      "fullName": "simbasjungles/free-my-tv",
-      "url": "https://github.com/simbasjungles/free-my-tv",
-      "stars": 4616,
-      "language": "Java",
-      "description": "A fast, ad-free home screen for Google TV, LG webOS and Samsung Tizen. One button to undo.",
-      "createdAt": "2026-10-19",
-      "license": "MIT"
-    },
-    {
-      "rank": 3,
-      "fullName": "JustAResearcher/gpu-unlock-ada",
-      "url": "https://github.com/JustAResearcher/gpu-unlock-ada",
-      "stars": 2653,
-      "language": "C",
-      "description": "GPU tensor unlock source for RTX 4090 and experimental RTX 4070 Ti SUPER; firmware generated locally",
-      "createdAt": "2026-10-23",
-      "license": "GPL-2.0"
-    },
-    {
-      "rank": 4,
-      "fullName": "JoasASantos/REA-Prompts",
-      "url": "https://github.com/JoasASantos/REA-Prompts",
-      "stars": 2458,
-      "language": "Batchfile",
-      "description": "REAP - Prompts for you to use REA (Reverse Engineer Anything), get the most out of it, and clone or break down any program",
-      "createdAt": "2026-10-19",
-      "license": null
-    },
-    {
-      "rank": 5,
-      "fullName": "EthanArbuckle/fairplay-decrypt",
-      "url": "https://github.com/EthanArbuckle/fairplay-decrypt",
-      "stars": 2101,
-      "language": "C",
-      "description": "Offline FairPlay App Store IPA decryption with independent key derivation",
-      "createdAt": "2026-10-19",
-      "license": null
-    },
-    {
-      "rank": 6,
-      "fullName": "xevrion/hatchzip",
-      "url": "https://github.com/xevrion/hatchzip",
-      "stars": 1941,
-      "language": "Rust",
-      "description": "HatchZip is a free, open-source archive extractor for Windows, macOS and Linux that extracts ZIP, 7z, RAR, tar and split archives in place, so it needs free space for the extracted",
-      "createdAt": "2026-10-21",
-      "license": "Apache-2.0"
-    },
-    {
-      "rank": 7,
-      "fullName": "wesbos/3d-model-anything",
-      "url": "https://github.com/wesbos/3d-model-anything",
-      "stars": 1927,
-      "language": "Swift",
-      "description": "Capture iPhone LiDAR and photos, reconstruct editable Three.js rooms, and explore them in a browser.",
-      "createdAt": "2026-10-21",
+      "fullName": "anhao/ai-pose-gallery-zh",
+      "url": "https://github.com/anhao/ai-pose-gallery-zh",
+      "stars": 5176,
+      "language": "TypeScript",
+      "description": "中文版 AI 姿势参考图库 · 1439 组 / 2878 张图片 / 完整汉化 · 零依赖静态画廊",
+      "createdAt": "2026-10-27",
       "license": "NOASSERTION"
     },
     {
+      "rank": 3,
+      "fullName": "heydamir/unslop",
+      "url": "https://github.com/heydamir/unslop",
+      "stars": 4955,
+      "language": "JavaScript",
+      "description": "A Claude skill that turns vibecoded, AI-looking UI into a designed interface",
+      "createdAt": "2026-10-29",
+      "license": "CC-BY-4.0"
+    },
+    {
+      "rank": 4,
+      "fullName": "wangzan101/Mika",
+      "url": "https://github.com/wangzan101/Mika",
+      "stars": 4012,
+      "language": "Kotlin",
+      "description": "An on-device AI agent for Android that operates apps and the web to get things done for you.",
+      "createdAt": "2026-10-29",
+      "license": "Apache-2.0"
+    },
+    {
+      "rank": 5,
+      "fullName": "valentderah/totk-pc-recomp",
+      "url": "https://github.com/valentderah/totk-pc-recomp",
+      "stars": 3246,
+      "language": "C",
+      "description": "Static recompilation of The Legend of Zelda: Tears of the Kingdom to native Windows x86-64, with a Vulkan renderer. Game files not included.",
+      "createdAt": "2026-10-29",
+      "license": "MIT"
+    },
+    {
+      "rank": 6,
+      "fullName": "patch-gg/pixelfx",
+      "url": "https://github.com/patch-gg/pixelfx",
+      "stars": 2715,
+      "language": "JavaScript",
+      "description": "244 pixel art effects, every one a small piece of code. Plus a Claude Code skill to make your own.",
+      "createdAt": "2026-10-30",
+      "license": "MIT"
+    },
+    {
+      "rank": 7,
+      "fullName": "Djihads80/Eglantine",
+      "url": "https://github.com/Djihads80/Eglantine",
+      "stars": 2036,
+      "language": "C++",
+      "description": "VERY experimental Nintendo Switch 2 emulator",
+      "createdAt": "2026-10-29",
+      "license": "GPL-3.0"
+    },
+    {
       "rank": 8,
-      "fullName": "ikow/php2shell-poc",
-      "url": "https://github.com/ikow/php2shell-poc",
-      "stars": 1792,
-      "language": "Python",
-      "description": "CVE-2026-109618/109619 — 5 RCE chains + detection rules (Suricata, Sigma, ModSecurity). PHP session.upload_progress pre-auth exploit research.",
-      "createdAt": "2026-10-21",
+      "fullName": "paipiange/nvzhuang",
+      "url": "https://github.com/paipiange/nvzhuang",
+      "stars": 1888,
+      "language": "Go",
+      "description": "1407 张 AI 女装参考图集与虚拟试穿网站，支持中英检索、OpenAI Images / Gemini / 豆包及自定义 Base URL、API Key、模型。https://github.com/paipiange/nvzhuang",
+      "createdAt": "2026-10-29",
       "license": "MIT"
     },
     {
       "rank": 9,
-      "fullName": "Jakeschincariol/day-trader-skill",
-      "url": "https://github.com/Jakeschincariol/day-trader-skill",
-      "stars": 1630,
-      "language": "Python",
-      "description": "11 Claude skills for day trading: scan thousands of charts, track breaking news, time every entry and exit, and replay every outcome before you risk a dollar.",
-      "createdAt": "2026-10-20",
+      "fullName": "haydenschmitty/floorplan",
+      "url": "https://github.com/haydenschmitty/floorplan",
+      "stars": 1833,
+      "language": "JavaScript",
+      "description": "See how your app actually fits together. An interactive, plain-English map of your codebase, drawn by Claude or Codex.",
+      "createdAt": "2026-10-27",
       "license": "MIT"
     },
     {
       "rank": 10,
-      "fullName": "oosexgang/hackios-xnu-kernel",
-      "url": "https://github.com/oosexgang/hackios-xnu-kernel",
-      "stars": 1461,
-      "language": "C",
-      "description": "仓库未提供简介。",
-      "createdAt": "2026-10-22",
-      "license": "NOASSERTION"
+      "fullName": "aschmelyun/print-my-profile-pic",
+      "url": "https://github.com/aschmelyun/print-my-profile-pic",
+      "stars": 1701,
+      "language": "未标注",
+      "description": "Say cheese! Star this repo and your profile picture gets printed out on a receipt printer.",
+      "createdAt": "2026-10-27",
+      "license": null
     }
   ]
 }
