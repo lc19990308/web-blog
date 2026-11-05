@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="从网络加载、资源优化到渲染性能，系统梳理前端性能优化的 20+ 个实战策略，含具体配置和可量化的优化效果" />
+    <meta name="description" content="性能优化先建立真实用户基线，再定位 LCP、INP、CLS 与资源瀑布中的具体问题。本文从测量、归因到验证，给出一套避免盲目优化的工作方式。" />
     <title>前端性能优化实战：从加载到渲染的完整指南 | 前端技术笔记</title>
     <link rel="alternate" href="/web-blog/atom.xml" title="前端技术笔记" type="application/atom+xml" />
     <link rel="stylesheet" href="/web-blog/css/main.css" />
@@ -31,247 +31,52 @@
 <main class="shell post-shell">
   <aside class="post-toc" aria-label="文章目录">
     <p class="section-label">ON THIS PAGE</p>
-    <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-list-text">前言</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%80%E3%80%81%E7%BD%91%E7%BB%9C%E5%8A%A0%E8%BD%BD%E4%BC%98%E5%8C%96"><span class="toc-list-text">一、网络加载优化</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-1-%E5%87%8F%E5%B0%91-HTTP-%E8%AF%B7%E6%B1%82"><span class="toc-list-text">1.1 减少 HTTP 请求</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-2-%E4%BD%BF%E7%94%A8-CDN"><span class="toc-list-text">1.2 使用 CDN</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-3-%E5%90%AF%E7%94%A8-Gzip-Brotli-%E5%8E%8B%E7%BC%A9"><span class="toc-list-text">1.3 启用 Gzip &#x2F; Brotli 压缩</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-4-%E4%BD%BF%E7%94%A8-HTTP-2"><span class="toc-list-text">1.4 使用 HTTP&#x2F;2</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-5-%E9%A2%84%E5%8A%A0%E8%BD%BD%E5%85%B3%E9%94%AE%E8%B5%84%E6%BA%90"><span class="toc-list-text">1.5 预加载关键资源</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%8C%E3%80%81%E8%B5%84%E6%BA%90%E4%BC%98%E5%8C%96"><span class="toc-list-text">二、资源优化</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-1-%E5%9B%BE%E7%89%87%E4%BC%98%E5%8C%96"><span class="toc-list-text">2.1 图片优化</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-2-JavaScript-%E4%BC%98%E5%8C%96"><span class="toc-list-text">2.2 JavaScript 优化</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-3-CSS-%E4%BC%98%E5%8C%96"><span class="toc-list-text">2.3 CSS 优化</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-4-%E5%AD%97%E4%BD%93%E4%BC%98%E5%8C%96"><span class="toc-list-text">2.4 字体优化</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%89%E3%80%81%E6%B8%B2%E6%9F%93%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="toc-list-text">三、渲染性能优化</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-1-%E5%87%8F%E5%B0%91%E9%87%8D%E6%8E%92%EF%BC%88Reflow%EF%BC%89%E4%B8%8E%E9%87%8D%E7%BB%98%EF%BC%88Repaint%EF%BC%89"><span class="toc-list-text">3.1 减少重排（Reflow）与重绘（Repaint）</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-2-%E4%BD%BF%E7%94%A8%E8%99%9A%E6%8B%9F%E6%BB%9A%E5%8A%A8"><span class="toc-list-text">3.2 使用虚拟滚动</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-3-%E5%8A%A8%E7%94%BB%E6%80%A7%E8%83%BD"><span class="toc-list-text">3.3 动画性能</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-4-%E4%BA%8B%E4%BB%B6%E8%8A%82%E6%B5%81%E4%B8%8E%E9%98%B2%E6%8A%96"><span class="toc-list-text">3.4 事件节流与防抖</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-5-%E9%95%BF%E4%BB%BB%E5%8A%A1%E6%8B%86%E5%88%86"><span class="toc-list-text">3.5 长任务拆分</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9B%9B%E3%80%81%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7"><span class="toc-list-text">四、性能监控</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-1-Core-Web-Vitals"><span class="toc-list-text">4.1 Core Web Vitals</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-2-%E6%B5%8B%E9%87%8F%E5%B7%A5%E5%85%B7"><span class="toc-list-text">4.2 测量工具</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%94%E3%80%81%E4%BC%98%E5%8C%96%E6%B8%85%E5%8D%95"><span class="toc-list-text">五、优化清单</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E5%BF%AB%E9%80%9F%E8%87%AA%E6%9F%A5%E8%A1%A8"><span class="toc-list-text">快速自查表</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-list-text">总结</span></a></li></ol>
+    <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%80%A7%E8%83%BD%E4%B8%8D%E6%98%AF%E4%B8%80%E5%BC%A0%E6%8A%80%E5%B7%A7%E6%B8%85%E5%8D%95"><span class="toc-list-text">性能不是一张技巧清单</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E7%94%A8%E7%8E%B0%E5%9C%BA%E6%95%B0%E6%8D%AE%E5%92%8C%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%95%B0%E6%8D%AE%E9%85%8D%E5%90%88%E5%88%A4%E6%96%AD"><span class="toc-list-text">用现场数据和实验室数据配合判断</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%85%88%E5%AE%9A%E4%BD%8D%E7%93%B6%E9%A2%88%EF%BC%8C%E5%86%8D%E9%80%89%E6%8B%A9%E6%89%8B%E6%AE%B5"><span class="toc-list-text">先定位瓶颈，再选择手段</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E8%AE%A9-JavaScript-%E5%8F%AA%E5%8A%A0%E8%BD%BD%E5%92%8C%E6%89%A7%E8%A1%8C%E5%BF%85%E8%A6%81%E9%83%A8%E5%88%86"><span class="toc-list-text">让 JavaScript 只加载和执行必要部分</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#INP-%E9%97%AE%E9%A2%98%E9%80%9A%E5%B8%B8%E5%9C%A8%E4%B8%BB%E7%BA%BF%E7%A8%8B"><span class="toc-list-text">INP 问题通常在主线程</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%8A%8A-CLS-%E5%BD%93%E6%88%90%E8%AE%BE%E8%AE%A1%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5"><span class="toc-list-text">把 CLS 当成设计问题排查</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%8F%91%E5%B8%83%E9%AA%8C%E6%94%B6"><span class="toc-list-text">发布验收</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
     <header class="post-header">
       <p class="section-label">性能优化</p>
       <h1 itemprop="headline">前端性能优化实战：从加载到渲染的完整指南</h1>
-      <div class="metadata"><span>2025-06-23</span><span>4 分钟阅读</span><span>更新于 2026-06-23</span></div>
-      <p class="post-lede">从网络加载、资源优化到渲染性能，系统梳理前端性能优化的 20+ 个实战策略，含具体配置和可量化的优化效果</p>
+      <div class="metadata"><span>2025-06-23</span><span>4 分钟阅读</span><span>更新于 2026-08-10</span></div>
+      <p class="post-lede">性能优化先建立真实用户基线，再定位 LCP、INP、CLS 与资源瀑布中的具体问题。本文从测量、归因到验证，给出一套避免盲目优化的工作方式。</p>
     </header>
-    <div class="prose" itemprop="articleBody"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>性能优化不是炫技，而是用户体验的底线。研究表明：</p>
+    <div class="prose" itemprop="articleBody"><h2 id="性能不是一张技巧清单"><a href="#性能不是一张技巧清单" class="headerlink" title="性能不是一张技巧清单"></a>性能不是一张技巧清单</h2><p>把图片转成 WebP、加 CDN、删几条 <code>console.log</code>，都可能有帮助，也可能完全没有改善用户正在经历的慢。性能工作从一条可复现的用户路径开始，例如“移动网络打开商品详情并加入购物车”，而不是从构建配置里找一个看起来能开启的开关。</p>
+<p>先记录基线：页面版本、测试设备和网络、关键操作、加载瀑布、主线程长任务，以及真实用户数据。之后每次优化只改一个假设，并复测同一条路径。没有前后对比，就无法判断体积变化是否真的改善了体验。</p>
+<h2 id="用现场数据和实验室数据配合判断"><a href="#用现场数据和实验室数据配合判断" class="headerlink" title="用现场数据和实验室数据配合判断"></a>用现场数据和实验室数据配合判断</h2><p>Core Web Vitals 关注三种用户可感知的结果：</p>
 <ul>
-<li>页面加载时间从 1s 增加到 3s，<strong>跳出率增加 32%</strong></li>
-<li>加载时间从 1s 增加到 5s，<strong>跳出率增加 90%</strong></li>
-<li>电商网站加载慢 100ms，<strong>转化率降低 7%</strong></li>
+<li><strong>LCP</strong>：主要内容何时出现，常受服务器响应、首屏图片、字体和渲染阻塞资源影响。</li>
+<li><strong>INP</strong>：一次交互从输入到下一帧反馈的延迟，常受长任务、同步计算和复杂更新影响。</li>
+<li><strong>CLS</strong>：页面是否在用户阅读或操作时突然位移，常由未预留尺寸的图片、广告位和异步模块造成。</li>
 </ul>
-<p>本文从<strong>网络加载</strong> → <strong>资源优化</strong> → <strong>渲染性能</strong> 三个维度，给出可直接落地的优化方案。</p>
-<hr>
-<h2 id="一、网络加载优化"><a href="#一、网络加载优化" class="headerlink" title="一、网络加载优化"></a>一、网络加载优化</h2><h3 id="1-1-减少-HTTP-请求"><a href="#1-1-减少-HTTP-请求" class="headerlink" title="1.1 减少 HTTP 请求"></a>1.1 减少 HTTP 请求</h3><p><strong>合并文件</strong>：将小文件合并，减少请求数。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Webpack / Vite 配置</span></span><br><span class="line"><span class="comment">// 将小于 10KB 的图片转为 base64 内联</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">test</span>: <span class="regexp">/\.(png|jpg|gif)$/</span>,</span><br><span class="line">  type: <span class="string">&#x27;asset&#x27;</span>,</span><br><span class="line">  <span class="attr">parser</span>: &#123;</span><br><span class="line">    <span class="attr">dataUrlCondition</span>: &#123; <span class="attr">maxSize</span>: <span class="number">10</span> * <span class="number">1024</span> &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在汇总真实用户数据时，应按页面类型、设备和网络分组，并看第 75 百分位等分布数据。实验室工具适合复现和分析，不能替代真实设备上的现场数据。<code>FID</code> 已不再是当前 Core Web Vitals 的交互响应指标，新的项目应关注 INP。</p>
+<p>可以用 <code>web-vitals</code> 在受控采样下采集指标，再关联当前页面、release 和设备类别：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; onCLS, onINP, onLCP &#125; <span class="keyword">from</span> <span class="string">&#x27;web-vitals&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sendMetric</span>(<span class="params">metric: &#123; name: <span class="built_in">string</span>; value: <span class="built_in">number</span>; id: <span class="built_in">string</span> &#125;</span>) </span>&#123;</span><br><span class="line">  navigator.sendBeacon(</span><br><span class="line">    <span class="string">&#x27;/api/rum&#x27;</span>,</span><br><span class="line">    <span class="built_in">JSON</span>.stringify(&#123;</span><br><span class="line">      <span class="attr">name</span>: metric.name,</span><br><span class="line">      <span class="attr">value</span>: metric.value,</span><br><span class="line">      <span class="attr">id</span>: metric.id,</span><br><span class="line">      <span class="attr">path</span>: location.pathname,</span><br><span class="line">    &#125;),</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">onLCP(sendMetric)</span><br><span class="line">onINP(sendMetric)</span><br><span class="line">onCLS(sendMetric)</span><br></pre></td></tr></table></figure>
 
-<h3 id="1-2-使用-CDN"><a href="#1-2-使用-CDN" class="headerlink" title="1.2 使用 CDN"></a>1.2 使用 CDN</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 将静态资源托管到 CDN --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.min.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- Webpack 配置 externals，避免打包三方库 --&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- webpack.config.js --&gt;</span></span><br><span class="line">module.exports = &#123;</span><br><span class="line">  externals: &#123;</span><br><span class="line">    vue: &#x27;Vue&#x27;,</span><br><span class="line">    &#x27;vue-router&#x27;: &#x27;VueRouter&#x27;,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>采集端要设置采样、脱敏和保留期限。不要把完整 URL 查询参数、账号信息或用户输入直接写入性能事件。</p>
+<h2 id="先定位瓶颈，再选择手段"><a href="#先定位瓶颈，再选择手段" class="headerlink" title="先定位瓶颈，再选择手段"></a>先定位瓶颈，再选择手段</h2><p>Lighthouse、Chrome DevTools 的 Network 与 Performance 面板能回答不同问题：资源是否太晚发现、是否被阻塞、JavaScript 是否占住主线程、布局位移由哪个元素造成。一次报告的总分不等于诊断结论，关键是找到一条可操作的因果链。</p>
+<p>例如 LCP 是首屏大图时，先检查图片是否在 HTML 中可发现、是否具有合适尺寸、是否选了过大的源文件。只有确认它就是 LCP 候选资源后，才考虑高优先级或预加载。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span></span></span><br><span class="line"><span class="tag">  <span class="attr">src</span>=<span class="string">&quot;/images/hero-1280.webp&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">srcset</span>=<span class="string">&quot;/images/hero-768.webp 768w, /images/hero-1280.webp 1280w&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">sizes</span>=<span class="string">&quot;(max-width: 760px) 100vw, 1280px&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">width</span>=<span class="string">&quot;1280&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">height</span>=<span class="string">&quot;720&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">alt</span>=<span class="string">&quot;产品界面预览&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">fetchpriority</span>=<span class="string">&quot;high&quot;</span></span></span><br><span class="line"><span class="tag">&gt;</span></span><br></pre></td></tr></table></figure>
 
-<h3 id="1-3-启用-Gzip-Brotli-压缩"><a href="#1-3-启用-Gzip-Brotli-压缩" class="headerlink" title="1.3 启用 Gzip / Brotli 压缩"></a>1.3 启用 Gzip / Brotli 压缩</h3><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Nginx 配置 Gzip</span></span><br><span class="line"><span class="attribute">gzip</span> <span class="literal">on</span>;</span><br><span class="line"><span class="attribute">gzip_types</span> text/plain text/css application/json application/javascript text/xml;</span><br><span class="line"><span class="attribute">gzip_min_length</span> <span class="number">1024</span>;</span><br><span class="line"><span class="attribute">gzip_comp_level</span> <span class="number">6</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># Brotli（比 Gzip 压缩率高 20-30%）</span></span><br><span class="line"><span class="attribute">brotli</span> <span class="literal">on</span>;</span><br><span class="line"><span class="attribute">brotli_types</span> text/plain text/css application/javascript;</span><br></pre></td></tr></table></figure>
+<p><code>fetchpriority=&quot;high&quot;</code> 只应给已确认的首屏关键资源。给多张图片或大量脚本都加高优先级，会让浏览器更难排队。首屏以下图片使用 <code>loading=&quot;lazy&quot;</code> 并保留 <code>width</code>、<code>height</code>，可以同时减少初始竞争和布局位移。</p>
+<h2 id="让-JavaScript-只加载和执行必要部分"><a href="#让-JavaScript-只加载和执行必要部分" class="headerlink" title="让 JavaScript 只加载和执行必要部分"></a>让 JavaScript 只加载和执行必要部分</h2><p>路由级动态导入通常比手工拆几十个小包更容易维护。先通过 bundle 分析确认大模块来自哪里，再决定是否延迟加载、替换依赖或拆分功能。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> ReportPage = <span class="function">() =&gt;</span> <span class="keyword">import</span>(<span class="string">&#x27;./pages/ReportPage.vue&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> routes = [</span><br><span class="line">  &#123; <span class="attr">path</span>: <span class="string">&#x27;/reports&#x27;</span>, <span class="attr">component</span>: ReportPage &#125;,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
 
-<p><strong>效果：</strong> JS/CSS 文件压缩后体积减少 **70-80%**。</p>
-<h3 id="1-4-使用-HTTP-2"><a href="#1-4-使用-HTTP-2" class="headerlink" title="1.4 使用 HTTP/2"></a>1.4 使用 HTTP/2</h3><p>HTTP/2 支持<strong>多路复用</strong>，一个连接并行传输多个文件，解决 HTTP/1.1 的队头阻塞问题：</p>
-<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">listen</span> <span class="number">443</span> ssl http2;</span><br></pre></td></tr></table></figure>
+<p>不要为了“减少请求数”把所有资源重新合成一个大文件。现代 HTTP 连接可以并发传输，真正要避免的是首屏下载和解析了用户当前不需要的大型资源。对每个路由设定 JavaScript、CSS、图片和字体预算，并在 CI 中对超出预算的构建发出提示，比一次性的压缩配置更有效。</p>
+<p>字体也是常见阻塞源。优先使用 WOFF2、明确子集和 <code>font-display</code> 策略，加载关键字体时再验证是否改善了正文稳定性；否则预加载可能只是抢占了图片和脚本带宽。</p>
+<h2 id="INP-问题通常在主线程"><a href="#INP-问题通常在主线程" class="headerlink" title="INP 问题通常在主线程"></a>INP 问题通常在主线程</h2><p>一次点击迟迟没有反馈，先在 Performance 面板找到对应的长任务，再判断是同步计算、重复渲染、布局抖动还是第三方脚本。对纯计算任务，Web Worker 往往比把工作拆进一堆 <code>setTimeout</code> 更可靠；对必须在主线程上分批处理的工作，可在每帧限制处理时间：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">processInFrames</span>&lt;<span class="title">T</span>&gt;(<span class="params">items: T[], handle: (item: T) =&gt; <span class="built_in">void</span></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> index = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">nextFrame</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> deadline = performance.now() + <span class="number">8</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (index &lt; items.length &amp;&amp; performance.now() &lt; deadline) &#123;</span><br><span class="line">      handle(items[index])</span><br><span class="line">      index += <span class="number">1</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (index &lt; items.length) requestAnimationFrame(nextFrame)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  requestAnimationFrame(nextFrame)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h3 id="1-5-预加载关键资源"><a href="#1-5-预加载关键资源" class="headerlink" title="1.5 预加载关键资源"></a>1.5 预加载关键资源</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- preload：当前页面需要的关键资源 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;preload&quot;</span> <span class="attr">href</span>=<span class="string">&quot;font.woff2&quot;</span> <span class="attr">as</span>=<span class="string">&quot;font&quot;</span> <span class="attr">crossorigin</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- prefetch：下一页可能需要的资源 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;prefetch&quot;</span> <span class="attr">href</span>=<span class="string">&quot;next-page.js&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- preconnect：提前建立连接 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;preconnect&quot;</span> <span class="attr">href</span>=<span class="string">&quot;https://api.example.com&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="二、资源优化"><a href="#二、资源优化" class="headerlink" title="二、资源优化"></a>二、资源优化</h2><h3 id="2-1-图片优化"><a href="#2-1-图片优化" class="headerlink" title="2.1 图片优化"></a>2.1 图片优化</h3><p>图片通常是页面<strong>最大的资源</strong>，优化收益最高：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Vite 配置图片压缩</span></span><br><span class="line"><span class="keyword">import</span> viteImagemin <span class="keyword">from</span> <span class="string">&#x27;vite-plugin-imagemin&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  <span class="attr">plugins</span>: [</span><br><span class="line">    viteImagemin(&#123;</span><br><span class="line">      <span class="attr">gifsicle</span>: &#123; <span class="attr">optimizationLevel</span>: <span class="number">7</span> &#125;,</span><br><span class="line">      <span class="attr">optipng</span>: &#123; <span class="attr">optimizationLevel</span>: <span class="number">7</span> &#125;,</span><br><span class="line">      <span class="attr">mozjpeg</span>: &#123; <span class="attr">quality</span>: <span class="number">80</span> &#125;,</span><br><span class="line">      <span class="attr">pngquant</span>: &#123; <span class="attr">quality</span>: [<span class="number">0.8</span>, <span class="number">0.9</span>] &#125;,</span><br><span class="line">      <span class="attr">webp</span>: &#123; <span class="attr">quality</span>: <span class="number">75</span> &#125;,</span><br><span class="line">    &#125;),</span><br><span class="line">  ],</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>图片选型：</strong></p>
-<table>
-<thead>
-<tr>
-<th>格式</th>
-<th>适用场景</th>
-<th>压缩率</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>WebP</td>
-<td>照片、复杂图像</td>
-<td>比 JPEG 小 <strong>25-35%</strong></td>
-</tr>
-<tr>
-<td>AVIF</td>
-<td>下一代格式</td>
-<td>比 WebP 小 <strong>20-30%</strong></td>
-</tr>
-<tr>
-<td>SVG</td>
-<td>图标、Logo</td>
-<td>无损、可缩放</td>
-</tr>
-<tr>
-<td>懒加载图片</td>
-<td>首屏以下图片</td>
-<td>减少首屏加载量</td>
-</tr>
-</tbody></table>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 懒加载：loading=&quot;lazy&quot; 原生支持 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;photo.jpg&quot;</span> <span class="attr">loading</span>=<span class="string">&quot;lazy&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;描述&quot;</span> /&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 响应式图片 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">img</span></span></span><br><span class="line"><span class="tag">  <span class="attr">srcset</span>=<span class="string">&quot;photo-400w.jpg 400w, photo-800w.jpg 800w&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">sizes</span>=<span class="string">&quot;(max-width: 600px) 400px, 800px&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">src</span>=<span class="string">&quot;photo-800w.jpg&quot;</span></span></span><br><span class="line"><span class="tag">/&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="2-2-JavaScript-优化"><a href="#2-2-JavaScript-优化" class="headerlink" title="2.2 JavaScript 优化"></a>2.2 JavaScript 优化</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 代码分割：Vite / Webpack 自动按路由分割</span></span><br><span class="line"><span class="keyword">const</span> routes = [</span><br><span class="line">  &#123; <span class="attr">path</span>: <span class="string">&#x27;/about&#x27;</span>, <span class="attr">component</span>: <span class="function">() =&gt;</span> <span class="keyword">import</span>(<span class="string">&#x27;./views/About.vue&#x27;</span>) &#125;,</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="comment">// 动态导入：按需加载非核心库</span></span><br><span class="line">button.addEventListener(<span class="string">&#x27;click&#x27;</span>, <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> moment = <span class="keyword">await</span> <span class="keyword">import</span>(<span class="string">&#x27;moment&#x27;</span>)</span><br><span class="line">  <span class="built_in">console</span>.log(moment().format())</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-
-<table>
-<thead>
-<tr>
-<th>优化策略</th>
-<th>效果</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Tree Shaking</td>
-<td>移除未使用的代码，减少 20-60%</td>
-</tr>
-<tr>
-<td>代码分割</td>
-<td>首屏只加载必要 JS</td>
-</tr>
-<tr>
-<td>动态导入</td>
-<td>非核心功能延迟加载</td>
-</tr>
-<tr>
-<td>移除 console</td>
-<td>生产环境移除 console.log</td>
-</tr>
-</tbody></table>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Vite 生产环境自动移除 console</span></span><br><span class="line"><span class="comment">// vite.config.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  <span class="attr">esbuild</span>: &#123;</span><br><span class="line">    <span class="attr">drop</span>: process.env.NODE_ENV === <span class="string">&#x27;production&#x27;</span> ? [<span class="string">&#x27;console&#x27;</span>, <span class="string">&#x27;debugger&#x27;</span>] : [],</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-3-CSS-优化"><a href="#2-3-CSS-优化" class="headerlink" title="2.3 CSS 优化"></a>2.3 CSS 优化</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 移除未使用的 CSS（PurgeCSS 自动完成） */</span></span><br><span class="line"><span class="comment">/* 使用后：从 200KB → 15KB */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* 关键 CSS 内联：首屏样式直接写在 HTML 中 */</span></span><br><span class="line">&lt;style&gt;</span><br><span class="line">  <span class="selector-class">.header</span> &#123; <span class="comment">/* 首屏关键样式 */</span> &#125;</span><br><span class="line">  <span class="selector-class">.hero</span> &#123; <span class="comment">/* 首屏关键样式 */</span> &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;link rel=&quot;stylesheet&quot; href=&quot;styles<span class="selector-class">.css</span>&quot; media=&quot;print&quot; onload=&quot;this<span class="selector-class">.media</span>=&#x27;all&#x27;&quot;&gt;</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-4-字体优化"><a href="#2-4-字体优化" class="headerlink" title="2.4 字体优化"></a>2.4 字体优化</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 使用 font-display 控制字体加载行为 */</span></span><br><span class="line"><span class="keyword">@font-face</span> &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: <span class="string">&#x27;CustomFont&#x27;</span>;</span><br><span class="line">  <span class="attribute">src</span>: <span class="built_in">url</span>(<span class="string">&#x27;font.woff2&#x27;</span>) <span class="built_in">format</span>(<span class="string">&#x27;woff2&#x27;</span>);</span><br><span class="line">  <span class="attribute">font-display</span>: swap; <span class="comment">/* 先用系统字体，加载后替换 */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 只加载需要的字符集 */</span></span><br><span class="line"><span class="comment">/* 比如只加载中文常用字，可减少 90%+ 字体体积 */</span></span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="三、渲染性能优化"><a href="#三、渲染性能优化" class="headerlink" title="三、渲染性能优化"></a>三、渲染性能优化</h2><h3 id="3-1-减少重排（Reflow）与重绘（Repaint）"><a href="#3-1-减少重排（Reflow）与重绘（Repaint）" class="headerlink" title="3.1 减少重排（Reflow）与重绘（Repaint）"></a>3.1 减少重排（Reflow）与重绘（Repaint）</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ❌ 每次读取 + 写入都会触发重排</span></span><br><span class="line"><span class="keyword">const</span> height = element.offsetHeight  <span class="comment">// 读取</span></span><br><span class="line">element.style.height = height + <span class="number">10</span> + <span class="string">&#x27;px&#x27;</span>  <span class="comment">// 写入</span></span><br><span class="line">element.style.width = <span class="string">&#x27;100px&#x27;</span>              <span class="comment">// 写入（再次重排）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 使用 requestAnimationFrame 批量写入</span></span><br><span class="line">requestAnimationFrame(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  element.style.height = height + <span class="number">10</span> + <span class="string">&#x27;px&#x27;</span></span><br><span class="line">  element.style.width = <span class="string">&#x27;100px&#x27;</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-
-<p><strong>触发重排的操作：</strong></p>
-<ul>
-<li>读取 <code>offsetHeight</code>、<code>offsetWidth</code>、<code>scrollTop</code>、<code>getComputedStyle</code></li>
-<li>修改 <code>width</code>、<code>height</code>、<code>margin</code>、<code>padding</code>、<code>border</code></li>
-<li><code>display: none</code> 到 <code>display: block</code></li>
+<p>这段代码不适合所有场景。它会延长总处理时间，适用于允许逐步完成的非关键工作。输入、滚动和动画应先减少不必要的状态更新；<code>will-change</code> 只在短暂动画前后使用，长期滥用会增加内存和合成开销。</p>
+<h2 id="把-CLS-当成设计问题排查"><a href="#把-CLS-当成设计问题排查" class="headerlink" title="把 CLS 当成设计问题排查"></a>把 CLS 当成设计问题排查</h2><p>为图片和视频提供尺寸，为异步模块预留空间，避免在用户开始输入后在顶部插入横幅或提示。广告、推荐位和远程配置尤其要有稳定的占位策略。修复 CLS 不是给元素加动画，而是让布局在内容到达前就具有可预测的几何尺寸。</p>
+<h2 id="发布验收"><a href="#发布验收" class="headerlink" title="发布验收"></a>发布验收</h2><ul>
+<li>记录优化前后的现场指标分布和同一设备、网络下的实验室结果。</li>
+<li>在 Network 面板确认关键资源何时被发现、是否被不必要的请求抢占。</li>
+<li>在 Performance 面板定位并减少特定交互附近的长任务，而不是只看总分。</li>
+<li>检查首屏图片、字体和异步模块的尺寸，观察页面加载与交互中的布局位移。</li>
+<li>验证低端移动设备和较差网络，不只在开发机的热缓存下测试。</li>
 </ul>
-<h3 id="3-2-使用虚拟滚动"><a href="#3-2-使用虚拟滚动" class="headerlink" title="3.2 使用虚拟滚动"></a>3.2 使用虚拟滚动</h3><p>当列表有<strong>数千条</strong>数据时，不要一次性渲染所有 DOM：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 大数据列表时，只渲染可视区域 --&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div ref=&quot;container&quot; @scroll=&quot;onScroll&quot; style=&quot;height: 400px; overflow: auto&quot;&gt;</span><br><span class="line">    &lt;div :style=&quot;&#123; height: totalHeight + &#x27;px&#x27; &#125;&quot;&gt;</span><br><span class="line">      &lt;div</span><br><span class="line">        v-for=&quot;item in visibleItems&quot;</span><br><span class="line">        :key=&quot;item.id&quot;</span><br><span class="line">        :style=&quot;&#123; position: &#x27;absolute&#x27;, top: item.top + &#x27;px&#x27; &#125;&quot;</span><br><span class="line">      &gt;</span><br><span class="line">        &#123;&#123; item.name &#125;&#125;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure>
-
-<p>或使用成熟的虚拟滚动库（<code>vue-virtual-scroller</code>、<code>react-window</code>）。</p>
-<h3 id="3-3-动画性能"><a href="#3-3-动画性能" class="headerlink" title="3.3 动画性能"></a>3.3 动画性能</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* ✅ GPU 加速：只使用 transform 和 opacity */</span></span><br><span class="line"><span class="selector-class">.element</span> &#123;</span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">translateX</span>(<span class="number">100px</span>);</span><br><span class="line">  <span class="attribute">opacity</span>: <span class="number">0.5</span>;</span><br><span class="line">  will-change: transform; <span class="comment">/* 提示浏览器优化 */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* ❌ 避免：触发重排的属性 */</span></span><br><span class="line"><span class="selector-class">.element</span> &#123;</span><br><span class="line">  <span class="attribute">left</span>: <span class="number">100px</span>;  <span class="comment">/* 触发重排 */</span></span><br><span class="line">  <span class="attribute">top</span>: <span class="number">50px</span>;    <span class="comment">/* 触发重排 */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-4-事件节流与防抖"><a href="#3-4-事件节流与防抖" class="headerlink" title="3.4 事件节流与防抖"></a>3.4 事件节流与防抖</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 防抖：搜索输入（用户停止输入后才触发）</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">debounce</span>(<span class="params">fn, delay = <span class="number">300</span></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> timer</span><br><span class="line">  <span class="keyword">return</span> <span class="function">(<span class="params">...args</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">clearTimeout</span>(timer)</span><br><span class="line">    timer = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> fn(...args), delay)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 节流：滚动事件（固定频率触发）</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">throttle</span>(<span class="params">fn, interval = <span class="number">100</span></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> last = <span class="number">0</span></span><br><span class="line">  <span class="keyword">return</span> <span class="function">(<span class="params">...args</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> now = <span class="built_in">Date</span>.now()</span><br><span class="line">    <span class="keyword">if</span> (now - last &gt;= interval) &#123;</span><br><span class="line">      last = now</span><br><span class="line">      fn(...args)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">window</span>.addEventListener(<span class="string">&#x27;scroll&#x27;</span>, throttle(handleScroll, <span class="number">100</span>))</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-5-长任务拆分"><a href="#3-5-长任务拆分" class="headerlink" title="3.5 长任务拆分"></a>3.5 长任务拆分</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ❌ 同步任务阻塞主线程 500ms，导致页面卡顿</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">processLargeData</span>(<span class="params">items</span>) </span>&#123;</span><br><span class="line">  items.forEach(<span class="function"><span class="params">item</span> =&gt;</span> heavyComputation(item))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 拆分为微任务，让浏览器有喘息机会</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">processLargeData</span>(<span class="params">items</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> chunkSize = <span class="number">50</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; items.length; i += chunkSize) &#123;</span><br><span class="line">    <span class="keyword">const</span> chunk = items.slice(i, i + chunkSize)</span><br><span class="line">    chunk.forEach(<span class="function"><span class="params">item</span> =&gt;</span> heavyComputation(item))</span><br><span class="line">    <span class="keyword">await</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> <span class="built_in">setTimeout</span>(resolve, <span class="number">0</span>)) <span class="comment">// 让出主线程</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="四、性能监控"><a href="#四、性能监控" class="headerlink" title="四、性能监控"></a>四、性能监控</h2><h3 id="4-1-Core-Web-Vitals"><a href="#4-1-Core-Web-Vitals" class="headerlink" title="4.1 Core Web Vitals"></a>4.1 Core Web Vitals</h3><p>Google 定义的三个核心指标：</p>
-<table>
-<thead>
-<tr>
-<th>指标</th>
-<th>含义</th>
-<th>目标</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>LCP</strong></td>
-<td>最大内容绘制</td>
-<td>≤ 2.5s</td>
-</tr>
-<tr>
-<td><strong>FID</strong></td>
-<td>首次输入延迟</td>
-<td>≤ 100ms</td>
-</tr>
-<tr>
-<td><strong>CLS</strong></td>
-<td>累计布局偏移</td>
-<td>≤ 0.1</td>
-</tr>
-</tbody></table>
-<h3 id="4-2-测量工具"><a href="#4-2-测量工具" class="headerlink" title="4.2 测量工具"></a>4.2 测量工具</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用 Performance API</span></span><br><span class="line"><span class="built_in">window</span>.addEventListener(<span class="string">&#x27;load&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 获取 LCP</span></span><br><span class="line">  <span class="keyword">new</span> PerformanceObserver(<span class="function">(<span class="params">list</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> entries = list.getEntries()</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;LCP:&#x27;</span>, entries[entries.length - <span class="number">1</span>].startTime)</span><br><span class="line">  &#125;).observe(&#123; <span class="attr">type</span>: <span class="string">&#x27;largest-contentful-paint&#x27;</span>, <span class="attr">buffered</span>: <span class="literal">true</span> &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 获取 FID</span></span><br><span class="line">  <span class="keyword">new</span> PerformanceObserver(<span class="function">(<span class="params">list</span>) =&gt;</span> &#123;</span><br><span class="line">    list.getEntries().forEach(<span class="function"><span class="params">entry</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&#x27;FID:&#x27;</span>, entry.processingStart - entry.startTime))</span><br><span class="line">  &#125;).observe(&#123; <span class="attr">type</span>: <span class="string">&#x27;first-input&#x27;</span>, <span class="attr">buffered</span>: <span class="literal">true</span> &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-
-<p><strong>推荐工具：</strong></p>
-<ul>
-<li><strong>Lighthouse</strong>：Chrome 内置审计工具</li>
-<li><strong>WebPageTest</strong>：在线测速工具</li>
-<li><strong>Chrome DevTools Performance</strong>：性能分析面板</li>
-</ul>
-<hr>
-<h2 id="五、优化清单"><a href="#五、优化清单" class="headerlink" title="五、优化清单"></a>五、优化清单</h2><h3 id="快速自查表"><a href="#快速自查表" class="headerlink" title="快速自查表"></a>快速自查表</h3><table>
-<thead>
-<tr>
-<th>类别</th>
-<th>检查项</th>
-<th>优先级</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>🚀 网络</td>
-<td>开启 Gzip/Brotli 压缩</td>
-<td>P0</td>
-</tr>
-<tr>
-<td>🚀 网络</td>
-<td>使用 CDN 分发静态资源</td>
-<td>P0</td>
-</tr>
-<tr>
-<td>🚀 网络</td>
-<td>启用 HTTP/2</td>
-<td>P0</td>
-</tr>
-<tr>
-<td>📦 资源</td>
-<td>图片使用 WebP 格式</td>
-<td>P0</td>
-</tr>
-<tr>
-<td>📦 资源</td>
-<td>图片懒加载（首屏以下）</td>
-<td>P0</td>
-</tr>
-<tr>
-<td>📦 资源</td>
-<td>JS 代码分割 + Tree Shaking</td>
-<td>P1</td>
-</tr>
-<tr>
-<td>📦 资源</td>
-<td>CSS 无用代码清理</td>
-<td>P1</td>
-</tr>
-<tr>
-<td>📦 资源</td>
-<td>关键 CSS 内联</td>
-<td>P1</td>
-</tr>
-<tr>
-<td>🖥 渲染</td>
-<td>长任务拆分</td>
-<td>P1</td>
-</tr>
-<tr>
-<td>🖥 渲染</td>
-<td>虚拟滚动（大数据列表）</td>
-<td>P2</td>
-</tr>
-<tr>
-<td>🖥 渲染</td>
-<td>动画使用 GPU 加速属性</td>
-<td>P2</td>
-</tr>
-<tr>
-<td>🖥 渲染</td>
-<td>事件节流/防抖</td>
-<td>P2</td>
-</tr>
-<tr>
-<td>📊 监控</td>
-<td>Core Web Vitals 达标</td>
-<td>P1</td>
-</tr>
-</tbody></table>
-<hr>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>性能优化不是一次性的工作，而是需要<strong>持续监控和迭代</strong>的过程。核心思路：</p>
-<ol>
-<li><strong>测量 → 优化 → 再测量</strong>（先找到瓶颈）</li>
-<li><strong>优先优化网络层</strong>（收益最大）</li>
-<li><strong>资源加载做懒加载</strong>（减少首屏压力）</li>
-<li><strong>渲染避免重排</strong>（保持 60fps）</li>
-<li><strong>监控 Core Web Vitals</strong>（用数据说话）</li>
-</ol>
-<p><strong>推荐工具：</strong></p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://developer.chrome.com/docs/lighthouse/">Lighthouse</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.webpagetest.org/">WebPageTest</a></li>
-<li><a target="_blank" rel="noopener" href="https://pagespeed.web.dev/">PageSpeed Insights</a></li>
-</ul>
+<p>优化完成后的结果应该能回答“哪条用户路径快了、为什么快了、会不会在下一次发布回退”。这比一份 20 条的万能清单更有用。</p>
+<p><strong>推荐阅读：</strong> <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Performance_API">MDN：Performance API</a></p>
 </div>
     
       <footer class="post-tags" aria-label="文章标签">

