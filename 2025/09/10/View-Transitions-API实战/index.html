@@ -37,7 +37,7 @@
     <header class="post-header">
       <p class="section-label">CSS</p>
       <h1 itemprop="headline">View Transitions API：原生页面过渡动画</h1>
-      <div class="metadata"><span>2025-09-10</span><span>4 分钟阅读</span><span>更新于 2026-08-10</span></div>
+      <div class="metadata"><span>2025-09-10</span><span>4 分钟阅读</span><span>更新于 2026-11-05</span></div>
       <p class="post-lede">View Transitions API 能在 DOM 更新前后生成页面快照，为 SPA 路由提供原生过渡。本文说明降级策略、Vue Router 的正确包裹方式和动画边界。</p>
     </header>
     <div class="prose" itemprop="articleBody"><h2 id="过渡动画包住的是-DOM-更新"><a href="#过渡动画包住的是-DOM-更新" class="headerlink" title="过渡动画包住的是 DOM 更新"></a>过渡动画包住的是 DOM 更新</h2><p>View Transitions API 的流程很直接：浏览器截取旧页面快照，执行一次 DOM 更新，再截取新快照并在两张快照间播放动画。它很适合 SPA 的路由切换和局部布局变化，因为动画不必等每个组件自己协调离场和入场。</p>

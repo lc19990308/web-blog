@@ -37,7 +37,7 @@
     <header class="post-header">
       <p class="section-label">监控</p>
       <h1 itemprop="headline">前端监控与 Sentry：错误追踪与性能监控实战</h1>
-      <div class="metadata"><span>2024-04-10</span><span>4 分钟阅读</span><span>更新于 2026-08-10</span></div>
+      <div class="metadata"><span>2024-04-10</span><span>4 分钟阅读</span><span>更新于 2026-11-05</span></div>
       <p class="post-lede">接入 Sentry 之前，先定义错误、性能和回放数据的采集边界。本文给出 Vue 项目的初始化、Source Map 发布关联、采样和脱敏检查。</p>
     </header>
     <div class="prose" itemprop="articleBody"><h2 id="监控先回答四个问题"><a href="#监控先回答四个问题" class="headerlink" title="监控先回答四个问题"></a>监控先回答四个问题</h2><p>线上报错的价值不在“多收集一些事件”，而在有人能回答：哪个版本开始出错、影响了多少用户、用户当时在什么操作、修复是否已随新版本上线。Sentry 可以把异常、性能事务和会话回放放到同一处，但采集范围必须先定下来。</p>
