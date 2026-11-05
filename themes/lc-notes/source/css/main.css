@@ -275,21 +275,20 @@ h1, h2, h3, h4, p { margin: 0; }
 .research-map svg { width: 100%; height: auto; }
 
 .github-weekly {
-  padding: 4rem 0 4.5rem;
-  border-bottom: 1px solid var(--ink);
+  padding: var(--space-2xl) 0 var(--space-3xl);
+  border-top: 1px solid var(--ink);
 }
 
 .github-weekly__heading {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.58fr);
-  gap: var(--space-3xl);
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-xl);
   align-items: end;
-  margin-bottom: var(--space-xl);
+  margin-bottom: var(--space-lg);
 }
 
 .github-weekly h2 {
-  max-width: 34rem;
-  font-size: 2.25rem;
+  font-size: 2rem;
   font-weight: 760;
   line-height: 1.15;
   text-wrap: balance;
@@ -298,10 +297,12 @@ h1, h2, h3, h4, p { margin: 0; }
 .github-weekly__meta {
   display: grid;
   gap: var(--space-xs);
+  max-width: 31rem;
   color: var(--muted);
   font-family: var(--mono);
   font-size: 0.76rem;
   line-height: 1.65;
+  text-align: right;
 }
 
 .github-weekly__meta a { color: var(--moss); text-decoration: underline; text-underline-offset: 0.18em; }
@@ -316,15 +317,14 @@ h1, h2, h3, h4, p { margin: 0; }
 
 .github-weekly__item {
   display: grid;
-  grid-template-columns: 3.625rem minmax(0, 1fr) minmax(13rem, auto);
-  gap: var(--space-lg);
-  align-items: start;
-  padding: var(--space-md) 0 1.125rem;
+  grid-template-columns: 2.75rem minmax(0, 1fr) auto;
+  gap: var(--space-md);
+  align-items: center;
+  padding: var(--space-md) 0;
   border-bottom: 1px solid var(--line);
 }
 
 .github-weekly__rank {
-  padding-top: 0.2rem;
   color: var(--coral);
   font-family: var(--mono);
   font-size: 0.8rem;
@@ -333,7 +333,8 @@ h1, h2, h3, h4, p { margin: 0; }
 }
 
 .github-weekly__repository h3 {
-  font-size: 1.08rem;
+  overflow-wrap: anywhere;
+  font-size: 1rem;
   font-weight: 730;
   line-height: 1.4;
 }
@@ -342,18 +343,22 @@ h1, h2, h3, h4, p { margin: 0; }
 .github-weekly__repository a:hover { color: var(--coral); }
 
 .github-weekly__repository p {
-  max-width: 60ch;
+  display: -webkit-box;
+  max-width: 68ch;
   margin-top: var(--space-xs);
+  overflow: hidden;
   color: var(--muted);
-  font-size: 0.9rem;
-  line-height: 1.65;
+  font-size: 0.86rem;
+  line-height: 1.55;
   text-wrap: pretty;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
 }
 
 .github-weekly__facts {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(4.75rem, auto));
-  justify-content: end;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
   gap: var(--space-lg);
   min-width: 0;
   margin: 0;
@@ -363,9 +368,10 @@ h1, h2, h3, h4, p { margin: 0; }
   font-variant-numeric: tabular-nums;
 }
 
-.github-weekly__facts > div { min-width: 0; text-align: right; }
-.github-weekly__facts dt { color: var(--muted); }
-.github-weekly__facts dd { margin: 0.25rem 0 0; color: var(--ink); font-weight: 700; overflow-wrap: anywhere; }
+.github-weekly__facts > div { min-width: 0; }
+.github-weekly__facts dd { display: flex; align-items: center; gap: var(--space-2xs); margin: 0; color: var(--ink); font-weight: 700; overflow-wrap: anywhere; }
+.github-weekly__star { color: var(--coral); font-size: 0.72rem; }
+.github-weekly__sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
 .latest {
   display: grid;
@@ -768,16 +774,16 @@ h1, h2, h3, h4, p { margin: 0; }
   .feature { padding: 3rem 0 3.5rem; }
   .feature h2 { font-size: 2.25rem; }
   .research-map { min-height: 0; padding: var(--space-lg); }
-  .github-weekly { padding: 3.25rem 0 3.5rem; }
-  .github-weekly__heading { grid-template-columns: 1fr; gap: var(--space-lg); margin-bottom: var(--space-xl); }
+  .github-weekly { padding: var(--space-2xl) 0 var(--space-3xl); }
+  .github-weekly__heading { grid-template-columns: 1fr; gap: var(--space-xs); margin-bottom: var(--space-lg); }
   .github-weekly h2 { font-size: 1.8rem; }
-  .github-weekly__item { grid-template-columns: 2.5rem minmax(0, 1fr); gap: var(--space-xs) var(--space-md); padding: var(--space-md) 0; }
+  .github-weekly__meta { max-width: none; text-align: left; }
+  .github-weekly__item { grid-template-columns: 2rem minmax(0, 1fr); gap: var(--space-xs) var(--space-md); align-items: start; padding: var(--space-md) 0; }
   .github-weekly__rank { grid-row: 1 / span 2; }
-  .github-weekly__facts { grid-column: 2; grid-row: 1; justify-content: start; gap: var(--space-lg); }
-  .github-weekly__facts > div { text-align: left; }
-  .github-weekly__repository { grid-column: 2; grid-row: 2; }
+  .github-weekly__repository { grid-column: 2; grid-row: 1; }
   .github-weekly__repository h3 { font-size: 1rem; overflow-wrap: anywhere; }
-  .github-weekly__repository p { margin-top: 0.35rem; font-size: 0.88rem; line-height: 1.6; }
+  .github-weekly__repository p { max-width: none; margin-top: var(--space-2xs); font-size: 0.88rem; line-height: 1.6; -webkit-line-clamp: 2; }
+  .github-weekly__facts { grid-column: 2; grid-row: 2; justify-content: start; gap: var(--space-lg); }
   .latest { padding: 3.4rem 0 4.125rem; }
   .latest-heading > p:last-child { max-width: 28rem; }
   .entry { grid-template-columns: 1fr auto; gap: var(--space-xs) var(--space-lg); }

@@ -50,39 +50,6 @@
     </aside>
   </section>
 
-  <% if (hasWeeklyRanking) { %>
-    <section class="shell github-weekly" aria-labelledby="github-weekly-title">
-      <div class="github-weekly__heading">
-        <div>
-          <p class="section-label">GITHUB WEEKLY INDEX</p>
-          <h2 id="github-weekly-title">近 7 日新建高星项目</h2>
-        </div>
-        <div class="github-weekly__meta">
-          <p>观察区间 <time datetime="<%= weeklyPeriod.start %>"><%= weeklyPeriod.start %></time> 至 <time datetime="<%= weeklyPeriod.end %>"><%= weeklyPeriod.end %></time></p>
-          <p>
-            <% if (weeklyGeneratedAt) { %>上次成功同步 <time datetime="<%= githubWeekly.generatedAt %>"><%= weeklyGeneratedAt %></time><% } %>
-            <% if (githubWeekly.sourceUrl) { %><% if (weeklyGeneratedAt) { %><span aria-hidden="true"> / </span><% } %><a href="<%= githubWeekly.sourceUrl %>" target="_blank" rel="noopener noreferrer">数据来源</a><% } %>
-          </p>
-        </div>
-      </div>
-      <ol class="github-weekly__list" aria-label="近 7 日新建高星项目排行榜">
-        <% weeklyRepositories.forEach((repository, index) => { %>
-          <li class="github-weekly__item">
-            <span class="github-weekly__rank" aria-label="第 <%= repository.rank || index + 1 %> 名"><%= String(repository.rank || index + 1).padStart(2, '0') %></span>
-            <div class="github-weekly__repository">
-              <h3><a href="<%= repository.url %>" target="_blank" rel="noopener noreferrer"><%= repository.fullName %></a></h3>
-              <p><%= repository.description %></p>
-            </div>
-            <dl class="github-weekly__facts">
-              <div><dt>Stars</dt><dd><%= formatStars(repository.stars) %></dd></div>
-              <div><dt>语言</dt><dd><%= repository.language || '未标注' %></dd></div>
-            </dl>
-          </li>
-        <% }) %>
-      </ol>
-    </section>
-  <% } %>
-
   <% if (feature) { %>
     <article class="shell feature" aria-labelledby="feature-title">
       <div>
@@ -115,4 +82,43 @@
       <% } %>
     </div>
   </section>
+
+  <% if (hasWeeklyRanking) { %>
+    <section class="shell github-weekly" aria-labelledby="github-weekly-title">
+      <div class="github-weekly__heading">
+        <div>
+          <p class="section-label">GITHUB WEEKLY</p>
+          <h2 id="github-weekly-title">GitHub 项目周榜</h2>
+        </div>
+        <div class="github-weekly__meta" aria-label="榜单数据说明">
+          <p>近 7 日新建 <time datetime="<%= weeklyPeriod.start %>"><%= weeklyPeriod.start %></time> 至 <time datetime="<%= weeklyPeriod.end %>"><%= weeklyPeriod.end %></time></p>
+          <p>
+            <% if (weeklyGeneratedAt) { %>更新 <time datetime="<%= githubWeekly.generatedAt %>"><%= weeklyGeneratedAt %></time><% } %>
+            <% if (githubWeekly.sourceUrl) { %><% if (weeklyGeneratedAt) { %><span aria-hidden="true"> / </span><% } %><a href="<%= githubWeekly.sourceUrl %>" target="_blank" rel="noopener noreferrer">数据来源</a><% } %>
+          </p>
+        </div>
+      </div>
+      <ol class="github-weekly__list" aria-label="近 7 日新建高星项目排行榜">
+        <% weeklyRepositories.forEach((repository, index) => { %>
+          <li class="github-weekly__item">
+            <span class="github-weekly__rank" aria-label="第 <%= repository.rank || index + 1 %> 名"><%= String(repository.rank || index + 1).padStart(2, '0') %></span>
+            <div class="github-weekly__repository">
+              <h3><a href="<%= repository.url %>" target="_blank" rel="noopener noreferrer"><%= repository.fullName %></a></h3>
+              <p title="<%= repository.description || '仓库未提供简介。' %>"><%= repository.description || '仓库未提供简介。' %></p>
+            </div>
+            <dl class="github-weekly__facts">
+              <div>
+                <dt class="github-weekly__sr-only">Stars</dt>
+                <dd><span class="github-weekly__star" aria-hidden="true">★</span><%= formatStars(repository.stars) %></dd>
+              </div>
+              <div>
+                <dt class="github-weekly__sr-only">语言</dt>
+                <dd><%= repository.language || '未标注' %></dd>
+              </div>
+            </dl>
+          </li>
+        <% }) %>
+      </ol>
+    </section>
+  <% } %>
 </main>
