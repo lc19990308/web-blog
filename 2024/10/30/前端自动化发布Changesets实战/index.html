@@ -37,7 +37,7 @@
     <header class="post-header">
       <p class="section-label">工程化</p>
       <h1 itemprop="headline">前端自动化发布：Changesets 与语义化版本</h1>
-      <div class="metadata"><span>2024-10-30</span><span>4 分钟阅读</span><span>更新于 2026-11-05</span></div>
+      <div class="metadata"><span>2024-10-30</span><span>4 分钟阅读</span><span>更新于 2026-11-09</span></div>
       <p class="post-lede">Changesets 把每次用户可见的变更记录在 PR 中，并在主分支生成可审查的版本发布 PR。本文覆盖版本策略、GitHub Actions 和发布验收。</p>
     </header>
     <div class="prose" itemprop="articleBody"><h2 id="版本号不该靠发布当天回忆"><a href="#版本号不该靠发布当天回忆" class="headerlink" title="版本号不该靠发布当天回忆"></a>版本号不该靠发布当天回忆</h2><p>发包时才想“这次该升 minor 还是 patch”，通常已经太晚。变更的作者最清楚 API 是否兼容、功能是否面向用户，因此版本意图应跟着代码一起进入 PR。Changesets 做的正是这件事：每个需要发布的变更都有一份小型 Markdown 记录，主分支再把这些记录汇总成版本和 CHANGELOG。</p>

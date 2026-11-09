@@ -37,7 +37,7 @@
     <header class="post-header">
       <p class="section-label">JavaScript</p>
       <h1 itemprop="headline">前端错误边界与优雅降级：不只是 try/catch</h1>
-      <div class="metadata"><span>2025-10-08</span><span>4 分钟阅读</span><span>更新于 2026-11-05</span></div>
+      <div class="metadata"><span>2025-10-08</span><span>4 分钟阅读</span><span>更新于 2026-11-09</span></div>
       <p class="post-lede">错误上报、组件降级和请求失败不是同一件事。本文用 Vue 的错误捕获、明确的请求状态与资源级回退，建立可恢复、可排查的错误处理路径。</p>
     </header>
     <div class="prose" itemprop="articleBody"><h2 id="先区分“报错”和“恢复”"><a href="#先区分“报错”和“恢复”" class="headerlink" title="先区分“报错”和“恢复”"></a>先区分“报错”和“恢复”</h2><p>用户不该因为一个卡片出错就看到整页空白，但也不能把所有异常都塞给 <code>window.onerror</code> 后假装页面已经恢复。错误处理至少有三类责任：</p>
