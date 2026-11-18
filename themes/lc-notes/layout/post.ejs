@@ -3,19 +3,38 @@
   const categories = page.categories && page.categories.length ? page.categories.toArray() : [];
   const pageToc = toc(page.content, { class: 'toc-list', list_number: false });
 %>
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <%- pageToc || '<p class="toc-empty">本文没有章节目录。</p>' %>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
     <header class="post-header">
-      <p class="section-label"><%= categories[0] ? categories[0].name : 'NOTE' %></p>
+      <p class="section-label"><%= categories[0] ? categories[0].name : '技术笔记' %></p>
       <h1 itemprop="headline"><%= page.title %></h1>
       <div class="metadata"><span><%= date(page.date, 'YYYY-MM-DD') %></span><span><%= Math.max(4, Math.ceil((page.length || 1200) / 450)) %> 分钟阅读</span><% if (page.updated && page.updated.valueOf() !== page.date.valueOf()) { %><span>更新于 <%= date(page.updated, 'YYYY-MM-DD') %></span><% } %></div>
       <% if (page.description) { %><p class="post-lede"><%= page.description %></p><% } %>
     </header>
-    <div class="prose" itemprop="articleBody"><%- page.content %></div>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><%- page.content %></div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     <% if (tags.length) { %>
       <footer class="post-tags" aria-label="文章标签">
         <% tags.forEach((tag) => { %><a href="<%= url_for(tag.path) %>"><%= tag.name %></a><% }) %>
@@ -27,7 +46,7 @@
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <% if (categories.length) { %><div><strong>专题</strong><% categories.forEach((category) => { %><a href="<%= url_for(category.path) %>"><%= category.name %></a><% }) %></div><% } %>
     <% if (tags.length) { %><div><strong>标签</strong><% tags.forEach((tag) => { %><a href="<%= url_for(tag.path) %>"><%= tag.name %></a><% }) %></div><% } %>
   </aside>

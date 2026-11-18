@@ -31,15 +31,15 @@
   const weeklyPeriod = githubWeekly.period || {};
   const weeklyGeneratedAt = formatGeneratedAt(githubWeekly.generatedAt);
 %>
-<main id="top">
+<main id="top" class="magazine-home" data-od-id="blog-home">
   <section class="shell hero" aria-labelledby="site-title">
     <div class="hero-copy">
-      <div class="annotation" aria-hidden="true"></div>
+      <p class="section-label">刘超 · 前端工程与实践</p>
       <h1 id="site-title">前端技术<em>笔记</em></h1>
       <p>把前端工程、AI Agent 与真实项目里的判断写成可复用的研究记录。</p>
     </div>
     <aside class="hero-rail" aria-label="研究方向">
-      <p>RESEARCH INDEX<br />持续更新 / <%= new Date().getFullYear() %></p>
+      <p>专题索引<br />持续更新 / <%= new Date().getFullYear() %></p>
       <div class="topic-list">
         <a href="<%= url_for('categories/#topic-language') %>">语言与类型 <b>01</b></a>
         <a href="<%= url_for('categories/#topic-interface') %>">界面与框架 <b>02</b></a>
@@ -53,7 +53,7 @@
   <% if (feature) { %>
     <article class="shell feature" aria-labelledby="feature-title">
       <div>
-        <p class="section-label">LATEST FIELD NOTE</p>
+        <p class="section-label">最新文章</p>
         <h2 id="feature-title"><a href="<%= url_for(feature.path) %>"><%= feature.title %></a></h2>
         <div class="metadata"><span><%= date(feature.date, 'YYYY-MM-DD') %></span><span><%= categoryName(feature) %></span><span><%= Math.max(4, Math.ceil((feature.length || 1200) / 450)) %> 分钟阅读</span></div>
         <p class="feature-copy"><%= summary(feature) %></p>
@@ -65,7 +65,7 @@
 
   <section class="shell latest" id="latest" aria-labelledby="latest-title">
     <div class="latest-heading">
-      <p class="section-label">ALL NOTES</p>
+      <p class="section-label">阅读笔记</p>
       <h2 id="latest-title">按问题，而不是按热度写。</h2>
       <p>每一篇都从一个真实工程选择、失败记录或可验证的技术问题开始。</p>
     </div>
@@ -87,7 +87,7 @@
     <section class="shell github-weekly" aria-labelledby="github-weekly-title">
       <div class="github-weekly__heading">
         <div>
-          <p class="section-label">GITHUB WEEKLY</p>
+          <p class="section-label">开源观察</p>
           <h2 id="github-weekly-title">GitHub 项目周榜</h2>
         </div>
         <div class="github-weekly__meta" aria-label="榜单数据说明">

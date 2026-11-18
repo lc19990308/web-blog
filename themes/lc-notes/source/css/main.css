@@ -18,7 +18,8 @@
   --space-3xl: 4.5rem;
   --space-4xl: 6rem;
   --sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-  --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --serif: "Songti SC", "Noto Serif CJK SC", "Source Han Serif SC", serif;
+  --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 }
 
 * { box-sizing: border-box; }
@@ -31,6 +32,7 @@ body {
   color: var(--ink);
   background: var(--paper);
   font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
   font-kerning: normal;
   text-rendering: optimizeLegibility;
 }
@@ -64,9 +66,9 @@ input:focus-visible {
 }
 
 .wordmark {
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-weight: 800;
-  letter-spacing: 0.06em;
+  letter-spacing: 0;
 }
 
 .wordmark span { color: var(--coral); }
@@ -74,8 +76,8 @@ input:focus-visible {
 .main-nav {
   display: flex;
   gap: 1.625rem;
-  font-size: 0.9rem;
-  font-weight: 680;
+  font-size: 0.8125rem;
+  font-weight: 650;
 }
 
 .main-nav a {
@@ -180,10 +182,10 @@ h1, h2, h3, h4, p { margin: 0; }
 .hero-rail > p,
 .section-label {
   color: var(--coral);
-  font-family: var(--mono);
-  font-size: 0.75rem;
+  font-family: var(--sans);
+  font-size: 0.6875rem;
   font-weight: 750;
-  letter-spacing: 0.08em;
+  letter-spacing: 0;
   line-height: 1.7;
 }
 
@@ -225,8 +227,8 @@ h1, h2, h3, h4, p { margin: 0; }
   gap: 0.625rem;
   margin: var(--space-lg) 0;
   color: var(--muted);
-  font-family: var(--mono);
-  font-size: 0.76rem;
+  font-family: var(--sans);
+  font-size: 0.75rem;
   line-height: 1.5;
 }
 
@@ -444,6 +446,7 @@ h1, h2, h3, h4, p { margin: 0; }
 .listing-heading { margin-bottom: var(--space-3xl); }
 
 .page-content { max-width: 45rem; }
+.about-page .page-content { max-width: 60rem; min-width: 0; margin-inline: auto; }
 .page-header { margin-bottom: var(--space-3xl); }
 .page-header h1 { font-size: 3.5rem; line-height: 1.1; text-wrap: balance; }
 
@@ -536,9 +539,29 @@ h1, h2, h3, h4, p { margin: 0; }
 .prose .highlight { overflow-x: auto; margin: 2em 0; padding: 1.25rem 1.4rem; color: #edf0f3; background: var(--code); border: 0; }
 .prose pre code,
 .prose .highlight code { padding: 0; color: inherit; background: transparent; font-size: 0.85rem; line-height: 1.7; }
-.prose .highlight table { width: 100%; }
-.prose .gutter { width: 2.25rem; padding-right: 1rem; color: #7f8793; text-align: right; user-select: none; }
+.prose .highlight table { width: auto; min-width: 100%; border-collapse: collapse; }
+/* 正文表格的 td 规则会漏进代码块：清掉边框、内边距和 min-width，长行才能横向滚动 */
+.prose .highlight td { min-width: 0; padding: 0; border: 0; vertical-align: top; }
+/* 内层 pre 的 2em 外边距会叠在图块的 padding 上，代码顶部留白过厚 */
+.prose .highlight td > pre { margin: 0; padding: 0; }
+.prose .highlight .gutter { width: 2.25rem; padding-right: 1.25rem; color: #7f8793; text-align: right; user-select: none; }
+/* 代码 token 配色：Hexo 内置 highlighter 会输出这些类名，主题此前没有对应样式，代码块是单色的 */
+.prose .highlight .comment { color: #7f8793; font-style: italic; }
+.prose .highlight .keyword,
+.prose .highlight .selector-tag { color: #f0826a; }
+.prose .highlight .string { color: #9ecf8f; }
+.prose .highlight .number,
+.prose .highlight .literal { color: #d9b06a; }
+.prose .highlight .title,
+.prose .highlight .built_in { color: #7fb3e0; }
+.prose .highlight .attr { color: #c9a0dc; }
+.prose .highlight .params { color: #c6cbd3; }
+.prose .highlight .meta { color: #8f97a3; }
 .prose img { display: block; max-width: 100%; height: auto; margin: 2em 0; border: 1px solid var(--line); }
+/* 带图注的图片段落（图片 + <br> + 斜体说明）：去掉 <br> 的空行，图注改用弱色小字贴在图下 */
+.prose p:has(> img) > br { display: none; }
+.prose p:has(> img) > img { margin-bottom: 0; }
+.prose p:has(> img) > em { display: block; margin-top: 0.55em; color: var(--muted); font-size: 0.9rem; }
 .prose table { display: block; width: 100%; overflow-x: auto; border-collapse: collapse; font-size: 0.93rem; }
 .prose th,
 .prose td { min-width: 8rem; padding: 0.75rem 0.85rem; border: 1px solid var(--line); text-align: left; vertical-align: top; }
@@ -829,6 +852,143 @@ h1, h2, h3, h4, p { margin: 0; }
   .topic-post strong { grid-column: 1 / -1; grid-row: 2; }
   .topic-post span { grid-column: 2; grid-row: 1; text-align: right; }
   .prose .article-diagram { min-height: 32rem; margin-top: var(--space-xl); }
+}
+
+/* 杂志阅读排版作用于文章页与关于页，其他独立页面保留既有样式。 */
+.magazine-post {
+  width: min(100% - 4rem, 74rem);
+  grid-template-columns: minmax(0, 53.75rem) minmax(0, 11.875rem);
+  justify-content: center;
+  column-gap: clamp(1.5rem, 3vw, 3rem);
+  padding: 3rem 0 5rem;
+}
+.magazine-post .post-content { grid-column: 1; grid-row: 1 / span 2; overflow-wrap: anywhere; }
+.magazine-post .post-toc { grid-column: 2; grid-row: 1; max-height: calc(100vh - 3rem); overflow-y: auto; }
+.magazine-post .post-rail { display: none; }
+.magazine-post .toc-list a { min-height: 2.75rem; padding: 0.5rem 0; font-size: 0.75rem; line-height: 1.65; }
+.magazine-post .toc-list a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 0.25em; }
+.magazine-post .post-header { max-width: none; margin-bottom: 1.75rem; }
+.magazine-post .post-header h1 { font-size: clamp(1.875rem, 3vw, 2.375rem); line-height: 1.4; }
+.magazine-post .post-header .metadata { flex-wrap: wrap; margin-top: 1.75rem; padding: 1rem 0; border-block: 1px solid var(--line); }
+.magazine-post .post-lede { margin-top: 1.125rem; font-size: 1.0625rem; line-height: 1.9; }
+.magazine-post .prose,
+.about-page .prose { max-width: none; color: var(--muted); font-size: 1rem; line-height: 1.95; text-wrap: pretty; }
+.magazine-post .prose > * + *,
+.about-page .prose > * + * { margin-top: 1.125rem; }
+.magazine-post .prose strong,
+.about-page .prose strong { color: var(--ink); font-weight: 700; }
+.magazine-post .prose h2,
+.magazine-post .prose h3,
+.about-page .prose h2,
+.about-page .prose h3 { font-family: var(--serif); line-height: 1.48; }
+.magazine-post .prose h2,
+.about-page .prose h2 { margin-top: 2.75rem; padding-bottom: 0; border-bottom: 0; font-size: 1.6875rem; }
+.magazine-post .prose h3,
+.about-page .prose h3 { margin-top: 1.6875rem; font-size: 1.1875rem; }
+.magazine-post .prose li,
+.about-page .prose li { font-size: 0.9375rem; line-height: 1.85; }
+.magazine-post .prose a:hover { color: var(--ink); text-decoration-color: var(--ink); }
+.magazine-post .prose ul > li::marker { color: var(--coral); content: "▪  "; }
+.magazine-post .prose blockquote,
+.about-page .prose blockquote { padding: 0.3125rem 0 0.3125rem 1.1875rem; color: var(--ink); background: transparent; border: 0; border-left: 3px solid var(--coral); font-family: var(--serif); font-size: 1.0625rem; font-style: normal; line-height: 1.9; }
+.magazine-post .prose > pre,
+.magazine-post .prose .highlight { max-width: 100%; border-radius: 0.375rem; text-wrap: nowrap; }
+.magazine-post .prose pre,
+.magazine-post .prose pre code { font-family: var(--mono); font-size: 0.8125rem; line-height: 1.9; }
+.magazine-post .prose .highlight::before { display: block; margin-bottom: 0.75rem; color: var(--code-muted); font: 0.625rem/1.5 var(--sans); letter-spacing: 0.08em; content: "代码"; }
+.magazine-post .prose .highlight.css::before { content: "CSS"; }
+.magazine-post .prose .highlight.js::before,
+.magazine-post .prose .highlight.javascript::before { content: "JavaScript"; }
+.magazine-post .prose .highlight.html::before { content: "HTML"; }
+.magazine-post .prose .highlight.ts::before,
+.magazine-post .prose .highlight.typescript::before { content: "TypeScript"; }
+.magazine-post .prose .highlight.bash::before,
+.magazine-post .prose .highlight.shell::before { content: "Shell"; }
+.magazine-post .prose .highlight.json::before { content: "JSON"; }
+.magazine-post .prose hr { position: relative; height: 1px; margin: 2.25rem 0; border: 0; background: var(--line); }
+.magazine-post .prose hr::after { position: absolute; top: 50%; left: 50%; width: 0.4375rem; height: 0.4375rem; border: 1px solid var(--coral); background: var(--paper); content: ""; transform: translate(-50%, -50%) rotate(45deg); }
+.article-share { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem; margin-top: 2rem; padding: 1rem 0; border-block: 1px solid var(--line); }
+.article-share p,
+.article-share-status { color: var(--muted); font-size: 0.875rem; line-height: 1.7; }
+.article-share button { min-height: 2.75rem; padding: 0.625rem 1rem; border: 1px solid var(--ink); color: var(--paper); background: var(--ink); font-size: 0.875rem; }
+.article-share button:hover { color: var(--paper); background: oklch(12% 0.01 260); border-color: oklch(12% 0.01 260); }
+.article-share-status:empty { display: none; }
+.article-share-status { flex-basis: 100%; }
+@media (max-width: 760px) {
+  .magazine-post { display: flex; flex-direction: column; width: calc(100% - 2rem); gap: 0; padding: 2rem 0 3rem; }
+  .magazine-post .post-toc { order: -1; width: 100%; max-height: none; margin-bottom: 2rem; }
+  .magazine-post .toc-list { max-height: min(10rem, 30vh); overflow-y: auto; }
+  .magazine-post .post-content { width: 100%; }
+  .magazine-post .post-header h1 { font-size: clamp(1.625rem, 5.5vw, 1.875rem); }
+  .magazine-post .prose,
+  .about-page .prose { font-size: 0.9375rem; }
+  .magazine-post .prose h2,
+  .about-page .prose h2 { font-size: 1.5rem; }
+  .magazine-post .prose h3 { font-size: 1.1875rem; }
+  .magazine-post .prose pre,
+  .magazine-post .prose pre code { font-size: 0.75rem; }
+}
+
+/* 首页沿用设计稿的无衬线主标题与宋体章节标题。 */
+.magazine-home .shell { width: min(100% - 4rem, 68rem); }
+.magazine-home .hero { grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); gap: 4rem; padding: 3rem 0; align-items: start; }
+.magazine-home .hero-copy > .section-label { margin: 0 0 1rem; color: var(--muted); font-size: 0.6875rem; line-height: 1.7; }
+.magazine-home .hero h1 { font-family: var(--sans); font-size: clamp(2.75rem, 5vw, 4rem); font-weight: 780; line-height: 1.25; }
+.magazine-home .hero h1 em { color: var(--ink); }
+.magazine-home .hero-copy > p:not(.section-label) { max-width: 32rem; margin-top: 1.25rem; font-size: 1rem; }
+.magazine-home .hero-rail { gap: 0.75rem; padding-left: 2rem; }
+.magazine-home .hero-rail > p { font-family: var(--sans); letter-spacing: 0; font-size: 0.75rem; }
+.magazine-home .topic-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.25rem 1.5rem; font-size: 0.8125rem; }
+.magazine-home .topic-list a { min-height: 2.75rem; align-items: center; gap: 0.5rem; padding-block: 0.5rem; }
+.magazine-home .topic-list b { color: var(--muted); font-weight: 400; }
+.magazine-home .feature { grid-template-columns: minmax(0, 1.5fr) minmax(0, 0.5fr); align-items: start; gap: 3rem; padding: 3rem 0; }
+.magazine-home .feature > div { min-width: 0; }
+.magazine-home .feature h2 { font-family: var(--sans); font-size: clamp(1.5rem, 2.4vw, 1.875rem); font-weight: 780; line-height: 1.45; overflow-wrap: anywhere; }
+.magazine-home .feature-copy { font-size: 1rem; line-height: 1.95; }
+.magazine-home .research-map { min-height: 0; padding: 1.25rem; }
+.magazine-home .research-map > p { margin-bottom: 1.25rem; }
+.magazine-home .latest { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; padding: 3rem 0 4rem; }
+.magazine-home .latest-heading h2 { font-family: var(--serif); font-size: clamp(1.375rem, 2.4vw, 1.6875rem); line-height: 1.5; }
+.magazine-home .latest-heading > p:last-child { max-width: 42rem; font-size: 0.875rem; line-height: 1.85; }
+.magazine-home .entry { grid-template-columns: 5.5rem minmax(0, 1fr) 5.5rem; gap: 1.25rem; padding: 1.5rem 0; }
+.magazine-home .entry h3 { font-size: 1.125rem; line-height: 1.65; overflow-wrap: anywhere; }
+.magazine-home .entry-category { text-align: right; overflow-wrap: anywhere; }
+.magazine-home .section-label { letter-spacing: 0; }
+.magazine-home .github-weekly h2 { font-family: var(--serif); font-size: 1.6875rem; line-height: 1.5; }
+.magazine-home .github-weekly__meta { font-family: var(--sans); font-size: 0.75rem; }
+.magazine-home .github-weekly__item { align-items: start; padding-block: 1.5rem; }
+.magazine-home .github-weekly__repository { min-width: 0; }
+.magazine-home .github-weekly__repository h3 { font-family: var(--sans); font-size: 1.125rem; font-weight: 700; line-height: 1.65; }
+.magazine-home .github-weekly__repository p { display: block; max-width: none; overflow: visible; overflow-wrap: anywhere; font-size: 1rem; line-height: 1.85; -webkit-line-clamp: unset; }
+.magazine-home .github-weekly__rank,
+.magazine-home .github-weekly__facts { font-family: var(--sans); font-size: 0.8125rem; line-height: 1.85; }
+.magazine-home .github-weekly__facts { flex-wrap: wrap; }
+.magazine-home .text-link { min-height: 2.75rem; align-items: center; margin-top: 1.25rem; }
+.magazine-home .text-link:hover,
+.magazine-home .topic-list a:hover,
+.magazine-home .entry:hover h3 { color: var(--ink); text-decoration: underline; text-underline-offset: 0.25em; }
+@media (min-width: 761px) and (max-width: 900px) {
+  .magazine-home .hero,
+  .magazine-home .feature,
+  .magazine-home .latest { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
+  .magazine-home .hero-rail { padding-left: 0; border-left: 0; }
+  .magazine-home .latest-heading > p:last-child { max-width: 32rem; }
+}
+@media (max-width: 760px) {
+  .magazine-home .shell { width: calc(100% - 2.5rem); }
+  .magazine-home .hero { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; padding: 2.25rem 0; }
+  .magazine-home .hero h1 { font-size: clamp(2.25rem, 9vw, 3rem); }
+  .magazine-home .hero-rail { padding: 1.25rem 0 0; border-left: 0; }
+  .magazine-home .feature { grid-template-columns: minmax(0, 1fr); gap: 1.75rem; padding: 2.25rem 0; }
+  .magazine-home .feature h2 { font-size: 1.5rem; }
+  .magazine-home .latest { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; padding: 2.25rem 0 3rem; }
+  .magazine-home .latest-heading > p:last-child { max-width: none; margin-top: 0.75rem; }
+  .magazine-home .entry { grid-template-columns: minmax(0, 1fr) auto; gap: 0.5rem 1rem; }
+  .magazine-home .entry h3 { grid-column: 1 / -1; grid-row: 2; font-size: 1.0625rem; }
+  .magazine-home .entry-category { grid-column: 2; grid-row: 1; }
+  .magazine-home .github-weekly h2 { font-size: 1.5rem; }
+  .magazine-home .github-weekly__repository h3 { font-size: 1.0625rem; }
+  .magazine-home .github-weekly__repository p { font-size: 0.9375rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

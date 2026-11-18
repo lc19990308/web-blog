@@ -14,7 +14,7 @@
   const aboutYearRange = aboutYears.length ? `${aboutYears[0]} - ${aboutYears[aboutYears.length - 1]}` : '--';
   const aboutTopicCount = Array.isArray(theme.topics) ? theme.topics.length : 0;
 %>
-<main class="shell page-shell">
+<main class="shell page-shell<%= isAboutPage ? ' about-page' : '' %>">
   <article class="page-content" itemscope itemtype="https://schema.org/WebPage">
     <header class="page-header">
       <p class="section-label">PAGE</p>
