@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E7%9B%91%E6%8E%A7%E5%85%88%E5%9B%9E%E7%AD%94%E5%9B%9B%E4%B8%AA%E9%97%AE%E9%A2%98"><span class="toc-list-text">监控先回答四个问题</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#Vue-%E9%A1%B9%E7%9B%AE%E7%9A%84%E6%9C%80%E5%B0%8F%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-list-text">Vue 项目的最小初始化</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#Source-Map-%E8%A6%81%E5%92%8C-Release-%E5%AF%B9%E4%B8%8A"><span class="toc-list-text">Source Map 要和 Release 对上</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E7%94%A8%E6%A0%87%E7%AD%BE%E8%A1%A5%E5%85%85%E4%B8%9A%E5%8A%A1%E8%AF%AD%E5%A2%83"><span class="toc-list-text">用标签补充业务语境</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%8A%E7%BA%BF%E9%AA%8C%E6%94%B6"><span class="toc-list-text">上线验收</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2024-04-10</span><span>4 分钟阅读</span><span>更新于 2026-11-05</span></div>
       <p class="post-lede">接入 Sentry 之前，先定义错误、性能和回放数据的采集边界。本文给出 Vue 项目的初始化、Source Map 发布关联、采样和脱敏检查。</p>
     </header>
-    <div class="prose" itemprop="articleBody"><h2 id="监控先回答四个问题"><a href="#监控先回答四个问题" class="headerlink" title="监控先回答四个问题"></a>监控先回答四个问题</h2><p>线上报错的价值不在“多收集一些事件”，而在有人能回答：哪个版本开始出错、影响了多少用户、用户当时在什么操作、修复是否已随新版本上线。Sentry 可以把异常、性能事务和会话回放放到同一处，但采集范围必须先定下来。</p>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><h2 id="监控先回答四个问题"><a href="#监控先回答四个问题" class="headerlink" title="监控先回答四个问题"></a>监控先回答四个问题</h2><p>线上报错的价值不在“多收集一些事件”，而在有人能回答：哪个版本开始出错、影响了多少用户、用户当时在什么操作、修复是否已随新版本上线。Sentry 可以把异常、性能事务和会话回放放到同一处，但采集范围必须先定下来。</p>
 <p>接入前至少明确四件事：</p>
 <ul>
 <li>错误事件要保留哪些上下文，哪些字段绝不能发送。</li>
@@ -78,6 +78,25 @@
 <p>Sentry 记录的是排障线索，不是业务数据仓库。把版本关联和隐私边界做好，告警才会成为能行动的信息。</p>
 <p><strong>推荐阅读：</strong> <a target="_blank" rel="noopener" href="https://docs.sentry.io/platforms/javascript/guides/vue/">Sentry Vue 文档</a></p>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/%E7%9B%91%E6%8E%A7/">监控</a>
@@ -89,7 +108,7 @@
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/%E7%9B%91%E6%8E%A7/">监控</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/%E7%9B%91%E6%8E%A7/">监控</a></div>
   </aside>

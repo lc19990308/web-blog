@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-list-text">前言</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%80%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AF-BFC"><span class="toc-list-text">一、什么是 BFC</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E7%90%86%E8%A7%A3%E7%A4%BA%E4%BE%8B"><span class="toc-list-text">理解示例</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%8C%E3%80%81%E8%A7%A6%E5%8F%91-BFC-%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="toc-list-text">二、触发 BFC 的方式</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%89%E3%80%81BFC-%E7%9A%84-3-%E4%B8%AA%E6%A0%B8%E5%BF%83%E5%BA%94%E7%94%A8"><span class="toc-list-text">三、BFC 的 3 个核心应用</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-1-%E6%B8%85%E9%99%A4%E6%B5%AE%E5%8A%A8%EF%BC%88%E8%A7%A3%E5%86%B3%E9%AB%98%E5%BA%A6%E5%A1%8C%E9%99%B7%EF%BC%89"><span class="toc-list-text">3.1 清除浮动（解决高度塌陷）</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-2-%E9%98%BB%E6%AD%A2-margin-%E6%8A%98%E5%8F%A0"><span class="toc-list-text">3.2 阻止 margin 折叠</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-3-%E8%87%AA%E9%80%82%E5%BA%94%E4%B8%A4%E6%A0%8F%E5%B8%83%E5%B1%80"><span class="toc-list-text">3.3 自适应两栏布局</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9B%9B%E3%80%81BFC-vs-IFC-vs-FFC"><span class="toc-list-text">四、BFC vs IFC vs FFC</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%94%E3%80%81%E9%9D%A2%E8%AF%95%E5%B8%B8%E9%97%AE"><span class="toc-list-text">五、面试常问</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#Q1%EF%BC%9Aoverflow-hidden-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%83%BD%E6%B8%85%E9%99%A4%E6%B5%AE%E5%8A%A8%EF%BC%9F"><span class="toc-list-text">Q1：overflow: hidden 为什么能清除浮动？</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#Q2%EF%BC%9ABFC-%E5%92%8C-clearfix-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-list-text">Q2：BFC 和 clearfix 有什么区别？</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#Q3%EF%BC%9A%E5%93%AA%E4%BA%9B%E5%B1%9E%E6%80%A7%E4%BC%9A%E8%A7%A6%E5%8F%91-BFC%EF%BC%9F"><span class="toc-list-text">Q3：哪些属性会触发 BFC？</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-list-text">总结</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2022-12-21</span><span>4 分钟阅读</span><span>更新于 2026-06-23</span></div>
       <p class="post-lede">深入理解 CSS 中的 BFC（块级格式化上下文）概念、触发条件、常见应用场景（清除浮动、防止 margin 折叠、自适应两栏布局）</p>
     </header>
-    <div class="prose" itemprop="articleBody"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>BFC（Block Formatting Context，块级格式化上下文）是 CSS 中一个重要的概念。理解 BFC 能帮你解决很多布局问题：<strong>浮动导致的高度塌陷、margin 折叠、自适应两栏布局</strong>等。</p>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>BFC（Block Formatting Context，块级格式化上下文）是 CSS 中一个重要的概念。理解 BFC 能帮你解决很多布局问题：<strong>浮动导致的高度塌陷、margin 折叠、自适应两栏布局</strong>等。</p>
 <hr>
 <h2 id="一、什么是-BFC"><a href="#一、什么是-BFC" class="headerlink" title="一、什么是 BFC"></a>一、什么是 BFC</h2><p>BFC 是 CSS 渲染过程中的一个<strong>独立渲染区域</strong>。内部元素的布局不会影响外部，外部元素也不会影响内部。</p>
 <p>可以把 BFC 想象成一个<strong>盒子</strong>：</p>
@@ -116,6 +116,25 @@
 <li><a target="_blank" rel="noopener" href="https://www.w3.org/TR/CSS22/visuren.html#block-formatting">CSS 规范：BFC</a></li>
 </ul>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/CSS/">CSS</a>
@@ -127,7 +146,7 @@
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/CSS/">CSS</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/CSS/">CSS</a></div>
   </aside>

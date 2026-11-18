@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%85%88%E8%AE%A9%E9%A1%B5%E9%9D%A2%E8%83%BD%E8%A2%AB%E7%90%86%E8%A7%A3%E5%92%8C%E6%93%8D%E4%BD%9C"><span class="toc-list-text">先让页面能被理解和操作</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%8E%9F%E7%94%9F%E6%8E%A7%E4%BB%B6%E4%BC%98%E5%85%88%E4%BA%8E%E6%A8%A1%E6%8B%9F%E6%8E%A7%E4%BB%B6"><span class="toc-list-text">原生控件优先于模拟控件</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E9%94%AE%E7%9B%98%E9%A1%BA%E5%BA%8F%E5%92%8C%E7%84%A6%E7%82%B9%E5%BF%85%E9%A1%BB%E5%8F%AF%E8%A7%81"><span class="toc-list-text">键盘顺序和焦点必须可见</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E8%A1%A8%E5%8D%95%E5%92%8C%E5%8A%A8%E6%80%81%E7%8A%B6%E6%80%81%E8%A6%81%E6%9C%89%E5%90%8D%E7%A7%B0"><span class="toc-list-text">表单和动态状态要有名称</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E9%A2%9C%E8%89%B2%E3%80%81%E5%9B%BE%E5%83%8F%E5%92%8C%E5%AA%92%E4%BD%93%E4%B8%8D%E8%83%BD%E5%8D%95%E7%8B%AC%E6%89%BF%E6%8B%85%E4%BF%A1%E6%81%AF"><span class="toc-list-text">颜色、图像和媒体不能单独承担信息</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E8%87%AA%E5%8A%A8%E6%A3%80%E6%9F%A5%E6%89%BE%E4%B8%8D%E5%88%B0%E5%85%A8%E9%83%A8%E9%97%AE%E9%A2%98"><span class="toc-list-text">自动检查找不到全部问题</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2024-06-20</span><span>4 分钟阅读</span><span>更新于 2026-11-05</span></div>
       <p class="post-lede">可访问性从语义、键盘和焦点开始，而不是堆叠 ARIA 属性。本文覆盖原生控件、动态提示、颜色、媒体与自动化和人工验收的边界。</p>
     </header>
-    <div class="prose" itemprop="articleBody"><h2 id="先让页面能被理解和操作"><a href="#先让页面能被理解和操作" class="headerlink" title="先让页面能被理解和操作"></a>先让页面能被理解和操作</h2><p>可访问性不是在上线前跑一次扫描就结束。它影响键盘用户能否完成操作、屏幕阅读器能否理解页面结构、放大文字后内容会不会丢失，也影响网络慢或资源失败时页面是否仍有意义。</p>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><h2 id="先让页面能被理解和操作"><a href="#先让页面能被理解和操作" class="headerlink" title="先让页面能被理解和操作"></a>先让页面能被理解和操作</h2><p>可访问性不是在上线前跑一次扫描就结束。它影响键盘用户能否完成操作、屏幕阅读器能否理解页面结构、放大文字后内容会不会丢失，也影响网络慢或资源失败时页面是否仍有意义。</p>
 <p>实践时先检查三件事：信息有没有正确语义，所有操作能不能用键盘完成，状态变化是否能被感知。它们往往比给元素添加更多 ARIA 属性更有效。</p>
 <h2 id="原生控件优先于模拟控件"><a href="#原生控件优先于模拟控件" class="headerlink" title="原生控件优先于模拟控件"></a>原生控件优先于模拟控件</h2><p>原生 <code>button</code>、<code>a</code>、<code>input</code> 和 <code>select</code> 已经包含键盘行为、焦点语义与辅助技术支持。用 <code>div</code> 模拟按钮时，不仅要补 <code>role</code>，还要自己处理 Enter、Space、禁用状态、焦点和名称，出错空间很大。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 推荐：行为和语义由浏览器提供 --&gt;</span><br><span class="line">&lt;button type=&quot;button&quot; :disabled=&quot;submitting&quot; @click=&quot;submit&quot;&gt;</span><br><span class="line">  &#123;&#123; submitting ? &#x27;正在提交…&#x27; : &#x27;提交&#x27; &#125;&#125;</span><br><span class="line">&lt;/button&gt;</span><br><span class="line"></span><br><span class="line">&lt;nav aria-label=&quot;主导航&quot;&gt;</span><br><span class="line">  &lt;a href=&quot;/articles&quot;&gt;文章&lt;/a&gt;</span><br><span class="line">&lt;/nav&gt;</span><br></pre></td></tr></table></figure>
@@ -71,6 +71,25 @@
 <p>可访问性最容易在组件刚设计时做好。等到页面堆满 <code>div</code> 和脚本后再补救，成本会高得多。</p>
 <p><strong>推荐阅读：</strong> <a target="_blank" rel="noopener" href="https://www.w3.org/WAI/WCAG22/quickref/">WCAG 2.2 快速参考</a></p>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/CSS/">CSS</a>
@@ -82,7 +101,7 @@
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/CSS/">CSS</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/CSS/">CSS</a></div>
   </aside>

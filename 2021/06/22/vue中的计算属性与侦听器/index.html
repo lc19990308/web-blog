@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-list-text">前言</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%80%E3%80%81computed-%E2%80%94%E2%80%94-%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7"><span class="toc-list-text">一、computed —— 计算属性</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-1-%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95"><span class="toc-list-text">1.1 基本用法</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-2-%E5%B8%A6-getter-setter-%E7%9A%84%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7"><span class="toc-list-text">1.2 带 getter&#x2F;setter 的计算属性</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-3-computed-%E7%9A%84%E7%89%B9%E6%80%A7"><span class="toc-list-text">1.3 computed 的特性</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%8C%E3%80%81watch-%E2%80%94%E2%80%94-%E4%BE%A6%E5%90%AC%E5%99%A8"><span class="toc-list-text">二、watch —— 侦听器</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-1-%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95"><span class="toc-list-text">2.1 基本用法</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-2-%E4%BE%A6%E5%90%AC%E5%A4%9A%E4%B8%AA%E6%95%B0%E6%8D%AE%E6%BA%90"><span class="toc-list-text">2.2 侦听多个数据源</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-3-%E6%B7%B1%E5%BA%A6%E4%BE%A6%E5%90%AC"><span class="toc-list-text">2.3 深度侦听</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-4-%E7%AB%8B%E5%8D%B3%E6%89%A7%E8%A1%8C"><span class="toc-list-text">2.4 立即执行</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%89%E3%80%81computed-vs-watch-%E5%AF%B9%E6%AF%94"><span class="toc-list-text">三、computed vs watch 对比</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-1-%E6%A0%B8%E5%BF%83%E5%8C%BA%E5%88%AB"><span class="toc-list-text">3.1 核心区别</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-2-%E9%80%89%E5%9E%8B%E5%86%B3%E7%AD%96"><span class="toc-list-text">3.2 选型决策</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-3-%E5%AE%9E%E6%88%98%E5%9C%BA%E6%99%AF%E6%BC%94%E7%A4%BA"><span class="toc-list-text">3.3 实战场景演示</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9B%9B%E3%80%81watchEffect-%E2%80%94%E2%80%94-%E8%87%AA%E5%8A%A8%E8%BF%BD%E8%B8%AA"><span class="toc-list-text">四、watchEffect —— 自动追踪</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%94%E3%80%81%E5%B8%B8%E8%A7%81%E5%9D%91%E7%82%B9"><span class="toc-list-text">五、常见坑点</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E5%9D%91-1%EF%BC%9Awatch-%E5%AF%B9%E8%B1%A1%E5%86%85%E9%83%A8%E5%8F%98%E5%8C%96"><span class="toc-list-text">坑 1：watch 对象内部变化</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E5%9D%91-2%EF%BC%9Acomputed-%E4%B8%AD%E4%BF%AE%E6%94%B9%E4%BE%9D%E8%B5%96"><span class="toc-list-text">坑 2：computed 中修改依赖</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E5%9D%91-3%EF%BC%9Awatch-%E4%B8%AD%E4%BF%AE%E6%94%B9%E6%AD%A3%E5%9C%A8%E4%BE%A6%E5%90%AC%E7%9A%84%E6%95%B0%E6%8D%AE"><span class="toc-list-text">坑 3：watch 中修改正在侦听的数据</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-list-text">总结</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2021-06-22</span><span>4 分钟阅读</span><span>更新于 2025-06-23</span></div>
       <p class="post-lede">深入对比 Vue 中 computed 和 watch 的核心差异、适用场景、底层原理，含 Options API 和 Composition API 双版本示例</p>
     </header>
-    <div class="prose" itemprop="articleBody"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><code>computed</code> 和 <code>watch</code> 是 Vue 中处理派生状态的两种方式。新手常困惑：<strong>什么时候用 computed？什么时候用 watch？</strong></p>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><code>computed</code> 和 <code>watch</code> 是 Vue 中处理派生状态的两种方式。新手常困惑：<strong>什么时候用 computed？什么时候用 watch？</strong></p>
 <p>核心原则只有一句话：</p>
 <blockquote>
 <p><strong>computed 用于派生值，watch 用于执行副作用。</strong></p>
@@ -185,6 +185,25 @@
 <li><a target="_blank" rel="noopener" href="https://vuejs.org/guide/essentials/watchers">Vue 3 侦听器</a></li>
 </ul>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/Vue/">Vue</a>
@@ -196,7 +215,7 @@
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/Vue/">Vue</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/Vue/">Vue</a></div>
   </aside>

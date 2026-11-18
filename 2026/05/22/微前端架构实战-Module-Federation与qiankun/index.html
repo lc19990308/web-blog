@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-list-text">前言</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%80%E3%80%81%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%BE%AE%E5%89%8D%E7%AB%AF%EF%BC%9F"><span class="toc-list-text">一、为什么需要微前端？</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-1-%E5%8D%95%E4%BD%93%E5%BA%94%E7%94%A8%E7%9A%84%E7%97%9B%E7%82%B9"><span class="toc-list-text">1.1 单体应用的痛点</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-2-%E5%BE%AE%E5%89%8D%E7%AB%AF%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="toc-list-text">1.2 微前端的优势</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%8C%E3%80%81%E4%B8%BB%E6%B5%81%E6%96%B9%E6%A1%88%E5%AF%B9%E6%AF%94"><span class="toc-list-text">二、主流方案对比</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#iframe-%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-list-text">iframe 的问题</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%89%E3%80%81Module-Federation-%E5%AE%9E%E6%88%98"><span class="toc-list-text">三、Module Federation 实战</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-1-%E4%B8%BB%E5%BA%94%E7%94%A8%E9%85%8D%E7%BD%AE"><span class="toc-list-text">3.1 主应用配置</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-2-%E5%AD%90%E5%BA%94%E7%94%A8%E9%85%8D%E7%BD%AE"><span class="toc-list-text">3.2 子应用配置</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-3-%E5%8A%A0%E8%BD%BD%E8%BF%9C%E7%A8%8B%E7%BB%84%E4%BB%B6"><span class="toc-list-text">3.3 加载远程组件</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9B%9B%E3%80%81qiankun-%E5%AE%9E%E6%88%98"><span class="toc-list-text">四、qiankun 实战</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-1-%E4%B8%BB%E5%BA%94%E7%94%A8"><span class="toc-list-text">4.1 主应用</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-2-%E5%AD%90%E5%BA%94%E7%94%A8%EF%BC%88Vue-3%EF%BC%89"><span class="toc-list-text">4.2 子应用（Vue 3）</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-3-%E5%AD%90%E5%BA%94%E7%94%A8%E7%8B%AC%E7%AB%8B%E8%BF%90%E8%A1%8C%E5%85%BC%E5%AE%B9"><span class="toc-list-text">4.3 子应用独立运行兼容</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%94%E3%80%81%E5%BE%AE%E5%89%8D%E7%AB%AF%E7%9A%84%E9%80%9A%E4%BF%A1"><span class="toc-list-text">五、微前端的通信</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-1-qiankun-%E7%9A%84-props-%E9%80%9A%E4%BF%A1"><span class="toc-list-text">5.1 qiankun 的 props 通信</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-2-%E5%85%A8%E5%B1%80-Event-Bus"><span class="toc-list-text">5.2 全局 Event Bus</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%85%AD%E3%80%81%E5%BE%AE%E5%89%8D%E7%AB%AF%E7%9A%84%E6%8C%91%E6%88%98"><span class="toc-list-text">六、微前端的挑战</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E4%BD%95%E6%97%B6%E4%B8%8D%E6%8E%A8%E8%8D%90%E7%94%A8%E5%BE%AE%E5%89%8D%E7%AB%AF"><span class="toc-list-text">何时不推荐用微前端</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%83%E3%80%81%E8%90%BD%E5%9C%B0%E7%BB%8F%E9%AA%8C"><span class="toc-list-text">七、落地经验</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-list-text">总结</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2026-05-22</span><span>4 分钟阅读</span><span>更新于 2026-06-23</span></div>
       <p class="post-lede">理解微前端的核心概念与技术方案，实战对比 Module Federation、qiankun、single-spa，以及微前端的适用场景与落地经验</p>
     </header>
-    <div class="prose" itemprop="articleBody"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>微前端（Micro Frontends）是将<strong>前端应用拆分为多个独立子应用</strong>，每个子应用可以独立开发、独立部署、独立运行，最终组合成一个完整产品的架构模式。</p>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>微前端（Micro Frontends）是将<strong>前端应用拆分为多个独立子应用</strong>，每个子应用可以独立开发、独立部署、独立运行，最终组合成一个完整产品的架构模式。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">┌────────────────────────────────────────┐</span><br><span class="line">│          主容器（Container）            │</span><br><span class="line">│  ┌──────┐ ┌──────┐ ┌──────┐ ┌──────┐  │</span><br><span class="line">│  │ 导航  │ │ 首页  │ │ 商品  │ │ 用户  │  │</span><br><span class="line">│  │ 子应用│ │ 子应用│ │ 子应用│ │ 子应用│  │</span><br><span class="line">│  └──────┘ └──────┘ └──────┘ └──────┘  │</span><br><span class="line">│       各子应用独立开发/部署/运行         │</span><br><span class="line">└────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
 
 <hr>
@@ -134,6 +134,25 @@
 <li><a target="_blank" rel="noopener" href="https://martinfowler.com/articles/micro-frontends.html">微前端（Micro Frontends）</a></li>
 </ul>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/%E6%9E%B6%E6%9E%84/">架构</a>
@@ -145,7 +164,7 @@
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/%E6%9E%B6%E6%9E%84/">架构</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/%E6%9E%B6%E6%9E%84/">架构</a></div>
   </aside>

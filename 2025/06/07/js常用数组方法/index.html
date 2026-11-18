@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-list-text">前言</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%80%E3%80%81%E9%81%8D%E5%8E%86%E6%96%B9%E6%B3%95"><span class="toc-list-text">一、遍历方法</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-1-forEach-vs-map"><span class="toc-list-text">1.1 forEach vs map</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-2-filter%E2%80%94%E2%80%94%E8%BF%87%E6%BB%A4"><span class="toc-list-text">1.2 filter——过滤</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-3-find-vs-findIndex%E2%80%94%E2%80%94%E6%9F%A5%E6%89%BE"><span class="toc-list-text">1.3 find vs findIndex——查找</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-4-some-vs-every%E2%80%94%E2%80%94%E6%9D%A1%E4%BB%B6%E5%88%A4%E6%96%AD"><span class="toc-list-text">1.4 some vs every——条件判断</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%8C%E3%80%81%E5%A2%9E%E5%88%A0%E6%94%B9%E6%96%B9%E6%B3%95"><span class="toc-list-text">二、增删改方法</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-1-%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95"><span class="toc-list-text">2.1 操作方法</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-2-splice-vs-slice"><span class="toc-list-text">2.2 splice vs slice</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%89%E3%80%81%E8%BD%AC%E6%8D%A2%E6%96%B9%E6%B3%95"><span class="toc-list-text">三、转换方法</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-1-flat-flatMap%E2%80%94%E2%80%94%E6%95%B0%E7%BB%84%E6%89%81%E5%B9%B3%E5%8C%96"><span class="toc-list-text">3.1 flat &#x2F; flatMap——数组扁平化</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-2-join-split"><span class="toc-list-text">3.2 join &#x2F; split</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-3-sort%E2%80%94%E2%80%94%E6%8E%92%E5%BA%8F"><span class="toc-list-text">3.3 sort——排序</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-4-reverse"><span class="toc-list-text">3.4 reverse</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-5-fill%E2%80%94%E2%80%94%E5%A1%AB%E5%85%85"><span class="toc-list-text">3.5 fill——填充</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9B%9B%E3%80%81reduce-%E9%AB%98%E9%98%B6%E5%AE%9E%E6%88%98"><span class="toc-list-text">四、reduce 高阶实战</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-1-%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95"><span class="toc-list-text">4.1 基本用法</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-2-%E5%AE%9E%E7%8E%B0-map-filter"><span class="toc-list-text">4.2 实现 map &#x2F; filter</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-3-%E7%BB%9F%E8%AE%A1%E5%85%83%E7%B4%A0%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0"><span class="toc-list-text">4.3 统计元素出现次数</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-4-%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D"><span class="toc-list-text">4.4 数组去重</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-5-%E8%B4%AD%E7%89%A9%E8%BD%A6%E5%95%86%E5%93%81%E6%B1%87%E6%80%BB"><span class="toc-list-text">4.5 购物车商品汇总</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-6-SKU-%E6%8E%92%E5%88%97%E7%BB%84%E5%90%88%EF%BC%88%E7%BB%8F%E5%85%B8%E5%AE%9E%E6%88%98%EF%BC%89"><span class="toc-list-text">4.6 SKU 排列组合（经典实战）</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-7-%E5%88%86%E7%BB%84"><span class="toc-list-text">4.7 分组</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%94%E3%80%81%E6%96%B9%E6%B3%95%E9%80%9F%E6%9F%A5%E8%A1%A8"><span class="toc-list-text">五、方法速查表</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E6%8C%89%E5%8A%9F%E8%83%BD%E5%88%86%E7%B1%BB"><span class="toc-list-text">按功能分类</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E6%98%AF%E5%90%A6%E6%94%B9%E5%8F%98%E5%8E%9F%E6%95%B0%E7%BB%84"><span class="toc-list-text">是否改变原数组</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-list-text">总结</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2025-06-07</span><span>4 分钟阅读</span><span>更新于 2025-06-22</span></div>
       <p class="post-lede">系统梳理 JS 数组全部常用方法（map/filter/reduce/find/some 等），含 reduce 高阶用法（SKU 计算、分组、去重）</p>
     </header>
-    <div class="prose" itemprop="articleBody"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>数组是 JavaScript 中最常用的数据结构之一。掌握数组方法不仅能写出更简洁的代码，还能提升对函数式编程的理解。</p>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>数组是 JavaScript 中最常用的数据结构之一。掌握数组方法不仅能写出更简洁的代码，还能提升对函数式编程的理解。</p>
 <p>本文<strong>系统梳理全部常用数组方法</strong>，按功能分类对比，并提供 reduce 高阶实战。</p>
 <hr>
 <h2 id="一、遍历方法"><a href="#一、遍历方法" class="headerlink" title="一、遍历方法"></a>一、遍历方法</h2><h3 id="1-1-forEach-vs-map"><a href="#1-1-forEach-vs-map" class="headerlink" title="1.1 forEach vs map"></a>1.1 forEach vs map</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">// forEach：遍历，无返回值（适合有副作用的操作）</span></span><br><span class="line">arr.forEach(<span class="function">(<span class="params">item, index</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(item); <span class="comment">// 适合：操作 DOM、写入外部变量</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// map：遍历并返回新数组（无副作用）</span></span><br><span class="line"><span class="keyword">const</span> doubled = arr.map(<span class="function">(<span class="params">item</span>) =&gt;</span> item * <span class="number">2</span>); <span class="comment">// [2, 4, 6]</span></span><br></pre></td></tr></table></figure>
@@ -313,6 +313,25 @@
 <li><a target="_blank" rel="noopener" href="https://tc39.es/ecma262/">ECMAScript 规范</a></li>
 </ul>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/JavaScript/">JavaScript</a>
@@ -324,7 +343,7 @@
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/JavaScript/">JavaScript</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/JavaScript/">JavaScript</a></div>
   </aside>

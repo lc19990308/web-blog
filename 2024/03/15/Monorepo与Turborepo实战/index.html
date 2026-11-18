@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E5%80%BC%E5%BE%97%E4%BD%BF%E7%94%A8-Monorepo"><span class="toc-list-text">什么时候值得使用 Monorepo</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%85%88%E5%BB%BA%E7%AB%8B%E6%B8%85%E6%A5%9A%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8C%BA%E8%BE%B9%E7%95%8C"><span class="toc-list-text">先建立清楚的工作区边界</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E7%94%A8%E4%BB%BB%E5%8A%A1%E5%9B%BE%E8%A1%A8%E8%BE%BE%E6%9E%84%E5%BB%BA%E9%A1%BA%E5%BA%8F"><span class="toc-list-text">用任务图表达构建顺序</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E5%BA%94%E6%9C%8D%E5%8A%A1%E4%BA%8E%E5%8F%98%E6%9B%B4%E8%8C%83%E5%9B%B4"><span class="toc-list-text">常用命令应服务于变更范围</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E8%BF%81%E7%A7%BB%E6%97%B6%E5%85%88%E5%81%9A%E5%B0%8F%E9%97%AD%E7%8E%AF"><span class="toc-list-text">迁移时先做小闭环</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2024-03-15</span><span>4 分钟阅读</span><span>更新于 2026-08-07</span></div>
       <p class="post-lede">先判断共享代码和发布节奏是否值得放进同一个仓库，再用 pnpm workspace 与 Turborepo 管理任务依赖和缓存。</p>
     </header>
-    <div class="prose" itemprop="articleBody"><p>Monorepo 解决的不是“仓库太多”，而是多个应用需要一起演进时，代码共享、版本联动和构建顺序变得难以维护。</p>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><p>Monorepo 解决的不是“仓库太多”，而是多个应用需要一起演进时，代码共享、版本联动和构建顺序变得难以维护。</p>
 <p>把所有项目塞进一个仓库并不会自动变好。应用没有共享代码、发布节奏彼此独立、权限边界又很强时，多个仓库反而更简单。先判断协作关系，再决定目录结构和工具。</p>
 <h2 id="什么时候值得使用-Monorepo"><a href="#什么时候值得使用-Monorepo" class="headerlink" title="什么时候值得使用 Monorepo"></a>什么时候值得使用 Monorepo</h2><p>下面几种情况通常值得集中管理：</p>
 <ul>
@@ -67,6 +67,25 @@
 <p>如果团队说不清“共享包由谁维护”“破坏性改动怎么发布”“失败任务谁修”，工具配置再漂亮也会变成新的负担。</p>
 <p>参考：<a target="_blank" rel="noopener" href="https://turborepo.com/docs/reference/configuration">Turborepo 配置参考</a> 与 <a target="_blank" rel="noopener" href="https://pnpm.io/workspaces">pnpm Workspace</a>。</p>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/">工程化</a>
@@ -78,7 +97,7 @@
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/%E5%B7%A5%E7%A8%8B%E5%8C%96/">工程化</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/">工程化</a></div>
   </aside>

@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#Vite-%E9%A1%B9%E7%9B%AE%E7%9A%84%E6%9C%80%E5%B0%8F%E6%8E%A5%E5%85%A5"><span class="toc-list-text">Vite 项目的最小接入</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E7%94%A8-theme-%E5%AE%9A%E4%B9%89%E8%AE%BE%E8%AE%A1%E4%BB%A4%E7%89%8C"><span class="toc-list-text">用 @theme 定义设计令牌</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%8F%98%E4%BD%93%E4%B8%8E%E5%B7%A5%E5%85%B7%E7%B1%BB"><span class="toc-list-text">自定义变体与工具类</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%97%A7%E9%85%8D%E7%BD%AE%E4%B8%8D%E5%BF%85%E4%B8%80%E6%AC%A1%E5%88%A0%E9%99%A4"><span class="toc-list-text">旧配置不必一次删除</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%80%E4%B8%AA%E7%A8%B3%E5%A6%A5%E7%9A%84%E8%BF%81%E7%A7%BB%E9%A1%BA%E5%BA%8F"><span class="toc-list-text">一个稳妥的迁移顺序</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2025-05-12</span><span>4 分钟阅读</span><span>更新于 2026-08-07</span></div>
       <p class="post-lede">Tailwind CSS v4 把主题定义移到 CSS，并提供更直接的 Vite 集成。迁移前先识别旧配置与插件依赖，避免为了 CSS-first 丢掉现有能力。</p>
     </header>
-    <div class="prose" itemprop="articleBody"><p>Tailwind CSS v4 的核心变化是 CSS-first：通过 <code>@import</code> 引入框架，用 <code>@theme</code> 定义设计令牌。它并不要求所有项目立刻删除 <code>tailwind.config.js</code>，旧的 JavaScript 配置可以继续通过 <code>@config</code> 显式加载。</p>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><p>Tailwind CSS v4 的核心变化是 CSS-first：通过 <code>@import</code> 引入框架，用 <code>@theme</code> 定义设计令牌。它并不要求所有项目立刻删除 <code>tailwind.config.js</code>，旧的 JavaScript 配置可以继续通过 <code>@config</code> 显式加载。</p>
 <p>迁移的重点不在于换一条安装命令，而在于确认构建工具、主题令牌、第三方插件和动态类名是否仍能被正确处理。先在一个页面或包里完成闭环，再扩大范围。</p>
 <h2 id="Vite-项目的最小接入"><a href="#Vite-项目的最小接入" class="headerlink" title="Vite 项目的最小接入"></a>Vite 项目的最小接入</h2><p>Vite 项目使用官方插件即可，不需要执行旧版的 <code>tailwindcss init</code>：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install tailwindcss @tailwindcss/vite</span><br></pre></td></tr></table></figure>
@@ -75,6 +75,25 @@
 <p>不要把“Rust 引擎”写成某个固定的速度倍数。构建时间取决于项目大小、变更范围、缓存和插件。对自己的项目记录迁移前后的构建数据，才有比较价值。</p>
 <p>参考：<a target="_blank" rel="noopener" href="https://tailwindcss.com/docs/installation/using-vite">Tailwind CSS Vite 安装</a> 与 <a target="_blank" rel="noopener" href="https://tailwindcss.com/docs/upgrade-guide">v4 升级指南</a>。</p>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/CSS/">CSS</a>
@@ -86,7 +105,7 @@
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/CSS/">CSS</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/CSS/">CSS</a></div>
   </aside>

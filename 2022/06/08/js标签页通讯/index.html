@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-list-text">前言</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%80%E3%80%81BroadcastChannel%EF%BC%88%E6%8E%A8%E8%8D%90%EF%BC%89"><span class="toc-list-text">一、BroadcastChannel（推荐）</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-1-%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95"><span class="toc-list-text">1.1 基本用法</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-2-%E5%AE%8C%E6%95%B4%E7%A4%BA%E4%BE%8B"><span class="toc-list-text">1.2 完整示例</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-3-%E6%94%B6%E5%8F%91%E6%B6%88%E6%81%AF"><span class="toc-list-text">1.3 收发消息</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%8C%E3%80%81localStorage-%E6%96%B9%E6%A1%88%EF%BC%88%E5%85%BC%E5%AE%B9%E6%80%A7%E6%9B%B4%E5%A5%BD%EF%BC%89"><span class="toc-list-text">二、localStorage 方案（兼容性更好）</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-list-text">适用场景</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%89%E3%80%81%E5%85%BC%E5%AE%B9%E6%80%A7"><span class="toc-list-text">三、兼容性</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9B%9B%E3%80%81%E5%85%B6%E4%BB%96%E6%96%B9%E6%A1%88"><span class="toc-list-text">四、其他方案</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-1-SharedWorker"><span class="toc-list-text">4.1 SharedWorker</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-2-window-open-postMessage"><span class="toc-list-text">4.2 window.open + postMessage</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-list-text">总结</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2022-06-08</span><span>4 分钟阅读</span><span>更新于 2026-06-23</span></div>
       <p class="post-lede">实现浏览器中多个标签页之间的数据通讯，涵盖 BroadcastChannel、localStorage、SharedWorker 等方案的对比与实战</p>
     </header>
-    <div class="prose" itemprop="articleBody"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在浏览器中，不同标签页（同一域名下）之间有时需要共享数据或状态——比如用户在一个标签页退出登录，其他标签页也同步退出。</p>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在浏览器中，不同标签页（同一域名下）之间有时需要共享数据或状态——比如用户在一个标签页退出登录，其他标签页也同步退出。</p>
 <p>最常见的实现方式有：</p>
 <ul>
 <li><strong>BroadcastChannel</strong>（现代推荐）</li>
@@ -138,6 +138,25 @@
 <li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/storage_event">MDN: Window: storage event</a></li>
 </ul>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/JavaScript/">JavaScript</a>
@@ -149,7 +168,7 @@
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/JavaScript/">JavaScript</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/JavaScript/">JavaScript</a></div>
   </aside>

@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BB%8E%E9%A3%8E%E9%99%A9%E8%80%8C%E4%B8%8D%E6%98%AF%E8%A6%86%E7%9B%96%E7%8E%87%E5%BC%80%E5%A7%8B"><span class="toc-list-text">从风险而不是覆盖率开始</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E7%94%A8-Vitest-%E4%BF%9D%E6%8A%A4%E4%B8%9A%E5%8A%A1%E8%A7%84%E5%88%99"><span class="toc-list-text">用 Vitest 保护业务规则</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E7%BB%84%E4%BB%B6%E6%B5%8B%E8%AF%95%E6%96%AD%E8%A8%80%E5%8F%AF%E8%A7%81%E8%A1%8C%E4%B8%BA"><span class="toc-list-text">组件测试断言可见行为</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E7%94%A8-Playwright-%E9%AA%8C%E8%AF%81%E4%B8%80%E6%9D%A1%E7%9C%9F%E5%AE%9E%E6%B5%81%E7%A8%8B"><span class="toc-list-text">用 Playwright 验证一条真实流程</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%8A%8A%E6%9C%AC%E5%9C%B0%E5%92%8C-CI-%E7%9A%84%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83%E5%9B%BA%E5%AE%9A%E4%B8%8B%E6%9D%A5"><span class="toc-list-text">把本地和 CI 的运行环境固定下来</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%8D%E8%A6%81%E7%94%A8%E6%95%B0%E5%AD%97%E4%BB%A3%E6%9B%BF%E5%88%A4%E6%96%AD"><span class="toc-list-text">不要用数字代替判断</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2026-04-12</span><span>4 分钟阅读</span><span>更新于 2026-11-05</span></div>
       <p class="post-lede">测试的价值在于给高风险改动提供快速、可信的反馈。本文用 Vitest 覆盖确定性逻辑，用 Playwright 验证关键用户流程，并说明 Mock 与真实依赖的边界。</p>
     </header>
-    <div class="prose" itemprop="articleBody"><h2 id="从风险而不是覆盖率开始"><a href="#从风险而不是覆盖率开始" class="headerlink" title="从风险而不是覆盖率开始"></a>从风险而不是覆盖率开始</h2><p>测试不是把每个函数都测一遍。登录、支付、权限切换、数据提交和不可逆操作的失败成本高，应该优先获得稳定的自动化保护；一个简单的展示组件可能只需要少量组件测试，甚至不值得单独写测试。</p>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><h2 id="从风险而不是覆盖率开始"><a href="#从风险而不是覆盖率开始" class="headerlink" title="从风险而不是覆盖率开始"></a>从风险而不是覆盖率开始</h2><p>测试不是把每个函数都测一遍。登录、支付、权限切换、数据提交和不可逆操作的失败成本高，应该优先获得稳定的自动化保护；一个简单的展示组件可能只需要少量组件测试，甚至不值得单独写测试。</p>
 <p>“70% 单元测试、20% 组件测试、10% E2E”不是通用配方。团队应根据改动速度、业务风险和环境成本选择组合。最重要的是：测试能在行为被破坏时失败，又不会因为内部重构频繁误报。</p>
 <p>Vitest 适合快速验证确定性逻辑和组件行为，Playwright 适合从浏览器视角验证跨页面的关键流程。两者不需要互相替代。</p>
 <h2 id="用-Vitest-保护业务规则"><a href="#用-Vitest-保护业务规则" class="headerlink" title="用 Vitest 保护业务规则"></a>用 Vitest 保护业务规则</h2><p>先测试输入与输出明确、没有浏览器环境依赖的逻辑。下面的请求封装明确了成功和非成功响应，测试也覆盖这两条行为，而不是断言内部变量。</p>
@@ -70,6 +70,25 @@
 <p>当测试回答这些问题，它才是重构时可以依靠的反馈，而不是 CI 里的一个绿色图标。</p>
 <p><strong>推荐阅读：</strong> <a target="_blank" rel="noopener" href="https://vitest.dev/guide/">Vitest 指南</a> 与 <a target="_blank" rel="noopener" href="https://playwright.dev/docs/intro">Playwright 入门文档</a></p>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/%E6%B5%8B%E8%AF%95/">测试</a>
@@ -81,7 +100,7 @@
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/%E6%B5%8B%E8%AF%95/">测试</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/%E6%B5%8B%E8%AF%95/">测试</a></div>
   </aside>

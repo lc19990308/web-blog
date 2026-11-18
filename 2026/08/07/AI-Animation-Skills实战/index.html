@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%AE%83%E5%AE%9E%E9%99%85%E6%8F%90%E4%BE%9B%E4%BA%86%E4%BB%80%E4%B9%88"><span class="toc-list-text">它实际提供了什么</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%AE%89%E8%A3%85%E6%96%B9%E5%BC%8F"><span class="toc-list-text">安装方式</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E7%94%A8-ppt-animation-%E5%81%9A%E4%B8%80%E6%AC%A1%E6%8A%80%E6%9C%AF%E6%BC%94%E7%A4%BA"><span class="toc-list-text">用 ppt-animation 做一次技术演示</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E7%94%9F%E6%88%90%E5%90%8E%EF%BC%8C%E4%B8%8D%E8%A6%81%E5%8F%AA%E7%9C%8B%E6%88%AA%E5%9B%BE"><span class="toc-list-text">生成后，不要只看截图</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%AE%83%E7%9A%84%E8%BE%B9%E7%95%8C%E5%9C%A8%E5%93%AA%E9%87%8C"><span class="toc-list-text">它的边界在哪里</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2026-08-07</span><span>4 分钟阅读</span><span>更新于 2026-08-07</span></div>
       <p class="post-lede">用 AI_Animation 的 ppt-animation Skill 把技术提纲做成单文件 HTML 演示：安装、提示词、验证方式，以及它适合和不适合解决的问题。</p>
     </header>
-    <div class="prose" itemprop="articleBody"><p>我原本以为，给一次技术分享准备材料，最自然的起点是新建一个 PPT。后来发现真正花时间的不是写提纲，而是把每一页的层级、图示和翻页节奏整理到能录屏的程度。</p>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><p>我原本以为，给一次技术分享准备材料，最自然的起点是新建一个 PPT。后来发现真正花时间的不是写提纲，而是把每一页的层级、图示和翻页节奏整理到能录屏的程度。</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/Unclecheng-li/AI_Animation">AI_Animation</a> 处理的是这一步。它不是一个要在业务项目里 <code>import</code> 的动画库，而是一组给 AI 编程代理用的 Skill。把主题、受众和演示节奏说清楚后，Agent 生成一个可独立打开的 HTML 文件。页面内的图形、样式和交互都在这个文件里，适合技术讲解、课程录屏和内部分享。</p>
 <p>这篇文章用仓库里的 <code>ppt-animation</code> 作为例子。下面的演示就是按这个方式做出的成品，可以用键盘方向键、鼠标滚轮、点击左右区域翻页。</p>
 <iframe class="article-diagram" src="/web-blog/demos/ai-animation-ppt-workflow.html" title="从技术提纲到 HTML 动画演示的交互示例" loading="lazy"></iframe>
@@ -109,6 +109,25 @@
 <p>另一个边界是事实。Agent 可以画一张很顺眼的协议流程图，却不能替你证明时序正确；它也能排出一页漂亮的架构图，却不会自动知道服务之间真正的依赖。把生成结果当成第一版，再按资料或代码核对，才是可靠的使用方式。</p>
 <p>项目采用 <a target="_blank" rel="noopener" href="https://github.com/Unclecheng-li/AI_Animation/blob/master/LICENSE">MIT 许可证</a>。完整说明、预览和各个 Skill 的适用范围可以直接查看 <a target="_blank" rel="noopener" href="https://github.com/Unclecheng-li/AI_Animation">AI_Animation README</a>。</p>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/AI/">AI</a><a href="/web-blog/tags/Skill/">Skill</a><a href="/web-blog/tags/Codex/">Codex</a><a href="/web-blog/tags/HTML-%E5%8A%A8%E7%94%BB/">HTML 动画</a>
@@ -120,7 +139,7 @@
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/AI/">AI</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/AI/">AI</a><a href="/web-blog/tags/Skill/">Skill</a><a href="/web-blog/tags/Codex/">Codex</a><a href="/web-blog/tags/HTML-%E5%8A%A8%E7%94%BB/">HTML 动画</a></div>
   </aside>

@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-list-text">前言</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%80%E3%80%81typeof-%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="toc-list-text">一、typeof 操作符</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-1-%E4%B8%BA%E4%BB%80%E4%B9%88-typeof-null-%E2%80%98object%E2%80%99%EF%BC%9F"><span class="toc-list-text">1.1 为什么 typeof null &#x3D;&#x3D;&#x3D; ‘object’？</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%8C%E3%80%81undefined-vs-null"><span class="toc-list-text">二、undefined vs null</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-1-%E8%AF%AD%E4%B9%89%E5%8C%BA%E5%88%AB"><span class="toc-list-text">2.1 语义区别</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-2-%E5%B8%B8%E8%A7%81%E4%BA%A7%E7%94%9F-undefined-%E7%9A%84%E5%9C%BA%E6%99%AF"><span class="toc-list-text">2.2 常见产生 undefined 的场景</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-3-%E4%BD%BF%E7%94%A8%E5%BB%BA%E8%AE%AE"><span class="toc-list-text">2.3 使用建议</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%89%E3%80%81boolean"><span class="toc-list-text">三、boolean</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-1-%E5%81%87%E5%80%BC%EF%BC%88Falsy-Values%EF%BC%89"><span class="toc-list-text">3.1 假值（Falsy Values）</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-2-%E5%B8%B8%E8%A7%81%E7%9A%84%E7%9C%9F%E5%80%BC%E9%99%B7%E9%98%B1"><span class="toc-list-text">3.2 常见的真值陷阱</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9B%9B%E3%80%81number"><span class="toc-list-text">四、number</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-1-JavaScript-%E5%8F%AA%E6%9C%89%E4%B8%80%E7%A7%8D%E6%95%B0%E5%AD%97%E7%B1%BB%E5%9E%8B"><span class="toc-list-text">4.1 JavaScript 只有一种数字类型</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-2-%E6%B5%AE%E7%82%B9%E6%95%B0%E7%B2%BE%E5%BA%A6%E9%97%AE%E9%A2%98"><span class="toc-list-text">4.2 浮点数精度问题</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-3-NaN"><span class="toc-list-text">4.3 NaN</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-4-%E9%9B%B6%E7%9A%84%E4%B8%A4%E7%A7%8D%E5%BD%A2%E6%80%81"><span class="toc-list-text">4.4 零的两种形态</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%94%E3%80%81string"><span class="toc-list-text">五、string</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-1-%E4%B8%8D%E5%8F%AF%E5%8F%98%E6%80%A7"><span class="toc-list-text">5.1 不可变性</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-2-%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%8E%E5%AD%97%E7%AC%A6%E6%95%B0%E7%BB%84"><span class="toc-list-text">5.2 字符串与字符数组</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-3-%E7%89%B9%E6%AE%8A%E5%AD%97%E7%AC%A6"><span class="toc-list-text">5.3 特殊字符</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%85%AD%E3%80%81symbol"><span class="toc-list-text">六、symbol</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%83%E3%80%81Object%EF%BC%88%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B%EF%BC%89"><span class="toc-list-text">七、Object（引用类型）</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#7-1-%E5%8E%9F%E5%A7%8B%E7%B1%BB%E5%9E%8B-vs-%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B"><span class="toc-list-text">7.1 原始类型 vs 引用类型</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#7-2-%E5%8C%85%E8%A3%85%E5%AF%B9%E8%B1%A1"><span class="toc-list-text">7.2 包装对象</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%85%AB%E3%80%81%E7%B1%BB%E5%9E%8B%E5%88%A4%E6%96%AD%E7%BB%BC%E5%90%88"><span class="toc-list-text">八、类型判断综合</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-list-text">总结</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2026-06-26</span><span>4 分钟阅读</span><span>更新于 2026-06-25</span></div>
       <p class="post-lede">JavaScript 有七种内置类型：null、undefined、boolean、number、string、object、symbol。深入解析每种类型的本质、边界情况和常见误区</p>
     </header>
-    <div class="prose" itemprop="articleBody"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>JavaScript 的类型系统经常被评价为”有坑”。但实际上，理解这些”坑”背后的原则后，一切都是可预测的。</p>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>JavaScript 的类型系统经常被评价为”有坑”。但实际上，理解这些”坑”背后的原则后，一切都是可预测的。</p>
 <p>JavaScript 有 <strong>7 种内置类型</strong>（ES2020 新增 BigInt 后为 8 种）：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">原始类型（Primitive）：undefined, null, boolean, number, string, symbol, bigint</span><br><span class="line">引用类型（Object）：object（包括 array, function, date, regexp 等）</span><br></pre></td></tr></table></figure>
 
@@ -163,18 +163,37 @@
 <p>下一篇将深入研究<strong>值</strong>——数组、字符串、数字的特殊行为。</p>
 </blockquote>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/JavaScript/">JavaScript</a><a href="/web-blog/tags/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/">你不知道的javascript</a>
       </footer>
     
     <nav class="post-navigation" aria-label="文章导航">
-      <a href="/web-blog/2026/06/26/posts/ydkjs-09-behavior-delegation/"><span>上一篇</span><b>你不知道的JavaScript（九）：行为委托——比&#34;类继承&#34;更 JavaScript 的方式</b></a>
-      <a class="next" href="/web-blog/2026/06/26/posts/ydkjs-13-coercion/"><span>下一篇</span><b>你不知道的JavaScript（十三）：强制类型转换（Coercion）——隐式与显式的完整解析</b></a>
+      <a href="/web-blog/2026/06/26/posts/ydkjs-11-values-array-string-number/"><span>上一篇</span><b>你不知道的JavaScript（十一）：值的底层机制——数组、字符串、数字的特殊行为</b></a>
+      <a class="next" href="/web-blog/2026/06/26/posts/ydkjs-12-native-functions/"><span>下一篇</span><b>你不知道的JavaScript（十二）：原生函数——String、Number、Boolean、Array、Object 的内幕</b></a>
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/">你不知道的javascript</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/JavaScript/">JavaScript</a><a href="/web-blog/tags/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/">你不知道的javascript</a></div>
   </aside>

@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#WebRTC-%E4%B8%8D%E6%98%AF%E2%80%9C%E5%BB%BA%E8%BF%9E%E6%8E%A5%E5%B0%B1%E8%83%BD%E7%9B%B4%E8%BF%9E%E2%80%9D"><span class="toc-list-text">WebRTC 不是“建连接就能直连”</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%85%88%E6%8B%BF%E5%88%B0%E6%9C%AC%E5%9C%B0%E5%AA%92%E4%BD%93"><span class="toc-list-text">先拿到本地媒体</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%88%9B%E5%BB%BA%E8%BF%9E%E6%8E%A5%E5%B9%B6%E5%87%86%E5%A4%87-STUN-TURN"><span class="toc-list-text">创建连接并准备 STUN&#x2F;TURN</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BF%A1%E4%BB%A4%E5%8F%AA%E4%BC%A0%E5%8D%8F%E5%95%86%E4%BF%A1%E6%81%AF"><span class="toc-list-text">信令只传协商信息</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%85%88%E5%81%9A%E4%B8%80%E5%AF%B9%E4%B8%80%EF%BC%8C%E5%86%8D%E8%80%83%E8%99%91%E5%A4%9A%E4%BA%BA"><span class="toc-list-text">先做一对一，再考虑多人</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%B5%8B%E8%AF%95%E6%B8%85%E5%8D%95"><span class="toc-list-text">测试清单</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2024-08-08</span><span>4 分钟阅读</span><span>更新于 2026-11-05</span></div>
       <p class="post-lede">WebRTC 能在浏览器中传输音视频和数据，但生产环境还需要信令、STUN/TURN、权限与网络失败处理。本文从一条可落地的通话链路讲起。</p>
     </header>
-    <div class="prose" itemprop="articleBody"><h2 id="WebRTC-不是“建连接就能直连”"><a href="#WebRTC-不是“建连接就能直连”" class="headerlink" title="WebRTC 不是“建连接就能直连”"></a>WebRTC 不是“建连接就能直连”</h2><p>WebRTC 提供浏览器里的媒体采集、编解码和实时传输能力。视频通话、屏幕共享和数据通道都可以用它实现，但它不负责让两个用户找到彼此，也不能保证两个网络之间总能直连。</p>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><h2 id="WebRTC-不是“建连接就能直连”"><a href="#WebRTC-不是“建连接就能直连”" class="headerlink" title="WebRTC 不是“建连接就能直连”"></a>WebRTC 不是“建连接就能直连”</h2><p>WebRTC 提供浏览器里的媒体采集、编解码和实时传输能力。视频通话、屏幕共享和数据通道都可以用它实现，但它不负责让两个用户找到彼此，也不能保证两个网络之间总能直连。</p>
 <p>一次真实通话至少有四个角色：</p>
 <ul>
 <li>浏览器通过 HTTPS 和用户授权取得摄像头或屏幕流。</li>
@@ -76,6 +76,25 @@
 </ul>
 <p><strong>推荐阅读：</strong> <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Connectivity">MDN：WebRTC 连接建立</a></p>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/">网络协议</a>
@@ -87,7 +106,7 @@
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/">网络协议</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/">网络协议</a></div>
   </aside>

@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-list-text">前言</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%80%E3%80%81ESBuild"><span class="toc-list-text">一、ESBuild</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-1-%E7%AE%80%E4%BB%8B"><span class="toc-list-text">1.1 简介</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-2-%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8"><span class="toc-list-text">1.2 基础使用</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-3-%E6%80%A7%E8%83%BD%E5%AF%B9%E6%AF%94"><span class="toc-list-text">1.3 性能对比</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-4-%E5%85%B8%E5%9E%8B%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-list-text">1.4 典型应用场景</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%8C%E3%80%81SWC"><span class="toc-list-text">二、SWC</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-1-%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8"><span class="toc-list-text">2.1 基础使用</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-2-SWC-vs-Babel"><span class="toc-list-text">2.2 SWC vs Babel</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-3-%E5%9C%A8-Webpack-Vite-%E4%B8%AD%E4%BD%BF%E7%94%A8"><span class="toc-list-text">2.3 在 Webpack&#x2F;Vite 中使用</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-4-SWC-%E7%94%9F%E6%80%81"><span class="toc-list-text">2.4 SWC 生态</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%89%E3%80%81Bun"><span class="toc-list-text">三、Bun</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-1-%E5%AE%89%E8%A3%85"><span class="toc-list-text">3.1 安装</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-2-%E6%A0%B8%E5%BF%83%E8%83%BD%E5%8A%9B"><span class="toc-list-text">3.2 核心能力</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-3-%E6%80%A7%E8%83%BD%E5%AF%B9%E6%AF%94"><span class="toc-list-text">3.3 性能对比</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-4-Bun-%E7%9A%84%E8%BD%AC%E8%AF%91%E8%83%BD%E5%8A%9B"><span class="toc-list-text">3.4 Bun 的转译能力</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-5-%E5%B1%80%E9%99%90%E6%80%A7"><span class="toc-list-text">3.5 局限性</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9B%9B%E3%80%81Rolldown"><span class="toc-list-text">四、Rolldown</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-1-%E8%AE%BE%E8%AE%A1%E7%9B%AE%E6%A0%87"><span class="toc-list-text">4.1 设计目标</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-2-%E7%8A%B6%E6%80%81"><span class="toc-list-text">4.2 状态</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%94%E3%80%81Lightning-CSS"><span class="toc-list-text">五、Lightning CSS</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-1-%E7%AE%80%E4%BB%8B"><span class="toc-list-text">5.1 简介</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-2-%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8"><span class="toc-list-text">5.2 基础使用</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-3-Vite-%E9%9B%86%E6%88%90"><span class="toc-list-text">5.3 Vite 集成</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-4-%E6%80%A7%E8%83%BD%E5%AF%B9%E6%AF%94"><span class="toc-list-text">5.4 性能对比</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%85%AD%E3%80%81%E6%80%A7%E8%83%BD%E5%88%86%E7%BA%A7%E6%A8%AA%E8%AF%84"><span class="toc-list-text">六、性能分级横评</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%83%E3%80%81%E9%80%89%E5%9E%8B%E5%BB%BA%E8%AE%AE"><span class="toc-list-text">七、选型建议</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#7-1-%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E7%94%A8%EF%BC%9F"><span class="toc-list-text">7.1 什么时候用？</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#7-2-%E5%AE%9E%E9%99%85%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AE%E5%8F%82%E8%80%83"><span class="toc-list-text">7.2 实际项目配置参考</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%85%AB%E3%80%81%E5%B1%80%E9%99%90%E6%80%A7%E4%B8%8E%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-list-text">八、局限性与注意事项</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-list-text">总结</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2026-06-25</span><span>4 分钟阅读</span><span>更新于 2026-06-25</span></div>
       <p class="post-lede">深入解析新一代基于 Rust/Go 的构建工具：ESBuild、SWC、Bun、Rolldown、Lightning CSS。对比它们在编译、打包、转译等场景的性能与适用边界</p>
     </header>
-    <div class="prose" itemprop="articleBody"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>传统的前端构建工具（Babel、Terser、PostCSS）是用 JavaScript 写的。随着项目规模增长，JS 构建工具的瓶颈越来越明显 —— <strong>单线程 + 解释执行</strong>的处理能力有限。</p>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>传统的前端构建工具（Babel、Terser、PostCSS）是用 JavaScript 写的。随着项目规模增长，JS 构建工具的瓶颈越来越明显 —— <strong>单线程 + 解释执行</strong>的处理能力有限。</p>
 <p>新一代构建工具用 <strong>Rust / Go / Zig</strong> 编写，充分利用多核 CPU 和原生性能：</p>
 <table>
 <thead>
@@ -286,18 +286,37 @@
 <p>核心趋势：<strong>构建工具正在从 JS 迁移到 Rust/Go</strong>。但这不是零成本的——JS 工具的灵活性、丰富的插件生态和易调试性仍然是 Rust/Go 工具短期内无法完全替代的优势。推荐的策略是”混合使用”——新项目首选 Rust/Go 原生工具，老项目在关键瓶颈处逐步替换。</p>
 </blockquote>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/">工程化</a>
       </footer>
     
     <nav class="post-navigation" aria-label="文章导航">
-      <a href="/web-blog/2026/06/25/service-worker-pwa-guide/"><span>上一篇</span><b>Service Worker 与 PWA 完整实战：从离线缓存到推送通知</b></a>
-      <a class="next" href="/web-blog/2026/06/25/typescript-advanced-generics-utility-types/"><span>下一篇</span><b>TypeScript 进阶：泛型、工具类型与实用模式</b></a>
+      <a href="/web-blog/2026/06/25/eslint-prettier-setup-guide/"><span>上一篇</span><b>ESLint + Prettier 工程化配置：从入门到团队规范</b></a>
+      <a class="next" href="/web-blog/2026/06/25/service-worker-pwa-guide/"><span>下一篇</span><b>Service Worker 与 PWA 完整实战：从离线缓存到推送通知</b></a>
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/%E5%B7%A5%E7%A8%8B%E5%8C%96/">工程化</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/">工程化</a></div>
   </aside>

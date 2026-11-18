@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%BB%BA%E7%AB%8B%E6%9C%80%E5%B0%8F%E9%85%8D%E7%BD%AE"><span class="toc-list-text">建立最小配置</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%91%BD%E4%BB%A4%E5%88%86%E6%B8%85%E6%A3%80%E6%9F%A5%E4%B8%8E%E4%BF%AE%E5%A4%8D"><span class="toc-list-text">命令分清检查与修复</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BB%8E-ESLint-%E5%92%8C-Prettier-%E8%BF%81%E7%A7%BB"><span class="toc-list-text">从 ESLint 和 Prettier 迁移</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E8%AE%A9%E7%BC%96%E8%BE%91%E5%99%A8%E5%8F%AA%E5%81%9A%E4%B8%80%E4%BB%B6%E4%BA%8B"><span class="toc-list-text">让编辑器只做一件事</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E8%BF%81%E7%A7%BB%E6%98%AF%E5%90%A6%E5%AE%8C%E6%88%90%EF%BC%8C%E7%9C%8B%E8%BF%99%E4%BA%9B%E4%BF%A1%E5%8F%B7"><span class="toc-list-text">迁移是否完成，看这些信号</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2025-04-08</span><span>4 分钟阅读</span><span>更新于 2026-08-07</span></div>
       <p class="post-lede">Biome 能统一格式化、静态检查和 import 整理，但不是所有 ESLint 插件的直接替代。本文从试点、迁移命令、编辑器与 CI 说明可验证的接入方式。</p>
     </header>
-    <div class="prose" itemprop="articleBody"><p>Biome 把格式化、检查和部分代码辅助能力放进同一个工具。它使用 Rust 实现，启动和执行往往很快，但“更快”不能替代规则覆盖率和迁移成本的检查。</p>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><p>Biome 把格式化、检查和部分代码辅助能力放进同一个工具。它使用 Rust 实现，启动和执行往往很快，但“更快”不能替代规则覆盖率和迁移成本的检查。</p>
 <p>如果项目依赖框架专用 ESLint 插件、定制规则或复杂的 overrides，先把 Biome 当成试点工具。确认它能覆盖团队真正关心的问题，再决定是否删除 ESLint 或 Prettier。</p>
 <h2 id="建立最小配置"><a href="#建立最小配置" class="headerlink" title="建立最小配置"></a>建立最小配置</h2><p>安装并让 Biome 生成起点配置：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install -D @biomejs/biome</span><br><span class="line">npx biome init</span><br></pre></td></tr></table></figure>
@@ -68,6 +68,25 @@
 </ul>
 <p>参考：<a target="_blank" rel="noopener" href="https://biomejs.dev/guides/migrate-eslint-prettier/">Biome 迁移 ESLint 与 Prettier 指南</a> 与 <a target="_blank" rel="noopener" href="https://biomejs.dev/reference/cli/">Biome CLI</a>。</p>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/">工程化</a>
@@ -79,7 +98,7 @@
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/%E5%B7%A5%E7%A8%8B%E5%8C%96/">工程化</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/">工程化</a></div>
   </aside>

@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-list-text">前言</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%80%E3%80%81%E6%9D%A1%E4%BB%B6%E7%B1%BB%E5%9E%8B%EF%BC%88Conditional-Types%EF%BC%89"><span class="toc-list-text">一、条件类型（Conditional Types）</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-1-%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95"><span class="toc-list-text">1.1 基础语法</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-2-%E5%88%86%E5%B8%83%E5%BC%8F%E6%9D%A1%E4%BB%B6%E7%B1%BB%E5%9E%8B"><span class="toc-list-text">1.2 分布式条件类型</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-3-%E7%A6%81%E7%94%A8%E5%88%86%E5%8F%91"><span class="toc-list-text">1.3 禁用分发</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%8C%E3%80%81%E6%98%A0%E5%B0%84%E7%B1%BB%E5%9E%8B%EF%BC%88Mapped-Types%EF%BC%89"><span class="toc-list-text">二、映射类型（Mapped Types）</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-1-%E5%9F%BA%E7%A1%80"><span class="toc-list-text">2.1 基础</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-2-%E9%94%AE%E5%90%8D%E9%87%8D%E6%98%A0%E5%B0%84%EF%BC%88as%EF%BC%89"><span class="toc-list-text">2.2 键名重映射（as）</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%89%E3%80%81infer-%E2%80%94-%E7%B1%BB%E5%9E%8B%E6%8E%A8%E5%AF%BC"><span class="toc-list-text">三、infer — 类型推导</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-1-%E5%9F%BA%E7%A1%80%E7%94%A8%E6%B3%95"><span class="toc-list-text">3.1 基础用法</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-2-%E6%8F%90%E5%8F%96-Promise-%E5%80%BC"><span class="toc-list-text">3.2 提取 Promise 值</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-3-%E9%80%92%E5%BD%92%E8%A7%A3%E5%8C%85"><span class="toc-list-text">3.3 递归解包</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-4-%E6%8F%90%E5%8F%96%E6%95%B0%E7%BB%84%E5%85%83%E7%B4%A0%E7%B1%BB%E5%9E%8B"><span class="toc-list-text">3.4 提取数组元素类型</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-5-%E6%A8%A1%E6%9D%BF%E5%AD%97%E9%9D%A2%E9%87%8F-infer"><span class="toc-list-text">3.5 模板字面量 + infer</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9B%9B%E3%80%81%E9%80%92%E5%BD%92%E7%B1%BB%E5%9E%8B"><span class="toc-list-text">四、递归类型</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-1-%E5%9F%BA%E7%A1%80%E9%80%92%E5%BD%92"><span class="toc-list-text">4.1 基础递归</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-2-%E6%B7%B1%E5%B1%82%E5%8F%AA%E8%AF%BB"><span class="toc-list-text">4.2 深层只读</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-3-%E6%B7%B1%E5%B1%82%E6%8E%92%E9%99%A4-null-undefined"><span class="toc-list-text">4.3 深层排除 null&#x2F;undefined</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%94%E3%80%81%E5%AE%9E%E7%94%A8%E7%B1%BB%E5%9E%8B%E4%BD%93%E6%93%8D%E5%AE%9E%E7%8E%B0"><span class="toc-list-text">五、实用类型体操实现</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-1-%E4%BB%8E%E8%81%94%E5%90%88%E7%B1%BB%E5%9E%8B%E4%B8%AD%E6%8E%92%E9%99%A4%E5%87%BD%E6%95%B0"><span class="toc-list-text">5.1 从联合类型中排除函数</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-2-%E5%AE%9E%E7%8E%B0%E7%B1%BB%E5%9E%8B%E5%AE%89%E5%85%A8%E7%9A%84-Builder"><span class="toc-list-text">5.2 实现类型安全的 Builder</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-3-%E4%BB%8E-GraphQL-%E5%93%8D%E5%BA%94%E6%8E%A8%E5%AF%BC%E7%B1%BB%E5%9E%8B"><span class="toc-list-text">5.3 从 GraphQL 响应推导类型</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-4-Chainable-%E7%B1%BB%E5%9E%8B"><span class="toc-list-text">5.4 Chainable 类型</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-5-%E5%85%83%E7%BB%84%E8%BD%AC%E5%AF%B9%E8%B1%A1"><span class="toc-list-text">5.5 元组转对象</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%85%AD%E3%80%81Flatten-%E7%B1%BB%E5%9E%8B%E4%B8%80%E9%A2%98%E5%A4%9A%E8%A7%A3"><span class="toc-list-text">六、Flatten 类型一题多解</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%83%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98"><span class="toc-list-text">七、面试题</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-list-text">总结</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2026-06-25</span><span>4 分钟阅读</span><span>更新于 2026-06-25</span></div>
       <p class="post-lede">深入 TypeScript 类型体操核心技巧：条件类型、映射类型、infer 推导、模板字面量类型与递归类型，手写实现 10+ 个常用工具类型</p>
     </header>
-    <div class="prose" itemprop="articleBody"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
 <p>“类型体操”指的是用 TypeScript 的类型系统解决复杂类型问题的编程实践。</p>
 </blockquote>
 <p>它很有趣，但不是炫技——在实际项目中，类型体操能：</p>
@@ -150,18 +150,37 @@
 <p>类型体操的核心不是”炫技”，而是精确地描述数据约束。在工作中，80% 的场景用工具类型就能解决，剩下 20% 才需要 infer + 递归。</p>
 </blockquote>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/TypeScript/">TypeScript</a>
       </footer>
     
     <nav class="post-navigation" aria-label="文章导航">
-      <a href="/web-blog/2026/06/25/typescript-advanced-generics-utility-types/"><span>上一篇</span><b>TypeScript 进阶：泛型、工具类型与实用模式</b></a>
-      <a class="next" href="/web-blog/2026/06/25/state-management-guide/"><span>下一篇</span><b>前端状态管理选型指南：Zustand vs Jotai vs Pinia vs Redux Toolkit</b></a>
+      <a href="/web-blog/2026/06/25/typescript-engineering-guide/"><span>上一篇</span><b>TypeScript 工程化：tsconfig 配置、声明文件与项目实战</b></a>
+      <a class="next" href="/web-blog/2026/06/25/vite-plugin-development-practice/"><span>下一篇</span><b>Vite 6 插件开发实战：从 Loader 到 HMR 自定义</b></a>
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/TypeScript/">TypeScript</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/TypeScript/">TypeScript</a></div>
   </aside>

@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E8%B7%A8%E6%A1%86%E6%9E%B6%E4%B8%8D%E7%AD%89%E4%BA%8E%E9%9B%B6%E9%9B%86%E6%88%90%E6%88%90%E6%9C%AC"><span class="toc-list-text">跨框架不等于零集成成本</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%85%88%E5%AE%9A%E4%B9%89%E5%85%AC%E5%BC%80%E7%9A%84%E7%BB%84%E4%BB%B6%E5%A5%91%E7%BA%A6"><span class="toc-list-text">先定义公开的组件契约</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%8B%E4%BB%B6%E5%BF%85%E9%A1%BB%E7%A9%BF%E8%BF%87%E7%BB%84%E4%BB%B6%E8%BE%B9%E7%95%8C"><span class="toc-list-text">事件必须穿过组件边界</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%8E%E6%A1%86%E6%9E%B6%E9%9B%86%E6%88%90%E6%97%B6%E5%81%9A%E4%B8%80%E6%AC%A1%E7%9C%9F%E5%AE%9E%E9%AA%8C%E8%AF%81"><span class="toc-list-text">与框架集成时做一次真实验证</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E9%80%82%E5%90%88%E5%92%8C%E4%B8%8D%E9%80%82%E5%90%88%E7%9A%84%E5%9C%B0%E6%96%B9"><span class="toc-list-text">适合和不适合的地方</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2024-01-18</span><span>4 分钟阅读</span><span>更新于 2026-11-05</span></div>
       <p class="post-lede">Web Components 能提供浏览器原生的组件边界，Lit 让模板和响应式更新更易维护。本文从属性、事件、插槽、样式与跨框架集成的真实成本讲起。</p>
     </header>
-    <div class="prose" itemprop="articleBody"><h2 id="跨框架不等于零集成成本"><a href="#跨框架不等于零集成成本" class="headerlink" title="跨框架不等于零集成成本"></a>跨框架不等于零集成成本</h2><p>Web Components 由 Custom Elements、Shadow DOM 和 HTML Templates 等浏览器能力组成。它们很适合设计系统、第三方嵌入和微前端中的稳定 UI 边界，因为最终交付的是浏览器认识的自定义元素。</p>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><h2 id="跨框架不等于零集成成本"><a href="#跨框架不等于零集成成本" class="headerlink" title="跨框架不等于零集成成本"></a>跨框架不等于零集成成本</h2><p>Web Components 由 Custom Elements、Shadow DOM 和 HTML Templates 等浏览器能力组成。它们很适合设计系统、第三方嵌入和微前端中的稳定 UI 边界，因为最终交付的是浏览器认识的自定义元素。</p>
 <p>不过，组件能在不同框架页面中出现，不代表属性、事件、表单、服务端渲染和类型提示都会自动一致。选型前先确认组件要被谁使用、如何发布版本、事件和复杂数据如何约定，以及哪些框架版本需要支持。</p>
 <p>Lit 在原生 Custom Elements 之上提供模板、响应式属性和样式管理。它不是另一个虚拟 DOM 框架，最终仍然注册为浏览器自定义元素。</p>
 <h2 id="先定义公开的组件契约"><a href="#先定义公开的组件契约" class="headerlink" title="先定义公开的组件契约"></a>先定义公开的组件契约</h2><p>一个可复用组件至少要说明：属性名与类型、默认行为、事件名和 <code>detail</code> 结构、插槽、可定制的 CSS 变量，以及升级时的兼容性规则。字符串属性可以通过 HTML attribute 传递；对象、数组和函数应通过 DOM property 赋值，不能把 JSON 随手塞进 attribute。</p>
@@ -67,6 +67,25 @@
 <p>把它当作公开的产品 API，而不是“任何框架都能直接复制粘贴”的捷径，才能获得跨框架复用的收益。</p>
 <p><strong>推荐阅读：</strong> <a target="_blank" rel="noopener" href="https://lit.dev/docs/">Lit 官方文档</a></p>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/Web-Components/">Web Components</a>
@@ -78,7 +97,7 @@
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/Web-Components/">Web Components</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/Web-Components/">Web Components</a></div>
   </aside>

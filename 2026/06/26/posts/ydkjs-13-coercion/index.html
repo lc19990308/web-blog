@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-list-text">前言</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%80%E3%80%81%E6%8A%BD%E8%B1%A1%E6%93%8D%E4%BD%9C%EF%BC%88Abstract-Operations%EF%BC%89"><span class="toc-list-text">一、抽象操作（Abstract Operations）</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-1-ToPrimitive"><span class="toc-list-text">1.1 ToPrimitive</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-2-ToString"><span class="toc-list-text">1.2 ToString</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-3-ToNumber"><span class="toc-list-text">1.3 ToNumber</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-4-ToBoolean"><span class="toc-list-text">1.4 ToBoolean</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%8C%E3%80%81%E6%98%BE%E5%BC%8F%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="toc-list-text">二、显式类型转换</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-1-%E6%98%BE%E5%BC%8F%E8%BD%AC%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-list-text">2.1 显式转字符串</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-2-%E6%98%BE%E5%BC%8F%E8%BD%AC%E6%95%B0%E5%AD%97"><span class="toc-list-text">2.2 显式转数字</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-3-%E6%98%BE%E5%BC%8F%E8%BD%AC%E5%B8%83%E5%B0%94"><span class="toc-list-text">2.3 显式转布尔</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%89%E3%80%81%E9%9A%90%E5%BC%8F%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="toc-list-text">三、隐式类型转换</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-1-%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%8B%BC%E6%8E%A5%EF%BC%88-%EF%BC%89"><span class="toc-list-text">3.1 字符串拼接（+）</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-2-%E5%85%B6%E4%BB%96%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="toc-list-text">3.2 其他操作符</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-3-%E5%B8%83%E5%B0%94%E9%9A%90%E5%BC%8F%E8%BD%AC%E6%8D%A2%E5%9C%BA%E6%99%AF"><span class="toc-list-text">3.3 布尔隐式转换场景</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9B%9B%E3%80%81%E7%BB%8F%E5%85%B8%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%A7%A3%E6%9E%90"><span class="toc-list-text">四、经典类型转换表达式解析</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%94%E3%80%81%E5%AE%BD%E6%9D%BE%E7%9B%B8%E7%AD%89%EF%BC%88-%EF%BC%89%E7%9A%84%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="toc-list-text">五、宽松相等（&#x3D;&#x3D;）的类型转换</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-1-%E6%80%AA%E5%BC%82%E7%9A%84"><span class="toc-list-text">5.1 怪异的 &#x3D;&#x3D;</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%85%AD%E3%80%81%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E5%AE%9E%E6%88%98%E5%BB%BA%E8%AE%AE"><span class="toc-list-text">六、类型转换实战建议</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#6-1-%E4%BD%BF%E7%94%A8%E6%98%BE%E5%BC%8F%E8%BD%AC%E6%8D%A2"><span class="toc-list-text">6.1 使用显式转换</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#6-2-%E9%81%BF%E5%BC%80-%E7%9A%84%E5%9D%91"><span class="toc-list-text">6.2 避开 &#x3D;&#x3D; 的坑</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#6-3-%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E6%B5%8B%E8%AF%95%E5%8A%A9%E6%89%8B"><span class="toc-list-text">6.3 类型转换测试助手</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-list-text">总结</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2026-06-26</span><span>4 分钟阅读</span><span>更新于 2026-06-25</span></div>
       <p class="post-lede">JavaScript 的强制类型转换不是&#34;bug&#34;，而是一套可预测的规则。深入 ToPrimitive、ToString、ToNumber、ToBoolean 的抽象操作</p>
     </header>
-    <div class="prose" itemprop="articleBody"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>很多开发者说 JavaScript 的类型转换”混乱”：</p>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>很多开发者说 JavaScript 的类型转换”混乱”：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[] + []   <span class="comment">// &quot;&quot;</span></span><br><span class="line">&#123;&#125; + []   <span class="comment">// 0 (??)</span></span><br><span class="line">[] + &#123;&#125;   <span class="comment">// &quot;[object Object]&quot;</span></span><br></pre></td></tr></table></figure>
 
 <p>但实际上，类型转换遵循严格的规则。理解这些规则后，这些表达式的结果都是可预测的。</p>
@@ -116,18 +116,37 @@
 <p>下一篇将深入 <strong>== 与 === 的完整对比</strong>，以及如何安全地比较各种类型。</p>
 </blockquote>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/JavaScript/">JavaScript</a><a href="/web-blog/tags/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/">你不知道的javascript</a>
       </footer>
     
     <nav class="post-navigation" aria-label="文章导航">
-      <a href="/web-blog/2026/06/26/posts/ydkjs-10-type-system/"><span>上一篇</span><b>你不知道的JavaScript（十）：JavaScript 的类型系统——七大内置类型深度解析</b></a>
-      <a class="next" href="/web-blog/2026/06/26/posts/ydkjs-11-values-array-string-number/"><span>下一篇</span><b>你不知道的JavaScript（十一）：值的底层机制——数组、字符串、数字的特殊行为</b></a>
+      <a href="/web-blog/2026/06/26/posts/ydkjs-12-native-functions/"><span>上一篇</span><b>你不知道的JavaScript（十二）：原生函数——String、Number、Boolean、Array、Object 的内幕</b></a>
+      <a class="next" href="/web-blog/2026/06/26/posts/ydkjs-14-equality-comparison/"><span>下一篇</span><b>你不知道的JavaScript（十四）：相等比较——== 与 === 的完全指南</b></a>
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/">你不知道的javascript</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/JavaScript/">JavaScript</a><a href="/web-blog/tags/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/">你不知道的javascript</a></div>
   </aside>

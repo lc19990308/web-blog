@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-list-text">前言</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%80%E3%80%81%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5"><span class="toc-list-text">一、同源策略</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-1-%E4%BB%80%E4%B9%88%E6%98%AF%E5%90%8C%E6%BA%90%EF%BC%9F"><span class="toc-list-text">1.1 什么是同源？</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-2-%E9%9D%9E%E5%90%8C%E6%BA%90%E7%9A%84%E9%99%90%E5%88%B6"><span class="toc-list-text">1.2 非同源的限制</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%8C%E3%80%81CORS-%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-list-text">二、CORS 的工作原理</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-1-%E7%AE%80%E5%8D%95%E8%AF%B7%E6%B1%82"><span class="toc-list-text">2.1 简单请求</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-2-%E9%A2%84%E6%A3%80%E8%AF%B7%E6%B1%82%EF%BC%88Preflight%EF%BC%89"><span class="toc-list-text">2.2 预检请求（Preflight）</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-3-%E5%93%8D%E5%BA%94%E5%A4%B4%E8%AF%A6%E8%A7%A3"><span class="toc-list-text">2.3 响应头详解</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%89%E3%80%81%E8%B7%A8%E5%9F%9F%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-list-text">三、跨域解决方案</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-1-%E5%90%8E%E7%AB%AF%E9%85%8D%E7%BD%AE-CORS%EF%BC%88%E6%8E%A8%E8%8D%90%EF%BC%89"><span class="toc-list-text">3.1 后端配置 CORS（推荐）</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-2-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E4%BB%A3%E7%90%86%EF%BC%88Vite%EF%BC%89"><span class="toc-list-text">3.2 开发环境代理（Vite）</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-3-JSONP%EF%BC%88%E4%BB%85-GET%EF%BC%8C%E5%B7%B2%E8%BF%87%E6%97%B6%EF%BC%89"><span class="toc-list-text">3.3 JSONP（仅 GET，已过时）</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-4-WebSocket%EF%BC%88%E5%A4%A9%E7%84%B6%E8%B7%A8%E5%9F%9F%EF%BC%89"><span class="toc-list-text">3.4 WebSocket（天然跨域）</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9B%9B%E3%80%81%E5%B8%A6%E5%87%AD%E6%8D%AE%E7%9A%84%E8%AF%B7%E6%B1%82%EF%BC%88Cookie-Authorization%EF%BC%89"><span class="toc-list-text">四、带凭据的请求（Cookie &#x2F; Authorization）</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-1-credentials-include"><span class="toc-list-text">4.1 credentials: include</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-2-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="toc-list-text">4.2 常见问题</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%94%E3%80%81%E5%B8%B8%E8%A7%81-CORS-%E9%94%99%E8%AF%AF%E4%B8%8E%E6%8E%92%E6%9F%A5"><span class="toc-list-text">五、常见 CORS 错误与排查</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-1-%E9%94%99%E8%AF%AF%E4%BF%A1%E6%81%AF%E5%88%86%E6%9E%90"><span class="toc-list-text">5.1 错误信息分析</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-2-%E6%8E%92%E6%9F%A5%E6%AD%A5%E9%AA%A4"><span class="toc-list-text">5.2 排查步骤</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-3-%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7"><span class="toc-list-text">5.3 调试工具</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%85%AD%E3%80%81%E5%85%B6%E4%BB%96%E8%B7%A8%E5%9F%9F%E5%9C%BA%E6%99%AF"><span class="toc-list-text">六、其他跨域场景</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#6-1-iframe-%E8%B7%A8%E5%9F%9F%E9%80%9A%E4%BF%A1"><span class="toc-list-text">6.1 iframe 跨域通信</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#6-2-%E8%B7%A8%E5%9F%9F%E5%9B%BE%E7%89%87"><span class="toc-list-text">6.2 跨域图片</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#6-3-%E8%B7%A8%E5%9F%9F%E5%AD%97%E4%BD%93"><span class="toc-list-text">6.3 跨域字体</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%83%E3%80%81CORS-%E6%B5%81%E7%A8%8B%E9%80%9F%E6%9F%A5%E5%9B%BE"><span class="toc-list-text">七、CORS 流程速查图</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%85%AB%E3%80%81%E5%AE%89%E5%85%A8%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-list-text">八、安全注意事项</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-list-text">总结</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2026-06-25</span><span>4 分钟阅读</span><span>更新于 2026-06-25</span></div>
       <p class="post-lede">深入浏览器同源策略与跨域资源共享（CORS）机制，涵盖简单请求/预检请求、各种跨域解决方案、常见错误排查与代理配置</p>
     </header>
-    <div class="prose" itemprop="articleBody"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Access to fetch at &#x27;https://api.example.com/data&#x27; from origin &#x27;http://localhost:3000&#x27;</span><br><span class="line">has been blocked by CORS policy.</span><br></pre></td></tr></table></figure>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Access to fetch at &#x27;https://api.example.com/data&#x27; from origin &#x27;http://localhost:3000&#x27;</span><br><span class="line">has been blocked by CORS policy.</span><br></pre></td></tr></table></figure>
 
 <p>这是前端开发者最常见的报错之一。</p>
 <p>CORS 本身并不复杂，但很多开发者只知其然而不知其所以然。本文从底层原理到各种场景的解决方案，完整覆盖跨域问题。</p>
@@ -190,18 +190,37 @@
 <p>CORS 的错误信息看似复杂，但排查思路很简单：先看请求头 Origin 对不对，再看响应头 Allow-Origin 是否匹配，最后检查 credentials 和预检配置。</p>
 </blockquote>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/">浏览器</a><a href="/web-blog/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/">网络协议</a>
       </footer>
     
     <nav class="post-navigation" aria-label="文章导航">
-      <a href="/web-blog/2026/06/25/browser-caching-guide/"><span>上一篇</span><b>浏览器缓存策略完全指南：强缓存、协商缓存与 CDN 实战</b></a>
-      <a class="next" href="/web-blog/2026/06/25/css-units-complete-guide/"><span>下一篇</span><b>前端 CSS 单位完全指南：从 px、rem、vw 到容器查询</b></a>
+      <a href="/web-blog/2026/06/25/build-tools-comparison/"><span>上一篇</span><b>前端构建工具对比：Vite vs Webpack vs Turbopack vs Rspack</b></a>
+      <a class="next" href="/web-blog/2026/06/25/css-2025-new-features/"><span>下一篇</span><b>CSS 2025 新特性全景：has()、View Transitions、CSS Layers、Scroll-Driven Animations</b></a>
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/%E6%B5%8F%E8%A7%88%E5%99%A8/">浏览器</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/">浏览器</a><a href="/web-blog/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/">网络协议</a></div>
   </aside>

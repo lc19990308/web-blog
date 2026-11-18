@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%85%88%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E5%80%BC%E5%BE%97%E5%AE%B9%E5%99%A8%E5%8C%96"><span class="toc-list-text">先判断是否值得容器化</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%9E%84%E5%BB%BA%E7%8E%AF%E5%A2%83%E5%92%8C%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83"><span class="toc-list-text">构建环境和运行环境</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%80%E4%B8%AA%E4%B8%8E-pnpm-%E9%94%81%E6%96%87%E4%BB%B6%E4%B8%80%E8%87%B4%E7%9A%84-Dockerfile"><span class="toc-list-text">一个与 pnpm 锁文件一致的 Dockerfile</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E8%AE%A9-Nginx-%E6%AD%A3%E7%A1%AE%E6%9C%8D%E5%8A%A1-SPA"><span class="toc-list-text">让 Nginx 正确服务 SPA</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%8D%E8%A6%81%E6%8A%8A%E6%9E%84%E5%BB%BA%E6%9C%9F%E5%8F%98%E9%87%8F%E5%BD%93%E6%88%90%E8%BF%90%E8%A1%8C%E6%9C%9F%E5%8F%98%E9%87%8F"><span class="toc-list-text">不要把构建期变量当成运行期变量</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%9C%AC%E5%9C%B0%E8%BF%90%E8%A1%8C%E5%92%8C%E5%8F%91%E5%B8%83%E6%A3%80%E6%9F%A5"><span class="toc-list-text">本地运行和发布检查</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%8A%E7%BA%BF%E5%89%8D%E6%A3%80%E6%9F%A5"><span class="toc-list-text">上线前检查</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2025-08-20</span><span>4 分钟阅读</span><span>更新于 2026-08-07</span></div>
       <p class="post-lede">用多阶段构建发布 Vite SPA：先判断 Docker 是否值得引入，再处理 pnpm 锁文件、Nginx、运行期配置和部署检查。</p>
     </header>
-    <div class="prose" itemprop="articleBody"><p>对静态前端来说，Docker 的价值不是把 Node.js 带到生产环境，而是把<strong>构建环境</strong>固定下来，再只把 <code>dist/</code> 交给运行容器。</p>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><p>对静态前端来说，Docker 的价值不是把 Node.js 带到生产环境，而是把<strong>构建环境</strong>固定下来，再只把 <code>dist/</code> 交给运行容器。</p>
 <p>这样能解决 Node 版本、包管理器和 Nginx 配置在不同环境里漂移的问题。它不会自动解决接口地址、缓存策略或发布回滚，这些仍然要在部署方案里明确。</p>
 <h2 id="先判断是否值得容器化"><a href="#先判断是否值得容器化" class="headerlink" title="先判断是否值得容器化"></a>先判断是否值得容器化</h2><p>Docker 适合需要在 CI、测试环境和生产环境之间保持构建一致的项目，也适合把 Nginx 配置和静态产物一起交付的团队。</p>
 <p>如果只是把一个已经构建好的 <code>dist/</code> 上传到托管平台，容器通常只会增加维护成本。先确认团队是否真的需要自管运行环境，再决定是否引入镜像构建。</p>
@@ -76,6 +76,25 @@
 </ul>
 <p>参考：<a target="_blank" rel="noopener" href="https://docs.docker.com/build/building/multi-stage/">Docker 多阶段构建</a> 与 <a target="_blank" rel="noopener" href="https://docs.docker.com/compose/">Docker Compose</a>。</p>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/">工程化</a>
@@ -87,7 +106,7 @@
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/%E5%B7%A5%E7%A8%8B%E5%8C%96/">工程化</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/">工程化</a></div>
   </aside>

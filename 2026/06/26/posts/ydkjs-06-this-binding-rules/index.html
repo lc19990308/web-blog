@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-list-text">前言</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%80%E3%80%81%E5%9B%9B%E7%A7%8D%E7%BB%91%E5%AE%9A%E8%A7%84%E5%88%99"><span class="toc-list-text">一、四种绑定规则</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-1-%E9%BB%98%E8%AE%A4%E7%BB%91%E5%AE%9A%EF%BC%88Default-Binding%EF%BC%89"><span class="toc-list-text">1.1 默认绑定（Default Binding）</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-2-%E9%9A%90%E5%BC%8F%E7%BB%91%E5%AE%9A%EF%BC%88Implicit-Binding%EF%BC%89"><span class="toc-list-text">1.2 隐式绑定（Implicit Binding）</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-3-%E6%98%BE%E5%BC%8F%E7%BB%91%E5%AE%9A%EF%BC%88Explicit-Binding%EF%BC%89"><span class="toc-list-text">1.3 显式绑定（Explicit Binding）</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-4-new-%E7%BB%91%E5%AE%9A%EF%BC%88New-Binding%EF%BC%89"><span class="toc-list-text">1.4 new 绑定（New Binding）</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%8C%E3%80%81%E7%BB%91%E5%AE%9A%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-list-text">二、绑定优先级</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-1-%E6%98%BE%E5%BC%8F%E7%BB%91%E5%AE%9A-vs-%E9%9A%90%E5%BC%8F%E7%BB%91%E5%AE%9A"><span class="toc-list-text">2.1 显式绑定 vs 隐式绑定</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-2-new-%E7%BB%91%E5%AE%9A-vs-%E6%98%BE%E5%BC%8F%E7%BB%91%E5%AE%9A"><span class="toc-list-text">2.2 new 绑定 vs 显式绑定</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-3-%E5%88%A4%E6%96%AD%E6%B5%81%E7%A8%8B"><span class="toc-list-text">2.3 判断流程</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%89%E3%80%81%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0%E7%9A%84-this"><span class="toc-list-text">三、箭头函数的 this</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-1-%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0-vs-%E6%99%AE%E9%80%9A%E5%87%BD%E6%95%B0"><span class="toc-list-text">3.1 箭头函数 vs 普通函数</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-2-%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0%E4%B8%8D%E8%83%BD%E7%94%A8%E4%BD%9C%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="toc-list-text">3.2 箭头函数不能用作构造函数</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9B%9B%E3%80%81bind-%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-list-text">四、bind 的实现原理</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%94%E3%80%81%E7%BB%BC%E5%90%88%E9%9D%A2%E8%AF%95%E9%A2%98"><span class="toc-list-text">五、综合面试题</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%85%AD%E3%80%81%E5%AE%9E%E9%99%85%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84-this-%E7%AE%A1%E7%90%86"><span class="toc-list-text">六、实际开发中的 this 管理</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#6-1-%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84-this"><span class="toc-list-text">6.1 事件处理中的 this</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#6-2-Vue-React-%E4%B8%AD%E7%9A%84-this"><span class="toc-list-text">6.2 Vue&#x2F;React 中的 this</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-list-text">总结</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2026-06-26</span><span>4 分钟阅读</span><span>更新于 2026-06-25</span></div>
       <p class="post-lede">this 是 JavaScript 中最令人困惑的关键字。本文从四种绑定规则入手，彻底理清 this 的指向逻辑，附带完整的优先级和边界情况</p>
     </header>
-    <div class="prose" itemprop="articleBody"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>很多开发者对 <code>this</code> 的理解是：”this 指向函数本身”或”this 指向函数所在的作用域”——<strong>两个都是错的</strong>。</p>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>很多开发者对 <code>this</code> 的理解是：”this 指向函数本身”或”this 指向函数所在的作用域”——<strong>两个都是错的</strong>。</p>
 <p><code>this</code> 的真相是：</p>
 <blockquote>
 <p><strong>this 是在函数被调用时（运行时）确定的，指向调用该函数的对象。</strong></p>
@@ -142,18 +142,37 @@
 <p>下一篇将深入 <strong>new 操作符</strong> 的底层实现，理解构造函数和实例的完整创建过程。</p>
 </blockquote>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/JavaScript/">JavaScript</a><a href="/web-blog/tags/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/">你不知道的javascript</a>
       </footer>
     
     <nav class="post-navigation" aria-label="文章导航">
-      <a href="/web-blog/2026/06/26/posts/ydkjs-05-closure/"><span>上一篇</span><b>你不知道的JavaScript（五）：闭包（Closure）——从原理到实战</b></a>
+      <a href="/web-blog/2026/06/26/posts/ydkjs-07-new-operator/"><span>上一篇</span><b>你不知道的JavaScript（七）：new 操作符——构造函数与实例的底层机制</b></a>
       <a class="next" href="/web-blog/2026/06/26/posts/ydkjs-08-prototype-chain/"><span>下一篇</span><b>你不知道的JavaScript（八）：原型与原型链——JavaScript 继承的底层实现</b></a>
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/">你不知道的javascript</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/JavaScript/">JavaScript</a><a href="/web-blog/tags/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/">你不知道的javascript</a></div>
   </aside>

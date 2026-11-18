@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-list-text">前言</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%80%E3%80%81%E2%80%9D%E7%B1%BB%E2%80%9D%E5%9C%A8-JavaScript-%E4%B8%AD%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-list-text">一、”类”在 JavaScript 中的问题</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-1-%E7%B1%BB%E6%98%AF%E2%80%9D%E5%A4%8D%E5%88%B6%E2%80%9D%EF%BC%8C%E5%8E%9F%E5%9E%8B%E6%98%AF%E2%80%9D%E8%BF%9E%E6%8E%A5%E2%80%9D"><span class="toc-list-text">1.1 类是”复制”，原型是”连接”</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-2-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%B7%B7%E4%B9%B1"><span class="toc-list-text">1.2 构造函数带来的混乱</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%8C%E3%80%81%E5%A7%94%E6%89%98%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="toc-list-text">二、委托的设计模式</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-1-%E5%A7%94%E6%89%98%E6%80%9D%E7%BB%B4"><span class="toc-list-text">2.1 委托思维</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-2-%E4%B8%8E%E4%BC%A0%E7%BB%9F%E6%96%B9%E5%BC%8F%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="toc-list-text">2.2 与传统方式的对比</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%89%E3%80%81%E5%A7%94%E6%89%98%E7%9A%84%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8"><span class="toc-list-text">三、委托的实际应用</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-1-%E7%99%BB%E5%BD%95%E8%A1%A8%E5%8D%95%E9%AA%8C%E8%AF%81"><span class="toc-list-text">3.1 登录表单验证</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-2-%E7%BB%84%E4%BB%B6%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86"><span class="toc-list-text">3.2 组件状态管理</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9B%9B%E3%80%81%E5%A7%94%E6%89%98-vs-%E7%B1%BB%E7%9A%84%E6%A0%B8%E5%BF%83%E5%8C%BA%E5%88%AB"><span class="toc-list-text">四、委托 vs 类的核心区别</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%94%E3%80%81OLOO%EF%BC%88Objects-Linked-to-Other-Objects%EF%BC%89"><span class="toc-list-text">五、OLOO（Objects Linked to Other Objects）</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-1-OLOO-%E9%A3%8E%E6%A0%BC"><span class="toc-list-text">5.1 OLOO 风格</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-2-%E5%86%85%E7%BD%AE%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%A7%94%E6%89%98"><span class="toc-list-text">5.2 内置对象的委托</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%85%AD%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98"><span class="toc-list-text">六、面试题</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%83%E3%80%81%E9%9D%A2%E5%90%91%E5%A7%94%E6%89%98%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%BB%BA%E8%AE%AE"><span class="toc-list-text">七、面向委托的设计建议</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-list-text">总结</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2026-06-26</span><span>4 分钟阅读</span><span>更新于 2026-06-25</span></div>
       <p class="post-lede">JavaScript 没有真正的&#34;类&#34;，只有对象。行为委托（Behavior Delegation）是一种比&#34;模拟类&#34;更自然、更简洁的代码组织方式</p>
     </header>
-    <div class="prose" itemprop="articleBody"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>大多数开发者试图用 JavaScript 模拟”类”的行为：</p>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>大多数开发者试图用 JavaScript 模拟”类”的行为：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Animal</span>(<span class="params">name</span>) </span>&#123; <span class="built_in">this</span>.name = name &#125;</span><br><span class="line">Animal.prototype.eat = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="comment">/* ... */</span> &#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Dog</span>(<span class="params">name</span>) </span>&#123; Animal.call(<span class="built_in">this</span>, name) &#125;</span><br><span class="line">Dog.prototype = <span class="built_in">Object</span>.create(Animal.prototype)</span><br></pre></td></tr></table></figure>
 
 <p>但 JavaScript 没有类——它只有对象。<strong>行为委托（Behavior Delegation）</strong> 是一种更贴合 JavaScript 本心的思维方式：</p>
@@ -158,18 +158,37 @@
 <p>下一篇将深入 JavaScript 的<strong>类型系统</strong>，深入分析七种内置类型的行为。</p>
 </blockquote>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/JavaScript/">JavaScript</a><a href="/web-blog/tags/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/">你不知道的javascript</a>
       </footer>
     
     <nav class="post-navigation" aria-label="文章导航">
-      <a href="/web-blog/2026/06/26/posts/ydkjs-07-new-operator/"><span>上一篇</span><b>你不知道的JavaScript（七）：new 操作符——构造函数与实例的底层机制</b></a>
-      <a class="next" href="/web-blog/2026/06/26/posts/ydkjs-10-type-system/"><span>下一篇</span><b>你不知道的JavaScript（十）：JavaScript 的类型系统——七大内置类型深度解析</b></a>
+      <a href="/web-blog/2026/06/26/posts/ydkjs-08-prototype-chain/"><span>上一篇</span><b>你不知道的JavaScript（八）：原型与原型链——JavaScript 继承的底层实现</b></a>
+      <a class="next" href="/web-blog/2026/06/26/posts/ydkjs-11-values-array-string-number/"><span>下一篇</span><b>你不知道的JavaScript（十一）：值的底层机制——数组、字符串、数字的特殊行为</b></a>
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/">你不知道的javascript</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/JavaScript/">JavaScript</a><a href="/web-blog/tags/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/">你不知道的javascript</a></div>
   </aside>

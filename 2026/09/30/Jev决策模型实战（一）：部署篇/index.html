@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E7%A1%AC%E4%BB%B6%E6%91%B8%E5%BA%95"><span class="toc-list-text">硬件摸底</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9D%91%E4%B8%80%EF%BC%9AVC-%E8%BF%90%E8%A1%8C%E5%BA%93"><span class="toc-list-text">坑一：VC++ 运行库</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9D%91%E4%BA%8C%EF%BC%9Atorch-%E8%A3%85%E6%88%90-CPU-%E7%89%88"><span class="toc-list-text">坑二：torch 装成 CPU 版</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%86%92%E7%83%9F%E6%B5%8B%E8%AF%95"><span class="toc-list-text">冒烟测试</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9F%BA%E5%BA%A7%E9%80%89%E5%9E%8B%EF%BC%9AQwen3-0-6B"><span class="toc-list-text">基座选型：Qwen3-0.6B</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E9%83%A8%E7%BD%B2%E9%80%9A%E9%81%93"><span class="toc-list-text">部署通道</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#FastAPI-%E7%94%9F%E4%BA%A7%E6%9C%8D%E5%8A%A1"><span class="toc-list-text">FastAPI 生产服务</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#Ollama-%E9%83%A8%E7%BD%B2"><span class="toc-list-text">Ollama 部署</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E9%83%A8%E7%BD%B2%E6%9E%B6%E6%9E%84"><span class="toc-list-text">部署架构</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-list-text">小结</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2026-09-30</span><span>4 分钟阅读</span><span>更新于 2026-11-05</span></div>
       <p class="post-lede">从环境搭建到 Ollama 部署的完整过程。VC++ DLL 缺失、torch 装成 CPU 版、GGUF 转换崩溃、官方 converter 的正确用法，每个坑都有排查过程和解决方案。</p>
     </header>
-    <div class="prose" itemprop="articleBody"><p>TypeSafe 在 2026 年 9 月发布的 Jev 模型在开发者圈子里引起了不小的讨论。它跟 ChatGPT 那类模型不一样，不写文章、不聊天、不生成代码，只做一件事：根据输入状态输出一个带概率的判断。</p>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><p>TypeSafe 在 2026 年 9 月发布的 Jev 模型在开发者圈子里引起了不小的讨论。它跟 ChatGPT 那类模型不一样，不写文章、不聊天、不生成代码，只做一件事：根据输入状态输出一个带概率的判断。</p>
 <p>这个东西的定位是「System One 模型」，名字来自卡尼曼的系统一思维。官方的说法是把它叫做「嵌进软件里的有限决策组件」。用更直白的话讲，它是一个更聪明的 if 语句。传统代码写条件判断需要精确表达，但用户说「这个东西买回来不太合适，能退吗」的时候，关键词匹配就抓瞎了。Jev 处理的就是这种模糊语义判断。</p>
 <p>跟 LLM 的核心区别在输出形式。LLM 返回自由文本，你不知道它有多确定。Jev 直接告诉你 <code>refund: 0.85, complaint: 0.10</code>，概率是核心输出。延迟 70-500ms，比调大模型快得多。</p>
 <p>GitHub 上的开源生态分三层。专门训练的有 NanoJev（Qwen3-0.6B，有训练代码）、Tev1（Qwen3.5-4B，Together 出品）、Open-Jev（2B/9B/27B，最完整的复现）、Bespoke Nimble（9B，LoRA 加对比数据法）。不训练直接包装的有 AnyJev（Nokia 出品，读 logits 零训练，在 BANKING77 上准确率从 74.7% 提到 80.7%）、Simple Jev、LLM2Jev。部署服务有 local-jev、vllm-jev、Ollaya。</p>
@@ -103,6 +103,25 @@
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>部署环节的核心教训是：Windows 上的深度学习环境比 Linux 折腾得多，VC++ 依赖、CUDA 版本、bitsandbytes 兼容性每个都可能卡住。GGUF 转换不要手写，用官方 converter 从完整 HF 目录转。冒烟测试不能省，5 分钟能省 2 小时。</p>
 <p>下一篇讲数据怎么造、模型怎么训，包括那个 68% 重复率的数据翻车故事。</p>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/AI/">AI</a><a href="/web-blog/tags/Jev/">Jev</a><a href="/web-blog/tags/Ollama/">Ollama</a><a href="/web-blog/tags/%E9%83%A8%E7%BD%B2/">部署</a><a href="/web-blog/tags/GGUF/">GGUF</a><a href="/web-blog/tags/RTX-5060/">RTX 5060</a>
@@ -110,11 +129,11 @@
     
     <nav class="post-navigation" aria-label="文章导航">
       <a href="/web-blog/2026/11/05/%E7%94%A8-React-Three-Fiber-%E6%90%AD%E4%B8%80%E5%BA%A7%E5%B0%8F%E9%95%87-%E4%BB%8E%E5%9C%B0%E5%BD%A2%E7%BD%91%E6%A0%BC%E5%88%B0%E5%A4%9C%E6%99%AF%E7%81%AF%E5%85%89/"><span>上一篇</span><b>用 React Three Fiber 搭一座小镇：从地形网格到夜景灯光</b></a>
-      <a class="next" href="/web-blog/2026/09/30/Jev%E5%86%B3%E7%AD%96%E6%A8%A1%E5%9E%8B%E5%AE%9E%E6%88%98%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E6%95%B0%E6%8D%AE%E4%B8%8E%E8%AE%AD%E7%BB%83/"><span>下一篇</span><b>Jev 决策模型实战（二）：数据与训练</b></a>
+      <a class="next" href="/web-blog/2026/09/30/Jev%E5%86%B3%E7%AD%96%E6%A8%A1%E5%9E%8B%E5%AE%9E%E6%88%98%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9A%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8/"><span>下一篇</span><b>Jev 决策模型实战（三）：如何使用</b></a>
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/AI/">AI</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/AI/">AI</a><a href="/web-blog/tags/Jev/">Jev</a><a href="/web-blog/tags/Ollama/">Ollama</a><a href="/web-blog/tags/%E9%83%A8%E7%BD%B2/">部署</a><a href="/web-blog/tags/GGUF/">GGUF</a><a href="/web-blog/tags/RTX-5060/">RTX 5060</a></div>
   </aside>

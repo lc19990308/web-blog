@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-list-text">前言</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%80%E3%80%81%E5%8E%9F%E7%94%9F%E5%87%BD%E6%95%B0%E6%98%AF%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="toc-list-text">一、原生函数是构造函数</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-1-%E6%9E%84%E9%80%A0-vs-%E4%B8%8D%E5%B8%A6-new"><span class="toc-list-text">1.1 构造 vs 不带 new</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-2-%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BE%88%E5%B0%91%E7%9C%8B%E5%88%B0-new-String-Number-Boolean"><span class="toc-list-text">1.2 为什么很少看到 new String&#x2F;Number&#x2F;Boolean</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%8C%E3%80%81%E5%86%85%E9%83%A8-Class-%E6%A0%87%E7%AD%BE"><span class="toc-list-text">二、内部 [[Class]] 标签</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%89%E3%80%81Array-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="toc-list-text">三、Array 构造函数</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-1-%E8%AF%A1%E5%BC%82%E7%9A%84%E8%A1%8C%E4%B8%BA"><span class="toc-list-text">3.1 诡异的行为</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-2-%E7%A9%BA%E6%95%B0%E7%BB%84%E7%9A%84%E7%89%B9%E6%AE%8A%E8%A1%8C%E4%B8%BA"><span class="toc-list-text">3.2 空数组的特殊行为</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9B%9B%E3%80%81Object-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="toc-list-text">四、Object 构造函数</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-1-%E5%8C%85%E8%A3%85%E5%AF%B9%E8%B1%A1"><span class="toc-list-text">4.1 包装对象</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-2-Object-keys-vs-Object-getOwnPropertyNames"><span class="toc-list-text">4.2 Object.keys vs Object.getOwnPropertyNames</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%94%E3%80%81Function-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="toc-list-text">五、Function 构造函数</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-1-%E5%8D%B1%E9%99%A9%E7%9A%84-Function"><span class="toc-list-text">5.1 危险的 Function</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-2-function-name-%E5%B1%9E%E6%80%A7"><span class="toc-list-text">5.2 function name 属性</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%85%AD%E3%80%81RegExp-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="toc-list-text">六、RegExp 构造函数</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%83%E3%80%81Date-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="toc-list-text">七、Date 构造函数</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#7-1-Date-%E7%9A%84%E5%A5%87%E6%80%AA%E8%A1%8C%E4%B8%BA"><span class="toc-list-text">7.1 Date 的奇怪行为</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%85%AB%E3%80%81Error-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="toc-list-text">八、Error 构造函数</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B9%9D%E3%80%81Symbol-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="toc-list-text">九、Symbol 构造函数</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%8D%81%E3%80%81toStringTag-%E5%92%8C-Symbol-species"><span class="toc-list-text">十、toStringTag 和 Symbol.species</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#10-1-Symbol-toStringTag"><span class="toc-list-text">10.1 Symbol.toStringTag</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#10-2-Symbol-species"><span class="toc-list-text">10.2 Symbol.species</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-list-text">总结</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2026-06-26</span><span>4 分钟阅读</span><span>更新于 2026-06-25</span></div>
       <p class="post-lede">JavaScript 的内建原生函数（String、Number、Boolean 等）不仅仅是构造函数，它们的行为与原始类型有本质区别。深入解析包装对象、内部槽位、[[Class]] 标签</p>
     </header>
-    <div class="prose" itemprop="articleBody"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>JavaScript 提供了几个内建的原生函数（Native Functions）：</p>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>JavaScript 提供了几个内建的原生函数（Native Functions）：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">String</span>()</span><br><span class="line"><span class="built_in">Number</span>()</span><br><span class="line"><span class="built_in">Boolean</span>()</span><br><span class="line"><span class="built_in">Array</span>()</span><br><span class="line"><span class="built_in">Object</span>()</span><br><span class="line"><span class="built_in">Function</span>()</span><br><span class="line"><span class="built_in">RegExp</span>()</span><br><span class="line"><span class="built_in">Date</span>()</span><br><span class="line"><span class="built_in">Error</span>()</span><br><span class="line"><span class="built_in">Symbol</span>()</span><br><span class="line"><span class="built_in">BigInt</span>()</span><br></pre></td></tr></table></figure>
 
 <p>这些看起来像”类”，但它们的行为和原始类型有根本区别。理解它们的本质是避免 bug 的关键。</p>
@@ -126,18 +126,37 @@
 <p>下一篇将深入<strong>强制类型转换</strong>——JavaScript 中最容易被误解的机制。</p>
 </blockquote>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/JavaScript/">JavaScript</a><a href="/web-blog/tags/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/">你不知道的javascript</a>
       </footer>
     
     <nav class="post-navigation" aria-label="文章导航">
-      <a href="/web-blog/2026/06/26/posts/ydkjs-11-values-array-string-number/"><span>上一篇</span><b>你不知道的JavaScript（十一）：值的底层机制——数组、字符串、数字的特殊行为</b></a>
-      <a class="next" href="/web-blog/2026/06/26/posts/ydkjs-16-promise/"><span>下一篇</span><b>你不知道的JavaScript（十六）：Promise 深入理解——解决回调问题的终极方案</b></a>
+      <a href="/web-blog/2026/06/26/posts/ydkjs-10-type-system/"><span>上一篇</span><b>你不知道的JavaScript（十）：JavaScript 的类型系统——七大内置类型深度解析</b></a>
+      <a class="next" href="/web-blog/2026/06/26/posts/ydkjs-13-coercion/"><span>下一篇</span><b>你不知道的JavaScript（十三）：强制类型转换（Coercion）——隐式与显式的完整解析</b></a>
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/">你不知道的javascript</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/JavaScript/">JavaScript</a><a href="/web-blog/tags/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/">你不知道的javascript</a></div>
   </aside>

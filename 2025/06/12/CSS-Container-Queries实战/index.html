@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E7%BB%84%E4%BB%B6%E5%85%B3%E5%BF%83%E7%9A%84%E6%98%AF%E8%87%AA%E5%B7%B1%E6%9C%89%E5%A4%9A%E5%AE%BD"><span class="toc-list-text">组件关心的是自己有多宽</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BB%8E%E5%8F%AF%E7%94%A8%E7%9A%84%E9%BB%98%E8%AE%A4%E6%A0%B7%E5%BC%8F%E5%BC%80%E5%A7%8B"><span class="toc-list-text">从可用的默认样式开始</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%AE%B9%E5%99%A8%E8%A6%81%E6%94%BE%E5%9C%A8%E6%AD%A3%E7%A1%AE%E7%9A%84%E8%BE%B9%E7%95%8C%E4%B8%8A"><span class="toc-list-text">容器要放在正确的边界上</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%B0%BA%E5%AF%B8%E5%8D%95%E4%BD%8D%E5%92%8C%E6%96%AD%E7%82%B9%E8%A6%81%E6%9C%8D%E5%8A%A1%E5%86%85%E5%AE%B9"><span class="toc-list-text">尺寸单位和断点要服务内容</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E7%94%A8%E6%B8%90%E8%BF%9B%E5%A2%9E%E5%BC%BA%E5%A4%84%E7%90%86%E6%94%AF%E6%8C%81%E5%B7%AE%E5%BC%82"><span class="toc-list-text">用渐进增强处理支持差异</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2025-06-12</span><span>4 分钟阅读</span><span>更新于 2026-11-05</span></div>
       <p class="post-lede">容器查询让可复用组件根据可用空间而非视口调整布局。本文说明容器建立、默认样式、嵌套命名与渐进增强，并区分它与媒体查询的职责。</p>
     </header>
-    <div class="prose" itemprop="articleBody"><h2 id="组件关心的是自己有多宽"><a href="#组件关心的是自己有多宽" class="headerlink" title="组件关心的是自己有多宽"></a>组件关心的是自己有多宽</h2><p>媒体查询回答“视口有多宽”。它仍然适合决定整页导航、全局排版和设备级体验。但一个商品卡片放在主内容区、侧栏和弹窗里时，视口可能相同，可用宽度却完全不同。容器查询让组件根据最近容器的尺寸调整，减少同一组件在不同布局里失效的情况。</p>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><h2 id="组件关心的是自己有多宽"><a href="#组件关心的是自己有多宽" class="headerlink" title="组件关心的是自己有多宽"></a>组件关心的是自己有多宽</h2><p>媒体查询回答“视口有多宽”。它仍然适合决定整页导航、全局排版和设备级体验。但一个商品卡片放在主内容区、侧栏和弹窗里时，视口可能相同，可用宽度却完全不同。容器查询让组件根据最近容器的尺寸调整，减少同一组件在不同布局里失效的情况。</p>
 <p>它不是媒体查询的替代品。页面级决策使用 <code>@media</code>，组件内部布局使用 <code>@container</code>，两者各自解决不同层级的问题。</p>
 <h2 id="从可用的默认样式开始"><a href="#从可用的默认样式开始" class="headerlink" title="从可用的默认样式开始"></a>从可用的默认样式开始</h2><p>容器查询应当是增强层，窄布局或不支持查询时的默认样式必须本身可用。下面的卡片默认纵向排列；当卡片所在区域达到足够宽度时才切换为横向布局。</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">section</span> <span class="attr">class</span>=<span class="string">&quot;product-list&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">article</span> <span class="attr">class</span>=<span class="string">&quot;product-card&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">class</span>=<span class="string">&quot;product-card__image&quot;</span> <span class="attr">src</span>=<span class="string">&quot;camera.webp&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;黑色相机&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;product-card__body&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">h2</span>&gt;</span>旅行相机<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">p</span>&gt;</span>轻量机身，适合日常记录。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;/products/camera&quot;</span>&gt;</span>查看详情<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">article</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">section</span>&gt;</span></span><br></pre></td></tr></table></figure>
@@ -63,6 +63,25 @@
 <p>是否需要这层检测，取决于产品支持范围。设计验收时至少在主内容区、侧栏、弹窗和窄屏中查看同一个组件，确认标题会换行、按钮不会溢出、图片尺寸稳定。容器查询让组件更独立，但不替你完成这些布局检查。</p>
 <p><strong>推荐阅读：</strong> <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Containment/Container_queries">MDN：CSS Container Queries</a></p>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/CSS/">CSS</a>
@@ -74,7 +93,7 @@
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/CSS/">CSS</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/CSS/">CSS</a></div>
   </aside>

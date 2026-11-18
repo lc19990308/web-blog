@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E8%BF%87%E6%B8%A1%E5%8A%A8%E7%94%BB%E5%8C%85%E4%BD%8F%E7%9A%84%E6%98%AF-DOM-%E6%9B%B4%E6%96%B0"><span class="toc-list-text">过渡动画包住的是 DOM 更新</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BB%8E%E9%BB%98%E8%AE%A4%E6%B7%A1%E5%85%A5%E6%B7%A1%E5%87%BA%E5%BC%80%E5%A7%8B"><span class="toc-list-text">从默认淡入淡出开始</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9C%A8-Vue-Router-%E4%B8%AD%E7%AD%89%E5%BE%85%E6%B8%B2%E6%9F%93%E5%AE%8C%E6%88%90"><span class="toc-list-text">在 Vue Router 中等待渲染完成</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E8%BE%B9%E7%95%8C%E6%AF%94%E5%8A%A8%E6%95%88%E6%9B%B4%E9%87%8D%E8%A6%81"><span class="toc-list-text">边界比动效更重要</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2025-09-10</span><span>4 分钟阅读</span><span>更新于 2026-11-05</span></div>
       <p class="post-lede">View Transitions API 能在 DOM 更新前后生成页面快照，为 SPA 路由提供原生过渡。本文说明降级策略、Vue Router 的正确包裹方式和动画边界。</p>
     </header>
-    <div class="prose" itemprop="articleBody"><h2 id="过渡动画包住的是-DOM-更新"><a href="#过渡动画包住的是-DOM-更新" class="headerlink" title="过渡动画包住的是 DOM 更新"></a>过渡动画包住的是 DOM 更新</h2><p>View Transitions API 的流程很直接：浏览器截取旧页面快照，执行一次 DOM 更新，再截取新快照并在两张快照间播放动画。它很适合 SPA 的路由切换和局部布局变化，因为动画不必等每个组件自己协调离场和入场。</p>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><h2 id="过渡动画包住的是-DOM-更新"><a href="#过渡动画包住的是-DOM-更新" class="headerlink" title="过渡动画包住的是 DOM 更新"></a>过渡动画包住的是 DOM 更新</h2><p>View Transitions API 的流程很直接：浏览器截取旧页面快照，执行一次 DOM 更新，再截取新快照并在两张快照间播放动画。它很适合 SPA 的路由切换和局部布局变化，因为动画不必等每个组件自己协调离场和入场。</p>
 <p>但它不是路由库，也不是兼容性保证。调用前要准备普通更新路径，并尊重用户的“减少动态效果”偏好。动画失败不应该阻止页面跳转。</p>
 <figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">updateWithTransition</span>(<span class="params">update: () =&gt; <span class="built_in">void</span> | <span class="built_in">Promise</span>&lt;<span class="built_in">void</span>&gt;</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> reduceMotion = <span class="built_in">window</span>.matchMedia(</span><br><span class="line">    <span class="string">&#x27;(prefers-reduced-motion: reduce)&#x27;</span>,</span><br><span class="line">  ).matches</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (!<span class="built_in">document</span>.startViewTransition || reduceMotion) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Promise</span>.resolve(update())</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">document</span>.startViewTransition(</span><br><span class="line">    <span class="function">() =&gt;</span> <span class="built_in">Promise</span>.resolve(update()),</span><br><span class="line">  ).finished</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -67,6 +67,25 @@
 <p>先让信息架构和导航本身清楚，再让过渡动画帮助用户感知位置变化。API 的意义不在“多一个炫酷效果”，而在于用更少的协调代码获得可降级的连续感。</p>
 <p><strong>推荐阅读：</strong> <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API">MDN：View Transitions API</a></p>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/CSS/">CSS</a>
@@ -78,7 +97,7 @@
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/CSS/">CSS</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/CSS/">CSS</a></div>
   </aside>

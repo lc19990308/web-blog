@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-list-text">前言</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%80%E3%80%81localStorage-%E7%9A%84%E6%9E%81%E9%99%90"><span class="toc-list-text">一、localStorage 的极限</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-1-%E7%8E%B0%E7%8A%B6%E5%88%86%E6%9E%90"><span class="toc-list-text">1.1 现状分析</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-2-%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-list-text">1.2 适用场景</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%8C%E3%80%81IndexedDB-%E5%9F%BA%E7%A1%80"><span class="toc-list-text">二、IndexedDB 基础</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-1-%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="toc-list-text">2.1 核心概念</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-2-%E6%89%93%E5%BC%80%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-list-text">2.2 打开数据库</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-3-CRUD-%E6%93%8D%E4%BD%9C"><span class="toc-list-text">2.3 CRUD 操作</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-4-%E6%89%B9%E9%87%8F%E6%93%8D%E4%BD%9C"><span class="toc-list-text">2.4 批量操作</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%89%E3%80%81localForage-%E2%80%94-IndexedDB-%E7%9A%84%E4%BC%98%E9%9B%85%E5%B0%81%E8%A3%85"><span class="toc-list-text">三、localForage — IndexedDB 的优雅封装</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-1-%E5%AE%89%E8%A3%85"><span class="toc-list-text">3.1 安装</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-2-%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8"><span class="toc-list-text">3.2 基础使用</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-3-%E9%85%8D%E7%BD%AE%E5%A4%9A%E4%B8%AA-Store"><span class="toc-list-text">3.3 配置多个 Store</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-4-%E5%B0%81%E8%A3%85%E4%B8%9A%E5%8A%A1%E7%BC%93%E5%AD%98"><span class="toc-list-text">3.4 封装业务缓存</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9B%9B%E3%80%81%E9%AB%98%E7%BA%A7%EF%BC%9AIndexedDB-%E5%A4%8D%E6%9D%82%E6%9F%A5%E8%AF%A2%E5%B0%81%E8%A3%85"><span class="toc-list-text">四、高级：IndexedDB 复杂查询封装</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-1-%E9%80%9A%E7%94%A8-DAO-%E5%B1%82"><span class="toc-list-text">4.1 通用 DAO 层</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%94%E3%80%81SQLite-WASM-%E5%9C%A8%E6%B5%8F%E8%A7%88%E5%99%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="toc-list-text">五、SQLite&#x2F;WASM 在浏览器中的应用</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-1-%E4%BB%80%E4%B9%88%E6%98%AF-SQLite-WASM%EF%BC%9F"><span class="toc-list-text">5.1 什么是 SQLite&#x2F;WASM？</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-2-%E4%BD%BF%E7%94%A8-sql-js"><span class="toc-list-text">5.2 使用 sql.js</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-3-SQLite-WASM-vs-IndexedDB"><span class="toc-list-text">5.3 SQLite&#x2F;WASM vs IndexedDB</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-4-%E9%80%89%E5%9E%8B%E5%BB%BA%E8%AE%AE"><span class="toc-list-text">5.4 选型建议</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%85%AD%E3%80%81%E5%AE%9E%E9%99%85%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E7%BC%93%E5%AD%98%E7%AD%96%E7%95%A5"><span class="toc-list-text">六、实际项目中的缓存策略</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#6-1-%E5%88%86%E5%B1%82%E7%BC%93%E5%AD%98%E6%9E%B6%E6%9E%84"><span class="toc-list-text">6.1 分层缓存架构</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#6-2-%E9%85%8D%E5%90%88-Service-Worker"><span class="toc-list-text">6.2 配合 Service Worker</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%83%E3%80%81%E5%AD%98%E5%82%A8%E5%AE%B9%E9%87%8F%E4%B8%8E%E6%B8%85%E7%90%86%E7%AD%96%E7%95%A5"><span class="toc-list-text">七、存储容量与清理策略</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#7-1-%E6%9F%A5%E7%9C%8B%E5%AD%98%E5%82%A8%E4%BD%BF%E7%94%A8%E9%87%8F"><span class="toc-list-text">7.1 查看存储使用量</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#7-2-%E8%87%AA%E5%8A%A8%E6%B8%85%E7%90%86%E7%AD%96%E7%95%A5"><span class="toc-list-text">7.2 自动清理策略</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-list-text">总结</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E6%96%B9%E6%A1%88%E9%80%89%E5%9E%8B%E6%80%BB%E8%A1%A8"><span class="toc-list-text">方案选型总表</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E5%BB%BA%E8%AE%AE"><span class="toc-list-text">建议</span></a></li></ol></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2026-06-25</span><span>4 分钟阅读</span><span>更新于 2026-06-25</span></div>
       <p class="post-lede">系统对比浏览器端数据持久化方案，从 localStorage 到 IndexedDB，再到 SQLite/WASM，涵盖 API 使用、性能对比和选型建议</p>
     </header>
-    <div class="prose" itemprop="articleBody"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前端应用的复杂度越来越高，需要本地存储的数据也越来越多：</p>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前端应用的复杂度越来越高，需要本地存储的数据也越来越多：</p>
 <ul>
 <li>离线缓存用户的操作草稿</li>
 <li>客户端全文搜索索引</li>
@@ -256,18 +256,37 @@
 <p>数据持久化的核心原则：把正确的数据放在正确的位置，存最短的时间。</p>
 </blockquote>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/JavaScript/">JavaScript</a><a href="/web-blog/tags/%E6%9E%B6%E6%9E%84/">架构</a>
       </footer>
     
     <nav class="post-navigation" aria-label="文章导航">
-      <a href="/web-blog/2026/06/25/css-2025-new-features/"><span>上一篇</span><b>CSS 2025 新特性全景：has()、View Transitions、CSS Layers、Scroll-Driven Animations</b></a>
+      <a href="/web-blog/2026/06/25/css-units-complete-guide/"><span>上一篇</span><b>前端 CSS 单位完全指南：从 px、rem、vw 到容器查询</b></a>
       <a class="next" href="/web-blog/2026/06/25/es6-array-methods/"><span>下一篇</span><b>ES6+ 新增数组方法：find、flat、flatMap、from、of 与 Typed Arrays</b></a>
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/JavaScript/">JavaScript</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/JavaScript/">JavaScript</a><a href="/web-blog/tags/%E6%9E%B6%E6%9E%84/">架构</a></div>
   </aside>

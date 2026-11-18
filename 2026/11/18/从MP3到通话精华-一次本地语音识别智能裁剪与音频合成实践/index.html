@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="用 whisper.cpp 和多语种 small 模型在本地解析 MP3，再由 AI 辅助阅读转写、定位关键问答，通过 FFmpeg 完成分段裁剪、停顿处理和音频合成，记录实际流程与踩坑经验。" />
+    <title>从 MP3 到通话精华：一次本地语音识别、智能裁剪与音频合成实践 | 前端技术笔记</title>
+    <link rel="alternate" href="/web-blog/atom.xml" title="前端技术笔记" type="application/atom+xml" />
+    <link rel="stylesheet" href="/web-blog/css/main.css" />
+  <meta name="generator" content="Hexo 5.4.0"></head>
+  <body>
+    <header class="site-header shell">
+      <a class="wordmark" href="/web-blog/" aria-label="前端技术笔记 首页">LC <span>/</span> NOTES</a>
+      <nav class="main-nav" id="main-nav" aria-label="主导航">
+        <a href="/web-blog/">笔记</a>
+        <a href="/web-blog/categories/">专题</a>
+        <a href="/web-blog/about/">关于</a>
+        <a href="/web-blog/archives/">归档</a>
+      </nav>
+      <div class="header-actions">
+        <button class="menu-button" aria-controls="main-nav" aria-expanded="false" aria-label="打开菜单" type="button">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+        </button>
+        <button class="search-button" aria-controls="search-dialog" aria-label="搜索文章" type="button">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.5 4.5"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
+  <aside class="post-toc" aria-label="文章目录">
+    <p class="section-label">本文目录</p>
+    <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%80%E3%80%81%E5%85%88%E8%AF%B4%E6%B8%85%E6%A5%9A%EF%BC%9A%E7%94%A8%E7%9A%84%E5%88%B0%E5%BA%95%E6%98%AF%E4%BB%80%E4%B9%88%E6%A8%A1%E5%9E%8B"><span class="toc-list-text">一、先说清楚：用的到底是什么模型</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%8C%E3%80%81%E6%8A%8A%E4%BB%BB%E5%8A%A1%E6%8B%86%E6%88%90%E5%87%A0%E6%AD%A5%EF%BC%8C%E5%8F%8D%E8%80%8C%E6%9B%B4%E5%AE%B9%E6%98%93%E5%81%9A%E5%A5%BD"><span class="toc-list-text">二、把任务拆成几步，反而更容易做好</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%89%E3%80%81%E5%85%88%E6%8A%8A-MP3-%E5%8F%98%E6%88%90%E5%8F%AF%E9%98%85%E8%AF%BB%E3%80%81%E5%8F%AF%E5%AE%9A%E4%BD%8D%E7%9A%84%E6%96%87%E5%AD%97"><span class="toc-list-text">三、先把 MP3 变成可阅读、可定位的文字</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-1-%E5%87%86%E5%A4%87%E5%B7%A5%E5%85%B7%E5%92%8C%E6%A8%A1%E5%9E%8B"><span class="toc-list-text">3.1 准备工具和模型</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-2-%E5%8E%9F%E9%9F%B3%E4%BF%9D%E7%95%99%EF%BC%8C%E5%B7%A5%E4%BD%9C%E6%96%87%E4%BB%B6%E5%8D%95%E7%8B%AC%E6%94%BE"><span class="toc-list-text">3.2 原音保留，工作文件单独放</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-3-%E4%B8%80%E6%AC%A1%E8%BE%93%E5%87%BA%E4%B8%89%E7%A7%8D%E7%BB%93%E6%9E%9C"><span class="toc-list-text">3.3 一次输出三种结果</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9B%9B%E3%80%81%E8%AF%BB%E5%8F%96%E8%BD%AC%E5%86%99%E4%BB%A5%E5%90%8E%EF%BC%8C%E5%85%88%E9%80%89%E9%97%AE%E7%AD%94%EF%BC%8C%E5%86%8D%E5%AE%9A%E5%88%87%E7%82%B9"><span class="toc-list-text">四、读取转写以后，先选问答，再定切点</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E4%B8%80%E4%B8%AA%E5%AE%9E%E9%99%85%E8%B8%A9%E5%88%B0%E7%9A%84%E5%9D%91%EF%BC%9A%E6%96%87%E5%AD%97%E8%BE%B9%E7%95%8C%E4%B8%8D%E7%AD%89%E4%BA%8E%E5%A3%B0%E9%9F%B3%E8%BE%B9%E7%95%8C"><span class="toc-list-text">一个实际踩到的坑：文字边界不等于声音边界</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%94%E3%80%81%E5%85%88%E5%AF%BC%E5%87%BA%E5%88%86%E6%AE%B5%EF%BC%8C%E4%BF%AE%E6%94%B9%E8%B5%B7%E6%9D%A5%E6%9B%B4%E7%9B%B4%E6%8E%A5"><span class="toc-list-text">五、先导出分段，修改起来更直接</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%85%AD%E3%80%81%E5%81%9C%E9%A1%BF%E5%A4%84%E7%90%86%EF%BC%9A%E7%B4%A7%E5%87%91%E5%92%8C%E8%87%AA%E7%84%B6%E4%B9%8B%E9%97%B4%E8%A6%81%E7%95%99%E4%B8%80%E7%82%B9%E7%A9%BA%E9%97%B4"><span class="toc-list-text">六、停顿处理：紧凑和自然之间要留一点空间</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#6-1-%E5%85%88%E6%A3%80%E6%B5%8B%E9%9D%99%E9%9F%B3%E5%8C%BA%E9%97%B4"><span class="toc-list-text">6.1 先检测静音区间</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#6-2-%E8%BF%99%E6%AC%A1%E5%AE%9E%E9%99%85%E5%B0%9D%E8%AF%95%E7%9A%84%E8%87%AA%E5%8A%A8%E5%A4%84%E7%90%86"><span class="toc-list-text">6.2 这次实际尝试的自动处理</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#6-3-%E5%A6%82%E6%9E%9C%E8%BF%98%E8%A6%81%E7%B2%BE%E4%BF%AE%EF%BC%8C%E4%B8%8B%E4%B8%80%E6%AD%A5%E6%80%8E%E4%B9%88%E5%81%9A"><span class="toc-list-text">6.3 如果还要精修，下一步怎么做</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%83%E3%80%81%E5%88%87%E7%89%87%E5%90%88%E6%88%90%EF%BC%8C%E6%9C%80%E5%90%8E%E5%86%8D%E8%BE%93%E5%87%BA-MP3"><span class="toc-list-text">七、切片合成，最后再输出 MP3</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%85%AB%E3%80%81%E6%88%90%E7%89%87%E6%A3%80%E6%9F%A5%E8%A6%81%E5%88%86%E6%B8%85%E6%A3%80%E6%9F%A5%E5%88%B0%E4%BA%86%E5%93%AA%E4%B8%80%E5%B1%82"><span class="toc-list-text">八、成片检查要分清检查到了哪一层</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B9%9D%E3%80%81%E8%BF%99%E5%A5%97%E6%96%B9%E6%B3%95%E9%80%82%E5%90%88%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E7%94%A8"><span class="toc-list-text">九、这套方法适合什么时候用</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-list-text">参考资料</span></a></li></ol>
+  </aside>
+  <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+    <header class="post-header">
+      <p class="section-label">AI</p>
+      <h1 itemprop="headline">从 MP3 到通话精华：一次本地语音识别、智能裁剪与音频合成实践</h1>
+      <div class="metadata"><span>2026-11-18</span><span>4 分钟阅读</span><span>更新于 2026-11-18</span></div>
+      <p class="post-lede">用 whisper.cpp 和多语种 small 模型在本地解析 MP3，再由 AI 辅助阅读转写、定位关键问答，通过 FFmpeg 完成分段裁剪、停顿处理和音频合成，记录实际流程与踩坑经验。</p>
+    </header>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><p>手里有一段客服电话录音，我需要从里面挑出几轮关键问答，整理成一份方便汇报的精华音频。</p>
+<p>要求听起来很简单：保留问题、保留对应回答，去掉无关的铺垫和过长空白。但真做起来，光知道“我要哪几句话”还不够。得找到它们在音频里的位置，判断前后哪些话必须保留，再处理句子之间的衔接。删得太少，录音还是拖沓；删得太狠，可能把半个字切掉，或者把对话剪成另一种意思。</p>
+<p>这次我用的办法是：<strong>先让本地语音模型把 MP3 转成带时间信息的文字，再让 AI 助手读取文字、辅助选择片段，最后交给 FFmpeg 执行裁剪和合成。</strong></p>
+<p>这篇记录这条流程怎么走通，以及哪些地方不能完全交给自动化。</p>
+<span id="more"></span>
+
+<h2 id="一、先说清楚：用的到底是什么模型"><a href="#一、先说清楚：用的到底是什么模型" class="headerlink" title="一、先说清楚：用的到底是什么模型"></a>一、先说清楚：用的到底是什么模型</h2><p>本次语音识别用的是 <strong>Whisper 多语种 small 模型</strong>，模型文件是 <code>ggml-small.bin</code>，约 465 MB。运行它的工具是 <strong>whisper.cpp</strong>，本机调用的命令是 <code>whisper-cli</code>。</p>
+<p>这几个名字容易混在一起，分别说明一下：</p>
+<table>
+<thead>
+<tr>
+<th align="left">名称</th>
+<th align="left">在这次工作里的作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Whisper</td>
+<td align="left">将语音转换为文字的自动语音识别模型</td>
+</tr>
+<tr>
+<td align="left">多语种 small</td>
+<td align="left">实际使用的模型规格，支持中文；没有使用英语专用的 <code>small.en</code></td>
+</tr>
+<tr>
+<td align="left">whisper.cpp</td>
+<td align="left">在本机运行 Whisper 模型的 C/C++ 实现</td>
+</tr>
+<tr>
+<td align="left">AI 助手</td>
+<td align="left">阅读转写内容，结合我的要求辅助定位问答、组织剪辑方案、调用工具</td>
+</tr>
+<tr>
+<td align="left">FFmpeg / ffprobe</td>
+<td align="left">执行音频转换、裁剪、停顿处理、拼接和文件检查</td>
+</tr>
+</tbody></table>
+<p><strong>在本地运行的是语音识别模型。</strong> 这次没有另外部署一个本地大语言模型来判断剪辑内容。语音转写在本机完成，没有将音频上传给云端转写服务；这也不等于 AI 助手的所有文本处理都离线。</p>
+<p>选择 small 是这次实际采用的方案。我没有对多个模型做完整速度和准确率对比，也没有记录可用来做性能结论的基准数据。</p>
+<h2 id="二、把任务拆成几步，反而更容易做好"><a href="#二、把任务拆成几步，反而更容易做好" class="headerlink" title="二、把任务拆成几步，反而更容易做好"></a>二、把任务拆成几步，反而更容易做好</h2><p>整条流程可以写成：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">原始 MP3</span><br><span class="line">   ↓</span><br><span class="line">whisper.cpp + 多语种 small：本地转写</span><br><span class="line">   ↓</span><br><span class="line">TXT / SRT / JSON：获得文字和时间信息</span><br><span class="line">   ↓</span><br><span class="line">AI 助手读取文字，结合需求提出候选区间</span><br><span class="line">   ↓</span><br><span class="line">结合原录音与用户反馈调整切点</span><br><span class="line">   ↓</span><br><span class="line">FFmpeg：分段裁剪 → 停顿处理 → 按顺序合成</span><br><span class="line">   ↓</span><br><span class="line">成片检查，并保留原音与分段文件</span><br></pre></td></tr></table></figure>
+
+<p>Whisper 提供“这里大概说了什么、发生在什么时候”的索引。FFmpeg 按明确的时间和滤镜参数处理音频。中间“哪些内容值得保留”的判断，需要结合任务目标和对话上下文。</p>
+<p>我说的“智能裁剪”，指的就是这个有反馈的协作过程：用语义帮助找到片段，再用音频工具执行编辑。</p>
+<p>下面的命令是按本次工作整理的复现示例，统一使用通用文件名。它们不是历史终端命令的逐条回放，时间区间和滤镜参数也需要按自己的录音调整。</p>
+<h2 id="三、先把-MP3-变成可阅读、可定位的文字"><a href="#三、先把-MP3-变成可阅读、可定位的文字" class="headerlink" title="三、先把 MP3 变成可阅读、可定位的文字"></a>三、先把 MP3 变成可阅读、可定位的文字</h2><h3 id="3-1-准备工具和模型"><a href="#3-1-准备工具和模型" class="headerlink" title="3.1 准备工具和模型"></a>3.1 准备工具和模型</h3><p>本次环境是 macOS，使用 Homebrew 安装工具：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install whisper-cpp ffmpeg</span><br></pre></td></tr></table></figure>
+
+<p>安装程序和准备模型是两件事。还需要从 whisper.cpp 官方说明指向的模型来源取得多语种 <code>small</code> 的 <code>ggml-small.bin</code>，放到自己选定的位置。</p>
+<p>本文后续示例假设模型保存在 <code>models/ggml-small.bin</code>，原音叫 <code>input.mp3</code>。模型下载完成后，本地推理不需要再调用远端语音识别接口。</p>
+<p>可以先查看当前安装版本的参数：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">whisper-cli --<span class="built_in">help</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-原音保留，工作文件单独放"><a href="#3-2-原音保留，工作文件单独放" class="headerlink" title="3.2 原音保留，工作文件单独放"></a>3.2 原音保留，工作文件单独放</h3><p>我把原始 MP3 和处理过程分开保存。用于识别的音频、转写结果、临时切片都属于可重新生成的工作文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p work segments output</span><br></pre></td></tr></table></figure>
+
+<p>本机这版 <code>whisper-cli</code> 支持直接读取 MP3。为了让复现流程更明确，也可以先生成 16 kHz、单声道、16-bit PCM 的识别用 WAV：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -n -i <span class="string">&quot;input.mp3&quot;</span> \</span><br><span class="line">  -ar 16000 -ac 1 -c:a pcm_s16le \</span><br><span class="line">  <span class="string">&quot;work/input-16k.wav&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>-n</code> 表示遇到同名文件时不覆盖。这个 WAV 用于识别，后面剪辑仍从原始 MP3 提取，不必把交付音频也降成识别用的采样率。</p>
+<h3 id="3-3-一次输出三种结果"><a href="#3-3-一次输出三种结果" class="headerlink" title="3.3 一次输出三种结果"></a>3.3 一次输出三种结果</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">whisper-cli \</span><br><span class="line">  -m <span class="string">&quot;models/ggml-small.bin&quot;</span> \</span><br><span class="line">  -f <span class="string">&quot;work/input-16k.wav&quot;</span> \</span><br><span class="line">  -l zh \</span><br><span class="line">  -otxt -osrt -oj \</span><br><span class="line">  -of <span class="string">&quot;work/transcript&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>几个关键参数的作用：</p>
+<table>
+<thead>
+<tr>
+<th align="left">参数</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>-m</code></td>
+<td align="left">指定模型文件</td>
+</tr>
+<tr>
+<td align="left"><code>-f</code></td>
+<td align="left">指定输入音频</td>
+</tr>
+<tr>
+<td align="left"><code>-l zh</code></td>
+<td align="left">指定中文识别</td>
+</tr>
+<tr>
+<td align="left"><code>-otxt</code></td>
+<td align="left">输出纯文本，便于阅读全文和搜索</td>
+</tr>
+<tr>
+<td align="left"><code>-osrt</code></td>
+<td align="left">输出带时间信息的字幕</td>
+</tr>
+<tr>
+<td align="left"><code>-oj</code></td>
+<td align="left">输出 JSON，便于后续程序读取</td>
+</tr>
+<tr>
+<td align="left"><code>-of</code></td>
+<td align="left">设置输出路径前缀，不带扩展名</td>
+</tr>
+</tbody></table>
+<p>TXT 用来理解内容，SRT 用来定位，JSON 留给需要结构化处理的环节。这次项目里也保留了这三类转写结果。</p>
+<h2 id="四、读取转写以后，先选问答，再定切点"><a href="#四、读取转写以后，先选问答，再定切点" class="headerlink" title="四、读取转写以后，先选问答，再定切点"></a>四、读取转写以后，先选问答，再定切点</h2><p>这次录音谈的是显卡算力与测试环境。我需要保留的主线是：来电者提出问题、客服回应环境因素、最后说明后续对接方式。</p>
+<p>因此，给 AI 助手的要求需要具体到内容和剪辑约束。例如：</p>
+<blockquote>
+<p>读取带时间信息的转写，找出问题描述、环境因素回应和后续对接建议。保留双方关键问答，删除无关铺垫。先列出候选时间段及保留理由，不要把客户的判断写成客服确认，也不要把转写时间直接当作最终切点。</p>
+</blockquote>
+<p>关键词有助于缩小范围，但选段时必须看完整的一轮对话。只留下客服的一句“可能是环境问题”，听众未必知道它在回答哪个问题。反过来，删掉一个限定条件，也可能让回答显得比原意更肯定。</p>
+<p>经过调整，主要保留了录音一中的三个区间：</p>
+<table>
+<thead>
+<tr>
+<th align="left">片段</th>
+<th align="left">相对原音的候选区间</th>
+<th align="left">内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">第一段</td>
+<td align="left">00:16–01:15</td>
+<td align="left">来电者描述标称与实测问题</td>
+</tr>
+<tr>
+<td align="left">第二段</td>
+<td align="left">02:27–03:17</td>
+<td align="left">来电者补充实测，客服回应环境因素</td>
+</tr>
+<tr>
+<td align="left">第三段</td>
+<td align="left">03:18–04:00</td>
+<td align="left">理论数据、说明诉求及商务对接建议</td>
+</tr>
+</tbody></table>
+<p>第三段后来又按要求删除了内部两处内容，所以这张表描述的是最初保留的范围，不能用来直接还原最后的成片。</p>
+<h3 id="一个实际踩到的坑：文字边界不等于声音边界"><a href="#一个实际踩到的坑：文字边界不等于声音边界" class="headerlink" title="一个实际踩到的坑：文字边界不等于声音边界"></a>一个实际踩到的坑：文字边界不等于声音边界</h3><p>自动转写可能识别错词，也可能把多句话放在同一个时间段里。双方抢话时，说话人归属尤其容易混淆。</p>
+<p>这次还有一个具体问题：直接对 MP3 设置转写偏移和时长时，曾出现输出文字超出预期区间的情况。后来需要局部定位时，采用的办法是<strong>先用 FFmpeg 物理截出短音频，再单独识别</strong>。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -n -i <span class="string">&quot;input.mp3&quot;</span> \</span><br><span class="line">  -ss 198 -t 42 \</span><br><span class="line">  -ar 16000 -ac 1 -c:a pcm_s16le \</span><br><span class="line">  <span class="string">&quot;work/boundary.wav&quot;</span></span><br><span class="line"></span><br><span class="line">whisper-cli \</span><br><span class="line">  -m <span class="string">&quot;models/ggml-small.bin&quot;</span> \</span><br><span class="line">  -f <span class="string">&quot;work/boundary.wav&quot;</span> \</span><br><span class="line">  -l zh -otxt -osrt -oj \</span><br><span class="line">  -of <span class="string">&quot;work/boundary&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>这里有个小细节：短音频里的时间从零开始。假如识别结果显示某句话从 5 秒开始，它在原音中的位置就是 <code>198 + 5 = 203</code> 秒。记录切点时必须说明时间相对于哪个文件。</p>
+<h2 id="五、先导出分段，修改起来更直接"><a href="#五、先导出分段，修改起来更直接" class="headerlink" title="五、先导出分段，修改起来更直接"></a>五、先导出分段，修改起来更直接</h2><p>选好区间后，我没有马上把所有内容做成一个文件，而是先分别导出 WAV。</p>
+<p>下面两条命令对应前两个区间，统一输出为 48 kHz、单声道 PCM，方便后续处理和拼接：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -n -i <span class="string">&quot;input.mp3&quot;</span> \</span><br><span class="line">  -ss 16 -t 59 \</span><br><span class="line">  -ar 48000 -ac 1 -c:a pcm_s16le \</span><br><span class="line">  <span class="string">&quot;segments/01.wav&quot;</span></span><br><span class="line"></span><br><span class="line">ffmpeg -n -i <span class="string">&quot;input.mp3&quot;</span> \</span><br><span class="line">  -ss 147 -t 50 \</span><br><span class="line">  -ar 48000 -ac 1 -c:a pcm_s16le \</span><br><span class="line">  <span class="string">&quot;segments/02.wav&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>-ss</code> 指定开始位置，<code>-t</code> 指定持续时间。示例把它们放在输入之后，并重新编码为 PCM；没有采用 MP3 直接流复制来追求精确的句子切点。</p>
+<p>分段的好处很快体现出来：用户认可前两段后，后续可以只处理第三段，不必每次把整段录音全部重做。</p>
+<p>如果要删除某一段内部的话语，可以把保留区间裁出来再连接。下面只是演示：从第三段候选范围中删除原音 222–225.7 秒，保留两侧内容，并不代表这次第三段全部修改记录。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -n -i <span class="string">&quot;input.mp3&quot;</span> \</span><br><span class="line">  -filter_complex \</span><br><span class="line">  <span class="string">&quot;[0:a]atrim=start=198:end=222,asetpts=PTS-STARTPTS[a]; \</span></span><br><span class="line"><span class="string">   [0:a]atrim=start=225.7:end=240,asetpts=PTS-STARTPTS[b]; \</span></span><br><span class="line"><span class="string">   [a][b]concat=n=2:v=0:a=1[out]&quot;</span> \</span><br><span class="line">  -map <span class="string">&quot;[out]&quot;</span> -ar 48000 -ac 1 -c:a pcm_s16le \</span><br><span class="line">  <span class="string">&quot;segments/03-edited.wav&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>atrim</code> 截取保留区间，<code>asetpts</code> 将每段时间戳归零，<code>concat</code> 再把它们接起来。</p>
+<p>命令执行成功，只说明音频按指定区间生成了。接缝有没有残字、半个音节或突然变化，仍需要回到声音本身检查。</p>
+<h2 id="六、停顿处理：紧凑和自然之间要留一点空间"><a href="#六、停顿处理：紧凑和自然之间要留一点空间" class="headerlink" title="六、停顿处理：紧凑和自然之间要留一点空间"></a>六、停顿处理：紧凑和自然之间要留一点空间</h2><p>用户对成片提出过一个很明确的要求：<strong>缩短对话间过长的空白，但保留自然停顿，不要全部删光。</strong></p>
+<p>这比“删除静音”更具体。短暂停顿承担了换人说话、句子结束和思考的作用，全部挤掉会让对话听起来像连续抢话。</p>
+<h3 id="6-1-先检测静音区间"><a href="#6-1-先检测静音区间" class="headerlink" title="6.1 先检测静音区间"></a>6.1 先检测静音区间</h3><p>FFmpeg 的 <code>silencedetect</code> 可以帮助查看低于阈值的区间：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -hide_banner -i <span class="string">&quot;segments/01.wav&quot;</span> \</span><br><span class="line">  -af <span class="string">&quot;silencedetect=noise=-38dB:d=0.7&quot;</span> \</span><br><span class="line">  -f null - 2&gt; <span class="string">&quot;work/silence-01.log&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>这个示例检测低于 <code>-38 dB</code>、持续至少 <code>0.7</code> 秒的区间。阈值需要按录音噪声和说话音量调整，不能把它当成所有通话都适用的值。</p>
+<p>检测也只提供声音强弱的信息。轻声的字、气声和电话背景噪声，都会影响判断。</p>
+<h3 id="6-2-这次实际尝试的自动处理"><a href="#6-2-这次实际尝试的自动处理" class="headerlink" title="6.2 这次实际尝试的自动处理"></a>6.2 这次实际尝试的自动处理</h3><p>工作记录中使用过这样的滤镜：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">silenceremove=start_periods=0:stop_periods=-1:stop_duration=0.35:stop_threshold=-38dB</span><br></pre></td></tr></table></figure>
+
+<p>对各分段处理后，还分别添加了 0.3 秒前置静音，再进行拼接。</p>
+<p>这里需要纠正一个容易出现的理解：**<code>stop_duration=0.35</code> 不能保证每一处静音最终都恰好保留 0.35 秒。** 它参与滤镜对静音的判断，并不是一句“把所有停顿统一设为这个长度”的指令。</p>
+<p>这次记录显示，三段合并版约为 146.54 秒，处理后的自然衔接版约为 134.368 秒，缩短约 12.17 秒。这些数值来自当时的工作记录，不能据此推出每个接缝都自然。</p>
+<h3 id="6-3-如果还要精修，下一步怎么做"><a href="#6-3-如果还要精修，下一步怎么做" class="headerlink" title="6.3 如果还要精修，下一步怎么做"></a>6.3 如果还要精修，下一步怎么做</h3><p>对于听感要求更高的版本，我会采用更明确的方式：检测长静音，保留其前后两端，只删除中间一部分，再逐处试听。这能清楚控制每一处停顿实际留下多少。</p>
+<p>这是后续精修方案，不是本次已经逐处完成的处理。当前自动检测没有发现超过 0.7 秒的静音，但这也不能证明没有误删轻声内容，或所有衔接都已达到预期。</p>
+<h2 id="七、切片合成，最后再输出-MP3"><a href="#七、切片合成，最后再输出-MP3" class="headerlink" title="七、切片合成，最后再输出 MP3"></a>七、切片合成，最后再输出 MP3</h2><p>各分段确认后，统一音频参数，再按顺序合成。下面以三份处理后的 WAV 为例；如果第三段有修改，就把第三个输入替换为对应版本。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -n \</span><br><span class="line">  -i <span class="string">&quot;segments/01.wav&quot;</span> \</span><br><span class="line">  -i <span class="string">&quot;segments/02.wav&quot;</span> \</span><br><span class="line">  -i <span class="string">&quot;segments/03-edited.wav&quot;</span> \</span><br><span class="line">  -filter_complex \</span><br><span class="line">  <span class="string">&quot;[0:a]asetpts=PTS-STARTPTS[a0]; \</span></span><br><span class="line"><span class="string">   [1:a]asetpts=PTS-STARTPTS[a1]; \</span></span><br><span class="line"><span class="string">   [2:a]asetpts=PTS-STARTPTS[a2]; \</span></span><br><span class="line"><span class="string">   [a0][a1][a2]concat=n=3:v=0:a=1[out]&quot;</span> \</span><br><span class="line">  -map <span class="string">&quot;[out]&quot;</span> -c:a pcm_s16le \</span><br><span class="line">  <span class="string">&quot;output/merged.wav&quot;</span></span><br><span class="line"></span><br><span class="line">ffmpeg -n -i <span class="string">&quot;output/merged.wav&quot;</span> \</span><br><span class="line">  -c:a libmp3lame -q:a 2 \</span><br><span class="line">  <span class="string">&quot;output/highlights.mp3&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>中间保留 WAV，最后生成方便分享的 MP3，可以减少反复有损编码。</p>
+<p>这次还保留了原音、转写、分段和处理副本。这样的文件组织有助于回答一个实际问题：如果第三段需要再删一句，应该改哪一份，而不是凭哪个文件名带着“最终版”来猜。</p>
+<h2 id="八、成片检查要分清检查到了哪一层"><a href="#八、成片检查要分清检查到了哪一层" class="headerlink" title="八、成片检查要分清检查到了哪一层"></a>八、成片检查要分清检查到了哪一层</h2><p>文件生成后，可以先查看格式和时长：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ffprobe -v error \</span><br><span class="line">  -show_entries format=duration:stream=codec_name,sample_rate,channels \</span><br><span class="line">  -of json <span class="string">&quot;output/highlights.mp3&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>再做一次全量解码检查：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -v error -i <span class="string">&quot;output/highlights.mp3&quot;</span> -f null -</span><br></pre></td></tr></table></figure>
+
+<p>不过，验证不能只停留在文件是否可读：</p>
+<table>
+<thead>
+<tr>
+<th align="left">检查</th>
+<th align="left">能确认什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">格式与全量解码检查</td>
+<td align="left">音频文件能够被读取、解码</td>
+</tr>
+<tr>
+<td align="left">静音检测</td>
+<td align="left">是否存在满足当前阈值的长静音</td>
+</tr>
+<tr>
+<td align="left">成片重新转写</td>
+<td align="left">辅助排查成片可能缺少或多出了哪些内容</td>
+</tr>
+<tr>
+<td align="left">人工回听原音和成片</td>
+<td align="left">确认切点、问答关系、听感和语义是否符合要求</td>
+</tr>
+</tbody></table>
+<p>这次的工作记录包含解码检查和静音检查，也有用户对前两段的认可；但没有完整人工听审的记录，个别说话人归属和第三段切点仍需要核实。</p>
+<p>尤其不能直接拿早期完整转写当作成片逐字稿。删改以后，成片包含的内容已经变了，原文里有的话，成片未必还在。</p>
+<h2 id="九、这套方法适合什么时候用"><a href="#九、这套方法适合什么时候用" class="headerlink" title="九、这套方法适合什么时候用"></a>九、这套方法适合什么时候用</h2><p>对我来说，它适合处理这样的任务：已经有录音，也知道大致要保留什么，但不想反复拖动进度条找位置。</p>
+<p>本地 Whisper 把声音变成可搜索的文字和时间索引；AI 助手帮助将“我想留下这些问答”转成候选区间；FFmpeg 把区间落实成独立切片和合成音频。用户反馈再推动局部修改，过程比较容易追溯。</p>
+<p>真正需要花心思的地方，是决定一句话的上下文该留到哪里，以及一句话之后应该停多久。</p>
+<p>做完这次以后，我会把流程固定为：<strong>先转写、再选段，先检查分段、再合成，最后回到成片核对。</strong> 原始录音始终保留，所有自动识别和剪辑结果都可以重新生成。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/ggml-org/whisper.cpp">whisper.cpp 项目</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/ggml-org/whisper.cpp/tree/master/examples/cli">whisper.cpp CLI 使用说明</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/ggml-org/whisper.cpp/tree/master/models">whisper.cpp 模型说明</a></li>
+<li><a target="_blank" rel="noopener" href="https://ffmpeg.org/ffmpeg-filters.html">FFmpeg 滤镜文档</a>：<code>atrim</code>、<code>asetpts</code>、<code>concat</code>、<code>silencedetect</code>、<code>silenceremove</code></li>
+<li><a target="_blank" rel="noopener" href="https://ffmpeg.org/ffprobe.html">ffprobe 文档</a></li>
+</ul>
+<blockquote>
+<p>本文记录一次实际工作，命令为整理后的复现示例。文件名做了泛化，未附原始通话和邮件。使用时请根据本机版本、录音条件和实际内容调整参数。</p>
+</blockquote>
+</div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
+    
+      <footer class="post-tags" aria-label="文章标签">
+        <a href="/web-blog/tags/AI/">AI</a><a href="/web-blog/tags/Whisper/">Whisper</a><a href="/web-blog/tags/whisper-cpp/">whisper.cpp</a><a href="/web-blog/tags/FFmpeg/">FFmpeg</a><a href="/web-blog/tags/%E9%9F%B3%E9%A2%91%E5%A4%84%E7%90%86/">音频处理</a><a href="/web-blog/tags/%E6%9C%AC%E5%9C%B0%E6%A8%A1%E5%9E%8B/">本地模型</a>
+      </footer>
+    
+    <nav class="post-navigation" aria-label="文章导航">
+      <a href="/web-blog/2026/11/18/dsh-bot%E5%9B%A2%E9%98%9F%E5%AE%9E%E8%B7%B5%E8%AE%B0%E5%BD%95/"><span>上一篇</span><b>付不起 Grok Bot 的订阅，我自己搭了一个：ds-bot 替代方案实录</b></a>
+      <a class="next" href="/web-blog/2026/11/18/%E4%BB%8Ecc-switch%E8%BF%81%E7%A7%BB%E5%88%B0magpie-%E7%BB%9F%E4%B8%80%E6%A8%A1%E5%9E%8B%E7%BD%91%E5%85%B3%E5%AE%9E%E8%B7%B5/"><span>下一篇</span><b>从 cc-switch 迁移到 magpie：把模型路由收进本地网关</b></a>
+    </nav>
+  </article>
+  <aside class="post-rail" aria-label="文章信息">
+    <p class="section-label">相关信息</p>
+    <div><strong>专题</strong><a href="/web-blog/categories/AI/">AI</a></div>
+    <div><strong>标签</strong><a href="/web-blog/tags/AI/">AI</a><a href="/web-blog/tags/Whisper/">Whisper</a><a href="/web-blog/tags/whisper-cpp/">whisper.cpp</a><a href="/web-blog/tags/FFmpeg/">FFmpeg</a><a href="/web-blog/tags/%E9%9F%B3%E9%A2%91%E5%A4%84%E7%90%86/">音频处理</a><a href="/web-blog/tags/%E6%9C%AC%E5%9C%B0%E6%A8%A1%E5%9E%8B/">本地模型</a></div>
+  </aside>
+</main>
+
+
+    <footer class="shell footer">
+      <span>2021 - 2026 &copy; LC</span>
+      <span>真实项目的研究记录</span>
+      <a href="/web-blog/atom.xml">RSS</a>
+    </footer>
+
+    <dialog class="search-dialog" id="search-dialog" data-search-url="/web-blog/search.xml">
+      <div class="search-dialog__bar">
+        <label for="site-search">搜索笔记</label>
+        <button class="dialog-close" aria-label="关闭搜索" type="button">关闭</button>
+      </div>
+      <input id="site-search" type="search" autocomplete="off" placeholder="输入文章标题、主题或关键词" />
+      <div class="search-results" aria-live="polite"></div>
+    </dialog>
+
+    <script src="/web-blog/js/site.js"></script>
+  </body>
+</html>

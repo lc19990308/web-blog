@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%85%88%E9%80%89%E4%B8%80%E4%B8%AA%E4%BC%9A%E6%94%B9%E5%96%84%E9%98%85%E8%AF%BB%E7%9A%84%E6%95%88%E6%9E%9C"><span class="toc-list-text">先选一个会改善阅读的效果</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%AE%89%E8%A3%85%E4%B8%80%E4%B8%AA%E7%BB%84%E4%BB%B6%EF%BC%8C%E8%80%8C%E4%B8%8D%E6%98%AF%E6%95%B4%E5%BA%93"><span class="toc-list-text">安装一个组件，而不是整库</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9C%A8%E4%B8%80%E4%B8%AA%E4%B8%9A%E5%8A%A1%E9%A1%B5%E9%9D%A2%E9%87%8C%E4%BD%BF%E7%94%A8"><span class="toc-list-text">在一个业务页面里使用</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9C%A8-Nuxt%E3%80%81%E7%A7%BB%E5%8A%A8%E7%AB%AF%E5%92%8C%E6%97%A0%E5%8A%A8%E7%94%BB%E5%81%8F%E5%A5%BD%E4%B8%8B%E6%94%B6%E4%BD%8F%E6%95%88%E6%9E%9C"><span class="toc-list-text">在 Nuxt、移动端和无动画偏好下收住效果</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%80%E4%B8%AA%E9%9C%80%E8%A6%81%E6%8F%90%E5%89%8D%E7%9F%A5%E9%81%93%E7%9A%84-GSAP-%E8%BE%B9%E7%95%8C"><span class="toc-list-text">一个需要提前知道的 GSAP 边界</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%8A%E7%BA%BF%E5%89%8D%E7%9A%84%E5%9B%9B%E4%B8%AA%E6%A3%80%E6%9F%A5"><span class="toc-list-text">上线前的四个检查</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2026-08-07</span><span>4 分钟阅读</span><span>更新于 2026-08-07</span></div>
       <p class="post-lede">从 vue-bits 的组件注册表安装 AnimatedContent，了解它写入项目的方式、GSAP 依赖、Nuxt/SSR 与减少动态效果设置，并避开全局 ScrollTrigger 的使用边界。</p>
     </header>
-    <div class="prose" itemprop="articleBody"><p><a target="_blank" rel="noopener" href="https://github.com/DavidHDev/vue-bits">vue-bits</a> 很容易让人误以为又是一个“装上就能全局使用”的 Vue UI 库。它不是。它更像一个可挑选的动效组件仓库：在需要某个效果时，把那一个组件和它的依赖拉进自己的项目，之后源码归项目自己维护。</p>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><p><a target="_blank" rel="noopener" href="https://github.com/DavidHDev/vue-bits">vue-bits</a> 很容易让人误以为又是一个“装上就能全局使用”的 Vue UI 库。它不是。它更像一个可挑选的动效组件仓库：在需要某个效果时，把那一个组件和它的依赖拉进自己的项目，之后源码归项目自己维护。</p>
 <p>这个区别很实际。你不会为了一个滚动入场动画引入一整套设计系统；代价是组件更新不会随着 <code>npm update</code> 自动到来，安装后要把它当作自己代码的一部分审查、测试和升级。</p>
 <p>仓库 README 目前列出 90+ 个文本动画、交互组件和背景效果，并说明它是 <a target="_blank" rel="noopener" href="https://reactbits.dev/">React Bits</a> 的官方 Vue 移植版。本文不追求把页面做得“特效很多”，只用 <code>AnimatedContent</code> 做一个可控的入场动画，讲清楚完整使用路径。</p>
 <h2 id="先选一个会改善阅读的效果"><a href="#先选一个会改善阅读的效果" class="headerlink" title="先选一个会改善阅读的效果"></a>先选一个会改善阅读的效果</h2><p><code>AnimatedContent</code> 是一个包裹组件。它在元素进入视口时，用 GSAP 把子内容从指定方向移动到原位，并可同时从低透明度过渡到可见。</p>
@@ -126,6 +126,25 @@
 <p>vue-bits 的价值在于让你从一个已完成的交互细节开始，而不是从零抄一段动效代码。选择一个能服务内容的组件，限定它的出现范围，再把动效关掉后重新检查页面。这样留下来的效果，通常比满屏背景粒子和逐字标题更耐看。</p>
 <p>最后还有许可证。vue-bits 使用的是 <a target="_blank" rel="noopener" href="https://github.com/DavidHDev/vue-bits/blob/main/LICENSE.md">MIT + Commons Clause</a>：可以把组件用于应用、网站或产品，包括商业用途；但不能把组件本身单独、打包、模板化或移植后出售、再授权或再分发。做客户项目一般没有问题，做“售卖组件库”的产品则不在许可范围内。</p>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/Vue/">Vue</a><a href="/web-blog/tags/%E7%BB%84%E4%BB%B6/">组件</a><a href="/web-blog/tags/%E5%8A%A8%E7%94%BB/">动画</a><a href="/web-blog/tags/UI/">UI</a>
@@ -137,7 +156,7 @@
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/Vue/">Vue</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/Vue/">Vue</a><a href="/web-blog/tags/%E7%BB%84%E4%BB%B6/">组件</a><a href="/web-blog/tags/%E5%8A%A8%E7%94%BB/">动画</a><a href="/web-blog/tags/UI/">UI</a></div>
   </aside>

@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-list-text">前言</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%80%E3%80%81new-%E5%88%B0%E5%BA%95%E5%81%9A%E4%BA%86%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-list-text">一、new 到底做了什么？</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-1-%E6%89%8B%E5%86%99%E5%AE%9E%E7%8E%B0-new"><span class="toc-list-text">1.1 手写实现 new</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-2-%E6%9B%B4%E7%B2%BE%E7%82%BC%E7%9A%84%E7%89%88%E6%9C%AC"><span class="toc-list-text">1.2 更精炼的版本</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%8C%E3%80%81%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E7%9A%84%E8%BF%94%E5%9B%9E%E5%80%BC%E8%A7%84%E5%88%99"><span class="toc-list-text">二、构造函数的返回值规则</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-1-%E8%BF%94%E5%9B%9E%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B"><span class="toc-list-text">2.1 返回基本类型</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-2-%E8%BF%94%E5%9B%9E%E5%AF%B9%E8%B1%A1%E7%B1%BB%E5%9E%8B"><span class="toc-list-text">2.2 返回对象类型</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%89%E3%80%81%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E4%B8%8D%E6%98%AF%E9%AD%94%E6%B3%95"><span class="toc-list-text">三、构造函数不是魔法</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-1-%E6%B2%A1%E6%9C%89-new-%E7%9A%84%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="toc-list-text">3.1 没有 new 的构造函数</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-2-%E6%A8%A1%E6%8B%9F%E6%B2%A1%E6%9C%89-new-%E7%9A%84%E4%BF%9D%E6%8A%A4"><span class="toc-list-text">3.2 模拟没有 new 的保护</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9B%9B%E3%80%81instanceof-%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-list-text">四、instanceof 的工作原理</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-1-%E6%89%8B%E5%8A%A8%E4%BF%AE%E6%94%B9%E5%8E%9F%E5%9E%8B%E9%93%BE%E7%9A%84%E5%90%8E%E6%9E%9C"><span class="toc-list-text">4.1 手动修改原型链的后果</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%94%E3%80%81%E5%8E%9F%E5%9E%8B%E9%93%BE%E7%9A%84%E5%AE%8C%E6%95%B4%E8%BF%9E%E6%8E%A5"><span class="toc-list-text">五、原型链的完整连接</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-1-constructor-%E5%B1%9E%E6%80%A7"><span class="toc-list-text">5.1 constructor 属性</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%85%AD%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98"><span class="toc-list-text">六、面试题</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%83%E3%80%81class-%E4%B8%8E-new"><span class="toc-list-text">七、class 与 new</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-list-text">总结</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2026-06-26</span><span>4 分钟阅读</span><span>更新于 2026-06-25</span></div>
       <p class="post-lede">深入 new 操作符的底层实现机制，理解构造函数、实例创建、原型连接的全过程，手写实现一个完整的 new 函数</p>
     </header>
-    <div class="prose" itemprop="articleBody"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = <span class="keyword">new</span> Foo()</span><br></pre></td></tr></table></figure>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = <span class="keyword">new</span> Foo()</span><br></pre></td></tr></table></figure>
 
 <p>这行代码看似简单，但 <code>new</code> 实际上做了 4 件事。理解这 4 件事，是理解 JavaScript 面向对象的基础。</p>
 <hr>
@@ -155,18 +155,37 @@
 <p>下一篇将深入<strong>原型与原型链</strong>，理解 JavaScript 继承的底层实现。</p>
 </blockquote>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/JavaScript/">JavaScript</a><a href="/web-blog/tags/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/">你不知道的javascript</a>
       </footer>
     
     <nav class="post-navigation" aria-label="文章导航">
-      <a href="/web-blog/2026/06/26/posts/ydkjs-08-prototype-chain/"><span>上一篇</span><b>你不知道的JavaScript（八）：原型与原型链——JavaScript 继承的底层实现</b></a>
-      <a class="next" href="/web-blog/2026/06/26/posts/ydkjs-09-behavior-delegation/"><span>下一篇</span><b>你不知道的JavaScript（九）：行为委托——比&#34;类继承&#34;更 JavaScript 的方式</b></a>
+      <a href="/web-blog/2026/06/26/posts/ydkjs-05-closure/"><span>上一篇</span><b>你不知道的JavaScript（五）：闭包（Closure）——从原理到实战</b></a>
+      <a class="next" href="/web-blog/2026/06/26/posts/ydkjs-06-this-binding-rules/"><span>下一篇</span><b>你不知道的JavaScript（六）：this 的四种绑定规则</b></a>
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/">你不知道的javascript</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/JavaScript/">JavaScript</a><a href="/web-blog/tags/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/">你不知道的javascript</a></div>
   </aside>

@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-list-text">前言</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%80%E3%80%81%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B"><span class="toc-list-text">一、快速开始</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-1-%E6%B5%8F%E8%A7%88%E5%99%A8%E4%B8%AD%E4%BD%BF%E7%94%A8"><span class="toc-list-text">1.1 浏览器中使用</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-2-Node-js-%E4%B8%AD%E4%BD%BF%E7%94%A8"><span class="toc-list-text">1.2 Node.js 中使用</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%8C%E3%80%81export%E2%80%94%E2%80%94%E5%AF%BC%E5%87%BA"><span class="toc-list-text">二、export——导出</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-1-%E5%91%BD%E5%90%8D%E5%AF%BC%E5%87%BA"><span class="toc-list-text">2.1 命名导出</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-2-%E9%BB%98%E8%AE%A4%E5%AF%BC%E5%87%BA"><span class="toc-list-text">2.2 默认导出</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-3-%E9%87%8D%E6%96%B0%E5%AF%BC%E5%87%BA%EF%BC%88%E8%81%9A%E5%90%88%EF%BC%89"><span class="toc-list-text">2.3 重新导出（聚合）</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%89%E3%80%81import%E2%80%94%E2%80%94%E5%AF%BC%E5%85%A5"><span class="toc-list-text">三、import——导入</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-1-%E5%AF%BC%E5%85%A5%E5%91%BD%E5%90%8D%E5%AF%BC%E5%87%BA"><span class="toc-list-text">3.1 导入命名导出</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-2-%E5%AF%BC%E5%85%A5%E9%BB%98%E8%AE%A4%E5%AF%BC%E5%87%BA"><span class="toc-list-text">3.2 导入默认导出</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-3-%E5%90%8C%E6%97%B6%E5%AF%BC%E5%85%A5%E9%BB%98%E8%AE%A4%E5%92%8C%E5%91%BD%E5%90%8D"><span class="toc-list-text">3.3 同时导入默认和命名</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9B%9B%E3%80%81%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7"><span class="toc-list-text">四、核心特性</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-1-%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F"><span class="toc-list-text">4.1 严格模式</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-2-%E9%9D%99%E6%80%81%E7%BB%93%E6%9E%84%E2%80%94%E2%80%94%E7%BC%96%E8%AF%91%E6%97%B6%E5%88%86%E6%9E%90"><span class="toc-list-text">4.2 静态结构——编译时分析</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-3-%E5%AF%BC%E5%87%BA%E7%9A%84%E6%98%AF%E5%BC%95%E7%94%A8%EF%BC%88Live-Binding%EF%BC%89"><span class="toc-list-text">4.3 导出的是引用（Live Binding）</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-4-%E9%BB%98%E8%AE%A4%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD"><span class="toc-list-text">4.4 默认延迟加载</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-5-CORS-%E9%99%90%E5%88%B6"><span class="toc-list-text">4.5 CORS 限制</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%94%E3%80%81%E5%8A%A8%E6%80%81%E5%AF%BC%E5%85%A5-import"><span class="toc-list-text">五、动态导入 import()</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%85%AD%E3%80%81%E6%A8%A1%E5%9D%97%E5%AF%B9%E6%AF%94%EF%BC%9AESM-vs-CJS-vs-AMD"><span class="toc-list-text">六、模块对比：ESM vs CJS vs AMD</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-list-text">总结</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2022-12-06</span><span>4 分钟阅读</span><span>更新于 2025-06-22</span></div>
       <p class="post-lede">系统掌握 ES Module 的 import/export 语法、静态/动态导入、模块加载原理以及与 CommonJS 的核心差异</p>
     </header>
-    <div class="prose" itemprop="articleBody"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>ES Module（ESM）是 JavaScript 官方的模块化方案，由 ECMAScript 2015（ES6）引入。与 CommonJS 不同，ESM 是<strong>语言层面</strong>的模块化，浏览器和 Node.js 都已原生支持。</p>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>ES Module（ESM）是 JavaScript 官方的模块化方案，由 ECMAScript 2015（ES6）引入。与 CommonJS 不同，ESM 是<strong>语言层面</strong>的模块化，浏览器和 Node.js 都已原生支持。</p>
 <hr>
 <h2 id="一、快速开始"><a href="#一、快速开始" class="headerlink" title="一、快速开始"></a>一、快速开始</h2><h3 id="1-1-浏览器中使用"><a href="#1-1-浏览器中使用" class="headerlink" title="1.1 浏览器中使用"></a>1.1 浏览器中使用</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;module&quot;</span>&gt;</span><span class="javascript"></span></span><br><span class="line"><span class="javascript">  <span class="keyword">import</span> &#123; add &#125; <span class="keyword">from</span> <span class="string">&#x27;./math.js&#x27;</span></span></span><br><span class="line"><span class="javascript">  <span class="built_in">console</span>.log(add(<span class="number">1</span>, <span class="number">2</span>))</span></span><br><span class="line"><span class="javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 或加载外部文件 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;module&quot;</span> <span class="attr">src</span>=<span class="string">&quot;./app.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
@@ -278,6 +278,25 @@
 <li><a target="_blank" rel="noopener" href="https://nodejs.org/api/esm.html">Node.js ESM 文档</a></li>
 </ul>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/ES6/">ES6</a>
@@ -289,7 +308,7 @@
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/ES6/">ES6</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/ES6/">ES6</a></div>
   </aside>

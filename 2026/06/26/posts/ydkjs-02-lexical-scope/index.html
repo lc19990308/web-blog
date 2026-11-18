@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-list-text">前言</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%80%E3%80%81%E8%AF%8D%E6%B3%95%E4%BD%9C%E7%94%A8%E5%9F%9F%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="toc-list-text">一、词法作用域的定义</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-1-%E5%AF%B9%E6%AF%94%EF%BC%9A%E5%A6%82%E6%9E%9C%E6%98%AF%E5%8A%A8%E6%80%81%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="toc-list-text">1.1 对比：如果是动态作用域</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%8C%E3%80%81%E4%BD%9C%E7%94%A8%E5%9F%9F%E9%93%BE%E7%9A%84%E5%BD%A2%E6%88%90"><span class="toc-list-text">二、作用域链的形成</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-1-%E5%AE%9A%E4%B9%89%E6%97%B6%E5%BB%BA%E7%AB%8B"><span class="toc-list-text">2.1 定义时建立</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-2-%E9%97%AD%E5%8C%85%E6%AD%A3%E6%98%AF%E5%88%A9%E7%94%A8%E4%BA%86%E8%BF%99%E4%B8%80%E7%82%B9"><span class="toc-list-text">2.2 闭包正是利用了这一点</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%89%E3%80%81%E6%AC%BA%E9%AA%97%E8%AF%8D%E6%B3%95%E4%BD%9C%E7%94%A8%E5%9F%9F%E7%9A%84%E6%89%8B%E6%AE%B5"><span class="toc-list-text">三、欺骗词法作用域的手段</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-1-eval"><span class="toc-list-text">3.1 eval</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-2-with"><span class="toc-list-text">3.2 with</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-3-%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F%E7%A6%81%E7%94%A8%E5%AE%83%E4%BB%AC%EF%BC%9F"><span class="toc-list-text">3.3 为什么严格模式禁用它们？</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9B%9B%E3%80%81%E6%80%A7%E8%83%BD%E5%BD%B1%E5%93%8D"><span class="toc-list-text">四、性能影响</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-1-%E7%BC%96%E8%AF%91%E5%99%A8%E4%BC%98%E5%8C%96"><span class="toc-list-text">4.1 编译器优化</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-2-eval-with-%E7%9A%84%E4%BB%A3%E4%BB%B7"><span class="toc-list-text">4.2 eval&#x2F;with 的代价</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%94%E3%80%81%E8%AF%8D%E6%B3%95%E4%BD%9C%E7%94%A8%E5%9F%9F%E7%9A%84%E6%B7%B1%E5%B1%82%E7%90%86%E8%A7%A3"><span class="toc-list-text">五、词法作用域的深层理解</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-1-%E5%87%BD%E6%95%B0%E4%BD%9C%E4%B8%BA%E4%B8%80%E7%AD%89%E5%85%AC%E6%B0%91"><span class="toc-list-text">5.1 函数作为一等公民</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-2-%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="toc-list-text">5.2 回调函数的作用域</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%85%AD%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98"><span class="toc-list-text">六、面试题</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-list-text">总结</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2026-06-26</span><span>4 分钟阅读</span><span>更新于 2026-06-25</span></div>
       <p class="post-lede">JavaScript 采用词法作用域（静态作用域）：函数的作用域在定义时确定，而不是在调用时。深入理解词法作用域是理解闭包的基础</p>
     </header>
-    <div class="prose" itemprop="articleBody"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>作用域有两种主要的工作模型：</p>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>作用域有两种主要的工作模型：</p>
 <ol>
 <li><strong>词法作用域（静态作用域）</strong> — 作用域在<strong>写代码时（定义时）</strong>确定。JavaScript 采用此模型</li>
 <li><strong>动态作用域</strong> — 作用域在<strong>运行时（调用时）</strong>确定。Bash、Perl 采用此模型</li>
@@ -144,18 +144,37 @@
 <p>下一篇将深入<strong>函数作用域与块作用域</strong>，讲解 var/let/const 的区别。</p>
 </blockquote>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/JavaScript/">JavaScript</a><a href="/web-blog/tags/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/">你不知道的javascript</a>
       </footer>
     
     <nav class="post-navigation" aria-label="文章导航">
-      <a href="/web-blog/2026/06/27/posts/ydkjs-25-regex-deep-dive/"><span>上一篇</span><b>你不知道的JavaScript（二十五）：正则表达式的深度解析——从匹配引擎到回溯陷阱</b></a>
+      <a href="/web-blog/2026/06/27/posts/ydkjs-24-async-iterator/"><span>上一篇</span><b>你不知道的JavaScript（二十四）：异步迭代器与流式数据处理</b></a>
       <a class="next" href="/web-blog/2026/06/26/posts/ydkjs-03-function-vs-block-scope/"><span>下一篇</span><b>你不知道的JavaScript（三）：函数作用域与块作用域——var、let、const 的真相</b></a>
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/">你不知道的javascript</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/JavaScript/">JavaScript</a><a href="/web-blog/tags/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/">你不知道的javascript</a></div>
   </aside>

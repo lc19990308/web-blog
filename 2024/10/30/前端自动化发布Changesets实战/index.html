@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E7%89%88%E6%9C%AC%E5%8F%B7%E4%B8%8D%E8%AF%A5%E9%9D%A0%E5%8F%91%E5%B8%83%E5%BD%93%E5%A4%A9%E5%9B%9E%E5%BF%86"><span class="toc-list-text">版本号不该靠发布当天回忆</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E5%B9%B6%E7%BA%A6%E5%AE%9A%E5%8F%98%E6%9B%B4%E7%B2%92%E5%BA%A6"><span class="toc-list-text">初始化并约定变更粒度</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E8%AF%AD%E4%B9%89%E5%8C%96%E7%89%88%E6%9C%AC%E6%98%AF%E5%85%BC%E5%AE%B9%E6%80%A7%E6%89%BF%E8%AF%BA"><span class="toc-list-text">语义化版本是兼容性承诺</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E7%94%A8-Release-PR-%E6%8A%8A%E5%8F%91%E5%B8%83%E5%8F%98%E6%88%90%E4%B8%80%E6%AC%A1%E5%AE%A1%E6%9F%A5"><span class="toc-list-text">用 Release PR 把发布变成一次审查</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%8F%91%E5%B8%83%E5%89%8D%E5%90%8E%E5%90%84%E7%9C%8B%E4%B8%80%E6%AC%A1"><span class="toc-list-text">发布前后各看一次</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2024-10-30</span><span>4 分钟阅读</span><span>更新于 2026-11-05</span></div>
       <p class="post-lede">Changesets 把每次用户可见的变更记录在 PR 中，并在主分支生成可审查的版本发布 PR。本文覆盖版本策略、GitHub Actions 和发布验收。</p>
     </header>
-    <div class="prose" itemprop="articleBody"><h2 id="版本号不该靠发布当天回忆"><a href="#版本号不该靠发布当天回忆" class="headerlink" title="版本号不该靠发布当天回忆"></a>版本号不该靠发布当天回忆</h2><p>发包时才想“这次该升 minor 还是 patch”，通常已经太晚。变更的作者最清楚 API 是否兼容、功能是否面向用户，因此版本意图应跟着代码一起进入 PR。Changesets 做的正是这件事：每个需要发布的变更都有一份小型 Markdown 记录，主分支再把这些记录汇总成版本和 CHANGELOG。</p>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><h2 id="版本号不该靠发布当天回忆"><a href="#版本号不该靠发布当天回忆" class="headerlink" title="版本号不该靠发布当天回忆"></a>版本号不该靠发布当天回忆</h2><p>发包时才想“这次该升 minor 还是 patch”，通常已经太晚。变更的作者最清楚 API 是否兼容、功能是否面向用户，因此版本意图应跟着代码一起进入 PR。Changesets 做的正是这件事：每个需要发布的变更都有一份小型 Markdown 记录，主分支再把这些记录汇总成版本和 CHANGELOG。</p>
 <p>它尤其适合多包仓库，也能用于单包项目。它不能替你决定什么是破坏性变更，团队仍需把版本策略写清楚。</p>
 <h2 id="初始化并约定变更粒度"><a href="#初始化并约定变更粒度" class="headerlink" title="初始化并约定变更粒度"></a>初始化并约定变更粒度</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install -D @changesets/cli</span><br><span class="line">npx changeset init</span><br></pre></td></tr></table></figure>
 
@@ -79,6 +79,25 @@
 <p>Changesets 让“谁决定版本、何时发布、改了什么”留下可审查的记录。真正让流程可靠的，是在 Release PR 上认真审查兼容性，而不是把发布按钮交给 CI 后就不再看它。</p>
 <p><strong>推荐阅读：</strong> <a target="_blank" rel="noopener" href="https://github.com/changesets/action">Changesets GitHub Action 文档</a></p>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/">工程化</a>
@@ -90,7 +109,7 @@
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/%E5%B7%A5%E7%A8%8B%E5%8C%96/">工程化</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/">工程化</a></div>
   </aside>

@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-list-text">前言</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%80%E3%80%81%E4%B8%A4%E4%B8%AA%E6%A0%B8%E5%BF%83%E5%8D%8F%E8%AE%AE"><span class="toc-list-text">一、两个核心协议</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-1-%E5%8F%AF%E8%BF%AD%E4%BB%A3%E5%8D%8F%E8%AE%AE%EF%BC%88Iterable-Protocol%EF%BC%89"><span class="toc-list-text">1.1 可迭代协议（Iterable Protocol）</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-2-%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%8D%8F%E8%AE%AE%EF%BC%88Iterator-Protocol%EF%BC%89"><span class="toc-list-text">1.2 迭代器协议（Iterator Protocol）</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%8C%E3%80%81%E5%86%85%E7%BD%AE%E7%9A%84%E5%8F%AF%E8%BF%AD%E4%BB%A3%E5%AF%B9%E8%B1%A1"><span class="toc-list-text">二、内置的可迭代对象</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%89%E3%80%81%E5%88%9B%E5%BB%BA%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BF%AD%E4%BB%A3%E5%99%A8"><span class="toc-list-text">三、创建自定义迭代器</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-1-%E6%89%8B%E5%8A%A8%E5%AE%9E%E7%8E%B0"><span class="toc-list-text">3.1 手动实现</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-2-%E4%BD%BF%E7%94%A8%E7%94%9F%E6%88%90%E5%99%A8%EF%BC%88Generator%EF%BC%89"><span class="toc-list-text">3.2 使用生成器（Generator）</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-3-%E6%97%A0%E9%99%90%E8%BF%AD%E4%BB%A3%E5%99%A8"><span class="toc-list-text">3.3 无限迭代器</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9B%9B%E3%80%81%E6%B6%88%E8%B4%B9%E5%8F%AF%E8%BF%AD%E4%BB%A3%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%AF%AD%E6%B3%95"><span class="toc-list-text">四、消费可迭代对象的语法</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%94%E3%80%81%E5%8F%AF%E8%BF%AD%E4%BB%A3%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%83%B0%E6%80%A7%E6%B1%82%E5%80%BC"><span class="toc-list-text">五、可迭代对象的惰性求值</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%85%AD%E3%80%81Iterator-Helper%EF%BC%88ES2025%EF%BC%89"><span class="toc-list-text">六、Iterator Helper（ES2025）</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%83%E3%80%81%E6%80%BB%E7%BB%93"><span class="toc-list-text">七、总结</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2026-06-27</span><span>4 分钟阅读</span><span>更新于 2026-06-28</span></div>
       <p class="post-lede">从迭代器协议到可迭代协议，从内置可迭代对象到自定义迭代器，深入理解 for...of、展开运算符、解构赋值背后的统一接口</p>
     </header>
-    <div class="prose" itemprop="articleBody"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><code>for...of</code>、展开运算符 <code>...</code> 、解构赋值——你可能每天都在用。但你知道它们背后的<strong>统一接口</strong>是什么吗？</p>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><code>for...of</code>、展开运算符 <code>...</code> 、解构赋值——你可能每天都在用。但你知道它们背后的<strong>统一接口</strong>是什么吗？</p>
 <blockquote>
 <p>所有可迭代的操作，都依赖于同一个协议：<strong>迭代器协议（Iterator Protocol）</strong>。</p>
 </blockquote>
@@ -91,18 +91,37 @@
 
 <p>迭代器协议是 ES6 给 JavaScript 带来的最重要的基础设施之一，它让数据消费的方式变得<strong>统一且可组合</strong>。理解它，你才能真正掌握 <code>for...of</code>、展开运算符和生成器。</p>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/JavaScript/">JavaScript</a><a href="/web-blog/tags/ES6/">ES6</a><a href="/web-blog/tags/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/">你不知道的javascript</a>
       </footer>
     
     <nav class="post-navigation" aria-label="文章导航">
-      <a href="/web-blog/2026/06/27/posts/ydkjs-22-memory-management-and-gc/"><span>上一篇</span><b>你不知道的JavaScript（二十二）：内存管理与 V8 垃圾回收机制</b></a>
-      <a class="next" href="/web-blog/2026/06/27/posts/ydkjs-24-async-iterator/"><span>下一篇</span><b>你不知道的JavaScript（二十四）：异步迭代器与流式数据处理</b></a>
+      <a href="/web-blog/2026/06/27/posts/ydkjs-21-module-system-deep-dive/"><span>上一篇</span><b>你不知道的JavaScript（二十一）：模块系统深度解析——从 CommonJS 到 ESM 的实现原理</b></a>
+      <a class="next" href="/web-blog/2026/06/27/posts/ydkjs-25-regex-deep-dive/"><span>下一篇</span><b>你不知道的JavaScript（二十五）：正则表达式的深度解析——从匹配引擎到回溯陷阱</b></a>
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/">你不知道的javascript</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/JavaScript/">JavaScript</a><a href="/web-blog/tags/ES6/">ES6</a><a href="/web-blog/tags/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript/">你不知道的javascript</a></div>
   </aside>

@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-list-text">前言</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%80%E3%80%81%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81-nextTick"><span class="toc-list-text">一、为什么需要 nextTick</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-1-Vue-%E7%9A%84%E5%BC%82%E6%AD%A5%E6%9B%B4%E6%96%B0%E7%AD%96%E7%95%A5"><span class="toc-list-text">1.1 Vue 的异步更新策略</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-2-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="toc-list-text">1.2 性能优化</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%8C%E3%80%81nextTick-%E7%9A%84%E7%94%A8%E6%B3%95"><span class="toc-list-text">二、nextTick 的用法</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-1-%E7%BB%84%E5%90%88%E5%BC%8F-API%EF%BC%88Vue-3%EF%BC%89"><span class="toc-list-text">2.1 组合式 API（Vue 3）</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-2-%E9%80%89%E9%A1%B9%E5%BC%8F-API%EF%BC%88Vue-2-3%EF%BC%89"><span class="toc-list-text">2.2 选项式 API（Vue 2&#x2F;3）</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%89%E3%80%81%E5%AE%9E%E6%88%98%E5%9C%BA%E6%99%AF"><span class="toc-list-text">三、实战场景</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-1-%E8%8E%B7%E5%8F%96%E6%9B%B4%E6%96%B0%E5%90%8E%E7%9A%84-DOM-%E5%B0%BA%E5%AF%B8"><span class="toc-list-text">3.1 获取更新后的 DOM 尺寸</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-2-%E5%88%97%E8%A1%A8%E6%BB%9A%E5%8A%A8%E5%88%B0%E5%BA%95%E9%83%A8"><span class="toc-list-text">3.2 列表滚动到底部</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-3-%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93%E9%85%8D%E5%90%88"><span class="toc-list-text">3.3 与第三方库配合</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9B%9B%E3%80%81nextTick-%E5%8E%9F%E7%90%86"><span class="toc-list-text">四、nextTick 原理</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-1-%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-list-text">4.1 实现原理</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-2-%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F"><span class="toc-list-text">4.2 执行顺序</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%94%E3%80%81%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-list-text">五、注意事项</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-1-nextTick-%E4%B8%8D%E6%98%AF-setTimeout"><span class="toc-list-text">5.1 nextTick 不是 setTimeout</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-2-%E4%B8%8D%E5%BF%85%E8%A6%81%E7%9A%84-nextTick"><span class="toc-list-text">5.2 不必要的 nextTick</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%85%AD%E3%80%81%E8%B0%83%E8%AF%95%E6%8A%80%E5%B7%A7"><span class="toc-list-text">六、调试技巧</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-list-text">总结</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2023-11-07</span><span>4 分钟阅读</span><span>更新于 2026-06-23</span></div>
       <p class="post-lede">理解 Vue 的 nextTick 机制——为什么数据变了但 DOM 没变？何时需要 nextTick？原理是什么？附实战场景</p>
     </header>
-    <div class="prose" itemprop="articleBody"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>很多 Vue 初学者会遇到这样的问题：</p>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>很多 Vue 初学者会遇到这样的问题：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> count = ref(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">handleClick</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  count.value++</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="built_in">document</span>.getElementById(<span class="string">&#x27;count&#x27;</span>).textContent) <span class="comment">// ❌ 还是旧值</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>这是因为 Vue 的 DOM 更新是<strong>异步</strong>的。而 <code>nextTick</code> 就是在 DOM 更新完成后执行回调的工具。</p>
@@ -86,6 +86,25 @@
 <li><a target="_blank" rel="noopener" href="https://vuejs.org/guide/essentials/reactivity-fundamentals.html#async-update-queue">Vue 异步更新队列</a></li>
 </ul>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/Vue/">Vue</a>
@@ -97,7 +116,7 @@
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/Vue/">Vue</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/Vue/">Vue</a></div>
   </aside>

@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#useTemplateRef-%E8%AE%A9%E6%A8%A1%E6%9D%BF%E5%BC%95%E7%94%A8%E6%9B%B4%E6%98%8E%E7%A1%AE"><span class="toc-list-text">useTemplateRef 让模板引用更明确</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#useId-%E8%A7%A3%E5%86%B3%E5%8F%AF%E8%AE%BF%E9%97%AE%E6%80%A7%E4%B8%8E-SSR-ID-%E5%AF%B9%E9%BD%90"><span class="toc-list-text">useId 解决可访问性与 SSR ID 对齐</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%93%8D%E5%BA%94%E5%BC%8F-props-%E8%A7%A3%E6%9E%84%E4%B8%8E-Watch-%E6%8E%A7%E5%88%B6"><span class="toc-list-text">响应式 props 解构与 Watch 控制</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%BB%B6%E8%BF%9F%E6%BF%80%E6%B4%BB%E5%8F%AA%E9%80%82%E7%94%A8%E4%BA%8E-SSR-%E5%BC%82%E6%AD%A5%E7%BB%84%E4%BB%B6"><span class="toc-list-text">延迟激活只适用于 SSR 异步组件</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%8D%87%E7%BA%A7%E5%90%8E%E6%A3%80%E6%9F%A5%E4%BB%80%E4%B9%88"><span class="toc-list-text">升级后检查什么</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2025-03-18</span><span>4 分钟阅读</span><span>更新于 2026-08-07</span></div>
       <p class="post-lede">Vue 3.5 增加了 useId、useTemplateRef、响应式 props 解构、Watcher 暂停恢复和延迟激活。本文只保留可直接使用的 API 与适用边界。</p>
     </header>
-    <div class="prose" itemprop="articleBody"><p>Vue 3.5 主要改善了组件开发和 SSR 场景的细节。升级前先确认运行时、编译器和 <code>@vue/language-tools</code> 的版本保持一致；只升级 <code>vue</code> 而保留旧编译器，往往会得到难以解释的类型或构建问题。</p>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><p>Vue 3.5 主要改善了组件开发和 SSR 场景的细节。升级前先确认运行时、编译器和 <code>@vue/language-tools</code> 的版本保持一致；只升级 <code>vue</code> 而保留旧编译器，往往会得到难以解释的类型或构建问题。</p>
 <p>下面的 API 都要求项目实际运行在 Vue 3.5 或更高版本。</p>
 <h2 id="useTemplateRef-让模板引用更明确"><a href="#useTemplateRef-让模板引用更明确" class="headerlink" title="useTemplateRef 让模板引用更明确"></a><code>useTemplateRef</code> 让模板引用更明确</h2><p><code>useTemplateRef</code> 用字符串和模板中的 <code>ref</code> 对应，类型工具可以据此给出更好的提示。它尤其适合组合式函数需要拿到元素引用的场景。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;script setup lang=&quot;ts&quot;&gt;</span><br><span class="line">import &#123; onMounted, useTemplateRef &#125; from &#x27;vue&#x27;</span><br><span class="line"></span><br><span class="line">const inputRef = useTemplateRef&lt;HTMLInputElement&gt;(&#x27;name-input&#x27;)</span><br><span class="line"></span><br><span class="line">onMounted(() =&gt; &#123;</span><br><span class="line">  inputRef.value?.focus()</span><br><span class="line">&#125;)</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;input ref=&quot;name-input&quot; name=&quot;name&quot; /&gt;</span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure>
@@ -66,6 +66,25 @@
 </ul>
 <p>参考：<a target="_blank" rel="noopener" href="https://blog.vuejs.org/posts/vue-3-5">Vue 3.5 发布说明</a> 与 <a target="_blank" rel="noopener" href="https://vuejs.org/api/reactivity-core.html#watch">Vue Watch API</a>。</p>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/Vue3/">Vue3</a>
@@ -77,7 +96,7 @@
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/Vue3/">Vue3</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/Vue3/">Vue3</a></div>
   </aside>

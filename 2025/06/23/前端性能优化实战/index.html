@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%80%A7%E8%83%BD%E4%B8%8D%E6%98%AF%E4%B8%80%E5%BC%A0%E6%8A%80%E5%B7%A7%E6%B8%85%E5%8D%95"><span class="toc-list-text">性能不是一张技巧清单</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E7%94%A8%E7%8E%B0%E5%9C%BA%E6%95%B0%E6%8D%AE%E5%92%8C%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%95%B0%E6%8D%AE%E9%85%8D%E5%90%88%E5%88%A4%E6%96%AD"><span class="toc-list-text">用现场数据和实验室数据配合判断</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%85%88%E5%AE%9A%E4%BD%8D%E7%93%B6%E9%A2%88%EF%BC%8C%E5%86%8D%E9%80%89%E6%8B%A9%E6%89%8B%E6%AE%B5"><span class="toc-list-text">先定位瓶颈，再选择手段</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E8%AE%A9-JavaScript-%E5%8F%AA%E5%8A%A0%E8%BD%BD%E5%92%8C%E6%89%A7%E8%A1%8C%E5%BF%85%E8%A6%81%E9%83%A8%E5%88%86"><span class="toc-list-text">让 JavaScript 只加载和执行必要部分</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#INP-%E9%97%AE%E9%A2%98%E9%80%9A%E5%B8%B8%E5%9C%A8%E4%B8%BB%E7%BA%BF%E7%A8%8B"><span class="toc-list-text">INP 问题通常在主线程</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%8A%8A-CLS-%E5%BD%93%E6%88%90%E8%AE%BE%E8%AE%A1%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5"><span class="toc-list-text">把 CLS 当成设计问题排查</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%8F%91%E5%B8%83%E9%AA%8C%E6%94%B6"><span class="toc-list-text">发布验收</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2025-06-23</span><span>4 分钟阅读</span><span>更新于 2026-11-05</span></div>
       <p class="post-lede">性能优化先建立真实用户基线，再定位 LCP、INP、CLS 与资源瀑布中的具体问题。本文从测量、归因到验证，给出一套避免盲目优化的工作方式。</p>
     </header>
-    <div class="prose" itemprop="articleBody"><h2 id="性能不是一张技巧清单"><a href="#性能不是一张技巧清单" class="headerlink" title="性能不是一张技巧清单"></a>性能不是一张技巧清单</h2><p>把图片转成 WebP、加 CDN、删几条 <code>console.log</code>，都可能有帮助，也可能完全没有改善用户正在经历的慢。性能工作从一条可复现的用户路径开始，例如“移动网络打开商品详情并加入购物车”，而不是从构建配置里找一个看起来能开启的开关。</p>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><h2 id="性能不是一张技巧清单"><a href="#性能不是一张技巧清单" class="headerlink" title="性能不是一张技巧清单"></a>性能不是一张技巧清单</h2><p>把图片转成 WebP、加 CDN、删几条 <code>console.log</code>，都可能有帮助，也可能完全没有改善用户正在经历的慢。性能工作从一条可复现的用户路径开始，例如“移动网络打开商品详情并加入购物车”，而不是从构建配置里找一个看起来能开启的开关。</p>
 <p>先记录基线：页面版本、测试设备和网络、关键操作、加载瀑布、主线程长任务，以及真实用户数据。之后每次优化只改一个假设，并复测同一条路径。没有前后对比，就无法判断体积变化是否真的改善了体验。</p>
 <h2 id="用现场数据和实验室数据配合判断"><a href="#用现场数据和实验室数据配合判断" class="headerlink" title="用现场数据和实验室数据配合判断"></a>用现场数据和实验室数据配合判断</h2><p>Core Web Vitals 关注三种用户可感知的结果：</p>
 <ul>
@@ -78,6 +78,25 @@
 <p>优化完成后的结果应该能回答“哪条用户路径快了、为什么快了、会不会在下一次发布回退”。这比一份 20 条的万能清单更有用。</p>
 <p><strong>推荐阅读：</strong> <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Performance_API">MDN：Performance API</a></p>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/JavaScript/">JavaScript</a><a href="/web-blog/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>
@@ -89,7 +108,7 @@
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/JavaScript/">JavaScript</a><a href="/web-blog/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a></div>
   </aside>

@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="用 Tailscale 远程用 Hermes，每次都得保证手机和电脑都开着、VPN 都连着，折腾下来还不如一个免费远程桌面。后来换成 DSH 当执行载体、Agents Anywhere 当控制面，这篇写清中间的过程、和 UU 远程的正面比较，以及踩到的坑" />
+    <title>手机远程用 Agent：Tailscale 之后，我换了 Agents Anywhere | 前端技术笔记</title>
+    <link rel="alternate" href="/web-blog/atom.xml" title="前端技术笔记" type="application/atom+xml" />
+    <link rel="stylesheet" href="/web-blog/css/main.css" />
+  <meta name="generator" content="Hexo 5.4.0"></head>
+  <body>
+    <header class="site-header shell">
+      <a class="wordmark" href="/web-blog/" aria-label="前端技术笔记 首页">LC <span>/</span> NOTES</a>
+      <nav class="main-nav" id="main-nav" aria-label="主导航">
+        <a href="/web-blog/">笔记</a>
+        <a href="/web-blog/categories/">专题</a>
+        <a href="/web-blog/about/">关于</a>
+        <a href="/web-blog/archives/">归档</a>
+      </nav>
+      <div class="header-actions">
+        <button class="menu-button" aria-controls="main-nav" aria-expanded="false" aria-label="打开菜单" type="button">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+        </button>
+        <button class="search-button" aria-controls="search-dialog" aria-label="搜索文章" type="button">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.5 4.5"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
+  <aside class="post-toc" aria-label="文章目录">
+    <p class="section-label">本文目录</p>
+    <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-list-text">前言</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%80%E3%80%81%E6%9C%80%E5%BC%80%E5%A7%8B%EF%BC%9ATailscale-%E6%8A%8A%E6%89%8B%E6%9C%BA%E6%8E%A5%E8%BF%9B%E8%B7%91-Hermes-%E7%9A%84%E6%9C%BA%E5%99%A8"><span class="toc-list-text">一、最开始：Tailscale 把手机接进跑 Hermes 的机器</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-1-%E4%B8%BA%E4%BB%80%E4%B9%88-Hermes-%E9%9C%80%E8%A6%81%E4%B8%80%E4%B8%AA%E8%BF%9C%E7%A8%8B%E5%85%A5%E5%8F%A3"><span class="toc-list-text">1.1 为什么 Hermes 需要一个远程入口</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-2-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%89-Tailscale"><span class="toc-list-text">1.2 为什么选 Tailscale</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-3-%E5%85%B7%E4%BD%93%E6%80%8E%E4%B9%88%E9%85%8D"><span class="toc-list-text">1.3 具体怎么配</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-4-%E4%BD%86%E6%98%AF%E7%94%A8%E8%B5%B7%E6%9D%A5%E5%88%AB%E6%89%AD"><span class="toc-list-text">1.4 但是用起来别扭</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%8C%E3%80%81%E6%8B%86%E5%BC%80%E7%9C%8B%EF%BC%8C%E8%BF%9C%E7%A8%8B%E7%94%A8-Agent-%E7%BC%BA%E7%9A%84%E5%88%B0%E5%BA%95%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-list-text">二、拆开看，远程用 Agent 缺的到底是什么</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-1-%E5%9B%9B%E4%BB%B6%E4%BA%8B%EF%BC%8C%E4%B8%8D%E6%98%AF%E4%B8%80%E4%BB%B6"><span class="toc-list-text">2.1 四件事，不是一件</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-2-Tailscale-%E5%8F%AA%E7%AE%A1%E7%AC%AC%E4%B8%80%E5%B1%82"><span class="toc-list-text">2.2 Tailscale 只管第一层</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-3-%E6%89%8B%E6%9C%BA%E4%B8%8D%E6%98%AF%E7%BC%A9%E5%B0%8F%E7%9A%84%E6%A1%8C%E9%9D%A2"><span class="toc-list-text">2.3 手机不是缩小的桌面</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-4-%E9%82%A3%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E7%94%A8%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2"><span class="toc-list-text">2.4 那为什么不用远程桌面</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-5-%E6%89%80%E4%BB%A5%E6%88%91%E8%A6%81%E7%9A%84%E6%98%AF%E4%B8%AA%E4%BB%80%E4%B9%88%E4%B8%9C%E8%A5%BF"><span class="toc-list-text">2.5 所以我要的是个什么东西</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%89%E3%80%81%E4%B8%AD%E9%80%94%E5%85%88%E6%8A%8A-Hermes-%E6%8D%A2%E6%88%90-DSH"><span class="toc-list-text">三、中途先把 Hermes 换成 DSH</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-1-%E6%B5%81%E6%B0%B4%E7%BA%BF%E5%92%8C%E8%BF%90%E8%A1%8C%E6%97%B6%E4%B8%8D%E6%98%AF%E4%B8%80%E5%9B%9E%E4%BA%8B"><span class="toc-list-text">3.1 流水线和运行时不是一回事</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-2-%E8%BF%99%E4%B8%AA%E5%B7%AE%E5%88%AB%E5%9C%A8%E6%89%8B%E6%9C%BA%E4%B8%8A%E4%BC%9A%E8%A2%AB%E6%94%BE%E5%A4%A7"><span class="toc-list-text">3.2 这个差别在手机上会被放大</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-3-%E6%8D%A2%E5%AE%8C%E4%B9%8B%E5%90%8E%EF%BC%8C%E6%96%B0%E9%97%AE%E9%A2%98%E5%86%92%E5%87%BA%E6%9D%A5%E4%BA%86"><span class="toc-list-text">3.3 换完之后，新问题冒出来了</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9B%9B%E3%80%81Agents-Anywhere-%E6%8E%A5%E6%89%8B%E6%8E%A7%E5%88%B6%E9%9D%A2"><span class="toc-list-text">四、Agents Anywhere 接手控制面</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-1-%E5%85%88%E5%88%92%E6%B8%85%E5%AE%83%E4%B8%8D%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-list-text">4.1 先划清它不是什么</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-2-%E5%9B%9B%E5%9D%97%E4%B8%9C%E8%A5%BF%E5%90%84%E8%87%AA%E5%B9%B2%E4%BB%80%E4%B9%88"><span class="toc-list-text">4.2 四块东西各自干什么</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-3-%E5%AE%83%E5%AF%B9%E4%B8%8A%E4%BA%86%E5%93%AA%E4%BA%9B%E5%85%B7%E4%BD%93%E9%97%AE%E9%A2%98"><span class="toc-list-text">4.3 它对上了哪些具体问题</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-4-%E4%B8%89%E4%B8%AA-Runtime-%E8%83%BD%E5%8A%9B%E4%B8%8D%E4%B8%80%E6%A0%B7"><span class="toc-list-text">4.4 三个 Runtime 能力不一样</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%94%E3%80%81DSH-%E8%BF%99%E8%BE%B9%E6%80%8E%E4%B9%88%E6%8E%A5"><span class="toc-list-text">五、DSH 这边怎么接</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-1-%E8%A3%85%E6%8F%92%E4%BB%B6%E4%B9%8B%E5%89%8D%E5%85%88%E7%A1%AE%E8%AE%A4%E8%87%AA%E5%B7%B1%E6%98%AF%E5%93%AA%E7%A7%8D"><span class="toc-list-text">5.1 装插件之前先确认自己是哪种</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-2-%E7%99%BB%E5%BD%95%EF%BC%8C%E8%BF%9E%E4%B8%8A%E5%B7%A5%E4%BD%9C%E8%AE%BE%E5%A4%87"><span class="toc-list-text">5.2 登录，连上工作设备</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-3-%E8%87%AA%E6%89%98%E7%AE%A1%E7%9A%84%E8%AF%9D"><span class="toc-list-text">5.3 自托管的话</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%85%AD%E3%80%81Codex-%E5%92%8C-Claude-Code-%E6%80%8E%E4%B9%88%E6%8E%A5"><span class="toc-list-text">六、Codex 和 Claude Code 怎么接</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#6-1-%E4%B8%80%E5%8F%B0%E6%9C%BA%E5%99%A8%E6%8C%82%E5%A4%9A%E4%B8%AA-Runtime"><span class="toc-list-text">6.1 一台机器挂多个 Runtime</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#6-2-%E6%89%BE%E4%B8%8D%E5%88%B0%E5%91%BD%E4%BB%A4%E5%B0%B1%E5%A1%AB%E7%BB%9D%E5%AF%B9%E8%B7%AF%E5%BE%84"><span class="toc-list-text">6.2 找不到命令就填绝对路径</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#6-3-%E5%88%AB%E8%AE%A9%E4%B8%89%E4%B8%AA-Connector-%E6%8A%A2%E4%B8%80%E5%8F%B0%E8%AE%BE%E5%A4%87"><span class="toc-list-text">6.3 别让三个 Connector 抢一台设备</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%83%E3%80%81%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91"><span class="toc-list-text">七、踩过的坑</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#7-1-%E8%AE%BE%E5%A4%87%E5%9C%A8%E7%BA%BF%E4%B8%8D%E7%AD%89%E4%BA%8E-Runtime-%E5%8F%AF%E7%94%A8"><span class="toc-list-text">7.1 设备在线不等于 Runtime 可用</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#7-2-%E4%BB%A3%E7%90%86%E4%BC%9A%E5%90%83%E6%8E%89%E4%B8%8A%E4%BC%A0%E9%80%9F%E5%BA%A6"><span class="toc-list-text">7.2 代理会吃掉上传速度</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#7-3-%E7%89%88%E6%9C%AC%E9%94%99%E4%BD%8D%EF%BC%8C%E8%A1%A8%E7%8E%B0%E6%98%AF%E4%B8%8D%E6%8A%A5%E9%94%99"><span class="toc-list-text">7.3 版本错位，表现是不报错</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#7-4-%E5%88%AB%E6%8C%87%E6%9C%9B%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88"><span class="toc-list-text">7.4 别指望无人值守</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#7-5-%E6%95%B0%E6%8D%AE%E8%90%BD%E5%9C%A8%E5%93%AA%E5%BE%97%E8%87%AA%E5%B7%B1%E6%B8%85%E6%A5%9A"><span class="toc-list-text">7.5 数据落在哪得自己清楚</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#7-6-%E5%8D%87%E7%BA%A7%E5%8D%B8%E8%BD%BD%E7%9A%84%E4%B8%A4%E4%BB%B6%E4%BA%8B"><span class="toc-list-text">7.6 升级卸载的两件事</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%85%AB%E3%80%81%E7%8E%B0%E5%9C%A8%E6%80%8E%E4%B9%88%E5%88%86%E5%B7%A5"><span class="toc-list-text">八、现在怎么分工</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#8-1-Tailscale-%E8%BF%98%E7%95%99%E7%9D%80%E5%B9%B2%E4%BB%80%E4%B9%88"><span class="toc-list-text">8.1 Tailscale 还留着干什么</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#8-2-%E4%BB%80%E4%B9%88%E6%83%85%E5%86%B5%E4%B8%8B%E5%88%AB%E4%B8%8A%E8%BF%99%E5%A5%97"><span class="toc-list-text">8.2 什么情况下别上这套</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%9C%80%E5%90%8E"><span class="toc-list-text">最后</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-list-text">参考资料</span></a></li></ol>
+  </aside>
+  <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+    <header class="post-header">
+      <p class="section-label">AI</p>
+      <h1 itemprop="headline">手机远程用 Agent：Tailscale 之后，我换了 Agents Anywhere</h1>
+      <div class="metadata"><span>2026-11-18</span><span>4 分钟阅读</span><span>更新于 2026-11-18</span></div>
+      <p class="post-lede">用 Tailscale 远程用 Hermes，每次都得保证手机和电脑都开着、VPN 都连着，折腾下来还不如一个免费远程桌面。后来换成 DSH 当执行载体、Agents Anywhere 当控制面，这篇写清中间的过程、和 UU 远程的正面比较，以及踩到的坑</p>
+    </header>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>先说结论，省得看到最后才发现不是你想找的东西。</p>
+<p>我一开始是用 Tailscale 远程用 Hermes 的。电脑开着，手机 VPN 开着，浏览器连上去，能用。但这套东西用久了就很烦：两个开关都得记得，少一个就白搭。</p>
+<p>烦到什么程度呢，有次在地铁上想催一个 Agent 干活，摸出手机才想起来 Tailscale 没开。开完 VPN、重新连、等证书、找页面，前后两三分钟，等进去了，想干的那件事已经不想干了。</p>
+<p>再后来我认真比了一下：如果只是「用手机操作电脑上跑着的东西」，装个网易 UU 远程不就完了，还免费，还不用配这配那。</p>
+<p>这个念头当时挺打击人的。我自己拼出来的方案，还不如一个装了就用的远控软件。</p>
+<p>但最后我没用 UU，也没把 Tailscale 删掉。中间换了执行载体（Hermes → DSH），又把远程方案换成了 Agents Anywhere。这篇文章就是讲中间这些事。</p>
+<hr>
+<h2 id="一、最开始：Tailscale-把手机接进跑-Hermes-的机器"><a href="#一、最开始：Tailscale-把手机接进跑-Hermes-的机器" class="headerlink" title="一、最开始：Tailscale 把手机接进跑 Hermes 的机器"></a>一、最开始：Tailscale 把手机接进跑 Hermes 的机器</h2><h3 id="1-1-为什么-Hermes-需要一个远程入口"><a href="#1-1-为什么-Hermes-需要一个远程入口" class="headerlink" title="1.1 为什么 Hermes 需要一个远程入口"></a>1.1 为什么 Hermes 需要一个远程入口</h3><p>Hermes 是我花三个月搭的金融研究智能体，<a href="/web-blog/2026/08/06/Hermes%E9%87%91%E8%9E%8D%E6%99%BA%E8%83%BD%E4%BD%93%E4%BB%8E0%E5%88%B0100%E6%90%AD%E5%BB%BA%E5%AE%9E%E5%BD%95/">搭建过程在这篇</a>。一条深度流水线，跑在我自己机器上，每天扫新闻、更新公司档案、写复盘。</p>
+<p>它的产出是定时的，但我看东西是随时看的。日报早上八点生成，我经常在通勤路上才翻。翻完基本会想干两件事之一：</p>
+<ul>
+<li>「这条不对，让它重新核下来源」</li>
+<li>「这家公司加进 watchlist，明天开始盯」</li>
+</ul>
+<p>在电脑前这是两秒钟的事。人不在电脑前就变成「晚上回去再说」，而金融信息晚上再说往往就没意义了。</p>
+<p>所以我需要的第一件事很朴素：在外面能碰到家里那台机器。</p>
+<h3 id="1-2-为什么选-Tailscale"><a href="#1-2-为什么选-Tailscale" class="headerlink" title="1.2 为什么选 Tailscale"></a>1.2 为什么选 Tailscale</h3><p>当时能选的有这么几个，我最后选 Tailscale 主要图安全，不是图方便。</p>
+<table>
+<thead>
+<tr>
+<th align="left">方案</th>
+<th align="left">代价</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">路由器端口映射 + 公网 IP</td>
+<td align="left">服务直接挂公网，认证做薄一点就出事故</td>
+</tr>
+<tr>
+<td align="left">内网穿透（frp 之类）</td>
+<td align="left">还得有台公网 IP 的中转机，暴露面没变小</td>
+</tr>
+<tr>
+<td align="left">Cloudflare Tunnel</td>
+<td align="left">好用，但流量出自己家、要绑域名</td>
+</tr>
+<tr>
+<td align="left">Tailscale</td>
+<td align="left">节点直连，不出公网、不绑域名、不开端口</td>
+</tr>
+</tbody></table>
+<p>Tailscale 底下是 WireGuard。设备加进同一个 tailnet，各自拿到 <code>100.x.y.z</code> 的地址，能打通就直连，打不通才走 DERP 中继。对我有用的就三点：不开放公网端口、有身份和 ACL、有 MagicDNS（手机上是 <code>http://mac-mini:4001</code>，不用记 IP）。</p>
+<p>免费额度个人够用，这块没什么好纠结的。</p>
+<h3 id="1-3-具体怎么配"><a href="#1-3-具体怎么配" class="headerlink" title="1.3 具体怎么配"></a>1.3 具体怎么配</h3><p>Hermes 那边只动了三个地方。</p>
+<p>先把 Web 服务绑回环地址，别给它任何暴露的机会：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Hermes 的 Web/API 只监听本地</span></span><br><span class="line">HOST=127.0.0.1 PORT=4001 ./start.sh</span><br></pre></td></tr></table></figure>
+
+<p>然后用 <code>tailscale serve</code> 挂到 tailnet 内部，不要用 <code>funnel</code>。funnel 是往公网暴露的，正好是我要避免的。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 只在 tailnet 内可访问，自动签发 ts.net 证书</span></span><br><span class="line">tailscale serve --<span class="built_in">bg</span> 4001</span><br><span class="line"></span><br><span class="line"><span class="comment"># 看一眼现在的映射</span></span><br><span class="line">tailscale serve status</span><br></pre></td></tr></table></figure>
+
+<p>这里有个前置条件：<code>serve</code> 走 HTTPS 要在 tailnet 设置里打开 HTTPS Certificates，不打开证书签不下来。</p>
+<p>最后写条 ACL。默认策略是全员互通，我不想要这个默认值。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  「grants」: [</span><br><span class="line">    &#123;</span><br><span class="line">      「src」: [「autogroup:member」],</span><br><span class="line">      「dst」: [「tag:agent-host」],</span><br><span class="line">      「ip」: [「443」]</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>给跑 Agent 的机器打上 <code>tag:agent-host</code>，其他设备只能碰它的 443。</p>
+<p>手机上装客户端、登同一个账号、开 VPN 开关，浏览器访问 <code>https://mac-mini.&lt;tailnet&gt;.ts.net</code> 就进去了。</p>
+<p>这一套配下来不到十分钟，也没出过什么事。</p>
+<h3 id="1-4-但是用起来别扭"><a href="#1-4-但是用起来别扭" class="headerlink" title="1.4 但是用起来别扭"></a>1.4 但是用起来别扭</h3><p>问题不出在故障上。整整一段时间它都挺稳的，我没碰到过连不上之类的事故。</p>
+<p>问题是每天都要做的两件小事。</p>
+<p>第一件，它要求两样东西同时开着。电脑要开着，手机 VPN 也要开着。单看都不苛刻，叠一起就是负担。手机那个 VPN 开关我经常是想用的时候才想起来没开，开了之后又是一次连接、一次等待。等连上，兴致已经过了。</p>
+<p>第二件就有点打击人了。我某天在心里过了一遍：用手机操作电脑上跑着的东西，最省事的办法是什么？</p>
+<p>答案是手机上已经装着的那个东西。网易 UU 远程，免费，Windows/macOS/iOS/Android 都有，连上去就是我那台电脑的真实桌面。想点什么点什么，想开什么开什么，不用管 tailnet，也不用管什么 Web 入口。</p>
+<p>所以不是 Tailscale 不好，是我拿它当了别的东西在用。</p>
+<hr>
+<h2 id="二、拆开看，远程用-Agent-缺的到底是什么"><a href="#二、拆开看，远程用-Agent-缺的到底是什么" class="headerlink" title="二、拆开看，远程用 Agent 缺的到底是什么"></a>二、拆开看，远程用 Agent 缺的到底是什么</h2><p>第二阶段开始时我没急着找新工具，先把这个事拆了一下。拆完发现选型没什么好纠结的。</p>
+<h3 id="2-1-四件事，不是一件"><a href="#2-1-四件事，不是一件" class="headerlink" title="2.1 四件事，不是一件"></a>2.1 四件事，不是一件</h3><p>远程用 Agent，要解决的问题其实是四层：</p>
+<table>
+<thead>
+<tr>
+<th align="left">层</th>
+<th align="left">要解决什么</th>
+<th align="left">做不好会怎样</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">网络可达</td>
+<td align="left">手机能不能连到工作机</td>
+<td align="left">连不上、超时、DNS 不解析</td>
+</tr>
+<tr>
+<td align="left">会话状态</td>
+<td align="left">连上之后看到的还是那个会话吗</td>
+<td align="left">重载丢上下文、历史对不上、多端各说各话</td>
+</tr>
+<tr>
+<td align="left">交互请求</td>
+<td align="left">Agent 中途要审批时我能收到吗</td>
+<td align="left">弹窗没人看见、任务卡到超时</td>
+</tr>
+<tr>
+<td align="left">工作区操作</td>
+<td align="left">我能看文件、看 diff、开终端吗</td>
+<td align="left">只能看文字输出，改不了也验证不了</td>
+</tr>
+</tbody></table>
+<p>这四层是递进的，但互相替代不了。网络通了不代表会话能续上，会话能续上不代表审批能推到你手机上。</p>
+<h3 id="2-2-Tailscale-只管第一层"><a href="#2-2-Tailscale-只管第一层" class="headerlink" title="2.2 Tailscale 只管第一层"></a>2.2 Tailscale 只管第一层</h3><p>它做得其实很干净。第三层网络的组网工具，保证包能到，别的不管，也不该管。</p>
+<p>问题出在我的期待上。我当时想的是「网络通了，剩下的浏览器会解决」。这句话在桌面上成立，在手机上不成立：手机上的浏览器不是应用，是个随时会被系统挂起、切走、回收的进程。</p>
+<h3 id="2-3-手机不是缩小的桌面"><a href="#2-3-手机不是缩小的桌面" class="headerlink" title="2.3 手机不是缩小的桌面"></a>2.3 手机不是缩小的桌面</h3><p>这条我踩得最实。</p>
+<p>我在手机上用 Hermes 的 Web 页面干过三件事，三件都别扭。</p>
+<p><strong>审批弹窗。</strong> Agent 跑到一半要问我「这个来源算不算一手信源」。桌面上那是侧边栏一个按钮，手机上是一个需要精确点击的区域，而且我大概率正在别的 app 里。等我想起来切回去，任务已经按超时策略走了默认分支。</p>
+<p><strong>长输出。</strong> 一份深度报告在手机上就是一条很长的滚动条。滑动没问题，问题是我需要一边看一边指，「第三段这个结论的依据在哪」。桌面能并排放，手机只能来回跳。</p>
+<p><strong>断线重连。</strong> 手机锁屏、切网、进电梯，断线是常态。桌面版网页的处理方式是重连后重新拉一次数据，这在手机上意味着滚动位置、展开状态、输入框里没发出去的字，全丢。</p>
+<p>这三件事没有一件是 Tailscale 的错，也没有一件是换个更好的隧道能解决的。它们在第 2、3 层。</p>
+<h3 id="2-4-那为什么不用远程桌面"><a href="#2-4-那为什么不用远程桌面" class="headerlink" title="2.4 那为什么不用远程桌面"></a>2.4 那为什么不用远程桌面</h3><p>这是我给自己提的最较真的一个问题，也是最容易一句话糊过去的：远程桌面能看到真桌面，想点哪里点哪里，还免费，为什么还要另外找东西？</p>
+<p>它对的地方我得承认。在「用手机操作电脑」这件事上，它的成熟度比我自己拼的那套高得多：</p>
+<ul>
+<li>看到的是真实桌面，不用为每个工具单独做移动端适配</li>
+<li>任何软件都能操作，不受「这个工具有没有 Web 版」的限制</li>
+<li>免费，装了就可用，不用配 tailnet、不用管 ACL、不用签证书</li>
+<li>桌面端交互逻辑原样保留，不会出现按钮在手机上点不到</li>
+</ul>
+<p>所以 1.4 里那句「还不如一个免费远控软件」是字面意思。</p>
+<p>但它解决的是另一类问题。摆一起看会比较清楚：</p>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left">远程桌面</th>
+<th align="left">Agents Anywhere</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">传的东西</td>
+<td align="left">像素（视频流）</td>
+<td align="left">会话对象（消息、时间线、审批、文件）</td>
+</tr>
+<tr>
+<td align="left">交互对象</td>
+<td align="left">一个 1920×1080 的桌面</td>
+<td align="left">为手机重排的会话界面</td>
+</tr>
+<tr>
+<td align="left">带宽</td>
+<td align="left">持续视频流，随画面波动</td>
+<td align="left">文本和结构化数据，间断、量小</td>
+</tr>
+<tr>
+<td align="left">等的时候</td>
+<td align="left">手机被画面占住</td>
+<td align="left">可以退出，需要你时再叫你</td>
+</tr>
+<tr>
+<td align="left">中途审批</td>
+<td align="left">你得正好在看着</td>
+<td align="left">是条待办，会等你</td>
+</tr>
+<tr>
+<td align="left">断线恢复</td>
+<td align="left">重连、重新同步画面</td>
+<td align="left">会话在服务端，接着看</td>
+</tr>
+</tbody></table>
+<p>远程桌面传的是像素。Agents Anywhere 传的是语义。</p>
+<p>打开个软件随便看看，这个差别无所谓，甚至远程桌面更强，因为通吃。但 Agent 跑三分钟要你拍板一次的时候，语义层的优势就很实在了。</p>
+<p>画面流没法告诉你「有两件事在等你决定」。它只能显示屏幕现在长什么样。那个审批弹窗要是被别的窗口盖住了，或者你根本没在看，它就是不存在的。</p>
+<p>再算两个现实账。</p>
+<p>带宽上，远程桌面是持续视频流，地铁里信号一抖画面就糊成马赛克。Agent 的输出是文字，几百 KB 的量级，弱网下只是慢，不会不可用。</p>
+<p>占用上，用远程桌面时手机屏幕是被占住的，没法一边挂着一边干别的。而 Agent 这类东西的特点是跑很久、只在少数时刻需要你。</p>
+<h3 id="2-5-所以我要的是个什么东西"><a href="#2-5-所以我要的是个什么东西" class="headerlink" title="2.5 所以我要的是个什么东西"></a>2.5 所以我要的是个什么东西</h3><p>把上面两层合起来，需求就具体了：一个能把会话、审批、文件、终端都端到手机上的控制面，执行还留在我的机器上。</p>
+<p>拆成三条，缺一条都不成立。</p>
+<p>执行必须在本地。工作区、密钥、登录好的模型账号都在那台机器上，搬到云端等于全部重来。</p>
+<p>交互必须是移动原生的。不是把桌面缩小，是按手机的方式重新组织。</p>
+<p>状态必须持久。会话在服务端，换设备、断线、锁屏都不丢。</p>
+<p>远程桌面满足第一条，后两条不满足。Tailscale + Web 三条都不太满足。</p>
+<hr>
+<h2 id="三、中途先把-Hermes-换成-DSH"><a href="#三、中途先把-Hermes-换成-DSH" class="headerlink" title="三、中途先把 Hermes 换成 DSH"></a>三、中途先把 Hermes 换成 DSH</h2><p>顺序上我是先换执行载体，再换远程方案。因为远程方案怎么选，取决于载体长什么样。</p>
+<h3 id="3-1-流水线和运行时不是一回事"><a href="#3-1-流水线和运行时不是一回事" class="headerlink" title="3.1 流水线和运行时不是一回事"></a>3.1 流水线和运行时不是一回事</h3><table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left">Hermes</th>
+<th align="left">DSH</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">形态</td>
+<td align="left">一条深度流水线</td>
+<td align="left">通用 Agent 运行时</td>
+</tr>
+<tr>
+<td align="left">擅长</td>
+<td align="left">把一件事做得很专业</td>
+<td align="left">承接各种不同类型的活</td>
+</tr>
+<tr>
+<td align="left">会话</td>
+<td align="left">单方向、任务式</td>
+<td align="left">多会话、可并行、可长期存在</td>
+</tr>
+<tr>
+<td align="left">扩展</td>
+<td align="left">改代码</td>
+<td align="left">装插件、写 Skill、配小队</td>
+</tr>
+</tbody></table>
+<p>Hermes 只服务金融研究这一件事，而我日常要用的 Agent 远不止金融：写代码、写文章、查资料、跑脚本、审 diff。</p>
+<p>之前那篇 <a href="/web-blog/2026/11/18/dsh-bot%E5%9B%A2%E9%98%9F%E5%AE%9E%E8%B7%B5%E8%AE%B0%E5%BD%95/">ds-bot 的记录</a>里写过这个转变：一堆事压在一个会话里，第三天基本就被挤没了。DSH 的解法是把事拆给多个长期存在的 Session，每个有自己的角色、模型和权限。</p>
+<p>Hermes 没有消失，位置反而更清楚了。金融研究那条流水线继续留在 Hermes 里，它的规则（口径统一、数字可追溯、档案只追加）是专门化的，套到别的事上就是牛刀杀鸡。通用场景全搬到 DSH。</p>
+<h3 id="3-2-这个差别在手机上会被放大"><a href="#3-2-这个差别在手机上会被放大" class="headerlink" title="3.2 这个差别在手机上会被放大"></a>3.2 这个差别在手机上会被放大</h3><p>这点是我换完之后才意识到的，但它可能是最关键的一条。</p>
+<p>流水线的交互是稀疏的。给个任务，等结果，看报告。中间可能十几次工具调用，需要我介入的只有开头和结尾。这种形态在手机上勉强能忍，打开看一眼关掉就行。</p>
+<p>运行时的交互是稠密的。跑一个任务，中途可能问三个问题、要两次审批、报一次失败让你决定重试还是换路。每一环都要切回浏览器、滚动、点。这就不是可用性的问题了，是根本不会去用。</p>
+<p>人会给自己找理由说「能用就行」，实际行为是「能不用就不用」。</p>
+<h3 id="3-3-换完之后，新问题冒出来了"><a href="#3-3-换完之后，新问题冒出来了" class="headerlink" title="3.3 换完之后，新问题冒出来了"></a>3.3 换完之后，新问题冒出来了</h3><p>DSH 换好，能力问题解决了，形态问题原封不动。</p>
+<p>我在电脑前开三个会话跑着，出门，然后什么都干不了。会话还在跑，进度看不到；跑到一半要我确认权限，我不知道；跑完了想追问，得等回家。</p>
+<p>2.5 里列的那三条，DSH 把第一条坐实了。剩下两条，得靠别的东西补。</p>
+<hr>
+<h2 id="四、Agents-Anywhere-接手控制面"><a href="#四、Agents-Anywhere-接手控制面" class="headerlink" title="四、Agents Anywhere 接手控制面"></a>四、Agents Anywhere 接手控制面</h2><h3 id="4-1-先划清它不是什么"><a href="#4-1-先划清它不是什么" class="headerlink" title="4.1 先划清它不是什么"></a>4.1 先划清它不是什么</h3><p>这类工具最容易被误解成又一个云端 Agent。不是。</p>
+<p>它不是 AI Agent，也不是模型服务。它是一个跨设备的 Agent 工作台，连接你工作设备上已经在跑的 Codex、Claude Code、DeepSeek Harness，在桌面、手机、平板、Web 上查看会话、继续对话、回复请求、管理文件和终端。</p>
+<p>任务还是在连接的工作设备上执行，用它自己的工作区、权限和已经登录好的模型账号。</p>
+<p>开源，Apache-2.0，可以连官方 Cloud，也可以 Docker 自托管。</p>
+<p>这两条对我挺关键。模型账号和费用都不变，它沿用工作设备上 Agent 的登录状态，不用额外买订阅。跟上一篇里「付不起 Grok Bot 订阅」是同一个思路，把已有的东西用起来，别再多开一份账单。</p>
+<h3 id="4-2-四块东西各自干什么"><a href="#4-2-四块东西各自干什么" class="headerlink" title="4.2 四块东西各自干什么"></a>4.2 四块东西各自干什么</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">桌面 · 手机 · 平板 · Web</span><br><span class="line">        │  访问与控制</span><br><span class="line">        ▼</span><br><span class="line">Agents Anywhere Server</span><br><span class="line">        │  Connector RPC（HTTP/WebSocket）</span><br><span class="line">        ▼</span><br><span class="line">工作设备上的 Connector</span><br><span class="line">        ├── Codex / Claude Code / DSH   （Runtime）</span><br><span class="line">        └── 工作区 · 文件 · 终端</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="left">组件</th>
+<th align="left">跑在哪</th>
+<th align="left">干什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">客户端</td>
+<td align="left">我的设备</td>
+<td align="left">展示会话和时间线，发消息、做审批</td>
+</tr>
+<tr>
+<td align="left">Server</td>
+<td align="left">Cloud 或自托管</td>
+<td align="left">登录验证、指令转发、会话与附件存储</td>
+</tr>
+<tr>
+<td align="left">Connector</td>
+<td align="left">工作设备</td>
+<td align="left">长连接 Server，把 RPC 落到本机执行</td>
+</tr>
+<tr>
+<td align="left">Runtime</td>
+<td align="left">工作设备</td>
+<td align="left">Agent 适配层，启动和驱动 Codex / Claude / DSH</td>
+</tr>
+</tbody></table>
+<p>这个分层刚好对上前面拆的那四层。网络转发归 Server，会话状态归 Server 加 Connector，交互请求走 RPC，工作区操作由 Connector 在本机提供。四层都有人负责，不用我自己拼。</p>
+<h3 id="4-3-它对上了哪些具体问题"><a href="#4-3-它对上了哪些具体问题" class="headerlink" title="4.3 它对上了哪些具体问题"></a>4.3 它对上了哪些具体问题</h3><table>
+<thead>
+<tr>
+<th align="left">我碰到的坑</th>
+<th align="left">它怎么处理</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">审批弹窗没人看见</td>
+<td align="left">审批和输入请求是一等对象，会出现在手机时间线上，等你处理</td>
+</tr>
+<tr>
+<td align="left">长会话滚动位置丢失</td>
+<td align="left">会话和 Timeline 在服务端持久化，换设备打开还是同一条线</td>
+</tr>
+<tr>
+<td align="left">想验证 Agent 说的对不对</td>
+<td align="left">能浏览预览文件、上传下载附件、开远程终端</td>
+</tr>
+<tr>
+<td align="left">多台机器</td>
+<td align="left">设备、项目、会话三级切换，同一账号下都能看到</td>
+</tr>
+<tr>
+<td align="left">必须守着那台电脑</td>
+<td align="left">手机负责控制，工作设备负责执行</td>
+</tr>
+</tbody></table>
+<p>第一条是我最看重的。Agent 停下来等人，是这类工具里最难缠的一种状态，因为它不报错、不失败，就那么挂着。</p>
+<p>桌面端有侧边栏提醒你，移动端如果不把这件事做成主动推送的对象，这个功能等于不存在。</p>
+<h3 id="4-4-三个-Runtime-能力不一样"><a href="#4-4-三个-Runtime-能力不一样" class="headerlink" title="4.4 三个 Runtime 能力不一样"></a>4.4 三个 Runtime 能力不一样</h3><p>DSH、Codex、Claude Code 都能接，但能力并不完全一致。能不能选模型、能不能打断、能不能恢复会话、审批粒度多细，取决于各 Runtime 自己支持什么，最终以客户端显示为准。</p>
+<p>我的感受是这样：</p>
+<table>
+<thead>
+<tr>
+<th align="left">Runtime</th>
+<th align="left">我拿它干什么</th>
+<th align="left">手机上怎么样</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">DSH</td>
+<td align="left">主力，长会话、多任务、写作和研究</td>
+<td align="left">接入最完整，官方专门做了桥接插件</td>
+</tr>
+<tr>
+<td align="left">Codex</td>
+<td align="left">单点代码任务，跑完就结束</td>
+<td align="left">审批流清晰，适合扔个任务然后走开</td>
+</tr>
+<tr>
+<td align="left">Claude Code</td>
+<td align="left">大仓库里的改动，需要看 diff</td>
+<td align="left">看 diff 和文件比纯聊天界面舒服</td>
+</tr>
+</tbody></table>
+<p>用法上我就一条原则：需要我在手机上频繁介入的活，交给接入能力最完整的那个。一次性的、不需要中途审批的，哪个顺手用哪个。</p>
+<hr>
+<h2 id="五、DSH-这边怎么接"><a href="#五、DSH-这边怎么接" class="headerlink" title="五、DSH 这边怎么接"></a>五、DSH 这边怎么接</h2><p>这一段只讲操作。整条链路里唯一需要先搞清楚「你用的是哪个 DSH」的地方就在这。</p>
+<h3 id="5-1-装插件之前先确认自己是哪种"><a href="#5-1-装插件之前先确认自己是哪种" class="headerlink" title="5.1 装插件之前先确认自己是哪种"></a>5.1 装插件之前先确认自己是哪种</h3><p>DeepSeek Harness 有官方桌面版，也有开源的 DSH Desktop，还有命令行装的。三个装法不一样，搞错了要白折腾。</p>
+<table>
+<thead>
+<tr>
+<th align="left">你在用</th>
+<th align="left">怎么装</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">官方 DeepSeek Harness Desktop</td>
+<td align="left">没有内置，从 npm 装 <code>@agents-anywhere/dsh-bridge-next</code></td>
+</tr>
+<tr>
+<td align="left">开源 DSH Desktop</td>
+<td align="left">已内置，直接启用，别再装 npm 包</td>
+</tr>
+<tr>
+<td align="left">命令行安装的 DSH</td>
+<td align="left">用 <code>dsh plugin</code></td>
+</tr>
+</tbody></table>
+<p>官方桌面版有两种装法。第一种是在「插件」页面点「添加插件」，输入包名：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@agents-anywhere/dsh-bridge-next</span><br></pre></td></tr></table></figure>
+
+<p>下载慢的话在「安装源」里切到中国大陆镜像源再试。</p>
+<p>装的过程中如果停下来提示「允许这些脚本并重试」，列表里应该只有 <code>@dataiku/uv</code>（它给插件提供 uv 程序）。列表里出现别的包名先别点允许，去 GitHub 提 issue。</p>
+<p>第二种是让 DSH 里的 AI 代装。<code>plugin_manager</code> 每次安装都会先要你批准，不会偷偷装。</p>
+<p>命令行装的版本更直接：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dsh plugin --profile desktop add @agents-anywhere/dsh-bridge-next</span><br></pre></td></tr></table></figure>
+
+<p>升级得先卸再装，原地 add 不覆盖：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dsh plugin --profile desktop remove @agents-anywhere/dsh-bridge-next</span><br><span class="line">dsh plugin --profile desktop add @agents-anywhere/dsh-bridge-next</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2-登录，连上工作设备"><a href="#5-2-登录，连上工作设备" class="headerlink" title="5.2 登录，连上工作设备"></a>5.2 登录，连上工作设备</h3><p>装完重启 DSH，左侧边栏进「远程控制」。</p>
+<p>先选服务，Agents Anywhere Cloud 或者填自己部署的地址。然后在系统浏览器里完成登录授权。等设备显示在线，确认 DSH Runtime 可用，选工作目录，建会话，发第一个任务。</p>
+<p>有个容易搞混的地方：Agents Anywhere Desktop 和 DSH Desktop 是两个不同的应用。如果插件检测到 Agents Anywhere Desktop 正在跑，会引导你去那个应用继续设置，避免两个应用同时管同一台机器。这不是报错。</p>
+<h3 id="5-3-自托管的话"><a href="#5-3-自托管的话" class="headerlink" title="5.3 自托管的话"></a>5.3 自托管的话</h3><p>Cloud 的服务器在国内，访问体验更好。但我还是自己部署了一遍，理由一是想知道数据落在哪，二是本来就有现成的机器。</p>
+<p>最小部署三步：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 起服务（PostgreSQL + Redis + 迁移任务 + Web）</span></span><br><span class="line">POSTGRES_PASSWORD=your-strong-password \</span><br><span class="line">AGENT_SERVER_SECRET=your-long-random-secret \</span><br><span class="line">docker compose -f docker/docker-compose.postgres.yml up --build</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 从 Server 日志里取 setup token，在 Web 完成首位管理员设置</span></span><br><span class="line"><span class="comment">#    地址是 http://127.0.0.1:5174</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 验证服务健康</span></span><br><span class="line">curl -i https://aa.example.com/api/v2/health</span><br></pre></td></tr></table></figure>
+
+<p>健康检查要看到 HTTP 200 加 JSON，内容里有 <code>「status」: 「ok」</code>。返回 HTML 是最常见的坑，多半是反向代理把 <code>/api/v2/health</code> 打到静态首页上了。这种情况它照样返回 200，但内容是错的。</p>
+<p>到这儿 Tailscale 又回来了。自托管 Server 如果只在家里那台机器上，出门怎么访问？别给它开公网端口，用 Tailscale 在 tailnet 内暴露就行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Server 只监听本机 5174，由 tailscale serve 转成 tailnet 内的 HTTPS</span></span><br><span class="line">tailscale serve --<span class="built_in">bg</span> 5174</span><br></pre></td></tr></table></figure>
+
+<p>手机上开着 Tailscale，客户端里填 <code>https://&lt;机器名&gt;.&lt;tailnet&gt;.ts.net</code> 当服务地址。注意填的是服务根地址，不要带 <code>/api/v2</code>。</p>
+<p>这也是前面那句「Tailscale 没被删掉」的来由。它从方案变成了基础设施，以前它是全部，现在只负责把自托管 Server 安全地送到手机面前。</p>
+<hr>
+<h2 id="六、Codex-和-Claude-Code-怎么接"><a href="#六、Codex-和-Claude-Code-怎么接" class="headerlink" title="六、Codex 和 Claude Code 怎么接"></a>六、Codex 和 Claude Code 怎么接</h2><h3 id="6-1-一台机器挂多个-Runtime"><a href="#6-1-一台机器挂多个-Runtime" class="headerlink" title="6.1 一台机器挂多个 Runtime"></a>6.1 一台机器挂多个 Runtime</h3><p>Connector 在设备详情里可以添加多个 Agent，装了哪个就能接哪个。前提是工作设备上已经装好并登录过对应的官方 CLI。Agents Anywhere 不管模型账号的事，它只负责驱动这些 CLI。</p>
+<p>顺序是先在工作设备上把 Codex / Claude Code 装好登好、能正常跑，然后在 AA 的设备详情里添加，最后新建会话时选「哪个设备 + 哪个 Agent」。</p>
+<h3 id="6-2-找不到命令就填绝对路径"><a href="#6-2-找不到命令就填绝对路径" class="headerlink" title="6.2 找不到命令就填绝对路径"></a>6.2 找不到命令就填绝对路径</h3><p>第一次接 Codex 就撞上了。设备在线，Agent 也添加了，会话起不来。</p>
+<p>原因是 Connector 有自己的 PATH。你在终端敲 <code>codex</code> 能跑，不代表 Connector 那个进程能找到它。用 Homebrew、nvm、asdf 这类会改 PATH 的方式装的 CLI，Connector 拿到的环境变量里可能根本没那些目录。</p>
+<p>解法很土：在实例配置里填绝对路径。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 先查清楚真实路径</span></span><br><span class="line"><span class="built_in">which</span> codex</span><br><span class="line"><span class="built_in">which</span> claude</span><br></pre></td></tr></table></figure>
+
+<p>这不是 AA 的问题，所有后台进程驱动 CLI 的工具都会碰见。</p>
+<h3 id="6-3-别让三个-Connector-抢一台设备"><a href="#6-3-别让三个-Connector-抢一台设备" class="headerlink" title="6.3 别让三个 Connector 抢一台设备"></a>6.3 别让三个 Connector 抢一台设备</h3><p>同一台机器上，有三个地方能启动 Connector：Agents Anywhere Desktop（内置）、<code>anywhere-cli</code> 命令行、DSH 的桥接插件。</p>
+<p>给同一个系统用户只选一种启动方式。三个一起跑会互相抢同一台设备的连接，表现是设备一直在线但操作就是不对劲，而且日志分散在几个地方写，排查很难受。</p>
+<p>我这边是主力机用 DSH 插件启动，因为主要在 DSH 里干活。偶尔要单独跑 Codex 会话，才去 Desktop 那边。</p>
+<hr>
+<h2 id="七、踩过的坑"><a href="#七、踩过的坑" class="headerlink" title="七、踩过的坑"></a>七、踩过的坑</h2><h3 id="7-1-设备在线不等于-Runtime-可用"><a href="#7-1-设备在线不等于-Runtime-可用" class="headerlink" title="7.1 设备在线不等于 Runtime 可用"></a>7.1 设备在线不等于 Runtime 可用</h3><p>界面上「设备在线」只说明 Connector 连上了 Server，跟 Agent 能不能跑是两件事。</p>
+<p>排错顺序是：设备在线 → Runtime 状态 → 会话是否支持这个操作 → Connector 日志。跳过中间两步直接翻日志，会浪费很多时间在无关的报错上。</p>
+<h3 id="7-2-代理会吃掉上传速度"><a href="#7-2-代理会吃掉上传速度" class="headerlink" title="7.2 代理会吃掉上传速度"></a>7.2 代理会吃掉上传速度</h3><p>Connector 连 Server 有三类流量（接口请求、实时连接、终端中继），走同一条出口路径。优先级是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">服务器在本机（localhost） → 直连</span><br><span class="line">AA_CONNECTOR_PROXY 环境变量 → Desktop 和 DSH 插件的「Connector 网络」设置就是它</span><br><span class="line">connector.json 的 proxy 字段 → 给不经过 Desktop/插件跑的 Connector</span><br><span class="line">以上都没有 → 跟随系统（NO_PROXY → 环境变量 → 系统代理）</span><br></pre></td></tr></table></figure>
+
+<p>我碰到的是上传慢。会话历史和附件都要往上走，而我的本地代理转发大请求只有直连的几十分之一速度。表现是小操作正常，一上传历史就转圈。</p>
+<p>定位很直接，看 Connector 启动时打的那行日志：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">connector egress server=https://... proxy=http://127.0.0.1:7890 source=system-proxy</span><br></pre></td></tr></table></figure>
+
+<p><code>source</code> 就是答案。<code>system-proxy</code> 说明走的是系统代理，换成 <code>direct</code> 试一下就知道是不是它的问题。</p>
+<p>另外两个容易误解的：只设 <code>NO_PROXY</code> 不会关掉系统代理，它只决定哪些地址不走代理；还有不支持 PAC，用 PAC 脚本的网络在「跟随系统」下可能静默走直连，这种就得在「Connector 网络」里手动填地址。</p>
+<h3 id="7-3-版本错位，表现是不报错"><a href="#7-3-版本错位，表现是不报错" class="headerlink" title="7.3 版本错位，表现是不报错"></a>7.3 版本错位，表现是不报错</h3><p>这条最容易让人卡住，因为它的表现是什么都不报，就是一直等待。</p>
+<p>规则是：升级 Agents Anywhere Desktop 或 Connector 的 MINOR 版本（比如 2.0.x → 2.1.0）时，桥接插件要一起升。不然本机连接会一直停在等待状态。</p>
+<p>插件本身还有个 DSH 版本兼容范围，写在它自己那份 <code>peerDependencies</code> 里（我装的时候是 DSH <code>&gt;=0.2.0-rc.1 &lt;0.3.0-0</code>，开发基线 <code>0.2.2-rc.4</code>）。</p>
+<p>不满足时不要加版本豁免。豁免只是绕过检查，运行时该崩还是崩。要么升 DSH，要么换个兼容的插件版本。</p>
+<p>还有个细节：通过「插件」页面装的插件暂时不会自动更新，升级要先卸载再装。</p>
+<h3 id="7-4-别指望无人值守"><a href="#7-4-别指望无人值守" class="headerlink" title="7.4 别指望无人值守"></a>7.4 别指望无人值守</h3><p>这条不算坑，是个得先接受的前提，我自己一开始就想错了。</p>
+<p>手机负责控制，工作设备负责执行。所以远程用的前提是那台机器开着机、连着网、Connector 在跑、对应 Runtime 正常。</p>
+<p>macOS 上尤其注意：机器睡眠等于 Connector 掉线等于手机端什么都做不了。我是把「接电源时不睡眠」设成了常态，否则这套东西只在我坐在电脑前的时候可用，那就毫无意义了。</p>
+<p>Windows 上的对应行为是关窗口会隐藏到托盘，Connector 继续跑，从托盘退出才是真停。</p>
+<h3 id="7-5-数据落在哪得自己清楚"><a href="#7-5-数据落在哪得自己清楚" class="headerlink" title="7.5 数据落在哪得自己清楚"></a>7.5 数据落在哪得自己清楚</h3><p>Agent 在工作设备上执行，用的是那台机器的工作区和终端权限。但会话内容、Timeline、上传的附件，会经过或存储在 Server 上。</p>
+<p>用 Cloud 就是存在官方服务器，自托管就是存在你自己部署的实例里。这不是谁的问题，是这类产品绕不开的结构：手机要看到会话，会话就得放在手机拿得到的地方。</p>
+<p>我的处理很简单，涉及真实账户、密钥、个人资料的活不从远程端发起。远程端我只用来推进读、判断、调度这类工作。</p>
+<h3 id="7-6-升级卸载的两件事"><a href="#7-6-升级卸载的两件事" class="headerlink" title="7.6 升级卸载的两件事"></a>7.6 升级卸载的两件事</h3><p>卸载插件不会删数据。账号、设备连接、设置都在 <code>~/.agents-anywhere/dsh-bridge-next/</code>，重装后接着用。想彻底清掉得先在插件的「设置 → 维护」里执行「恢复出厂设置」再卸载。</p>
+<p>内置插件不要叠加 npm 安装。DSH Desktop 内置的那份和它自己的版本配套，版本号带 <code>-desktop</code> 后缀，跟 npm 上那个包不是同一个构建。硬装一份上去，遇到的现象会很难解释。</p>
+<hr>
+<h2 id="八、现在怎么分工"><a href="#八、现在怎么分工" class="headerlink" title="八、现在怎么分工"></a>八、现在怎么分工</h2><table>
+<thead>
+<tr>
+<th align="left">场景</th>
+<th align="left">走哪条路</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">在电脑前长时间干活</td>
+<td align="left">直接开 DSH Desktop，不走远程</td>
+</tr>
+<tr>
+<td align="left">通勤路上看进度、催一句、追个问题</td>
+<td align="left">手机 → Agents Anywhere → DSH</td>
+</tr>
+<tr>
+<td align="left">在外面碰到 Agent 停下来等审批</td>
+<td align="left">手机处理，这一格用得最多</td>
+</tr>
+<tr>
+<td align="left">只想跑个代码任务，跑完就走</td>
+<td align="left">手机 → Codex</td>
+</tr>
+<tr>
+<td align="left">要看 diff、翻文件、开终端</td>
+<td align="left">手机 → Claude Code 或 DSH 的文件和终端面板</td>
+</tr>
+<tr>
+<td align="left">彻底连不上要救火</td>
+<td align="left">Tailscale + SSH</td>
+</tr>
+</tbody></table>
+<h3 id="8-1-Tailscale-还留着干什么"><a href="#8-1-Tailscale-还留着干什么" class="headerlink" title="8.1 Tailscale 还留着干什么"></a>8.1 Tailscale 还留着干什么</h3><p>不是为了情怀，是它还有三个位置。</p>
+<p>一是兜底。Agents Anywhere 整条链路（客户端 → Server → Connector）任何一环出问题，SSH 还在，这是不依赖任何第三方服务的最后一条路。</p>
+<p>二是给自托管 Server 留个安全入口。前面说的，不开公网端口，用 tailnet 内的 HTTPS。</p>
+<p>三是管 Server 本身。数据库、备份、日志、升级，这些本来就需要个稳定的远程入口，而这正是 Tailscale 最擅长的事。</p>
+<h3 id="8-2-什么情况下别上这套"><a href="#8-2-什么情况下别上这套" class="headerlink" title="8.2 什么情况下别上这套"></a>8.2 什么情况下别上这套</h3><p>也有几种情况我建议用简单方案就行。</p>
+<p>只用一种 Agent、任务稀疏、几乎不需要中途介入的，Tailscale + Web 够了，不用再叠一层。</p>
+<p>工作设备不是常开的，这套会持续给你「设备不在线」的挫败感，收益是负的。</p>
+<p>对数据经过第三方极度敏感又不想自托管的，这套不合适，回到纯内网方案去。</p>
+<p>只是想看结果不想推进任务的，把结果推到 IM 更省事。</p>
+<hr>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>回头看这件事，被改变的其实是两个判断。</p>
+<p>一个是关于「够得着」的。以前我以为远程使用的难点在网络，把包送到目的地就完事了。后来才发现，包送到了只是开始。</p>
+<p>另一个是关于「自己拼」的。我花时间配 tailnet、签证书、写 ACL，做出来的东西还不如一个免费 App 顺手。这件事不太好受，但它至少说明了一件事：这个位置本来就该有专门的产品，而不是我自己拼。</p>
+<p>如果你也在折腾类似的事，可以先问自己一个很土的问题：你为了「用一下」，需要先做几步准备？如果需要三步以上，那大概就是用不起来的。</p>
+<hr>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.agents-anywhere.com/">Agents Anywhere 官网</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/anywhere-labs/Agents-Anywhere">Agents-Anywhere 源码（Apache-2.0）</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/anywhere-labs/Agents-Anywhere/blob/main/dsh-bridge-next/README.md">Agents Anywhere for DSH 接入说明</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/anywhere-labs/Agents-Anywhere/blob/main/docs/getting-started.md">安装与首次使用</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/anywhere-labs/Agents-Anywhere/blob/main/docs/connector-network.md">Connector 网络与代理排查</a></li>
+<li><a target="_blank" rel="noopener" href="https://tailscale.com/kb/">Tailscale 文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/deepseek-ai/deepseek-harness">DeepSeek Harness</a></li>
+</ul>
+<blockquote>
+<p>文中的机器名、域名、tailnet 名称和密钥都做了泛化。版本号和命令行参数以我实际用的版本为准，升级前请对照官方文档。</p>
+</blockquote>
+</div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
+    
+      <footer class="post-tags" aria-label="文章标签">
+        <a href="/web-blog/tags/AI/">AI</a><a href="/web-blog/tags/Agent/">Agent</a><a href="/web-blog/tags/dsh/">dsh</a><a href="/web-blog/tags/Tailscale/">Tailscale</a><a href="/web-blog/tags/%E8%BF%9C%E7%A8%8B/">远程</a>
+      </footer>
+    
+    <nav class="post-navigation" aria-label="文章导航">
+      <a href="/web-blog/2026/11/18/%E4%BB%8Ecc-switch%E8%BF%81%E7%A7%BB%E5%88%B0magpie-%E7%BB%9F%E4%B8%80%E6%A8%A1%E5%9E%8B%E7%BD%91%E5%85%B3%E5%AE%9E%E8%B7%B5/"><span>上一篇</span><b>从 cc-switch 迁移到 magpie：把模型路由收进本地网关</b></a>
+      <a class="next" href="/web-blog/2026/11/18/%E6%88%91%E7%94%A8OpenDesign%E5%81%9A%E4%BA%86%E4%BB%80%E4%B9%88-%E4%BB%8E%E5%8E%9F%E5%9E%8B%E8%BF%AD%E4%BB%A3%E5%88%B0MCP%E5%8D%8F%E4%BD%9C/"><span>下一篇</span><b>用 OpenDesign 补上设计这一环：十个项目产出与 MCP 接入</b></a>
+    </nav>
+  </article>
+  <aside class="post-rail" aria-label="文章信息">
+    <p class="section-label">相关信息</p>
+    <div><strong>专题</strong><a href="/web-blog/categories/AI/">AI</a></div>
+    <div><strong>标签</strong><a href="/web-blog/tags/AI/">AI</a><a href="/web-blog/tags/Agent/">Agent</a><a href="/web-blog/tags/dsh/">dsh</a><a href="/web-blog/tags/Tailscale/">Tailscale</a><a href="/web-blog/tags/%E8%BF%9C%E7%A8%8B/">远程</a></div>
+  </aside>
+</main>
+
+
+    <footer class="shell footer">
+      <span>2021 - 2026 &copy; LC</span>
+      <span>真实项目的研究记录</span>
+      <a href="/web-blog/atom.xml">RSS</a>
+    </footer>
+
+    <dialog class="search-dialog" id="search-dialog" data-search-url="/web-blog/search.xml">
+      <div class="search-dialog__bar">
+        <label for="site-search">搜索笔记</label>
+        <button class="dialog-close" aria-label="关闭搜索" type="button">关闭</button>
+      </div>
+      <input id="site-search" type="search" autocomplete="off" placeholder="输入文章标题、主题或关键词" />
+      <div class="search-results" aria-live="polite"></div>
+    </dialog>
+
+    <script src="/web-blog/js/site.js"></script>
+  </body>
+</html>

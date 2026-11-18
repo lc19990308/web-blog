@@ -28,9 +28,9 @@
     </header>
 
     
-<main class="shell post-shell">
+<main class="shell post-shell magazine-post" data-od-id="article-layout">
   <aside class="post-toc" aria-label="文章目录">
-    <p class="section-label">ON THIS PAGE</p>
+    <p class="section-label">本文目录</p>
     <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%B8%83%E5%B0%94%E5%8F%98%E9%87%8F%E4%BD%95%E6%97%B6%E5%BC%80%E5%A7%8B%E5%A4%B1%E6%8E%A7"><span class="toc-list-text">布尔变量何时开始失控</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%85%88%E6%8A%8A%E6%B5%81%E7%A8%8B%E7%94%BB%E6%88%90%E4%BA%8B%E4%BB%B6"><span class="toc-list-text">先把流程画成事件</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E7%94%A8-XState-v5-%E5%BB%BA%E6%A8%A1%E5%BC%82%E6%AD%A5%E8%AF%B7%E6%B1%82"><span class="toc-list-text">用 XState v5 建模异步请求</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9C%A8-Vue-3-%E4%B8%AD%E8%AE%A2%E9%98%85%E5%BF%AB%E7%85%A7"><span class="toc-list-text">在 Vue 3 中订阅快照</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%8A%8A%E6%9C%BA%E5%99%A8%E5%BD%93%E6%88%90%E5%8F%AF%E5%AE%A1%E6%9F%A5%E7%9A%84%E4%B8%9A%E5%8A%A1%E8%A7%84%E5%88%99"><span class="toc-list-text">把机器当成可审查的业务规则</span></a></li></ol>
   </aside>
   <article class="post-content" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
@@ -40,7 +40,7 @@
       <div class="metadata"><span>2024-02-22</span><span>4 分钟阅读</span><span>更新于 2026-11-05</span></div>
       <p class="post-lede">当加载、错误、重试和多步骤操作互相影响时，用状态机明确合法状态和事件。本文以 XState v5 的 actor 与 snapshot 模型实现一个可重试的数据请求。</p>
     </header>
-    <div class="prose" itemprop="articleBody"><h2 id="布尔变量何时开始失控"><a href="#布尔变量何时开始失控" class="headerlink" title="布尔变量何时开始失控"></a>布尔变量何时开始失控</h2><p>一个页面只有“加载中”时，<code>isLoading</code> 足够。等到它同时要处理首次加载、成功、空数据、失败、重试和取消，多个布尔变量很容易制造不该出现的组合：<code>isLoading</code> 与 <code>isSuccess</code> 同时为真，或错误提示没有随着重试清掉。</p>
+    <div class="prose" itemprop="articleBody" data-od-id="article-content"><h2 id="布尔变量何时开始失控"><a href="#布尔变量何时开始失控" class="headerlink" title="布尔变量何时开始失控"></a>布尔变量何时开始失控</h2><p>一个页面只有“加载中”时，<code>isLoading</code> 足够。等到它同时要处理首次加载、成功、空数据、失败、重试和取消，多个布尔变量很容易制造不该出现的组合：<code>isLoading</code> 与 <code>isSuccess</code> 同时为真，或错误提示没有随着重试清掉。</p>
 <p>状态机把问题换成两个更具体的问题：系统当前处于什么状态？它在这个状态下允许接收什么事件？这会让非法组合变成模型里根本不存在的路径。</p>
 <p>状态机不适合替换所有组件状态。输入框内容、折叠开关和一次性的局部视觉状态仍可以用 <code>ref</code>。当状态之间有明确顺序、异步操作或多个入口会改变同一流程时，状态机才开始划算。</p>
 <h2 id="先把流程画成事件"><a href="#先把流程画成事件" class="headerlink" title="先把流程画成事件"></a>先把流程画成事件</h2><p>以下请求只有四个稳定状态：</p>
@@ -66,6 +66,25 @@
 <p>流程复杂并不一定需要状态机，但当“允许什么发生”已经比“存一个值”更重要时，状态图会比一组相互牵制的布尔变量可靠。</p>
 <p><strong>推荐阅读：</strong> <a target="_blank" rel="noopener" href="https://stately.ai/docs/xstate">Stately XState 文档</a></p>
 </div>
+    <section class="article-share" aria-label="分享文章" data-od-id="article-share">
+      <p>如果觉得有用，欢迎转发。</p>
+      <button type="button" id="article-share-button" data-od-id="share-button">复制文章链接</button>
+      <span class="article-share-status" role="status" id="article-share-status"></span>
+    </section>
+    <script>
+      (() => {
+        const button = document.getElementById('article-share-button');
+        const status = document.getElementById('article-share-status');
+        button.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            status.textContent = '文章链接已复制';
+          } catch {
+            status.textContent = '无法自动复制，请从地址栏复制文章链接';
+          }
+        });
+      })();
+    </script>
     
       <footer class="post-tags" aria-label="文章标签">
         <a href="/web-blog/tags/%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86/">状态管理</a>
@@ -77,7 +96,7 @@
     </nav>
   </article>
   <aside class="post-rail" aria-label="文章信息">
-    <p class="section-label">CONNECTIONS</p>
+    <p class="section-label">相关信息</p>
     <div><strong>专题</strong><a href="/web-blog/categories/%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86/">状态管理</a></div>
     <div><strong>标签</strong><a href="/web-blog/tags/%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86/">状态管理</a></div>
   </aside>
